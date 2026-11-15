@@ -387,6 +387,13 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
 .nav { flex: none; }
 @media (max-width: 430px) { .nav { gap: 4px; } .nav .ghost { padding: 7px 6px; letter-spacing: .01em; font-size: 10.5px; min-height: 34px; } .brand { font-size: 15px; } }
 
+/* deux boutons d'envoi : Dire (paroles) et Agir (gestes) ; celui de la touche Entrée est plein */
+form.line { gap: 6px; }
+form.line #go, form.line #goDire { flex: none; min-height: 40px; padding-left: 12px; padding-right: 12px; }
+form.line .ghost { border: 2px solid var(--text); background: transparent; color: var(--text); font-family: var(--display); text-transform: uppercase; letter-spacing: .04em; font-size: 15px; transform: skewX(-8deg); }
+form.line input { min-width: 0; flex: 1 1 auto; }
+@media (max-width: 430px) { form.line { padding-left: 8px; gap: 5px; } form.line .prompt { display: none; } form.line #go, form.line #goDire { padding-left: 9px; padding-right: 9px; font-size: 14px; } }
+
 </style>
 </head>
 <body data-san="0">
@@ -430,7 +437,8 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       <span class="prompt" aria-hidden="true">/</span>
       <label for="cmd" class="sr">Votre action</label>
       <input id="cmd" type="text" enterkeyhint="send" autocapitalize="sentences" spellcheck="false" placeholder="Que faites-vous ?">
-      <button class="act" id="go" type="submit">Agir</button>
+      <button class="ghost dire" id="goDire" type="button" title="Ce que dit votre personnage, mot pour mot">Dire</button>
+      <button class="act" id="go" type="button" title="Ce que fait votre personnage">Agir</button>
     </form>
   </footer>
 </div>
@@ -1794,7 +1802,9 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
         return;
       }
       // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
-      if (!p.recit && GESTE.test(p.text) && !/\?\s*$/.test(p.raw) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde))) {
+      // en mode « Dire », les mots restent des mots : seul « je m'en vais », dit tout haut, met fin à la conversation
+      if (p.dit && /^(bon |bien |allez |alors |eh bien |sur ce |excusez moi |pardon )*(je (m en vais|pars|sors|file|vous laisse|te laisse|vous quitte|dois (y aller|partir|filer|vous laisser))|il faut que j y aille|a bientot|a plus tard|a demain|bonne (nuit|soiree|journee))\b/.test(normalize(p.raw))) { api.endTalk(); return; }
+      if (!p.dit && !p.recit && GESTE.test(p.text) && !/\?\s*$/.test(p.raw) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde))) {
         var seul = rankActions(p)[0];
         if (!(seul && seul.a.talkTo === npc.id)) { api.endTalk(false); handleWorld(p); return; }
       }
@@ -1813,12 +1823,12 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       if (A && A.mine && talkBack()) return;
       if (A && A.a && A.a.ents.length && scene.converse.note) scene.converse.note(api, npc, A.a.ents[0]);
       var addressed = A && A.addressed;
-      if (!selfOnly && worldVerb && !addressed && !/\?\s*$/.test(p.raw) && best && best.score >= THRESHOLD && (!tb || tb.score < 0.9 || best.score - tb.score > 0.9)) {
+      if (!p.dit && !selfOnly && worldVerb && !addressed && !/\?\s*$/.test(p.raw) && best && best.score >= THRESHOLD && (!tb || tb.score < 0.9 || best.score - tb.score > 0.9)) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
       // « je l'observe », « je le jauge » : sans sujet écrit pour ça, c'est un jet de Psychologie
-      if (/^(je|j) (l |le |la )?(observe|jauge|scrute|sonde|devisage|etudie son visage|cerne|examine son visage|lis dans son regard)/.test(normalize(p.raw)) && !tops.some(function (x) { return (x.t.keys || []).indexOf('PSY') >= 0; })) { doJet({ skill: 'Psychologie' }, p); return; }
+      if (!p.dit && /^(je|j) (l |le |la )?(observe|jauge|scrute|sonde|devisage|etudie son visage|cerne|examine son visage|lis dans son regard)/.test(normalize(p.raw)) && !tops.some(function (x) { return (x.t.keys || []).indexOf('PSY') >= 0; })) { doJet({ skill: 'Psychologie' }, p); return; }
       // une question sur lui, une insulte, une machine, un nom : le personnage d'abord, sauf si un sujet écrit vise précisément la chose
       if (A && A.prior && A.a.claim) {
         // une scène écrite pour ce mensonge-là (un jet de Baratin prévu) passe avant la règle générale
@@ -1837,7 +1847,7 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       var sureTop = A && tops.filter(function (x) { return sureScore(x.t, p, A) >= 0.64; })[0];
       if (sureTop) { runTopic(npc, sureTop.t.id, p); return; }
       if (p.c.SUITE !== undefined && (!A || A.short)) { followUp(npc); return; }
-      if (!p.recit && !selfOnly && !addressed && best && best.score >= THRESHOLD) {
+      if (!p.dit && !p.recit && !selfOnly && !addressed && best && best.score >= THRESHOLD) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
@@ -1845,7 +1855,7 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       if (A && talkBack()) return;
       if (tb && tb.score >= 0.64) { runTopic(npc, tb.t.id, p); return; }
       if (p.c.SUITE !== undefined) { followUp(npc); return; }
-      if (!selfOnly && best && best.score >= THRESHOLD) {
+      if (!p.dit && !selfOnly && best && best.score >= THRESHOLD) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
@@ -2126,11 +2136,14 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
     }
 
     // ----- entrées publiques -----
-    function step(input) {
+    // mode : 'dire' = ce que le personnage dit, mot pour mot (aucun geste n'en sort) ;
+    //        'agir' ou rien = ce qu'il fait (« j'examine la table », « je lui demande où est Ravel »)
+    function step(input, mode) {
       if (s.ended) return;
       var raw = String(input || '').trim();
       if (!raw) return;
-      log({ t: 'player', x: raw });
+      var dire = mode === 'dire';
+      log(dire ? { t: 'player', x: raw, said: true } : { t: 'player', x: raw });
       var p = rewrite(lex, parse(lex, raw, scene.phrases));
       if (s.pending) {
         if (p.c.LANCER !== undefined || p.c.INSISTER !== undefined) { roll(); return; }
@@ -2142,6 +2155,7 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
         s.pendingPush = null;
       }
       s.turn++;
+      if (dire) { s.tick = scene.talkTick || 1; parler(raw, p); afterTurn(); finish(); return; }
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
       // « dire qu'on est de la police » : c'est une parole. On la dit à son interlocuteur, ou à la seule personne présente.
@@ -2172,6 +2186,31 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       }
       if (apres) afterTurn();
       finish();
+    }
+    // une parole : à son interlocuteur ; sinon à la personne qu'on nomme, ou à la seule présente
+    function parler(raw, p) {
+      var texte = raw;
+      if (!s.talk) {
+        var gens = availableActions().filter(function (a) { return a.talkTo && !(scene.disponible && scene.disponible(api, a.talkTo)); });
+        var dst = destinataire(p);
+        var cible = dst ? gens.filter(function (a) { return a.talkTo === dst.id; })[0] : (gens.length === 1 ? gens[0] : null);
+        if (!cible) {
+          api.say(gens.length ? fresh('aQuiParler', ['À qui parlez-vous ?', 'Vous parlez, oui. Mais à qui ?', 'Plusieurs têtes se tournent. À qui vous adressez-vous ?']) : fresh('parlerSeul', ['Vous parlez dans le vide. Personne n’est là pour vous entendre.', 'Votre voix se perd. Il n’y a personne.', 'Personne ne répond. Vous êtes seul{e} à vous entendre.']));
+          if (gens.length) api.chips(gens.slice(0, 4).map(function (a) { return { label: a.label, action: a.id }; }));
+          s.tick = 0; return;
+        }
+        exec(cible, rewrite(lex, parse(lex, '', scene.phrases)));
+        if (dst && dst.reste && dst.reste.split(/\s+/).length >= 2) texte = dst.reste;
+        else if (dst) return; // on l'a seulement interpellé
+      }
+      var segs = phrasesDe(texte);
+      for (var i = 0; i < segs.length; i++) {
+        if (!s.talk || s.pending || s.ended) break;
+        var ps = rewrite(lex, parse(lex, segs[i], scene.phrases));
+        ps.dit = true;
+        handleDialogue(ps);
+        s.prefix = null;
+      }
     }
     // un geste ou une réplique ; renvoie vrai si le temps du monde doit passer ensuite
     function unGeste(raw, p) {
@@ -7113,6 +7152,8 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       // l'humeur : jurons, menaces, excuses, absurdités, mots d'un autre siècle
       a.juron = !a.insulte && HU.RX.juron.test(t);
       a.menace = HU.RX.menace.test(t);
+      // dit tout haut (« Dire »), « je vous étrangle » est une menace, pas un geste
+      if (p.dit && /\b(je|j) (vous|te|t) (tue|etrangle|frappe|cogne|egorge|assomme|poignarde|gifle|casse|descends|bute|creve)\w*\b/.test(t)) a.menace = true;
       a.excuse = HU.RX.excuse.test(t);
       a.absurde = HU.RX.absurde.test(t);
       var am = t.match(HU.ANA), fm = am ? null : t.match(HU.FUTUR);
@@ -11539,7 +11580,11 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
     var input = $('cmd');
     input.placeholder = s.ended ? 'Fin du chapitre' : s.pending ? 'Lancez les dés…' : s.talk ? 'Que dites-vous ?' : 'Que faites-vous ?';
     input.disabled = !!s.ended;
-    $('go').disabled = !!s.ended;
+    $('go').disabled = !!s.ended; $('goDire').disabled = !!s.ended || !!s.pending;
+    // le bouton mis en avant est celui de la touche Entrée
+    var enDire = !!s.talk && !s.pending;
+    $('goDire').className = (enDire ? 'act' : 'ghost') + ' dire'; $('go').className = enDire ? 'ghost' : 'act';
+    input.setAttribute('enterkeyhint', 'send');
     actions();
   }
   function actions() {
@@ -11562,14 +11607,14 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
       tb.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
       bar.appendChild(tb);
       if (ideasOpen) game.topicChips().forEach(function (t) { bar.appendChild(btn(esc(t.label), '', function () { act(function () { game.choose({ label: t.label, topic: t.topic }); }); })); });
-      else { var h2 = document.createElement('span'); h2.className = 'label'; h2.textContent = 'Parlez librement, comme à quelqu’un en face de vous'; bar.appendChild(h2); }
+      else { var h2 = document.createElement('span'); h2.className = 'label'; h2.textContent = '« Dire » : vos paroles · « Agir » : vos gestes'; bar.appendChild(h2); }
       return;
     }
     var ib = btn(ideasOpen ? 'Idées ▾' : 'Idées ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
     ib.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
     bar.appendChild(ib);
     if (ideasOpen) game.ideas(4).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
-    else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = 'Écrivez librement, comme à une table de jeu'; bar.appendChild(hint); }
+    else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(hint); }
   }
 
   function act(fn) {
@@ -11686,6 +11731,7 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
     help.innerHTML = '<h3>Comment jouer</h3><p>Écrivez ce que fait ' + esc(game.state.pc.name) + ', comme vous le diriez à un meneur de jeu : ' + esc(SC.examples || '« j’examine la table », « je parle au serveur »') + '. En conversation, parlez librement : « pourquoi ? », « et ensuite ? ». Les fautes de frappe sont tolérées.</p>' +
+      '<p><b>Dire</b> envoie vos paroles, mot pour mot : le personnage les entend, et aucun geste n’en sort (« je vous étrangle », dit tout haut, n’est qu’une menace). <b>Agir</b> envoie ce que vous faites : « j’examine la table », « je sors », « je lui demande où est Ravel ». La touche Entrée utilise le bouton mis en avant : Dire en conversation, Agir le reste du temps.</p>' +
       '<p>Quand un jet est demandé, lancez les dés : il faut faire moins que la compétence. Une réussite majeure (moitié) ou extrême (cinquième) donne parfois plus. Après certains échecs, vous pouvez insister : c’est un jet forcé, et un nouvel échec coûte plus cher.</p>' +
       '<p>Surveillez votre santé mentale. Plus elle baisse, moins ce que vous lisez est sûr.</p>' +
       '<h3>À propos</h3><p>Prototype de jeu de rôle textuel entièrement scripté : analyseur de phrases tolérant aux fautes, dés d100, dialogues à sujets et relances, horloge, relances du meneur quand on s’égare, sauvegarde automatique dans ce navigateur. Aucune IA ne répond pendant la partie.</p>';
@@ -11779,14 +11825,19 @@ body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35de
   }
 
   // ---------------------------------------------------------------- événements
-  $('form').addEventListener('submit', function (ev) {
-    ev.preventDefault();
+  // deux façons d'envoyer : « Dire » (les paroles du personnage, mot pour mot) et « Agir » (ce qu'il fait).
+  // La touche Entrée envoie avec le bouton mis en avant : Dire en conversation, Agir le reste du temps.
+  function modeParDefaut() { return game && game.state.talk && !game.state.pending ? 'dire' : 'agir'; }
+  function envoyer(mode) {
     var v = $('cmd').value.trim();
     if (!v) { skip(); return; }
     if (busy) return;
     $('cmd').value = '';
-    act(function () { game.step(v); });
-  });
+    act(function () { game.step(v, mode); });
+  }
+  $('form').addEventListener('submit', function (ev) { ev.preventDefault(); envoyer(modeParDefaut()); });
+  $('go').addEventListener('click', function () { envoyer('agir'); });
+  $('goDire').addEventListener('click', function () { envoyer('dire'); });
   logEl.addEventListener('click', function (ev) { if (!ev.target.closest('button')) skip(); });
   $('btnSheet').addEventListener('click', function () { openPanel('ovSheet'); });
   $('btnNotes').addEventListener('click', function () { openPanel('ovNotes'); });
