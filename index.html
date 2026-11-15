@@ -793,6 +793,9 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
   var ATTRIBUTS = new Set(('moustache moustaches favoris barbe barbiche cheveux coiffure chignon yeux regard visage figure mains main voix accent chapeau casquette kepi melon feutre bonnet robe costume habit ' +
     'veste manteau pardessus gilet cravate uniforme tenue bijoux collier bague lunettes monocle canne chaussures bottes chale eventail gants pelerine tablier echarpe foulard').split(' '));
   var DEFINI = /^(le|la|les|l|au|aux|son|sa|ses|ce|cet|cette|ces|du|leur|leurs|en)$/;
+  // des mots qui sont à la fois un nom et un verbe conjugué
+  var VERBE_NOM = new Set('porte portes portent note notes notent garde gardes gardent montre montres montrent livre livres livrent place places marche marches marchent ferme fermes ferment signe signes signent compte comptes comptent demande demandes demandent visite visites visitent couche couches tire tires tirent cause causes causent sonne sonnent presse pressent serre serrent tente tentent trouble troublent plante plantent peste reste restent'.split(' '));
+  var SUJET = /^(ne|n|je|j|tu|il|elle|on|ils|elles|qui)$/;
   function parse(lex, raw, phrases) {
     var text = normalize(raw, phrases);
     var toks = text ? text.split(' ') : [];
@@ -810,6 +813,8 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       // « un chapeau », « des moustaches » : un vêtement ou un trait quelconque. Seule une référence définie
       // (« l'homme au chapeau », « le chapeau », « son visage ») désigne le personnage qu'on reconnaît à ce détail.
       if (m && ATTRIBUTS.has(t) && lex.concepts[m.id].type === 'n' && !DEFINI.test(toks[i - 1] || '') && !DEFINI.test(toks[i - 2] || '')) return;
+      // « ne porte-t-il pas plainte », « je note », « il garde » : un verbe conjugué, pas la porte, la note ou le garde
+      if (m && /^[nx]$/.test(lex.concepts[m.id].type) && m.score >= 1 && VERBE_NOM.has(t) && (SUJET.test(toks[i - 1] || '') || (toks[i + 1] === 't' && /^(il|elle|on|ils|elles)$/.test(toks[i + 2] || '')) || /^(je|tu|il|elle|on|nous|vous|ils|elles)$/.test(toks[i + 1] || '') && !DEFINI.test(toks[i - 1] || ''))) return;
       if (m) push(m.id, m.score, i); else if (t.length > 1) p.unknown.push(t);
     });
     function push(id, score, pos) {
@@ -1004,6 +1009,16 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       x = echoJuste(who, x);
       var npc = scene.npcs[who];
       var name = npc ? npc.name : who;
+      // verrou des faits : personne ne parle d'un événement qui n'a pas encore eu lieu (scene.faits)
+      var fi = npc && faitInconnu(x);
+      if (fi) {
+        if (G.RPG_FAITS) G.RPG_FAITS.push({ who: who, fait: fi, x: String(x).slice(0, 100) });
+        // le joueur en parle lui-même : on s'étonne (« Quel incendie ? ») ; sinon, on répond à côté, sans rien révéler
+        var F = scene.faits[fi], evoque = paroleJoueur && F.re.test(String(paroleJoueur.raw || ''));
+        var dz = (evoque && F.nie) || npc.deflect || ['…'];
+        x = tokens(dz[(s.seq + s.turn) % dz.length]);
+        if (faitInconnu(x)) return;
+      }
       // verrou : un personnage qui n'est pas là ne parle jamais (ni à sa place, ni dans le dos d'un autre)
       // (une réplique écrite dans le geste en cours — « Beddows paraît à la porte » — est voulue par le scénario)
       if (npc && !inExec && !pnjIci(who)) {
@@ -1013,6 +1028,15 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       noterReplique(who, x);
       // les répliques sans guillemets sont des gestes : narration
       log({ t: 'npc', who: who, name: name, x: x });
+    }
+    // ----- les faits -----
+    // scene.faits = { nom: { re: /mots qui en parlent/, existe: function (api) } } : tant que le fait n'existe pas
+    // (l'incendie avant samedi 23 h), aucune réplique ne peut le mentionner, d'où qu'elle vienne.
+    function faitInconnu(x) {
+      var F = scene.faits; if (!F || typeof x !== 'string') return null;
+      if (/^« (Quel|Quelle|Quels|Quelles|Aucun|Aucune|Un|Une) [^»?]{0,40}\?/.test(x)) return null; // il s'étonne, il ne confirme rien
+      for (var k in F) { if (F[k].re.test(x) && !F[k].existe(api)) return k; }
+      return null;
     }
     // ----- l'écho juste -----
     // Une réplique écrite qui commence par reprendre la question (« Un homme qui nous observe ? Mon ami… ») suppose
@@ -1440,6 +1464,11 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
         if (s.talk === dest.id && !s.pending && dest.reste.split(/\s+/).length >= 2) handleDialogue(reste);
         return;
       }
+      // « j'ai essayé de l'étrangler », dit à personne : c'est du passé, on ne le rejoue pas
+      if (R_PASSE.test(' ' + normalize(p.raw) + ' ') && !/\?\s*$/.test(p.raw) && !/\b(decide|choisi|fini|termine|compris|change d avis)\b/.test(normalize(p.raw))) {
+        api.say(fresh('recitSeul', ['Ce qui est fait est fait. Reste à savoir ce que vous faites maintenant.', 'Vous y repensez un instant. Mais personne, ici, ne vous a rien demandé. Que faites-vous ?', 'Le passé ne se rejoue pas. Et maintenant ?']));
+        s.tick = 0; return;
+      }
       if (scene.improvise && scene.improvise(api, p)) return;
       var cands = rankActions(p);
       var best = cands[0], second = cands[1];
@@ -1558,6 +1587,8 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       s.tick = scene.talkTick || 1;
     }
     function startTalk(npcId, p) {
+      // les gens ont des heures : la nuit, le dimanche, certains ne sont pas là (scene.disponible)
+      if (scene.disponible) { var absent = scene.disponible(api, npcId); if (absent) { api.say(absent); return; } }
       retenir(conceptDuPnj(npcId));
       var npc = scene.npcs[npcId];
       var st = npcState(npcId);
@@ -1587,11 +1618,18 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
         talkMode = null;
       }
       if (p && s.talk === npcId) {
+        // « je l'ai vu » : « l' » ne désigne quelqu'un, pour ce personnage, que si on en a déjà parlé avec lui
+        var horsTerrain = p.pronom && !abordes(npcId)[p.pronom] ? p.pronom : null;
         noterAborde(npcId, p);
+        paroleJoueur = p;
         var q = cloneParse(p);
+        if (horsTerrain) { delete q.c[horsTerrain]; q.nouns = q.nouns.filter(function (n) { return n.id !== horsTerrain; }); q.all = q.all.filter(function (n) { return n.id !== horsTerrain; }); }
         (npc.selfKeys || []).forEach(function (k) { delete q.c[k]; });
         delete q.c.PARLER; delete q.c.ALLER;
-        var tops = rankTopics(npc, q);
+        // la phrase qui ouvre la conversation passe par les mêmes garde-fous que les suivantes :
+        // un récit (« j'ai essayé de l'étrangler ») est écouté, pas pris pour une question sur quelqu'un
+        if (recit(p.raw)) { handleDialogue(q); return; }
+        var tops = rankTopics(npc, q).filter(function (x) { return !horsSujet(x.t, q, npc); });
         if (tops[0] && tops[0].score >= 0.64) runTopic(npc, tops[0].t.id, q);
       }
     }
@@ -3660,11 +3698,11 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     cheapside: { label: 'la chambre de Cheapside', concept: 'CHEAPSIDE', also: ['BEDDOWS', 'BRULE', 'CARTEVISITE'] },
     chelsea: { label: 'l’hôtel Chelsea Arms', concept: 'CHELSEA', also: ['MEURTRES'] },
     yard: { label: 'Scotland Yard', concept: 'YARD', also: ['FLEMING', 'RIGBY', 'POLICE'] },
-    ambassade: { label: 'l’ambassade de Turquie', concept: 'AMBASSADE', also: ['MUSTAPHA', 'TURCS'], hours: [9, 18], closed: 'À cette heure, l’ambassade de Turquie est fermée. Ses bureaux ouvrent à 9 h.' },
+    ambassade: { label: 'l’ambassade de Turquie', concept: 'AMBASSADE', also: ['MUSTAPHA', 'TURCS'], hours: [9, 18], jours: ['samedi', 'dimanche'], fermeJour: 'Les grilles de l’ambassade de Turquie sont closes : les bureaux ne rouvrent que lundi, à 9 h.', closed: 'À cette heure, l’ambassade de Turquie est fermée. Ses bureaux ouvrent à 9 h.' },
     islington: { label: 'la boutique de Brophy Lane, à Islington', concept: 'ISLINGTON', also: ['VOISIN', 'MAKRYAT', 'REGISTRE'] },
-    musee: { label: 'la salle de lecture du British Museum', concept: 'MUSEE', also: ['BIBLIOTHECAIRE', 'LIVRE'], hours: [9, 20], closed: 'La salle de lecture du British Museum ouvre de 9 h à 20 h. À cette heure, ses grilles sont fermées.' },
-    stoke: { label: 'la pension de Stoke Newington', concept: 'STOKE', also: ['ATKINS', 'STANLEY', 'SERGENT'] },
-    camberwell: { label: 'la maison d’Arthur Butter, à Camberwell', concept: 'CAMBERWELL', also: ['BUTTER', 'MAQUETTE', 'ASSOCIATION'] },
+    musee: { label: 'la salle de lecture du British Museum', concept: 'MUSEE', also: ['BIBLIOTHECAIRE', 'LIVRE'], hours: [9, 20], jours: ['dimanche'], fermeJour: 'Le dimanche, la salle de lecture du British Museum reste fermée. Les lecteurs, comme les livres, se reposent jusqu’à lundi.', closed: 'La salle de lecture du British Museum ouvre de 9 h à 20 h. À cette heure, ses grilles sont fermées.' },
+    stoke: { label: 'la pension de Stoke Newington', concept: 'STOKE', also: ['ATKINS', 'STANLEY', 'SERGENT'], hours: [7, 22], closed: 'À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison.' },
+    camberwell: { label: 'la maison d’Arthur Butter, à Camberwell', concept: 'CAMBERWELL', also: ['BUTTER', 'MAQUETTE', 'ASSOCIATION'], hours: [8, 24], closed: 'À cette heure, la maison de M. Butter est éteinte. On ne sonne pas chez les gens en pleine nuit.' },
     victoria: { label: 'la gare Victoria', concept: 'VICTORIA', also: ['VOYAGE', 'TRAIN'] }
   };
   var ZONE = { boutique: 'islington', chambre_stanley: 'stoke', cave: 'camberwell' };
@@ -3791,6 +3829,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       [/\b(la |une )?valise (dans|du|qui roule dans) (le )?couloir\b|\bla valise qui roule\b/g, ' couloir '],
       [/\b(la |une )?(dame|voisine|cliente|vieille dame) du (deuxieme|2e|second)( etage)?\b|\bpas au plafond\b|\bdeuxieme etage\b/g, ' damedeuxieme '],
       [/\bscotland yard\b|\bnew scotland yard\b/g, ' yard '],
+      [/\b(porte\w*|porter|depose\w*|deposer|retire\w*|retirer) (t il |t elle )?(pas |jamais |plus )?(une |de |sa |la )?plainte\b/g, ' plainte '],
       [/\b(l |un |cet |ce |le )?(homme|monsieur|type|inconnu|individu) (brun|aux cheveux noirs|aux cheveux bruns|qui (m |nous )?(observait|regardait|epiait|fixait|surveillait))\b|\b(le |un )?grand brun\b/g, ' moustachu '],
       [/\bchelsea arms\b/g, ' chelsea '],
       [/\bbritish museum\b|\bsalle de lecture\b|\breading room\b/g, ' musee '],
@@ -3887,6 +3926,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       Lx.add('STANLEY', 'n', 'stanley, henry', { label: 'Henry Stanley', npc: true });
       Lx.add('BIBLIOTHECAIRE', 'n', 'bibliothecaire, conservateur, gardien, lorgnon', { label: 'le conservateur', npc: true });
       Lx.add('PASSAGERSMORTS', 'n', 'morts, defunts, spectres, revenants, cadavres, cadavre, zombies', { label: 'les passagers morts' });
+      Lx.add('PLAINTE', 'x', 'plainte, plaintes, poursuites, inculpation, inculpe, accusation, chefs d accusation', { label: 'la plainte' });
       Lx.add('MOUSTACHU', 'n', 'moustachu, moustache, moustaches, observateur, espion, guetteur', { label: 'l’homme à la moustache' });
       // sujets de l'enquête
       Lx.add('MAKRYAT', 'n', 'makryat, mehmet', { label: 'Makryat' });
@@ -4290,7 +4330,16 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       close: ['« Sergent ! Raccompagnez ces messieurs-dames. » L’entretien est terminé.'],
       topics: [
         T('meurtres', ['MAKRYAT', 'CHELSEA', 'MEURTRES', 'TURCS', 'PASSEPORT'], ['« Trois hommes poignardés en plein cœur, trois passeports au même nom. Les Turcs jurent que ce sont des faux. Le vrai Makryat, s’il existe, n’a pas jugé bon de se présenter. Voilà ce que je peux dire, et c’est déjà dans le Times. »', '« Si vous savez quelque chose, dites-le. Sinon, je ne vous retiens pas. »'], { chip: 'Les meurtres du Chelsea Arms' }),
-        T('smith', ['SMITH', 'INCENDIE', 'BEDDOWS'], ['« L’incendie de St John’s Wood ? Pas mon affaire. Voyez le sergent Rigby, aux incendies, deuxième étage. »'], { chip: 'La maison de Smith' }),
+        T('smith', ['SMITH', 'INCENDIE', 'BEDDOWS'], function (api, n, p) {
+          // avant l'incendie (samedi, 23 h), il n'y a pas d'incendie dont parler
+          if (api.s.min < at(1, 23, 0)) {
+            if (p && p.c && p.c.INCENDIE !== undefined && p.c.SMITH === undefined) { api.npc('fleming', api.fresh('flemQuelFeu', ['« Quel incendie ? » Il fronce les sourcils. « Vous savez quelque chose que j’ignore, {m} ? »', '« Aucun incendie sur mon bureau, {m}. Et je préfère. »'])); return; }
+            if (api.flag('agresse') === 'smith') { api.npc('fleming', n === 0 ? '« Le professeur ne porte pas plainte. Il dit que vous n’étiez pas vous-même, ce soir-là. C’est la seule raison pour laquelle vous dormirez dans votre lit. »' : '« Ne m’obligez pas à rouvrir ce dossier, {m}. »'); return; }
+            api.npc('fleming', n === 0 ? '« Le professeur Smith ? Il nous a aidés, en dix-neuf, contre de faux médiums. Un homme sérieux. Je n’ai rien d’autre à son nom, {m}, et j’aimerais que ça dure. »' : '« Je vous l’ai dit : rien à son nom. »');
+            return;
+          }
+          api.npc('fleming', '« L’incendie de St John’s Wood ? Pas mon affaire. Voyez le sergent Rigby, aux incendies, deuxième étage. »');
+        }, { chip: 'Le professeur Smith' }),
         T('aide', ['PERSUADER', 'BARATIN', 'ARGENT'], ['« Vous voulez m’aider ? Alors apportez-moi un fait. Pas une impression, pas une rumeur : un fait. »'])
       ] }),
 
@@ -4512,6 +4561,8 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
         if (id === 'institut') { api.say(api.fresh('instFini', ['L’Institut impérial ? Le banquet est terminé depuis longtemps. Les salons sont fermés, les chaises empilées ; il n’y a plus rien à y apprendre.', 'Vous pensez à l’Institut impérial, à ses lustres et à son champagne tiède. Le banquet est fini : ce qui compte, maintenant, se passe ailleurs dans Londres.'])); return; }
         if (!known(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.'); return; }
         var h = hour(api.s.min);
+        // les jours de fermeture (le dimanche au British Museum, le week-end à l'ambassade)
+        if (p.jours && p.jours.indexOf(JOURS[(4 + day(api.s.min)) % 7]) >= 0) { api.say(p.fermeJour || p.closed); return; }
         if (p.hours && h >= p.hours[1]) { api.say(p.closed + ' Il faudra y retourner demain.'); return; }
         if (p.hours && h < p.hours[0] - 1) {
           // un lieu qui n'ouvre que le soir : on attend le soir, si c'est ce qu'on a dit
@@ -4734,11 +4785,11 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     yard: {
       name: 'New Scotland Yard', art: 'bureau',
       enter: function (api, first) { if (first) api.say('Les briques rouges et blanches de New Scotland Yard, au bord de la Tamise. Un hall bruyant, des agents qui courent, des bancs où attendent des gens qui ont perdu quelque chose : un chien, un mari, une montre.'); else api.say(api.fresh('yardR', ['Scotland Yard, de nouveau. Le planton vous reconnaît et soupire.', 'Le hall de Scotland Yard sent le tabac froid et le papier humide.'])); },
-      things: [{ label: 'l’inspecteur Fleming', ids: ['FLEMING'] }, { label: 'le sergent Rigby, aux incendies', ids: ['RIGBY'] }, { label: 'les agents du hall', ids: ['POLICE', 'QUELQUUN'] }, { label: null, ids: ['SALLE', 'YARD'] }],
+      things: [{ label: 'l’inspecteur Fleming', ids: ['FLEMING'] }, { label: 'le sergent Rigby, aux incendies', ids: ['RIGBY'], cond: function (api) { return api.s.min >= at(1, 23, 0); } }, { label: 'les agents du hall', ids: ['POLICE', 'QUELQUUN'] }, { label: null, ids: ['SALLE', 'YARD'] }],
       actions: [
         { id: 'y_fleming', label: 'Demander à voir l’inspecteur Fleming', obj: 'l’inspecteur Fleming', idea: true, talkTo: 'fleming', verbs: ['PARLER', 'ALLER', 'VISITER', 'PERSUADER', 'BARATIN', 'POLI'], nouns: ['FLEMING', 'MAKRYAT'], extra: ['SMITH', 'INCENDIE', 'BEDDOWS', 'CHELSEA', 'ARGENT'],
           run: function (api, p) { api.talk('fleming', p); } },
-        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
+        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, cond: function (api) { return api.s.min >= at(1, 23, 0); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
           run: function (api, p) { api.talk('rigby', p); } },
         { id: 'y_glaner', label: 'Glaner des informations auprès des agents', obj: 'les agents du hall', idea: true, verbs: ['BARATIN', 'ECOUTER', 'PARLER', 'FOUILLER', 'PSY'], nouns: ['POLICE', 'QUELQUUN', 'MAKRYAT'], bare: true,
           run: function (api) {
@@ -5058,6 +5109,14 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     if (api.item(BILLETS)) { api.say('Vos billets sont déjà dans votre portefeuille, avec la réservation des wagons-lits.'); return; }
     if (!api.has('QUETE')) { api.say('Réserver un voyage ? Rien ne vous y pousse encore.'); return; }
     if (api.s.money < 12) { api.say('Il vous faudrait une douzaine de livres pour le premier tronçon jusqu’à Paris. Vous ne les avez pas.'); return; }
+    var hb = hour(api.s.min), jb = JOURS[(4 + day(api.s.min)) % 7];
+    if (jb === 'dimanche' || hb < 9 || hb >= 19) {
+      // une première fois, on apprend les horaires ; si l'on insiste, on attend l'ouverture
+      if (!api.flag('guichetFerme')) { api.flag('guichetFerme', true); api.say((jb === 'dimanche' ? 'Un dimanche ? Les bureaux de la Compagnie des wagons-lits et de Cook sont fermés. On réserve à partir de lundi, 9 h.' : 'À cette heure, les bureaux de la Compagnie des wagons-lits sont fermés. On réserve de 9 h à 19 h.') + ' Vous pouvez revenir, ou attendre l’ouverture.'); return; }
+      var dj = day(api.s.min) + (hb >= 9 ? 1 : 0); if (JOURS[(4 + dj) % 7] === 'dimanche') dj++;
+      api.s.min = dj * D + 9 * 60 + 5; api.s.tick = 0; api.flag('guichetFerme', false);
+      api.say('Vous attendez l’ouverture. Une nuit trop courte, un thé brûlant, et vous êtes le premier client devant le rideau qui se lève.');
+    }
     api.s.money -= 12; api.take(BILLETS);
     api.say(api.s.loc === 'victoria' ? 'Au guichet de la Compagnie internationale des wagons-lits, un employé à manchettes établit vos billets : train du ferry, traversée Douvres-Calais, voiture directe pour Paris, puis le Simplon-Orient. Douze livres pour le premier tronçon, le reste sera réglé en route.' : 'Le réceptionniste téléphone à l’agence Cook. Une heure plus tard, un coursier apporte vos billets : train du ferry depuis Victoria, traversée Douvres-Calais, voiture directe pour Paris, réservation sur le Simplon-Orient. Douze livres pour le premier tronçon.');
   }
@@ -5103,6 +5162,8 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       run: function (api) { var c = destChips(api); if (!c.length) { api.say('Vous ne connaissez encore aucune adresse utile.'); return; } api.say('Vous pouvez vous rendre à : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.'); api.chips(c); } },
     { id: 'g_journal', label: 'Acheter un journal', verbs: ['PRENDRE', 'EXAMINER', 'COMMANDER', 'DONNER'], nouns: ['JOURNAL'], repeatable: true, cond: function (api) { return /^(islington|stoke|victoria|yard|chelsea|musee|camberwell)$/.test(api.s.loc); },
       run: function (api) {
+        var hj = hour(api.s.min);
+        if (hj >= 22 || hj < 5) { api.say(api.fresh('pasDeCrieur', ['À cette heure, plus un crieur dans les rues. Les éditions du matin ne sortiront des presses qu’à l’aube.', 'Les kiosques sont fermés, les crieurs couchés. Il faudra attendre le matin pour un journal.'])); return; }
         var where = { yard: ['Un exemplaire du jour traîne sur un banc du hall.', 'Vous empruntez le journal d’un agent qui somnole.'], chelsea: ['Les journaux du jour sont empilés sur le comptoir de la réception.', 'Vous prenez un journal sur la pile, sous l’œil las du réceptionniste.'], musee: ['Vous empruntez le journal du jour sur le présentoir des périodiques.', 'Le présentoir des périodiques vous fournit un journal du jour.'], camberwell: ['Butter vous tend son journal, plié à la page des chemins de fer.', 'Vous reprenez le journal de Butter, toujours plié aux chemins de fer.'] }[api.s.loc] || ['Vous achetez un journal à un crieur qui hurle les titres dans le brouillard.', 'Un gamin vous vend un journal encore humide d’encre.'];
         api.say(api.fresh('crieur:' + api.s.loc, where)); lirePresse(api);
       } },
@@ -5261,6 +5322,27 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     alexis: 'Randolph Alexis, occultiste, censé être mort en 1897. Prisonnier du train fantôme. Pas digne de confiance.',
     stanley: 'Henry Stanley, collectionneur de trains, disparu de sa chambre dans un nuage de fumée.'
   };
+  // ---------------------------------------------------------------- qui est là, à quelle heure
+  // Les gens ont des heures : un inspecteur rentre chez lui, un buraliste baisse son rideau, un laitier ne passe qu'à l'aube.
+  var DISPO = {
+    fleming: { h: [8, 20], x: 'Le planton de nuit lève à peine les yeux. « L’inspecteur Fleming ? Rentré chez lui, {m}. Les bureaux rouvrent à huit heures. »' },
+    rigby: { h: [8, 20], x: 'Le planton de nuit lève à peine les yeux. « Le sergent Rigby ? Parti depuis longtemps, {m}. Revenez à huit heures. »' },
+    sergent: { h: [8, 20], x: 'Au poste du coin, un agent de nuit somnole derrière son guichet. « Le sergent ? Demain, huit heures. »' },
+    voisin: { h: [7, 20], repos: 'dimanche', x: 'Le bureau de tabac a baissé son rideau de fer. Une pancarte jaunie : « Ouvert de 7 h à 20 h ».', xRepos: 'Rideau baissé, pancarte : « Fermé le dimanche ». Le buraliste respecte le jour du Seigneur, ou sa grasse matinée.' },
+    atkins: { h: [7, 22], x: 'Mrs Atkins est montée se coucher. La maison dort. Il faudra revenir après sept heures.' },
+    butter: { h: [8, 24], x: 'M. Butter dort, sans doute au milieu de ses catalogues. Il faudra revenir au matin.' },
+    laitier: { h: [5, 12], x: 'Le laitier a fini sa tournée depuis longtemps : il ne passe qu’à l’aube. Sa carriole n’est plus là.' }
+  };
+  L.disponible = function (api, id) {
+    var d = DISPO[id]; if (!d) return null;
+    if (L.pnjIci && L.pnjIci(api, id)) return null;
+    if (api.flag('combat') || /^(wagon|retour|campagne|cave)/.test(api.s.loc)) return null;
+    var h = hour(api.s.min);
+    if (d.repos && JOURS[(4 + day(api.s.min)) % 7] === d.repos) return d.xRepos || d.x;
+    return (h < d.h[0] || h >= d.h[1]) ? d.x : null;
+  };
+  L.boutiquesOuvertes = function (api) { var h = hour(api.s.min); return h >= 8 && h < 20 && JOURS[(4 + day(api.s.min)) % 7] !== 'dimanche'; };
+
   L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -5315,6 +5397,14 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
   L.clues.FUYARD = { title: 'Un fardeau dans le brouillard', text: 'Avant l’incendie, « Beddows » s’est enfui de la maison avec un lourd ballot sur l’épaule, de la taille d’un homme, et a pris un fiacre vers la City.' };
   L.clues.CLE14 = { title: 'La clé de la chambre 14', text: 'L’homme à la moustache a laissé tomber dans le brouillard une plaque de clé du Chelsea Arms : chambre 14.' };
   L.clues.SEUL = { title: 'Beddows, seul', text: 'Loin du lit, Beddows tremble : « Il ne mange plus. Il ne dort plus. Il connaît des choses que Monsieur ne savait pas. » Puis il s’est enfui.' };
+
+  // ================================================================ les faits datés
+  // Tant qu'un fait n'existe pas, le moteur interdit à tout personnage d'en parler (verrou des faits).
+  L.faits = {
+    incendie: { re: /incendie de|l’incendie|un incendie|cet incendie|a brûlé|ont brûlé|maison (a |qui a )?brûl|les ruines|des ruines|décombres|les cendres|flambait|le feu est parti|avant le feu|juste avant les flammes|parti du bureau|sentait l’essence|le feu partout|filé avant le feu/i, existe: function (api) { return api.s.min >= FEU; },
+      nie: ['« Quel incendie, {m} ? Je n’ai rien entendu de tel. »', '« Un incendie ? Où ça ? Vous m’apprenez quelque chose, ou vous inventez. »', '« Aucun incendie à ma connaissance. Et j’aime autant. »'] },
+    seance: { re: /voix d’Albert|la voix de la séance|ce qui a parlé à ma table|« Ne montez pas/i, existe: function (api) { return !!api.flag('seanceFaite'); } }
+  };
 
   // ================================================================ nouveaux lieux
   H.PLACES.stjohn = { label: 'la maison de Smith, à St John’s Wood', concept: 'STJOHN', also: ['INCENDIE', 'TEMOIN'] };
@@ -5782,6 +5872,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
   function arrest(api, who, quiet) {
     var n = (api.flag('arrestations') || 0) + 1;
     api.flag('arrestations', n);
+    if (who) api.flag('agresse', who); // ce qu'on vous reproche : on vous en reparlera
     var name = who && L.npcs[who] ? (L.npcs[who].short || L.npcs[who].name) : 'quelqu’un';
     api.endTalk(false);
     if (who) { var st = api.npcs(who); st.closedUntil = api.s.min + 100000; st.patience = 0; }
@@ -5799,8 +5890,10 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     if (n > 1) api.pay(5);
     api.go('yard');
     if (api.flag('mort:fleming')) api.say(n === 1 ? 'Un inspecteur que vous ne connaissez pas referme votre dossier. « Une fois. Pas deux. »' : 'Le même inspecteur, plus las encore. « La prochaine fois, c’est le juge d’instruction. »');
-    else api.npc('fleming', n === 1 ? '« Fleming. On me dit que vous êtes un ami du professeur Smith. Alors je vais faire comme si cette nuit n’avait pas existé. » Il referme votre dossier. « Une fois. »' : '« Encore vous. La prochaine fois, c’est le juge d’instruction, et je ne lèverai pas le petit doigt. »');
+    else api.npc('fleming', n === 1 ? (who === 'smith' ? '« Fleming. Le professeur Smith ne porte pas plainte : il dit que vous êtes son ami, et que vous n’étiez pas vous-même. Alors je vais faire comme si cette nuit n’avait pas existé. » Il referme votre dossier. « Une fois. »' : '« Fleming. On me dit que vous êtes un ami du professeur Smith. Alors je vais faire comme si cette nuit n’avait pas existé. » Il referme votre dossier. « Une fois. »') : '« Encore vous. La prochaine fois, c’est le juge d’instruction, et je ne lèverai pas le petit doigt. »');
     if (who === 'fleming') api.say('L’inspecteur ne vous adressera plus la parole. Ni aujourd’hui, ni plus tard.');
+    // vous êtes dans son bureau, il vient de vous parler : la conversation continue avec lui
+    else if (!api.flag('mort:fleming') && !api.s.ended && api.npcs('fleming').closedUntil <= api.s.min) { api.s.talk = 'fleming'; api.npcs('fleming').met = true; }
     api.lose(1);
     return true;
   }
@@ -7890,7 +7983,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
       fleming: { groupe: 'police', reg: 'sec', mefiant: 0.8, tics: ['Écoutez,', 'Bon.'],
         dada: ['J’ai quarante dossiers ouverts et un seul inspecteur. Moi.', 'Il faut que je finisse ce rapport avant six heures. Il ne se finira pas.'],
         moi: { nom: '« Fleming. Inspecteur. C’est écrit sur la porte. »', age: '« Quarante-six ans. J’en parais soixante, d’après ma femme. »', origine: '« Bermondsey. Les docks. On n’en sort pas, on s’en éloigne. »', domicile: '« Lewisham. Ça ne vous regarde pas, mais voilà. »', famille: '« Une femme, Margaret. Deux filles, qui trouvent que je ne rentre jamais. Elles ont raison. »', metier: '« Vingt-deux ans de police. On voit tout, à la longue. Puis on voit trop. »', loisirs: '« Un jardin ouvrier, à Lewisham. Des poireaux. Les poireaux ne mentent pas. »', peur: '« De quoi j’ai peur ? Des choses qui n’ont pas d’explication. Elles finissent toujours sur mon bureau. »', croit: '« Je ne crois pas aux fantômes. Je crois aux gens qui ont intérêt à ce qu’on y croie. »', humeur: '« Fatigué. Comme d’habitude. »', guerre: '« Sergent, à Ypres. Trois ans. Ensuite on m’a rendu mon uniforme bleu. »', boire: '« Pas en service. »', argent: '« Un salaire d’inspecteur. Ça paie les poireaux. »', secret: '« J’en ai plein. Ils s’appellent des dossiers. »', joueur: '« Je n’ai pas d’opinion sur vous. Pas encore. Ça viendra. »', defaut: ['« Je ne vois pas le rapport avec l’enquête. »'] },
-        sait: { SMITH: '« Le professeur Smith ? Il nous a aidés sur l’affaire des médiums de Kensington, en dix-neuf. Un homme sérieux. Pour un chasseur de fantômes. »', RIGBY: '« Rigby ? Bon sergent. Trop de fumée dans les poumons, trop d’années dans les incendies. Il voit des incendiaires partout. Il a souvent raison. »', MUSTAPHA: '« L’attaché turc ? Courtois. Bien élevé. Il ment avec beaucoup de grâce. »', BUTTER: '« Butter ? Un vieux fou des trains, à Camberwell. Inoffensif. »', ATKINS: '« La logeuse de Stoke Newington ? Elle fait payer six pence pour voir la chambre. Je n’ai pas de loi contre ça. Je devrais. »', CHELSEA: '« Le Chelsea Arms ? Un hôtel où l’on ne pose pas de questions. On a eu tort de ne pas en poser. »', ISLINGTON: '« Islington. Des antiquaires, des receleurs, et ceux qui sont les deux. »', STOKE: '« Stoke Newington. Des petites gens, des petites maisons. Et un homme qui part en fumée. »', MUSEE: '« Le British Museum ? Ils ont des gardiens. Mieux payés que mes agents. »', ARME: '« Mes hommes n’ont pas d’arme à feu. Ici, c’est l’Angleterre. On compte sur le bon sens et la matraque. »', POLICE: '« La police fait ce qu’elle peut avec ce qu’elle a. Ce qu’elle a, c’est moi. »', BEDDOWS: '« Le domestique de Smith ? On le cherche. On cherche beaucoup de monde, cette semaine. »', OCCULTE: '« L’occultisme ? Laissez ça aux journaux du dimanche. »', FANTOME: '« Les fantômes ne laissent pas d’empreintes. Les assassins, si. »' },
+        sait: { PLAINTE: function (api) { return api.flag('agresse') === 'smith' ? ['« Pourquoi il ne porte pas plainte ? Parce qu’il vous croit son ami. Moi, je ne crois personne : ça fait gagner du temps. »', '« Sans plainte, pas de dossier. Sans dossier, vous sortez. Ne me faites pas regretter l’arithmétique. »'] : api.flag('agresse') ? ['« La plainte a été retirée ce matin. On ne m’a pas dit pourquoi, et je n’aime pas ça. »', '« Pas de plainte, pas de dossier. Estimez-vous heureux. »'] : ['« Une plainte, ça se dépose au guichet, {m}. Moi, je m’occupe de ceux qui ne peuvent plus en déposer. »']; }, SMITH: '« Le professeur Smith ? Il nous a aidés sur l’affaire des médiums de Kensington, en dix-neuf. Un homme sérieux. Pour un chasseur de fantômes. »', RIGBY: '« Rigby ? Bon sergent. Trop de fumée dans les poumons, trop d’années dans les incendies. Il voit des incendiaires partout. Il a souvent raison. »', MUSTAPHA: '« L’attaché turc ? Courtois. Bien élevé. Il ment avec beaucoup de grâce. »', BUTTER: '« Butter ? Un vieux fou des trains, à Camberwell. Inoffensif. »', ATKINS: '« La logeuse de Stoke Newington ? Elle fait payer six pence pour voir la chambre. Je n’ai pas de loi contre ça. Je devrais. »', CHELSEA: '« Le Chelsea Arms ? Un hôtel où l’on ne pose pas de questions. On a eu tort de ne pas en poser. »', ISLINGTON: '« Islington. Des antiquaires, des receleurs, et ceux qui sont les deux. »', STOKE: '« Stoke Newington. Des petites gens, des petites maisons. Et un homme qui part en fumée. »', MUSEE: '« Le British Museum ? Ils ont des gardiens. Mieux payés que mes agents. »', ARME: '« Mes hommes n’ont pas d’arme à feu. Ici, c’est l’Angleterre. On compte sur le bon sens et la matraque. »', POLICE: '« La police fait ce qu’elle peut avec ce qu’elle a. Ce qu’elle a, c’est moi. »', BEDDOWS: '« Le domestique de Smith ? On le cherche. On cherche beaucoup de monde, cette semaine. »', OCCULTE: '« L’occultisme ? Laissez ça aux journaux du dimanche. »', FANTOME: '« Les fantômes ne laissent pas d’empreintes. Les assassins, si. »' },
         avis: { spiritisme: '« Les médiums ? Des escrocs, et les pires : ils volent les veuves. »', turquie: '« La politique turque ne m’intéresse que quand elle meurt à Chelsea. »' },
         relances: [{ q: '« Et vous, qu’est-ce que vous faites dans cette histoire, exactement ? »', oui: '« Ce n’était pas une question à laquelle on répond par oui. »', non: '« C’est bien ce qui m’inquiète. »', autre: '« Hm. Je note. »' }, { q: '« Vous ne me cachez rien, j’espère ? »', oui: '« Alors dites-le. Maintenant. »', non: '« Bien. Je vous croirai jusqu’à preuve du contraire. »' }] },
 
@@ -8025,6 +8118,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
         if (!api.flag('mort:fleming')) api.npc('fleming', id === 'fleming'
           ? '« Vous avez eu la nuit pour réfléchir. » Fleming ne lève pas les yeux de son dossier. « Je ne retiens rien contre vous. Cette fois. »'
           : '« On m’a raconté votre soirée. » Fleming referme un dossier. « Insulter mes hommes ne vous avancera à rien. Une fois, je veux bien. Pas deux. »');
+        if (!api.flag('mort:fleming') && id !== 'fleming' && !api.s.ended) { api.s.talk = 'fleming'; api.npcs('fleming').met = true; }
         api.lose(1);
       }
     };
@@ -9080,8 +9174,27 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     return false;
   }
   var impro0 = L.improvise;
+  var ACHAT = /\b(achet\w*|me procur\w*|faire (des|mes|quelques) (courses|achats|emplettes)|fais (des|mes|quelques) (courses|achats|emplettes)|cherche (une boutique|un magasin|une quincaillerie|une pharmacie|un tailleur|une armurerie)|vais (a la|dans une|chez (le|un)) (boutique|quincaillerie|pharmacie|droguerie|papeterie|epicerie|tailleur|armurier|marchand))\b/;
+  var FOURNITURES = /\b(fournitures?|provisions|materiel|equipement|lampe|lanterne|torche|corde|bougies?|chandelles?|allumettes|couteau|canif|craie|ficelle|papier|encre|carnet|crayons?|pellicules?|piles?|boussole|carte de londres|plan de londres|parapluie|gants|echarpe|pansements?|bandages?|aspirine|laudanum|tabac|cigarettes|cigares|whisky|sandwich|provisions de bouche)\b/;
   L.improvise = function (api, p) {
     var t = ' ' + (p.text || '') + ' ';
+    // les boutiques ont des heures : on n'achète rien à onze heures du soir, ni le dimanche
+    var ta = ' ' + G.RPG.normalize(p.raw || '') + ' ';
+    if (ACHAT.test(ta) && !/\b(journal|journaux|times|billets?)\b/.test(ta) && !/^(wagon|retour|campagne|cave|institut)/.test(api.s.loc) && !G.RPG.recit(p.raw || '')) {
+      if (!L.boutiquesOuvertes(api)) {
+        var dim = !(api.s.min % 1440 >= 20 * 60 || api.s.min % 1440 < 8 * 60);
+        api.say(dim ? api.fresh('ferméDim', ['Un dimanche à Londres : rideaux baissés d’un bout à l’autre de la ville. Rien ne s’achète avant lundi matin.', 'Le dimanche, Londres ne vend rien, pas même une boîte d’allumettes. Il faudra attendre lundi.'])
+          : api.fresh('ferméNuit', ['À cette heure, Londres a baissé ses rideaux de fer. Les boutiques rouvrent vers huit heures.', 'Vous longez des vitrines éteintes, des grilles cadenassées. Rien ne s’achète la nuit, dans ce quartier. Il faudra revenir demain.', 'Un allumeur de réverbères vous regarde secouer une poignée de porte. « Fermé, {m}. Tout est fermé. Revenez au matin. »']));
+        api.s.tick = 2; return true;
+      }
+      if (FOURNITURES.test(ta)) {
+        var ft = (ta.match(FOURNITURES) || [])[0];
+        if (!api.pay(0.25)) { api.say('Vous comptez votre monnaie : pas de quoi, pour l’instant.'); return true; }
+        api.say(api.fresh('achat', ['Une quincaillerie de Holborn, étroite comme un couloir, où l’on trouve de tout sauf de la place. Vous en ressortez avec ce qu’il vous fallait, pour cinq shillings.', 'Un marchand de Southampton Row vous sert sans un mot, enveloppe le tout dans du papier brun, et empoche vos cinq shillings.']));
+        api.take('Des achats du jour (' + ft.trim() + ')'); api.time(30);
+        return true;
+      }
+    }
     if (/\b(prend\w*|ramass\w*|empoch\w*|emport\w*|garde\w*|pique\w*|chipe\w*)\b/.test(t) && prendre(api, t)) return true;
     if (utiliser(api, t)) return true;
     if (/\b(pos\w*|depos\w*|laiss\w*|confi\w*|range\w*|lach\w*)\b.*\b(caisse|maquette|valise|colis|fardeau)\b/.test(t) && charge(api).length) { api.exec('obj_deposer'); return true; }
