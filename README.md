@@ -178,6 +178,18 @@ Plusieurs règles générales évitent qu'un personnage réponde à côté :
 
 Vérifications : `node jeu/tools/test_realisme.js` (phrases pièges), `node jeu/tools/test_fil.js` (retours à l'intrigue).
 
+## Les verrous du moteur
+
+Trois protections générales, dans le moteur, évitent d'avoir à corriger les dialogues au cas par cas :
+
+- **Le verrou des faits** (`faits`, dans `jeu/src/londres_circuits.js`). Chaque événement daté de l'intrigue est déclaré une fois : les mots qui en parlent, et la condition pour qu'il existe (l'incendie : samedi 23 h). Tant qu'il n'existe pas, aucune réplique d'aucun personnage ne peut le mentionner. Si le joueur en parle lui-même, le personnage s'étonne (« Quel incendie ? »). Vérification : `node jeu/tools/test_chrono.js`.
+- **Le terrain commun.** Un pronom (« je l'ai vu ») ne désigne quelqu'un, pour un personnage, que si on a déjà parlé de cette personne avec lui. La phrase qui ouvre une conversation passe par les mêmes garde-fous que les suivantes. Un mot qui est à la fois un nom et un verbe conjugué (« ne porte-t-il pas plainte ») n'est pas pris pour le nom.
+- **Le récit.** Passé, hypothèse, négation, troisième personne : rien n'est joué (voir plus haut).
+
+## Les horaires
+
+Les lieux et les gens ont des heures (`PLACES` et `DISPO`, dans `jeu/src/londres.js`) : le British Museum ferme à 20 h et le dimanche, l'ambassade le week-end, la pension de Stoke Newington dort la nuit ; les inspecteurs rentrent chez eux à 20 h, le buraliste ferme à 20 h et le dimanche, le laitier ne passe qu'à l'aube. Les boutiques sont ouvertes de 8 h à 20 h, sauf le dimanche ; les crieurs de journaux se taisent la nuit ; les billets se réservent de 9 h à 19 h (si l'on insiste, on attend l'ouverture). Vérification : `node jeu/tools/test_horaires.js`.
+
 ## Les personnages absents ne parlent pas
 
 Un verrou dans le moteur empêche toute réplique d’un personnage qui n’est pas là. Un personnage est là si on lui parle, si on peut lui parler à cet endroit, s’il fait partie du décor, ou si sa fiche déclare ses lieux (`lieux: ['stoke']`). Quand un personnage entre en scène le temps d’un événement (Beddows qui ouvre la porte, les passagers du train fantôme), le scénario l’annonce avec `api.arrive('beddows')`. Quand on change de lieu, la conversation en cours s’arrête. Si une réplique est bloquée, elle n’est pas affichée ; les tests automatiques comptent ces blocages pour qu’on corrige le scénario.

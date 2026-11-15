@@ -314,6 +314,9 @@
   var ATTRIBUTS = new Set(('moustache moustaches favoris barbe barbiche cheveux coiffure chignon yeux regard visage figure mains main voix accent chapeau casquette kepi melon feutre bonnet robe costume habit ' +
     'veste manteau pardessus gilet cravate uniforme tenue bijoux collier bague lunettes monocle canne chaussures bottes chale eventail gants pelerine tablier echarpe foulard').split(' '));
   var DEFINI = /^(le|la|les|l|au|aux|son|sa|ses|ce|cet|cette|ces|du|leur|leurs|en)$/;
+  // des mots qui sont à la fois un nom et un verbe conjugué
+  var VERBE_NOM = new Set('porte portes portent note notes notent garde gardes gardent montre montres montrent livre livres livrent place places marche marches marchent ferme fermes ferment signe signes signent compte comptes comptent demande demandes demandent visite visites visitent couche couches tire tires tirent cause causes causent sonne sonnent presse pressent serre serrent tente tentent trouble troublent plante plantent peste reste restent'.split(' '));
+  var SUJET = /^(ne|n|je|j|tu|il|elle|on|ils|elles|qui)$/;
   function parse(lex, raw, phrases) {
     var text = normalize(raw, phrases);
     var toks = text ? text.split(' ') : [];
@@ -331,6 +334,8 @@
       // « un chapeau », « des moustaches » : un vêtement ou un trait quelconque. Seule une référence définie
       // (« l'homme au chapeau », « le chapeau », « son visage ») désigne le personnage qu'on reconnaît à ce détail.
       if (m && ATTRIBUTS.has(t) && lex.concepts[m.id].type === 'n' && !DEFINI.test(toks[i - 1] || '') && !DEFINI.test(toks[i - 2] || '')) return;
+      // « ne porte-t-il pas plainte », « je note », « il garde » : un verbe conjugué, pas la porte, la note ou le garde
+      if (m && /^[nx]$/.test(lex.concepts[m.id].type) && m.score >= 1 && VERBE_NOM.has(t) && (SUJET.test(toks[i - 1] || '') || (toks[i + 1] === 't' && /^(il|elle|on|ils|elles)$/.test(toks[i + 2] || '')) || /^(je|tu|il|elle|on|nous|vous|ils|elles)$/.test(toks[i + 1] || '') && !DEFINI.test(toks[i - 1] || ''))) return;
       if (m) push(m.id, m.score, i); else if (t.length > 1) p.unknown.push(t);
     });
     function push(id, score, pos) {
@@ -525,6 +530,16 @@
       x = echoJuste(who, x);
       var npc = scene.npcs[who];
       var name = npc ? npc.name : who;
+      // verrou des faits : personne ne parle d'un événement qui n'a pas encore eu lieu (scene.faits)
+      var fi = npc && faitInconnu(x);
+      if (fi) {
+        if (G.RPG_FAITS) G.RPG_FAITS.push({ who: who, fait: fi, x: String(x).slice(0, 100) });
+        // le joueur en parle lui-même : on s'étonne (« Quel incendie ? ») ; sinon, on répond à côté, sans rien révéler
+        var F = scene.faits[fi], evoque = paroleJoueur && F.re.test(String(paroleJoueur.raw || ''));
+        var dz = (evoque && F.nie) || npc.deflect || ['…'];
+        x = tokens(dz[(s.seq + s.turn) % dz.length]);
+        if (faitInconnu(x)) return;
+      }
       // verrou : un personnage qui n'est pas là ne parle jamais (ni à sa place, ni dans le dos d'un autre)
       // (une réplique écrite dans le geste en cours — « Beddows paraît à la porte » — est voulue par le scénario)
       if (npc && !inExec && !pnjIci(who)) {
@@ -534,6 +549,15 @@
       noterReplique(who, x);
       // les répliques sans guillemets sont des gestes : narration
       log({ t: 'npc', who: who, name: name, x: x });
+    }
+    // ----- les faits -----
+    // scene.faits = { nom: { re: /mots qui en parlent/, existe: function (api) } } : tant que le fait n'existe pas
+    // (l'incendie avant samedi 23 h), aucune réplique ne peut le mentionner, d'où qu'elle vienne.
+    function faitInconnu(x) {
+      var F = scene.faits; if (!F || typeof x !== 'string') return null;
+      if (/^« (Quel|Quelle|Quels|Quelles|Aucun|Aucune|Un|Une) [^»?]{0,40}\?/.test(x)) return null; // il s'étonne, il ne confirme rien
+      for (var k in F) { if (F[k].re.test(x) && !F[k].existe(api)) return k; }
+      return null;
     }
     // ----- l'écho juste -----
     // Une réplique écrite qui commence par reprendre la question (« Un homme qui nous observe ? Mon ami… ») suppose
@@ -961,6 +985,11 @@
         if (s.talk === dest.id && !s.pending && dest.reste.split(/\s+/).length >= 2) handleDialogue(reste);
         return;
       }
+      // « j'ai essayé de l'étrangler », dit à personne : c'est du passé, on ne le rejoue pas
+      if (R_PASSE.test(' ' + normalize(p.raw) + ' ') && !/\?\s*$/.test(p.raw) && !/\b(decide|choisi|fini|termine|compris|change d avis)\b/.test(normalize(p.raw))) {
+        api.say(fresh('recitSeul', ['Ce qui est fait est fait. Reste à savoir ce que vous faites maintenant.', 'Vous y repensez un instant. Mais personne, ici, ne vous a rien demandé. Que faites-vous ?', 'Le passé ne se rejoue pas. Et maintenant ?']));
+        s.tick = 0; return;
+      }
       if (scene.improvise && scene.improvise(api, p)) return;
       var cands = rankActions(p);
       var best = cands[0], second = cands[1];
@@ -1079,6 +1108,8 @@
       s.tick = scene.talkTick || 1;
     }
     function startTalk(npcId, p) {
+      // les gens ont des heures : la nuit, le dimanche, certains ne sont pas là (scene.disponible)
+      if (scene.disponible) { var absent = scene.disponible(api, npcId); if (absent) { api.say(absent); return; } }
       retenir(conceptDuPnj(npcId));
       var npc = scene.npcs[npcId];
       var st = npcState(npcId);
@@ -1108,11 +1139,18 @@
         talkMode = null;
       }
       if (p && s.talk === npcId) {
+        // « je l'ai vu » : « l' » ne désigne quelqu'un, pour ce personnage, que si on en a déjà parlé avec lui
+        var horsTerrain = p.pronom && !abordes(npcId)[p.pronom] ? p.pronom : null;
         noterAborde(npcId, p);
+        paroleJoueur = p;
         var q = cloneParse(p);
+        if (horsTerrain) { delete q.c[horsTerrain]; q.nouns = q.nouns.filter(function (n) { return n.id !== horsTerrain; }); q.all = q.all.filter(function (n) { return n.id !== horsTerrain; }); }
         (npc.selfKeys || []).forEach(function (k) { delete q.c[k]; });
         delete q.c.PARLER; delete q.c.ALLER;
-        var tops = rankTopics(npc, q);
+        // la phrase qui ouvre la conversation passe par les mêmes garde-fous que les suivantes :
+        // un récit (« j'ai essayé de l'étrangler ») est écouté, pas pris pour une question sur quelqu'un
+        if (recit(p.raw)) { handleDialogue(q); return; }
+        var tops = rankTopics(npc, q).filter(function (x) { return !horsSujet(x.t, q, npc); });
         if (tops[0] && tops[0].score >= 0.64) runTopic(npc, tops[0].t.id, q);
       }
     }

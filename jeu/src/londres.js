@@ -21,11 +21,11 @@
     cheapside: { label: 'la chambre de Cheapside', concept: 'CHEAPSIDE', also: ['BEDDOWS', 'BRULE', 'CARTEVISITE'] },
     chelsea: { label: 'l’hôtel Chelsea Arms', concept: 'CHELSEA', also: ['MEURTRES'] },
     yard: { label: 'Scotland Yard', concept: 'YARD', also: ['FLEMING', 'RIGBY', 'POLICE'] },
-    ambassade: { label: 'l’ambassade de Turquie', concept: 'AMBASSADE', also: ['MUSTAPHA', 'TURCS'], hours: [9, 18], closed: 'À cette heure, l’ambassade de Turquie est fermée. Ses bureaux ouvrent à 9 h.' },
+    ambassade: { label: 'l’ambassade de Turquie', concept: 'AMBASSADE', also: ['MUSTAPHA', 'TURCS'], hours: [9, 18], jours: ['samedi', 'dimanche'], fermeJour: 'Les grilles de l’ambassade de Turquie sont closes : les bureaux ne rouvrent que lundi, à 9 h.', closed: 'À cette heure, l’ambassade de Turquie est fermée. Ses bureaux ouvrent à 9 h.' },
     islington: { label: 'la boutique de Brophy Lane, à Islington', concept: 'ISLINGTON', also: ['VOISIN', 'MAKRYAT', 'REGISTRE'] },
-    musee: { label: 'la salle de lecture du British Museum', concept: 'MUSEE', also: ['BIBLIOTHECAIRE', 'LIVRE'], hours: [9, 20], closed: 'La salle de lecture du British Museum ouvre de 9 h à 20 h. À cette heure, ses grilles sont fermées.' },
-    stoke: { label: 'la pension de Stoke Newington', concept: 'STOKE', also: ['ATKINS', 'STANLEY', 'SERGENT'] },
-    camberwell: { label: 'la maison d’Arthur Butter, à Camberwell', concept: 'CAMBERWELL', also: ['BUTTER', 'MAQUETTE', 'ASSOCIATION'] },
+    musee: { label: 'la salle de lecture du British Museum', concept: 'MUSEE', also: ['BIBLIOTHECAIRE', 'LIVRE'], hours: [9, 20], jours: ['dimanche'], fermeJour: 'Le dimanche, la salle de lecture du British Museum reste fermée. Les lecteurs, comme les livres, se reposent jusqu’à lundi.', closed: 'La salle de lecture du British Museum ouvre de 9 h à 20 h. À cette heure, ses grilles sont fermées.' },
+    stoke: { label: 'la pension de Stoke Newington', concept: 'STOKE', also: ['ATKINS', 'STANLEY', 'SERGENT'], hours: [7, 22], closed: 'À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison.' },
+    camberwell: { label: 'la maison d’Arthur Butter, à Camberwell', concept: 'CAMBERWELL', also: ['BUTTER', 'MAQUETTE', 'ASSOCIATION'], hours: [8, 24], closed: 'À cette heure, la maison de M. Butter est éteinte. On ne sonne pas chez les gens en pleine nuit.' },
     victoria: { label: 'la gare Victoria', concept: 'VICTORIA', also: ['VOYAGE', 'TRAIN'] }
   };
   var ZONE = { boutique: 'islington', chambre_stanley: 'stoke', cave: 'camberwell' };
@@ -152,6 +152,7 @@
       [/\b(la |une )?valise (dans|du|qui roule dans) (le )?couloir\b|\bla valise qui roule\b/g, ' couloir '],
       [/\b(la |une )?(dame|voisine|cliente|vieille dame) du (deuxieme|2e|second)( etage)?\b|\bpas au plafond\b|\bdeuxieme etage\b/g, ' damedeuxieme '],
       [/\bscotland yard\b|\bnew scotland yard\b/g, ' yard '],
+      [/\b(porte\w*|porter|depose\w*|deposer|retire\w*|retirer) (t il |t elle )?(pas |jamais |plus )?(une |de |sa |la )?plainte\b/g, ' plainte '],
       [/\b(l |un |cet |ce |le )?(homme|monsieur|type|inconnu|individu) (brun|aux cheveux noirs|aux cheveux bruns|qui (m |nous )?(observait|regardait|epiait|fixait|surveillait))\b|\b(le |un )?grand brun\b/g, ' moustachu '],
       [/\bchelsea arms\b/g, ' chelsea '],
       [/\bbritish museum\b|\bsalle de lecture\b|\breading room\b/g, ' musee '],
@@ -248,6 +249,7 @@
       Lx.add('STANLEY', 'n', 'stanley, henry', { label: 'Henry Stanley', npc: true });
       Lx.add('BIBLIOTHECAIRE', 'n', 'bibliothecaire, conservateur, gardien, lorgnon', { label: 'le conservateur', npc: true });
       Lx.add('PASSAGERSMORTS', 'n', 'morts, defunts, spectres, revenants, cadavres, cadavre, zombies', { label: 'les passagers morts' });
+      Lx.add('PLAINTE', 'x', 'plainte, plaintes, poursuites, inculpation, inculpe, accusation, chefs d accusation', { label: 'la plainte' });
       Lx.add('MOUSTACHU', 'n', 'moustachu, moustache, moustaches, observateur, espion, guetteur', { label: 'l’homme à la moustache' });
       // sujets de l'enquête
       Lx.add('MAKRYAT', 'n', 'makryat, mehmet', { label: 'Makryat' });
@@ -651,7 +653,16 @@
       close: ['« Sergent ! Raccompagnez ces messieurs-dames. » L’entretien est terminé.'],
       topics: [
         T('meurtres', ['MAKRYAT', 'CHELSEA', 'MEURTRES', 'TURCS', 'PASSEPORT'], ['« Trois hommes poignardés en plein cœur, trois passeports au même nom. Les Turcs jurent que ce sont des faux. Le vrai Makryat, s’il existe, n’a pas jugé bon de se présenter. Voilà ce que je peux dire, et c’est déjà dans le Times. »', '« Si vous savez quelque chose, dites-le. Sinon, je ne vous retiens pas. »'], { chip: 'Les meurtres du Chelsea Arms' }),
-        T('smith', ['SMITH', 'INCENDIE', 'BEDDOWS'], ['« L’incendie de St John’s Wood ? Pas mon affaire. Voyez le sergent Rigby, aux incendies, deuxième étage. »'], { chip: 'La maison de Smith' }),
+        T('smith', ['SMITH', 'INCENDIE', 'BEDDOWS'], function (api, n, p) {
+          // avant l'incendie (samedi, 23 h), il n'y a pas d'incendie dont parler
+          if (api.s.min < at(1, 23, 0)) {
+            if (p && p.c && p.c.INCENDIE !== undefined && p.c.SMITH === undefined) { api.npc('fleming', api.fresh('flemQuelFeu', ['« Quel incendie ? » Il fronce les sourcils. « Vous savez quelque chose que j’ignore, {m} ? »', '« Aucun incendie sur mon bureau, {m}. Et je préfère. »'])); return; }
+            if (api.flag('agresse') === 'smith') { api.npc('fleming', n === 0 ? '« Le professeur ne porte pas plainte. Il dit que vous n’étiez pas vous-même, ce soir-là. C’est la seule raison pour laquelle vous dormirez dans votre lit. »' : '« Ne m’obligez pas à rouvrir ce dossier, {m}. »'); return; }
+            api.npc('fleming', n === 0 ? '« Le professeur Smith ? Il nous a aidés, en dix-neuf, contre de faux médiums. Un homme sérieux. Je n’ai rien d’autre à son nom, {m}, et j’aimerais que ça dure. »' : '« Je vous l’ai dit : rien à son nom. »');
+            return;
+          }
+          api.npc('fleming', '« L’incendie de St John’s Wood ? Pas mon affaire. Voyez le sergent Rigby, aux incendies, deuxième étage. »');
+        }, { chip: 'Le professeur Smith' }),
         T('aide', ['PERSUADER', 'BARATIN', 'ARGENT'], ['« Vous voulez m’aider ? Alors apportez-moi un fait. Pas une impression, pas une rumeur : un fait. »'])
       ] }),
 
@@ -873,6 +884,8 @@
         if (id === 'institut') { api.say(api.fresh('instFini', ['L’Institut impérial ? Le banquet est terminé depuis longtemps. Les salons sont fermés, les chaises empilées ; il n’y a plus rien à y apprendre.', 'Vous pensez à l’Institut impérial, à ses lustres et à son champagne tiède. Le banquet est fini : ce qui compte, maintenant, se passe ailleurs dans Londres.'])); return; }
         if (!known(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.'); return; }
         var h = hour(api.s.min);
+        // les jours de fermeture (le dimanche au British Museum, le week-end à l'ambassade)
+        if (p.jours && p.jours.indexOf(JOURS[(4 + day(api.s.min)) % 7]) >= 0) { api.say(p.fermeJour || p.closed); return; }
         if (p.hours && h >= p.hours[1]) { api.say(p.closed + ' Il faudra y retourner demain.'); return; }
         if (p.hours && h < p.hours[0] - 1) {
           // un lieu qui n'ouvre que le soir : on attend le soir, si c'est ce qu'on a dit
@@ -1095,11 +1108,11 @@
     yard: {
       name: 'New Scotland Yard', art: 'bureau',
       enter: function (api, first) { if (first) api.say('Les briques rouges et blanches de New Scotland Yard, au bord de la Tamise. Un hall bruyant, des agents qui courent, des bancs où attendent des gens qui ont perdu quelque chose : un chien, un mari, une montre.'); else api.say(api.fresh('yardR', ['Scotland Yard, de nouveau. Le planton vous reconnaît et soupire.', 'Le hall de Scotland Yard sent le tabac froid et le papier humide.'])); },
-      things: [{ label: 'l’inspecteur Fleming', ids: ['FLEMING'] }, { label: 'le sergent Rigby, aux incendies', ids: ['RIGBY'] }, { label: 'les agents du hall', ids: ['POLICE', 'QUELQUUN'] }, { label: null, ids: ['SALLE', 'YARD'] }],
+      things: [{ label: 'l’inspecteur Fleming', ids: ['FLEMING'] }, { label: 'le sergent Rigby, aux incendies', ids: ['RIGBY'], cond: function (api) { return api.s.min >= at(1, 23, 0); } }, { label: 'les agents du hall', ids: ['POLICE', 'QUELQUUN'] }, { label: null, ids: ['SALLE', 'YARD'] }],
       actions: [
         { id: 'y_fleming', label: 'Demander à voir l’inspecteur Fleming', obj: 'l’inspecteur Fleming', idea: true, talkTo: 'fleming', verbs: ['PARLER', 'ALLER', 'VISITER', 'PERSUADER', 'BARATIN', 'POLI'], nouns: ['FLEMING', 'MAKRYAT'], extra: ['SMITH', 'INCENDIE', 'BEDDOWS', 'CHELSEA', 'ARGENT'],
           run: function (api, p) { api.talk('fleming', p); } },
-        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
+        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, cond: function (api) { return api.s.min >= at(1, 23, 0); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
           run: function (api, p) { api.talk('rigby', p); } },
         { id: 'y_glaner', label: 'Glaner des informations auprès des agents', obj: 'les agents du hall', idea: true, verbs: ['BARATIN', 'ECOUTER', 'PARLER', 'FOUILLER', 'PSY'], nouns: ['POLICE', 'QUELQUUN', 'MAKRYAT'], bare: true,
           run: function (api) {
@@ -1419,6 +1432,14 @@
     if (api.item(BILLETS)) { api.say('Vos billets sont déjà dans votre portefeuille, avec la réservation des wagons-lits.'); return; }
     if (!api.has('QUETE')) { api.say('Réserver un voyage ? Rien ne vous y pousse encore.'); return; }
     if (api.s.money < 12) { api.say('Il vous faudrait une douzaine de livres pour le premier tronçon jusqu’à Paris. Vous ne les avez pas.'); return; }
+    var hb = hour(api.s.min), jb = JOURS[(4 + day(api.s.min)) % 7];
+    if (jb === 'dimanche' || hb < 9 || hb >= 19) {
+      // une première fois, on apprend les horaires ; si l'on insiste, on attend l'ouverture
+      if (!api.flag('guichetFerme')) { api.flag('guichetFerme', true); api.say((jb === 'dimanche' ? 'Un dimanche ? Les bureaux de la Compagnie des wagons-lits et de Cook sont fermés. On réserve à partir de lundi, 9 h.' : 'À cette heure, les bureaux de la Compagnie des wagons-lits sont fermés. On réserve de 9 h à 19 h.') + ' Vous pouvez revenir, ou attendre l’ouverture.'); return; }
+      var dj = day(api.s.min) + (hb >= 9 ? 1 : 0); if (JOURS[(4 + dj) % 7] === 'dimanche') dj++;
+      api.s.min = dj * D + 9 * 60 + 5; api.s.tick = 0; api.flag('guichetFerme', false);
+      api.say('Vous attendez l’ouverture. Une nuit trop courte, un thé brûlant, et vous êtes le premier client devant le rideau qui se lève.');
+    }
     api.s.money -= 12; api.take(BILLETS);
     api.say(api.s.loc === 'victoria' ? 'Au guichet de la Compagnie internationale des wagons-lits, un employé à manchettes établit vos billets : train du ferry, traversée Douvres-Calais, voiture directe pour Paris, puis le Simplon-Orient. Douze livres pour le premier tronçon, le reste sera réglé en route.' : 'Le réceptionniste téléphone à l’agence Cook. Une heure plus tard, un coursier apporte vos billets : train du ferry depuis Victoria, traversée Douvres-Calais, voiture directe pour Paris, réservation sur le Simplon-Orient. Douze livres pour le premier tronçon.');
   }
@@ -1464,6 +1485,8 @@
       run: function (api) { var c = destChips(api); if (!c.length) { api.say('Vous ne connaissez encore aucune adresse utile.'); return; } api.say('Vous pouvez vous rendre à : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.'); api.chips(c); } },
     { id: 'g_journal', label: 'Acheter un journal', verbs: ['PRENDRE', 'EXAMINER', 'COMMANDER', 'DONNER'], nouns: ['JOURNAL'], repeatable: true, cond: function (api) { return /^(islington|stoke|victoria|yard|chelsea|musee|camberwell)$/.test(api.s.loc); },
       run: function (api) {
+        var hj = hour(api.s.min);
+        if (hj >= 22 || hj < 5) { api.say(api.fresh('pasDeCrieur', ['À cette heure, plus un crieur dans les rues. Les éditions du matin ne sortiront des presses qu’à l’aube.', 'Les kiosques sont fermés, les crieurs couchés. Il faudra attendre le matin pour un journal.'])); return; }
         var where = { yard: ['Un exemplaire du jour traîne sur un banc du hall.', 'Vous empruntez le journal d’un agent qui somnole.'], chelsea: ['Les journaux du jour sont empilés sur le comptoir de la réception.', 'Vous prenez un journal sur la pile, sous l’œil las du réceptionniste.'], musee: ['Vous empruntez le journal du jour sur le présentoir des périodiques.', 'Le présentoir des périodiques vous fournit un journal du jour.'], camberwell: ['Butter vous tend son journal, plié à la page des chemins de fer.', 'Vous reprenez le journal de Butter, toujours plié aux chemins de fer.'] }[api.s.loc] || ['Vous achetez un journal à un crieur qui hurle les titres dans le brouillard.', 'Un gamin vous vend un journal encore humide d’encre.'];
         api.say(api.fresh('crieur:' + api.s.loc, where)); lirePresse(api);
       } },
@@ -1622,6 +1645,27 @@
     alexis: 'Randolph Alexis, occultiste, censé être mort en 1897. Prisonnier du train fantôme. Pas digne de confiance.',
     stanley: 'Henry Stanley, collectionneur de trains, disparu de sa chambre dans un nuage de fumée.'
   };
+  // ---------------------------------------------------------------- qui est là, à quelle heure
+  // Les gens ont des heures : un inspecteur rentre chez lui, un buraliste baisse son rideau, un laitier ne passe qu'à l'aube.
+  var DISPO = {
+    fleming: { h: [8, 20], x: 'Le planton de nuit lève à peine les yeux. « L’inspecteur Fleming ? Rentré chez lui, {m}. Les bureaux rouvrent à huit heures. »' },
+    rigby: { h: [8, 20], x: 'Le planton de nuit lève à peine les yeux. « Le sergent Rigby ? Parti depuis longtemps, {m}. Revenez à huit heures. »' },
+    sergent: { h: [8, 20], x: 'Au poste du coin, un agent de nuit somnole derrière son guichet. « Le sergent ? Demain, huit heures. »' },
+    voisin: { h: [7, 20], repos: 'dimanche', x: 'Le bureau de tabac a baissé son rideau de fer. Une pancarte jaunie : « Ouvert de 7 h à 20 h ».', xRepos: 'Rideau baissé, pancarte : « Fermé le dimanche ». Le buraliste respecte le jour du Seigneur, ou sa grasse matinée.' },
+    atkins: { h: [7, 22], x: 'Mrs Atkins est montée se coucher. La maison dort. Il faudra revenir après sept heures.' },
+    butter: { h: [8, 24], x: 'M. Butter dort, sans doute au milieu de ses catalogues. Il faudra revenir au matin.' },
+    laitier: { h: [5, 12], x: 'Le laitier a fini sa tournée depuis longtemps : il ne passe qu’à l’aube. Sa carriole n’est plus là.' }
+  };
+  L.disponible = function (api, id) {
+    var d = DISPO[id]; if (!d) return null;
+    if (L.pnjIci && L.pnjIci(api, id)) return null;
+    if (api.flag('combat') || /^(wagon|retour|campagne|cave)/.test(api.s.loc)) return null;
+    var h = hour(api.s.min);
+    if (d.repos && JOURS[(4 + day(api.s.min)) % 7] === d.repos) return d.xRepos || d.x;
+    return (h < d.h[0] || h >= d.h[1]) ? d.x : null;
+  };
+  L.boutiquesOuvertes = function (api) { var h = hour(api.s.min); return h >= 8 && h < 20 && JOURS[(4 + day(api.s.min)) % 7] !== 'dimanche'; };
+
   L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);

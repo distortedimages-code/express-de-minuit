@@ -49,6 +49,14 @@
   L.clues.CLE14 = { title: 'La clé de la chambre 14', text: 'L’homme à la moustache a laissé tomber dans le brouillard une plaque de clé du Chelsea Arms : chambre 14.' };
   L.clues.SEUL = { title: 'Beddows, seul', text: 'Loin du lit, Beddows tremble : « Il ne mange plus. Il ne dort plus. Il connaît des choses que Monsieur ne savait pas. » Puis il s’est enfui.' };
 
+  // ================================================================ les faits datés
+  // Tant qu'un fait n'existe pas, le moteur interdit à tout personnage d'en parler (verrou des faits).
+  L.faits = {
+    incendie: { re: /incendie de|l’incendie|un incendie|cet incendie|a brûlé|ont brûlé|maison (a |qui a )?brûl|les ruines|des ruines|décombres|les cendres|flambait|le feu est parti|avant le feu|juste avant les flammes|parti du bureau|sentait l’essence|le feu partout|filé avant le feu/i, existe: function (api) { return api.s.min >= FEU; },
+      nie: ['« Quel incendie, {m} ? Je n’ai rien entendu de tel. »', '« Un incendie ? Où ça ? Vous m’apprenez quelque chose, ou vous inventez. »', '« Aucun incendie à ma connaissance. Et j’aime autant. »'] },
+    seance: { re: /voix d’Albert|la voix de la séance|ce qui a parlé à ma table|« Ne montez pas/i, existe: function (api) { return !!api.flag('seanceFaite'); } }
+  };
+
   // ================================================================ nouveaux lieux
   H.PLACES.stjohn = { label: 'la maison de Smith, à St John’s Wood', concept: 'STJOHN', also: ['INCENDIE', 'TEMOIN'] };
   H.PLACES.archives = { label: 'les archives du Daily Courier, à Fleet Street', concept: 'ARCHIVES', also: ['ARCHIVISTE'], hours: [8, 23], closed: 'Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h.' };
@@ -515,6 +523,7 @@
   function arrest(api, who, quiet) {
     var n = (api.flag('arrestations') || 0) + 1;
     api.flag('arrestations', n);
+    if (who) api.flag('agresse', who); // ce qu'on vous reproche : on vous en reparlera
     var name = who && L.npcs[who] ? (L.npcs[who].short || L.npcs[who].name) : 'quelqu’un';
     api.endTalk(false);
     if (who) { var st = api.npcs(who); st.closedUntil = api.s.min + 100000; st.patience = 0; }
@@ -532,8 +541,10 @@
     if (n > 1) api.pay(5);
     api.go('yard');
     if (api.flag('mort:fleming')) api.say(n === 1 ? 'Un inspecteur que vous ne connaissez pas referme votre dossier. « Une fois. Pas deux. »' : 'Le même inspecteur, plus las encore. « La prochaine fois, c’est le juge d’instruction. »');
-    else api.npc('fleming', n === 1 ? '« Fleming. On me dit que vous êtes un ami du professeur Smith. Alors je vais faire comme si cette nuit n’avait pas existé. » Il referme votre dossier. « Une fois. »' : '« Encore vous. La prochaine fois, c’est le juge d’instruction, et je ne lèverai pas le petit doigt. »');
+    else api.npc('fleming', n === 1 ? (who === 'smith' ? '« Fleming. Le professeur Smith ne porte pas plainte : il dit que vous êtes son ami, et que vous n’étiez pas vous-même. Alors je vais faire comme si cette nuit n’avait pas existé. » Il referme votre dossier. « Une fois. »' : '« Fleming. On me dit que vous êtes un ami du professeur Smith. Alors je vais faire comme si cette nuit n’avait pas existé. » Il referme votre dossier. « Une fois. »') : '« Encore vous. La prochaine fois, c’est le juge d’instruction, et je ne lèverai pas le petit doigt. »');
     if (who === 'fleming') api.say('L’inspecteur ne vous adressera plus la parole. Ni aujourd’hui, ni plus tard.');
+    // vous êtes dans son bureau, il vient de vous parler : la conversation continue avec lui
+    else if (!api.flag('mort:fleming') && !api.s.ended && api.npcs('fleming').closedUntil <= api.s.min) { api.s.talk = 'fleming'; api.npcs('fleming').met = true; }
     api.lose(1);
     return true;
   }

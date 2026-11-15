@@ -20,6 +20,10 @@ const CAS = [
   ['londres', 'institut', 'smith', null, 'si je vous frappais, que feriez-vous ?', null, /Votre geste|vous jetez/i],
   ['londres', 'institut', 'smith', null, 'je ne vais pas vous frapper', null, /Votre geste|vous jetez/i],
   ['prologue', 'restaurant', 'serveur', null, 'j’ai frappé un homme à Paris', null, /recule|menace|Intimidation/i],
+  ['londres', 'yard', 'fleming', g => { g.state.min = 1440 + 540; g.api.flag('agresse', 'smith'); }, 'parlez-moi de Smith', /plainte/i, /incendie|Rigby/i],
+  ['londres', 'yard', 'fleming', g => { g.state.min = 1440 + 540; g.api.flag('agresse', 'smith'); }, 'pourquoi ne porte-t-il pas plainte ?', /ami|plainte/i, /la porte|« porte »/i],
+  ['londres', 'yard', 'fleming', g => { g.state.min = 1440 + 540; }, 'je l’ai vu hier soir', null, /incendie|Rigby/i],
+  ['londres', 'yard', 'fleming', g => { g.state.min = 1440 + 540; }, 'et l’incendie ?', /Quel incendie|Aucun incendie/i, /Rigby/i],
   ['londres', 'hotel', 'concierge', g => { g.state.min = 1440 + 600; }, 'j’ai mal dormi', null, /courrier|Rien pour vous/i],
 ];
 let bad = 0;

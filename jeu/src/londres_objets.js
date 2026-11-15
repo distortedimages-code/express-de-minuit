@@ -125,8 +125,27 @@
     return false;
   }
   var impro0 = L.improvise;
+  var ACHAT = /\b(achet\w*|me procur\w*|faire (des|mes|quelques) (courses|achats|emplettes)|fais (des|mes|quelques) (courses|achats|emplettes)|cherche (une boutique|un magasin|une quincaillerie|une pharmacie|un tailleur|une armurerie)|vais (a la|dans une|chez (le|un)) (boutique|quincaillerie|pharmacie|droguerie|papeterie|epicerie|tailleur|armurier|marchand))\b/;
+  var FOURNITURES = /\b(fournitures?|provisions|materiel|equipement|lampe|lanterne|torche|corde|bougies?|chandelles?|allumettes|couteau|canif|craie|ficelle|papier|encre|carnet|crayons?|pellicules?|piles?|boussole|carte de londres|plan de londres|parapluie|gants|echarpe|pansements?|bandages?|aspirine|laudanum|tabac|cigarettes|cigares|whisky|sandwich|provisions de bouche)\b/;
   L.improvise = function (api, p) {
     var t = ' ' + (p.text || '') + ' ';
+    // les boutiques ont des heures : on n'achète rien à onze heures du soir, ni le dimanche
+    var ta = ' ' + G.RPG.normalize(p.raw || '') + ' ';
+    if (ACHAT.test(ta) && !/\b(journal|journaux|times|billets?)\b/.test(ta) && !/^(wagon|retour|campagne|cave|institut)/.test(api.s.loc) && !G.RPG.recit(p.raw || '')) {
+      if (!L.boutiquesOuvertes(api)) {
+        var dim = !(api.s.min % 1440 >= 20 * 60 || api.s.min % 1440 < 8 * 60);
+        api.say(dim ? api.fresh('ferméDim', ['Un dimanche à Londres : rideaux baissés d’un bout à l’autre de la ville. Rien ne s’achète avant lundi matin.', 'Le dimanche, Londres ne vend rien, pas même une boîte d’allumettes. Il faudra attendre lundi.'])
+          : api.fresh('ferméNuit', ['À cette heure, Londres a baissé ses rideaux de fer. Les boutiques rouvrent vers huit heures.', 'Vous longez des vitrines éteintes, des grilles cadenassées. Rien ne s’achète la nuit, dans ce quartier. Il faudra revenir demain.', 'Un allumeur de réverbères vous regarde secouer une poignée de porte. « Fermé, {m}. Tout est fermé. Revenez au matin. »']));
+        api.s.tick = 2; return true;
+      }
+      if (FOURNITURES.test(ta)) {
+        var ft = (ta.match(FOURNITURES) || [])[0];
+        if (!api.pay(0.25)) { api.say('Vous comptez votre monnaie : pas de quoi, pour l’instant.'); return true; }
+        api.say(api.fresh('achat', ['Une quincaillerie de Holborn, étroite comme un couloir, où l’on trouve de tout sauf de la place. Vous en ressortez avec ce qu’il vous fallait, pour cinq shillings.', 'Un marchand de Southampton Row vous sert sans un mot, enveloppe le tout dans du papier brun, et empoche vos cinq shillings.']));
+        api.take('Des achats du jour (' + ft.trim() + ')'); api.time(30);
+        return true;
+      }
+    }
     if (/\b(prend\w*|ramass\w*|empoch\w*|emport\w*|garde\w*|pique\w*|chipe\w*)\b/.test(t) && prendre(api, t)) return true;
     if (utiliser(api, t)) return true;
     if (/\b(pos\w*|depos\w*|laiss\w*|confi\w*|range\w*|lach\w*)\b.*\b(caisse|maquette|valise|colis|fardeau)\b/.test(t) && charge(api).length) { api.exec('obj_deposer'); return true; }

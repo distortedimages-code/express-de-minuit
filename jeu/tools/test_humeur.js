@@ -35,12 +35,13 @@ function play(ch, id, lines, check) {
     });
     if (check) check(i, out, g);
   });
-  return { g, fin: fin || (g.state.talk ? null : 'fin') };
+  return { g, fin: fin || (g.state.talk === id ? null : 'fin') };
 }
 for (const ch of ['prologue', 'londres']) {
   const sc = CHAPTERS[ch];
   for (const id of Object.keys(sc.fiches)) {
     // les absurdités : on finit par se taire ou par sévir
+    sc.pnjIci = (api, who) => who === id; // le banc d'essai fait venir le personnage, quelle que soit l'heure
     const a = play(ch, id, ABS);
     if (!a.fin && !(a.g.api.flag('pm:' + id) || {}).sil) { (issues.absurde = issues.absurde || []).push(id); }
     // les insultes : idem, et plus vite
