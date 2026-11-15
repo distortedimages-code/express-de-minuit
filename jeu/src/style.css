@@ -356,3 +356,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 
 /* le carnet rongé par les remords */
 .scrawl { font-family: 'Archivo', sans-serif; font-style: italic; color: var(--red-hi); transform: rotate(-1.2deg); line-height: 1.7; padding: 4px 2px 10px; }
+
+.title-screen .tmsg { color: var(--red); text-transform: none; letter-spacing: .02em; }
+.menu-msg { margin: 4px 0 0; color: var(--red); font-size: 14px; }
+.menu-msg.ok { color: var(--text); }

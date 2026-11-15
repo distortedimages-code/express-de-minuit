@@ -182,6 +182,14 @@ Quand on dit n'importe quoi à un personnage, qu'on l'insulte ou qu'on lui parle
 
 Plusieurs phrases d’un coup reçoivent plusieurs réponses, dans l’ordre (« T’es con ou quoi ? Où est passé le barman ? »). Un personnage insulté répond du bout des lèvres, puis ne répond plus sans excuses. Un compliment déclenche un jet de Charme : réussi, le personnage vous a à la bonne pour la journée (dé bonus à vos jets sociaux avec lui) ; s’il vous en veut, c’est un dé de malus. Des excuses font retomber la tension. Un même personnage ne dit jamais deux fois la même phrase. La vérification se lance avec `node jeu/tools/test_humeur.js`.
 
+## Les sauvegardes
+
+La partie s’enregistre toute seule dans le navigateur après chaque geste (bouton « Continuer » à l’écran titre). Pour garder plusieurs parties ou faire des essais, le menu propose « Enregistrer dans un fichier » (un fichier `.json` nommé d’après le chapitre, l’investigateur et l’heure du jeu) et « Charger un fichier de sauvegarde ». L’écran titre a aussi « Charger une sauvegarde ». Un fichier se recharge sur n’importe quel appareil. Dans la visionneuse de Claude, l’enregistrement passe par sa fenêtre de confirmation.
+
+## La version en ligne (GitHub Pages)
+
+La branche `gh-pages` contient le jeu prêt à jouer : `index.html`, les images et la musique. Une fois GitHub Pages activé sur cette branche, le jeu est à l’adresse https://distortedimages-code.github.io/express-de-minuit/ . Chaque nouvelle version du jeu y est recopiée.
+
 ## Le testeur IA
 
 Le workflow **Testeur IA** fait jouer ChatGPT à des parties entières du jeu, qui tourne sans écran sur les serveurs de GitHub (sources dans `jeu/src`). À chaque tour, le modèle lit ce que le jeu vient d'écrire et tape l'action suivante, selon un profil de joueur : méthodique, bavard, absurde, menteur, pressé, ou qui fait des fautes de frappe. À la fin de chaque partie, il relit la transcription et relève ce qui sonne faux. Un filtre automatique gratuit s'ajoute à sa relecture.

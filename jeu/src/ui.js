@@ -42,6 +42,73 @@
   // ---------------------------------------------------------------- utilitaires
   function save() { try { localStorage.setItem(KEY, JSON.stringify(game.state)); } catch (e) {} }
   function loadSave() { try { var s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+  // ---------------------------------------------------------------- sauvegardes en fichier
+  // Un fichier par partie : on le garde où l'on veut, on le recharge plus tard, sur cet appareil ou un autre.
+  function nomFichier() {
+    var s = game.state, pc = s.pc || {}, quand = String(game.clock() || '').toLowerCase().replace(/\s*·\s*/g, '-').replace(/\s+/g, '');
+    var bout = ['express-minuit', s.chapter || 'prologue', (pc.key || pc.first || '').toString().toLowerCase(), quand].filter(Boolean).join('_');
+    return bout.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9_\-]/g, '') + '.json';
+  }
+  // dans la visionneuse de Claude, un fichier passe par sa propre fenêtre de confirmation (capacité « downloads »)
+  var dlClaude = null;
+  try { if (window.claude && typeof window.claude.use === 'function') window.claude.use('downloads').then(function (d) { dlClaude = d || null; }, function () {}); } catch (e) {}
+  function telecharger(nom, texte, fin) {
+    fin = fin || function () {};
+    if (dlClaude) {
+      dlClaude.save({ filename: nom, data: texte }).then(function () { fin('Fichier enregistré : ' + nom); }, function (e) {
+        var c = e && e.code;
+        if (c === 'declined') return fin('');
+        if (c === 'rate_limited') return fin('Une fenêtre d’enregistrement est déjà ouverte.');
+        fin('L’enregistrement de fichiers n’est pas disponible ici. Essayez la version en ligne sur GitHub.');
+      });
+      return;
+    }
+    var blob = new Blob([texte], { type: 'application/json' });
+    function lien() {
+      var url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = nom; a.style.display = 'none'; document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 2000);
+    }
+    // iPhone, iPad : la feuille de partage propose « Enregistrer dans Fichiers »
+    var tactile = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+    try {
+      var f = new File([blob], nom, { type: 'application/json' });
+      if (tactile && navigator.canShare && navigator.canShare({ files: [f] })) {
+        navigator.share({ files: [f], title: nom }).then(function () { fin('Fichier enregistré : ' + nom); }, function (e) { if (!e || e.name !== 'AbortError') { lien(); fin('Fichier enregistré : ' + nom); } });
+        return;
+      }
+    } catch (e) {}
+    lien(); fin('Fichier enregistré : ' + nom);
+  }
+  function enregistrerFichier(fin) {
+    if (!game) return;
+    var s = game.state, pc = s.pc || {};
+    var data = { format: 'express-minuit', version: 1, enregistre: new Date().toISOString(),
+      resume: (CH[s.chapter || 'prologue'] || {}).short + ' · ' + (pc.name || '') + ' · ' + game.clock(), state: s };
+    telecharger(nomFichier(), JSON.stringify(data), fin);
+  }
+  // lit un fichier de sauvegarde ; rappelle fin(etat, resume) ou fin(null, message d'erreur)
+  function lireFichier(file, fin) {
+    var r = new FileReader();
+    r.onload = function () {
+      var d = null; try { d = JSON.parse(r.result); } catch (e) {}
+      var st = d && (d.state || d);
+      if (!st || st.v !== 1 || !st.log || !CH[st.chapter || 'prologue'] || !(CH[st.chapter || 'prologue'].locations || {})[st.loc]) { fin(null, 'Ce fichier n’est pas une sauvegarde de L’Express de minuit.'); return; }
+      fin(st, (d && d.resume) || '');
+    };
+    r.onerror = function () { fin(null, 'Le fichier n’a pas pu être lu.'); };
+    r.readAsText(file);
+  }
+  var apresChoix = null;
+  function choisirFichier(fin) {
+    var inp = $('fichierSauvegarde'); apresChoix = fin; inp.value = ''; inp.click();
+  }
+  function chargerEtat(st, resume) {
+    try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {}
+    closePanels(); hideTitle(); mount(st);
+    game.api.sys('Sauvegarde chargée' + (resume ? ' : ' + resume : '') + '.');
+    render();
+  }
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function rich(s) {
     return esc(s).replace(/⟦([^|⟧]*)\|([^⟧]*)⟧/g, function (m, a, b) {
@@ -358,6 +425,14 @@
       closePanels(); try { localStorage.removeItem(KEY); } catch (e) {} showTitle();
     });
     list.appendChild(nb);
+    var msg = document.createElement('p'); msg.className = 'menu-msg'; msg.hidden = true;
+    list.appendChild(btn('Enregistrer dans un fichier', 'ghost', function () {
+      enregistrerFichier(function (t) { msg.textContent = t; msg.hidden = !t; msg.classList.toggle('ok', /^Fichier/.test(t)); });
+    }));
+    list.appendChild(btn('Charger un fichier de sauvegarde', 'ghost', function () {
+      choisirFichier(function (st, info) { if (!st) { msg.textContent = info; msg.hidden = false; msg.classList.remove('ok'); return; } chargerEtat(st, info); });
+    }));
+    list.appendChild(msg);
     var sb = btn('Son : ' + (soundOn ? 'oui' : 'non'), 'ghost', function () { toggleSound(); sb.innerHTML = 'Son : ' + (soundOn ? 'oui' : 'non'); });
     list.appendChild(sb);
     var mb = btn('Musique : ' + (musicOn ? 'oui' : 'non'), 'ghost', function () { toggleMusic(); mb.innerHTML = 'Musique : ' + (musicOn ? 'oui' : 'non'); });
@@ -493,6 +568,13 @@
     $('btnLondres').addEventListener('click', function () { if (CH.londres) showPick('londres'); });
     $('btnProlo').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'prologue'); });
     $('btnBack').addEventListener('click', function () { $('tpick').hidden = true; $('tmain').hidden = false; });
+    $('fichierSauvegarde').addEventListener('change', function () {
+      var f = this.files && this.files[0], fin = apresChoix; apresChoix = null;
+      if (f && fin) lireFichier(f, fin);
+    });
+    $('btnCharger').addEventListener('click', function () {
+      choisirFichier(function (st, info) { var m = $('tmsg'); if (!st) { m.textContent = info; m.hidden = false; return; } m.hidden = true; chargerEtat(st, info); });
+    });
     $('btnCont').addEventListener('click', function () { var sv = loadSave() || saved; if (!sv) return; hideTitle(); mount(sv); });
     if (hotState) { $('title').hidden = true; mount(hotState); }
     else mount(saved && saved.v === 1 ? saved : null, saved ? saved.chapter : 'prologue');

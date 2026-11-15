@@ -94,7 +94,9 @@
     <div class="row">
       <button class="act" id="btnLondres" type="button">Campagne : Londres</button>
       <button class="ghost" id="btnCont" type="button" hidden>Continuer</button>
+      <button class="ghost" id="btnCharger" type="button">Charger une sauvegarde</button>
     </div>
+    <p class="fine tmsg" id="tmsg" hidden></p>
     <div class="row">
       <button class="ghost" id="btnProlo" type="button">Prologue : le wagon-restaurant</button>
       <button class="ghost" id="btnSound" type="button" aria-pressed="true">Son : oui</button>
@@ -111,6 +113,7 @@
   </div>
 </div>
 
+<input type="file" id="fichierSauvegarde" accept=".json,application/json" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" tabindex="-1" aria-hidden="true">
 <script>
 /*ENGINE*/
 </script>
