@@ -1,0 +1,61 @@
+# Après chaque vraie génération, publie les images terminées sur la branche « rendus »
+# pour que Claude puisse les récupérer et les intégrer au jeu.
+# Gratuit : aucun appel à OpenAI, la clé n'est jamais utilisée ici.
+name: Rendus
+run-name: "Publier les rendus sur la branche rendus"
+
+on:
+  workflow_run:
+    workflows: [Illustrations]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write  # pousser la branche « rendus »
+  actions: read    # relire l'état des illustrations
+
+concurrency:
+  group: rendus
+  cancel-in-progress: true
+
+jobs:
+  publier:
+    # les simulations ne sont jamais publiées
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.workflow_run.display_title, 'simulation') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Retrouver le dernier état
+        id: precedent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=etat-illustrations&per_page=100" \
+            --jq '[.artifacts[] | select(.expired == false)] | sort_by(.created_at) | last | .workflow_run.id // empty')
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+          if [ -z "$run" ]; then echo "Aucune image réelle pour l'instant."; fi
+
+      - name: Télécharger l'état
+        if: steps.precedent.outputs.run != ''
+        uses: actions/download-artifact@v8
+        with:
+          name: etat-illustrations
+          path: etat
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.precedent.outputs.run }}
+
+      - name: Pousser la branche « rendus »
+        if: steps.precedent.outputs.run != ''
+        working-directory: etat
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(find images -name '*.png' | wc -l)
+          printf 'Images générées par le workflow Illustrations (%s / 56). Branche réécrite à chaque publication.\n' "$n" > LISEZMOI.txt
+          git init -q -b rendus
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -qm "Rendus : $n / 56 illustrations"
+          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" rendus
+          echo "Branche rendus publiée : $n / 56 images." | tee -a "$GITHUB_STEP_SUMMARY"

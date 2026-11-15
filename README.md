@@ -123,6 +123,10 @@ Lancez le workflow en mode réel avec **refaire** = une partie du nom, par exemp
 - L'ancienne version reste en place tant que la nouvelle n'est pas réussie.
 - Les scènes qui utilisaient ce portrait comme référence ne sont pas refaites automatiquement. Ajoutez-les à **refaire** si besoin.
 
+## La branche « rendus »
+
+Après chaque vraie génération, le workflow **Rendus** publie les images terminées sur la branche `rendus` du dépôt. C'est gratuit : il n'appelle jamais OpenAI. Claude peut ainsi les récupérer lui-même pour les intégrer au jeu. Les simulations ne sont jamais publiées.
+
 ## Stockage GitHub
 
 Un dépôt privé gratuit dispose de 500 Mo pour les artifacts. L'état complet et le ZIP final pèsent chacun environ 200 Mo. Le workflow efface donc automatiquement les anciennes copies : il ne garde que le dernier état et le dernier ZIP.
