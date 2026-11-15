@@ -12174,6 +12174,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     this.rainSynth = ctx.createGain(); this.rainSynth.gain.value = 1;
     rain.connect(bp); bp.connect(this.rainSynth); this.rainSynth.connect(this.rainGain); this.rainGain.connect(this.master); rain.start();
     this.vraiePluie();
+    this.chargerBruits();
     // grondement du train
     var rum = ctx.createBufferSource(); rum.buffer = buf; rum.loop = true;
     var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 160;
@@ -12229,6 +12230,39 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         var t = ctx.currentTime; g.gain.setTargetAtTime(PLUIE.gain, t, 1.2); self.rainSynth.gain.setTargetAtTime(0, t, 1.2);
         self.pluie = 'ok'; self.pluieDuree = b.fin - b.debut;
       }).catch(function () { self.pluie = 'absente'; });
+  };
+  // ---- les bruitages enregistrés : chaque geste a quelques variantes, tirées au hasard, jamais deux fois la même de suite.
+  // audio/sfx/*.wav : lot « RPG Audio » de Kenney (kenney.nl, CC0). Sans fichier, le son synthétisé de blip() reste.
+  var BRUITS = {
+    door: { f: ['porte1', 'porte2', 'porte3'], vol: 0.4 },   // on change de lieu : une porte se referme
+    clue: { f: ['page1', 'page2', 'page3'], vol: 0.7 }       // un indice au carnet : une page qu'on tourne
+    // à venir : dice (les dés), dès que les enregistrements seront là ; d'ici là, blip() les synthétise
+  };
+  Sound.BRUITS = BRUITS;
+  Sound.prototype.chargerBruits = function () {
+    var self = this, ctx = this.ctx;
+    if (this.bruits || typeof fetch !== 'function') return;
+    this.bruits = {}; this.dernierBruit = {};
+    Object.keys(BRUITS).forEach(function (k) {
+      BRUITS[k].f.forEach(function (nom) {
+        fetch('audio/sfx/' + nom + '.wav').then(function (r) { if (!r.ok) throw new Error('absent'); return r.arrayBuffer(); })
+          .then(function (ab) { return new Promise(function (ok, ko) { ctx.decodeAudioData(ab, ok, ko); }); })
+          .then(function (buf) { (self.bruits[k] = self.bruits[k] || []).push(buf); })
+          .catch(function () {});
+      });
+    });
+  };
+  // joue un enregistrement s'il y en a un pour ce geste ; renvoie false sinon (blip() synthétise alors le son)
+  Sound.prototype.bruit = function (kind) {
+    var l = this.bruits && this.bruits[kind]; if (!l || !l.length) return false;
+    var i = Math.floor(Math.random() * l.length);
+    if (l.length > 1 && i === this.dernierBruit[kind]) i = (i + 1) % l.length;
+    this.dernierBruit[kind] = i;
+    var ctx = this.ctx, src = ctx.createBufferSource(), g = ctx.createGain();
+    src.buffer = l[i]; src.playbackRate.value = 0.95 + Math.random() * 0.1; // un rien plus grave ou plus aigu à chaque fois
+    g.gain.value = BRUITS[kind].vol; src.connect(g); g.connect(this.master); src.start();
+    this.bruitsJoues = (this.bruitsJoues || 0) + 1;
+    return true;
   };
   Sound.prototype.stop = function () {
     if (!this.ctx) return; this.on = false;
@@ -12304,6 +12338,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   };
   Sound.prototype.blip = function (kind) {
     if (!this.on || !this.ctx) return;
+    if (this.bruit(kind)) return;
     var ctx = this.ctx, t = ctx.currentTime, self = this;
     function tone(f, start, dur, type, vol) {
       var o = ctx.createOscillator(); o.type = type || 'square'; o.frequency.value = f;
