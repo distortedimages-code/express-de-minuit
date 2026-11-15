@@ -197,6 +197,7 @@
         api.npc('concierge', '« Un taxi en dix minutes, {m}, brouillard ou pas. Et si vous cherchez des renseignements, je me permets : le British Museum, à cinq minutes, ou la morgue du Daily Courier, à Fleet Street. Ils ont tout gardé depuis Waterloo. »');
         api.chips(H.destChips(api).slice(0, 6));
       }, { chip: 'Où trouver des renseignements ?' }),
+      T('dame', ['DAMEDEUX'], ['« Mrs Gresham, au 21, {m}. Une cliente fidèle. Elle ne reçoit personne, mais si vous montez, elle vous parlera de ses pas. Elle en parle à tout le monde. »', '« Au-dessus de Mrs Gresham, {m}, il n’y a que le grenier. Condamné depuis la guerre. Je préfère ne pas y penser. »']),
       T('billets', ['BILLETS', 'VOYAGE', 'VICTORIA'], function (api) { H.reserver(api); }, { chip: 'Réserver les billets', cond: function (api) { return api.has('QUETE') && !api.item(H.BILLETS); } }),
       T('ragots', ['MEURTRES', 'CHELSEA', 'MAKRYAT', 'TURCS', 'QUELQUUN'], function (api, n) {
         if (day(api.s.min) < 3) { api.npc('concierge', '« Des ragots, {m} ? Le brouillard, surtout. Et une dame du deuxième qui prétend entendre des pas au plafond. Il n’y a pas d’étage au-dessus du sien. »'); return; }

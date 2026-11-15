@@ -149,6 +149,8 @@
 
     // -------------------------------------------------------------- vocabulaire propre à Londres
     phrases: [
+      [/\b(la |une )?valise (dans|du|qui roule dans) (le )?couloir\b|\bla valise qui roule\b/g, ' couloir '],
+      [/\b(la |une )?(dame|voisine|cliente|vieille dame) du (deuxieme|2e|second)( etage)?\b|\bpas au plafond\b|\bdeuxieme etage\b/g, ' damedeuxieme '],
       [/\bscotland yard\b|\bnew scotland yard\b/g, ' yard '],
       [/\bchelsea arms\b/g, ' chelsea '],
       [/\bbritish museum\b|\bsalle de lecture\b|\breading room\b/g, ' musee '],
@@ -197,7 +199,9 @@
     lexicon: function (Lx) {
       // lieux et objets génériques de Londres
       Lx.add('SALLE', 'n', 'salle, piece, alentours, autour, endroit, lieu, lieux, decor, ambiance, environs, hall, galerie, interieur, rue, ruelle, quartier', { label: 'les lieux' });
-      Lx.add('CHAMBRE', 'n', 'chambre, chambres', { label: 'la chambre' });
+      Lx.add('CHAMBRE', 'n', 'chambre, chambres, armoire, armoires', { label: 'la chambre' });
+      Lx.add('COULOIR', 'n', 'couloir, corridor, ascenseur, couloirs', { label: 'le couloir' });
+      Lx.add('DAMEDEUX', 'n', 'damedeuxieme, gresham', { label: 'la dame du deuxième' });
       Lx.add('TABLE', 'n', 'table, tables, nappe, bureau, pupitre, pupitres, chaise, chaises, fauteuil, fauteuils', { label: 'la table' });
       Lx.add('BOISSON', 'n', 'cafe, the, boisson, boissons, biere, vin, champagne, whisky, gin, porto, sherry, coupe, coupes, verre, verres, cognac, alcool, grog, cocktail', { label: 'une boisson' });
       Lx.add('LAMPE', 'n', 'lampe, lampes, lumiere, lumieres, eclairage, bougie, bougies, ampoule, reverbere, reverberes, lustre, lustres, chandelle', { label: 'la lumière' });
@@ -212,7 +216,7 @@
       Lx.add('POLICE', 'x', 'agent, agents, bobby, bobbies, constable, constables');
       // lieux de l'enquête
       Lx.add('HOTEL', 'n', 'hotel, bloomsbury, groom, portier, chasseur', { label: 'votre hôtel' });
-      Lx.add('RECEPTION', 'n', 'reception, receptionniste, concierge, accueil, gerant, liftier', { label: 'la réception', npc: true });
+      Lx.add('RECEPTION', 'n', 'reception, receptionniste, concierge, pratt, accueil, gerant, liftier', { label: 'la réception', npc: true });
       Lx.add('INSTITUT', 'n', 'institut, kensington, challenger, fondation, banquet', { label: 'l’Institut impérial' });
       Lx.add('CONFERENCE', 'x', 'conference, expose, discours, sujet, theme, causerie, intervention', { label: 'la conférence' });
       Lx.add('HANTISE', 'x', 'hantise, hantises, hante, hantee, apparition, apparitions, phenomene, phenomenes, paranormal, surnaturel, spiritisme, medium, mediums, voyante, voyantes, tricheur, tricheurs', { label: 'les hantises' });
@@ -918,7 +922,7 @@
       },
       things: [
         { label: 'les journaux', ids: ['JOURNAL'] }, { label: 'la fenêtre', ids: ['FENETRE'] }, { label: 'le téléphone de la réception', ids: ['ANNUAIRE', 'HOTEL'] },
-        { label: null, ids: ['SALLE', 'CARTEVISITE', 'BILLETS', 'VALISE', 'DESTINATIONS', 'LAMPE', 'PORTE'] }
+        { label: null, ids: ['SALLE', 'CARTEVISITE', 'BILLETS', 'VALISE', 'DESTINATIONS', 'LAMPE', 'PORTE', 'CHAMBRE', 'TABLE', 'COULOIR', 'DAMEDEUX'] }
       ],
       nudges: [
         { at: 4, cond: function (api) { return !api.flag('presse1') && day(api.s.min) >= 3; }, run: function (api) { api.event('Le garçon d’étage frappe. « Les journaux de {m}, sous la porte. Une sale histoire à Chelsea, si je puis me permettre. »'); } },
@@ -929,6 +933,22 @@
       actions: [
         { id: 'h_look', label: 'Regarder la chambre', idea: 'Regarder autour de vous', verbs: ['EXAMINER', 'FOUILLER'], nouns: ['SALLE', 'HOTEL'], bare: true,
           run: function (api) { api.say('Un lit trop mou, un bureau, une armoire qui grince, un portrait du roi George. Les journaux attendent sur la table. Par la fenêtre, une mer grise où flottent quelques cheminées.'); } },
+        { id: 'h_fouille', label: 'Fouiller la chambre', verbs: ['FOUILLER', 'EXAMINER'], nouns: ['CHAMBRE', 'TABLE'], repeatable: true,
+          run: function (api) {
+            if (api.once('hFouille')) { api.time(15); api.say('Vous fouillez la chambre pour de bon : le bureau et ses tiroirs vides, l’armoire, sous le lit, derrière le portrait du roi. Vos affaires sont telles que vous les avez laissées. Personne n’est entré ici. Pas encore.'); return; }
+            api.say(api.fresh('hFouille2', ['Rien de plus que la première fois : vos affaires, et l’odeur de poussière chaude du radiateur.', 'Vous rouvrez les tiroirs, par acquit de conscience. Toujours vides.']));
+          } },
+        { id: 'h_couloir', label: 'Jeter un œil dans le couloir', verbs: ['EXAMINER', 'OUVRIR', 'ALLER', 'ECOUTER', 'FOUILLER'], nouns: ['COULOIR'], repeatable: true,
+          run: function (api) {
+            api.say(api.fresh('hCouloir', ['Vous entrouvrez la porte. Le couloir est vide, et le tapis rouge avale les bruits. Au bout, l’ascenseur descend en grinçant : un groom, une valise, un client qui part. Rien de plus.', 'Le couloir, désert. Une porte se referme doucement, quelque part vers l’escalier. Vous restez un moment sur le seuil, puis vous rentrez.', 'Personne dans le couloir. Seulement l’odeur d’un cigare éteint, et le cliquetis lointain de l’ascenseur.']));
+          } },
+        { id: 'h_deuxieme', label: 'Descendre au deuxième étage', verbs: ['ALLER', 'FRAPPER', 'VISITER', 'PARLER', 'EXAMINER'], nouns: ['DAMEDEUX'], repeatable: true,
+          run: function (api) {
+            api.time(15);
+            if (!api.once('mrsGresham')) { api.say(api.fresh('gresham2', ['Vous redescendez au deuxième. Le 21 ne rouvre pas. Derrière la porte, une radio grésille, très bas.', 'Le couloir du deuxième, désert. Au 21, une lumière sous la porte, puis plus rien quand vous approchez.'])); return; }
+            api.say('Vous descendez au deuxième. Au numéro 21, une vieille dame en robe de chambre entrouvre sa porte sur la chaînette. « Vous aussi, vous les entendez ? Les pas. Au-dessus de moi, tous les soirs. » Elle lève les yeux au plafond. Au-dessus du 21, d’après le groom, il n’y a que le grenier, condamné depuis la guerre.');
+            api.say('La porte se referme. Vous remontez, en vous surprenant à écouter le plafond.');
+          } },
         { id: 'h_journal', label: 'Lire les journaux', idea: true, verbs: ['EXAMINER', 'PRENDRE', 'FOUILLER', 'UTILISER'], nouns: ['JOURNAL'], repeatable: true,
           run: function (api) { lirePresse(api); } },
         { id: 'h_fenetre', label: 'Regarder par la fenêtre', verbs: ['EXAMINER', 'OUVRIR'], nouns: ['FENETRE'],
@@ -1531,7 +1551,7 @@
   L.intro = function (api) {
     api.title('L’Express de minuit', 'Londres · Danseurs dans le brouillard');
     api.say('Vendredi 5 janvier 1923. Londres disparaît sous un brouillard comme on n’en a pas vu depuis des années.');
-    api.say('Votre vieil {ami}, le professeur Julius Arthur Smith, vous a invité{e} au banquet de la Fondation Challenger, à l’Institut impérial de Kensington. Une fois par an, les administrateurs y convient un orateur capable de les étonner : Marie Curie, Marconi, Edison s’y sont succédé. Ce soir, c’est Smith, le grand pourfendeur de médiums. Il a refusé de vous dire un mot de son sujet.');
+    api.say('Votre vieil ami, le professeur Julius Arthur Smith, vous a invité{e} au banquet de la Fondation Challenger, à l’Institut impérial de Kensington. Une fois par an, les administrateurs y convient un orateur capable de les étonner : Marie Curie, Marconi, Edison s’y sont succédé. Ce soir, c’est Smith, le grand pourfendeur de médiums. Il a refusé de vous dire un mot de son sujet.');
     api.say('Sous les lustres, l’Empire en habit de soirée. À la table d’honneur, Smith relit ses notes, ses énormes favoris frémissant au-dessus d’une pipe qui empeste. Derrière lui, droit comme un I, son fidèle Beddows.');
     api.sys('Vous incarnez ' + api.pc.name + ', ' + api.pc.occupation.charAt(0).toLowerCase() + api.pc.occupation.slice(1) + '. Écrivez ce que vous faites, comme à une table de jeu. Les fautes ne gênent pas.');
   };

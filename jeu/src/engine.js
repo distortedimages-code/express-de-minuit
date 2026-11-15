@@ -12,6 +12,10 @@
     // « les gens dont la vieille dame m'a parlé » : celle qui en a parlé n'est pas celle qu'on cherche
     [/\b(dont|que|qu)\s+((?:[a-z]+\s+){0,3})(m\s+a|m\s+avait|nous\s+a|nous\s+avait|vient\s+de|venait\s+de)\s+(parle|parlee|decrit|decrite|decrits|decrites|mentionne|mentionnee|mentionnes|cite|cites|evoque|evoques|dit|montre|montres|signale|signales)\b/g, ' '],
     [/\bdont\s+(parlait|parlaient|a\s+parle|ont\s+parle)\s+((mme|madame|monsieur|mr|mrs|le|la|l)\s+)?[a-z]+\b/g, ' '],
+    // « je quitte les archives et retourne chez Smith » : on garde la destination
+    [/\b(je )?(quitte|quittons|quitter|sors de|sors du|sors des|sortir de|sortir du)\s+(?:[a-z]+\s+){1,5}?(et|puis|pour)\s+/g, ' '],
+    // « je vais au British Museum pour chercher les rouleaux » : le but ne change pas le geste
+    [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)[a-z]+(er|ir|re|oir)\b.*$/g, ' '],
     // « je m'approche d'elle » : on y va
     [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
     // « je vais le voir », « je vais la trouver » : on va lui parler
@@ -652,11 +656,23 @@
       return sc;
     }
     // ----- la mémoire des référents : « je regarde la vieille dame », puis « je lui parle » -----
-    var npcConcept = null;
-    function conceptDuPnj(npcId) {
-      if (!npcConcept) { npcConcept = {}; Object.keys(lex.concepts).forEach(function (k) { var c = lex.concepts[k]; if (c.npc && !npcConcept[c.npc]) npcConcept[c.npc] = k; }); }
-      return npcConcept[npcId];
+    // le lien entre un personnage et le mot qui le désigne, d'après les actions « parler à »
+    var npcConcept = null, conceptNpc = null;
+    function liens() {
+      if (npcConcept) return;
+      npcConcept = {}; conceptNpc = {};
+      var all = (scene.globalActions || []).slice();
+      Object.keys(scene.locations || {}).forEach(function (l) { all = all.concat(scene.locations[l].actions || []); });
+      all.forEach(function (a) {
+        if (!a.talkTo) return;
+        (a.nouns || []).forEach(function (n) { var c = lex.concepts[n]; if (c && c.npc && conceptNpc[n] === undefined) conceptNpc[n] = a.talkTo; });
+        var n0 = (a.nouns || []).filter(function (n) { return lex.concepts[n] && lex.concepts[n].npc; })[0];
+        if (n0 && !npcConcept[a.talkTo]) npcConcept[a.talkTo] = n0;
+      });
+      Object.keys(lex.concepts).forEach(function (k) { var c = lex.concepts[k], id = k.toLowerCase(); if (c.npc && conceptNpc[k] === undefined && scene.npcs[id]) { conceptNpc[k] = id; if (!npcConcept[id]) npcConcept[id] = k; } });
     }
+    function conceptDuPnj(npcId) { liens(); return npcConcept[npcId]; }
+    function pnjDuConcept(cid) { liens(); return conceptNpc[cid]; }
     function genreDe(id) {
       var c = lex.concepts[id] || {}, H = G.RPG && G.RPG.Humeur, T = H && c.npc && H.T[c.npc];
       if (T && T.f !== undefined) return T.f ? 'f' : 'm';
@@ -696,6 +712,35 @@
       var item = { id: r.id, score: 0.95, pos: -1, type: 'n' };
       p.all.push(item); p.nouns.push(item); p.c[r.id] = 0.95; p.pronom = r.id;
     }
+    // ----- à qui parle-t-on ? « Beddows, … », « je demande à Pratt si… », « j'interroge le laitier sur… » -----
+    var ADRESSE = /\b(?:demande\w*|redemande\w*|interroge\w*|questionne\w*|dis|dit|parle|adresse|m adresse|appelle|interpelle)\s+(?:a\s+|au\s+|aux\s+)?((?:[a-z]+\s*){1,4})/;
+    function premierPnj(texte) {
+      var toks = texte.trim().split(/\s+/);
+      for (var i = 0; i < toks.length; i++) {
+        if (STOP.has(toks[i])) continue;
+        var m = lex.best(toks[i]);
+        if (m && m.score >= 0.9 && lex.concepts[m.id].npc) {
+          // le personnage présent que ce mot désigne (« la réception » : le concierge ici, le réceptionniste à Chelsea)
+          var ici = availableActions().filter(function (a) { return a.talkTo && (a.nouns || []).indexOf(m.id) >= 0; })[0];
+          if (ici) return ici.talkTo;
+          if (pnjDuConcept(m.id)) return pnjDuConcept(m.id);
+        }
+        if (i >= 1) break; // le nom doit venir tout de suite
+      }
+      return null;
+    }
+    function destinataire(p) {
+      var raw = String(p.raw || ''), voc = raw.match(/^\s*([^,:;?!.]{2,40})\s*[,:]/), id = null, reste = raw;
+      if (voc) { id = premierPnj(normalize(voc[1])); if (id) reste = raw.slice(voc[0].length); }
+      if (!id) {
+        var m = (' ' + p.text + ' ').match(ADRESSE);
+        if (m) { id = premierPnj(m[1]); if (id) reste = raw.replace(/^.*?\b(demand|redemand|interrog|questionn|dis|dit|parl|adress|appell|interpell)\S*\s+(?:(?:à|a|au|aux)\s+)?/i, '').replace(/^\S+(\s+(de|d’|d')\s*\S+)?\s*/, ''); }
+      }
+      return id ? { id: id, reste: reste.trim() } : null;
+    }
+    function pnjPresent(id) { return availableActions().some(function (a) { return a.talkTo === id; }); }
+    // un geste à la première personne, en pleine conversation : on la quitte pour agir
+    var GESTE = /^(?:je|j)\s+(?:vais\s+|me\s+|m\s+)?(examine|fouille|ouvre|prends|monte|descends|retourne|sors|pars|quitte|lis|relis|consulte|cherche|frappe|sonne|ecoute|attends|entre|rentre|file|inspecte|scrute|observe|regarde|fais le tour|m eloigne|eloigne|approche|suis la|suis le|suis les|vais)\b/;
     function rankActions(p) {
       return availableActions().map(function (a) { return { a: a, score: scoreAction(a, p) }; })
         .filter(function (x) { return x.score > 0; })
@@ -789,7 +834,18 @@
       if (chips.length) api.chips(chips);
     }
 
+    function low1(x) { x = String(x); return /^(Le|La|Les|L’) /.test(x) || /^L’/.test(x) ? x.charAt(0).toLowerCase() + x.slice(1) : x; }
+    function cap1(x) { x = String(x); return x.charAt(0).toUpperCase() + x.slice(1); }
     function handleWorld(p) {
+      // « je demande à Pratt si… » : on va lui parler, et on lui pose la question
+      var dest = destinataire(p);
+      if (dest && pnjPresent(dest.id)) {
+        var ta = availableActions().filter(function (a) { return a.talkTo === dest.id; })[0];
+        var reste = rewrite(lex, parse(lex, dest.reste, scene.phrases));
+        exec(ta, rewrite(lex, parse(lex, '', scene.phrases)));
+        if (s.talk === dest.id && !s.pending && dest.reste.split(/\s+/).length >= 2) handleDialogue(reste);
+        return;
+      }
       if (scene.improvise && scene.improvise(api, p)) return;
       var cands = rankActions(p);
       var best = cands[0], second = cands[1];
@@ -797,7 +853,7 @@
       var n0 = p.nouns[0];
       if (best && n0 && lex.concepts[n0.id].type === 'n' && !nounHere(n0.id)) {
         var handles = (best.a.nouns || []).concat(best.a.extra || [], best.a.also || []);
-        if (handles.indexOf(n0.id) < 0) { fallback(p, []); return; }
+        if (handles.indexOf(n0.id) < 0 && !p.nouns.some(function (n) { return n.id !== n0.id && handles.indexOf(n.id) >= 0 && lex.concepts[n.id].type === 'n'; })) { fallback(p, []); return; }
       }
       if (best) {
         var margin = second ? best.score - second.score : 9;
@@ -957,6 +1013,24 @@
         if (ok) afterConverse(npc, st);
         return ok;
       }
+      // on s'adresse à quelqu'un d'autre que son interlocuteur
+      var dest = destinataire(p);
+      if (dest && dest.id !== npc.id) {
+        if (pnjPresent(dest.id)) {
+          api.endTalk(false);
+          startTalk(dest.id);
+          if (s.talk === dest.id && dest.reste.split(/\s+/).length >= 2) handleDialogue(rewrite(lex, parse(lex, dest.reste, scene.phrases)));
+        } else {
+          var dn = scene.npcs[dest.id] || {};
+          api.say(fresh('pasLa', ['Vous cherchez ' + low1(dn.short || dn.name || 'cette personne') + ' des yeux : pas ici.', cap1(dn.short || dn.name || 'Cette personne') + ' n’est pas là.']));
+        }
+        return;
+      }
+      // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
+      if (GESTE.test(p.text) && !/\?\s*$/.test(p.raw) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde))) {
+        var seul = rankActions(p)[0];
+        if (!(seul && seul.a.talkTo === npc.id)) { api.endTalk(false); handleWorld(p); return; }
+      }
       // l'humeur passe avant tout : on ne répond pas sagement à une insulte, à une absurdité, à un mot d'un autre siècle
       if (scene.converse && scene.converse.avant) {
         var menaceTopic = p.c.MENACER !== undefined && (npc.topics || []).some(function (x) { return (x.keys || []).some(function (k) { return (typeof k === 'string' ? k : k[0]) === 'MENACER'; }); });
@@ -988,6 +1062,8 @@
         if (nounTop) { runTopic(npc, nounTop.t.id, p); return; }
         if (talkBack()) return;
       }
+      // un sujet que le personnage connaît (« l'homme à moustache ») passe avant un sujet écrit qui n'accroche que par un verbe (« passé »)
+      if (A && A.connu && tb && sureScore(tb.t, p, A, true) < 0.64 && talkBack()) return;
       if (tb && tb.score >= 0.64 && (!A || A.short || sureScore(tb.t, p, A) >= 0.64)) { runTopic(npc, tb.t.id, p); return; }
       var sureTop = A && tops.filter(function (x) { return sureScore(x.t, p, A) >= 0.64; })[0];
       if (sureTop) { runTopic(npc, sureTop.t.id, p); return; }
@@ -1205,6 +1281,7 @@
     function handleMeta(p) {
       var m = p.metas[0];
       if (!m) return false;
+      if (/\b(vos|votre|ses|son|sa|leurs?|ces|ce|un|une)\s+(notes|carnet|indices|bilan)\b|\b(notes|carnet)\s+(de|du|d)\s/.test(p.text)) return false;
       if (p.nouns.length > 1 || p.verbs.some(function (v) { return v.id !== 'EXAMINER' && v.id !== 'FOUILLER'; })) return false;
       if (m.id === 'AIDE') scene.help(api);
       else if (m.id === 'INVENTAIRE') {
@@ -1297,6 +1374,11 @@
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
       if (!s.talk) resoudre(p);
+      // « je demande à Pratt si… » : la question va à Pratt, avant toute autre interprétation (le téléphone, un jet…)
+      if (!s.talk && !s.pending) {
+        var dst = destinataire(p);
+        if (dst && pnjPresent(dst.id)) { handleWorld(p); afterTurn(); finish(); return; }
+      }
       // l'improvisation passe avant les jets demandés (« je me cache » avec une caisse dans les bras…)
       if (!s.talk && !s.pending && scene.improvise && scene.improvise(api, p)) { finish(); return; }
       var jr = jetRequest(raw);
@@ -1323,7 +1405,9 @@
     }
     // « T’es con ou quoi ? Où est passé le barman ? » : deux phrases, deux réponses, dans l'ordre
     function phrasesDe(raw) {
-      var parts = (String(raw).match(/[^?!.;…]+[?!.;…]*/g) || [raw]).map(function (x) { return x.trim(); }).filter(Boolean);
+      // « M. Ravel », « Dr. Smith » : le point d'une abréviation ne finit pas la phrase
+      var prot = String(raw).replace(/\b(M|Mr|Mrs|Mme|Mlle|Dr|St|Ste|Pr|Me|cf|etc)\.(?=\s+\S)/g, '$1\u2024');
+      var parts = (prot.match(/[^?!.;…]+[?!.;…]*/g) || [prot]).map(function (x) { return x.trim().replace(/\u2024/g, '.'); }).filter(Boolean);
       // un mot seul (« Euh… », « Bon. ») s'accroche à la phrase suivante ; « Connard ! » ou « Pardon ? » se suffisent
       var out = [], buf = '';
       var FILLER = /^(euh|heu|hum|hm|bon|bien|alors|ah|oh|eh|ben|bref|enfin|voila|voilà|ok|tiens|dites|écoutez|ecoutez|attendez|voyons|allons|bref|donc|et)[.…,;!]*$/i;

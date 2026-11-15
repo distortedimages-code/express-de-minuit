@@ -39,7 +39,7 @@ if (!listeProfils.every(p => PROFILS[p]) || !listePersos.every(p => PERSOS[p])) 
 
 function ligne(e) {
   switch (e.t) {
-    case 'npc': return (e.who || 'PNJ').toUpperCase() + ' : ' + e.x;
+    case 'npc': return (e.name || e.who || 'PNJ') + ' : ' + e.x;
     case 'narr': case 'event': return e.x;
     case 'doc': return '[document] ' + e.x;
     case 'clue': return '[indice noté dans le carnet] ' + (e.x || e.title || '');
@@ -84,7 +84,7 @@ Tu ne connais pas le scénario : tu le découvres en jouant. Réponds UNIQUEMENT
 }
 async function critique(transcription, perso, profil) {
   if (SIMULATION || !CRITIQUE) return [];
-  const instr = `Tu relis la transcription d'une partie de jeu de rôle textuel en français (1923, L'Appel de Cthulhu). Relève UNIQUEMENT les vrais problèmes : réponse qui trahit qu'il s'agit d'un jeu ou d'un programme, réponse à côté de la question, personnage qui sort de son rôle ou change de caractère, contradiction de faits ou de chronologie, texte répété, faute de français ou d'accord (masculin/féminin), action du joueur raisonnable mais mal comprise. Réponds en JSON : {"problemes":[{"tour":numéro,"joueur":"…","jeu":"extrait court","probleme":"…","gravite":"faible|moyenne|forte"}]}. Si tout va bien : {"problemes":[]}.`;
+  const instr = `Tu relis la transcription d'une partie de jeu de rôle textuel en français (1923, L'Appel de Cthulhu). Relève UNIQUEMENT les vrais problèmes : réponse qui trahit qu'il s'agit d'un jeu ou d'un programme, réponse à côté de la question, personnage qui sort de son rôle ou change de caractère, contradiction de faits ou de chronologie, texte répété, faute de français ou d'accord (masculin/féminin), action du joueur raisonnable mais mal comprise. Réponds en JSON : {"problemes":[{"tour":numéro,"commande":"ce que le joueur a tapé à ce tour, recopié","reponse":"extrait court de ce que le jeu a répondu","probleme":"…","gravite":"faible|moyenne|forte"}]}. Si tout va bien : {"problemes":[]}.`;
   const t = await demander(instr, transcription.slice(-60000), 6000);
   try { return (JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)).problemes) || []; } catch (e) { return [{ tour: 0, probleme: 'réponse de critique illisible', gravite: 'faible' }]; }
 }
@@ -124,7 +124,7 @@ async function partie(n, perso, profil) {
 (async () => {
   if (!SIMULATION && !process.env.OPENAI_API_KEY) { console.error('OPENAI_API_KEY absente : ajoutez le secret, ou lancez en simulation.'); process.exit(1); }
   fs.mkdirSync(SORTIE, { recursive: true });
-  const plan = []; for (let i = 0; i < PARTIES; i++) plan.push([listePersos[i % listePersos.length], listeProfils[Math.floor(i / listePersos.length) % listeProfils.length]]);
+  const plan = []; for (let i = 0; i < PARTIES; i++) plan.push([listePersos[i % listePersos.length], listeProfils[i % listeProfils.length]]); // personnages et façons de jouer varient ensemble
   const res = [];
   for (let i = 0; i < plan.length; i++) {
     if (!SIMULATION && depense >= PLAFOND) { console.log('Plafond atteint : arrêt avant la partie ' + (i + 1)); break; }
@@ -136,7 +136,7 @@ async function partie(n, perso, profil) {
   res.forEach(r => {
     lignes.push(`## ${r.nom} — ${r.tours} tours, ${r.indices} indices, fin : ${r.fin ? 'oui' : 'non'}`);
     if (!r.problemes.length) lignes.push('Rien à signaler.');
-    r.problemes.forEach(p => lignes.push(`- [${p.gravite || '?'}] tour ${p.tour} : ${p.probleme}${p.joueur ? ` — joueur : « ${p.joueur} »` : ''}${p.jeu ? ` — jeu : « ${String(p.jeu).slice(0, 160)} »` : ''}`));
+    r.problemes.forEach(p => { const cmd = p.commande || p.joueur, rep = p.reponse || p.jeu; lignes.push(`- [${p.gravite || '?'}] tour ${p.tour} : ${p.probleme}${cmd ? ` — joueur : « ${cmd} »` : ''}${rep ? ` — jeu : « ${String(rep).slice(0, 160)} »` : ''}`); });
     lignes.push('');
   });
   fs.writeFileSync(path.join(SORTIE, 'rapport.md'), lignes.join('\n'));

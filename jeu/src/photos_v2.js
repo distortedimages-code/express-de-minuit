@@ -5,20 +5,22 @@
   'use strict';
   var V = G.PixelArt && G.PixelArt.PHOTO_V2; if (!V) return;
   function dehors(n) { return { n: n || 60, a: 0.45, pts: [0, 0, 720, 0, 720, 300, 0, 300] }; }
+  // la pluie derrière une vitre : seulement dans le polygone de la fenêtre
+  function vitre(n, pts) { return { n: n || 20, a: 0.4, pts: pts }; }
   // cadrage des anciennes images 4:3, s'il en reste (0 = haut, 100 = bas) ; les images cinéma remplissent le cadre
   G.PixelArt.PHOTO_FOCUS = {};
 
   // ---------------------------------------------------------------- écran-titre et prologue
   V['ecran-titre/titre'] = { rain: [dehors(90)] };
-  V['prologue/01_wagon-restaurant'] = {};
+  V['prologue/01_wagon-restaurant'] = { lamps: [[431, 23, 6], [373, 63, 5], [508, 150, 6]], rain: [vitre(22, [0, 0, 104, 0, 96, 172, 0, 178]), vitre(22, [596, 22, 720, 0, 720, 182, 612, 160])] };
   V['prologue/02_soufflet'] = { lamps: [[355, 85, 4]] };
-  V['prologue/03_voitures-lits'] = {};
+  V['prologue/03_voitures-lits'] = { lamps: [[288, 35, 5]], rain: [vitre(20, [22, 190, 60, 0, 132, 0, 118, 150]), vitre(12, [182, 125, 200, 0, 250, 0, 240, 105])] };
   V['prologue/04_compartiment-7'] = { lamps: [[450, 77, 5]], candles: [[364, 50]] };
 
   // ---------------------------------------------------------------- Londres
   V['londres/01_institut-imperial'] = {};
-  V['londres/02_hotel-chambre_nuit'] = { prowl: { x: 160, y: 290, h: 150, hat: 'top', lean: -0.4, san: 1 } };
-  V['londres/03_hotel-chambre_jour'] = {};
+  V['londres/02_hotel-chambre_nuit'] = { lamps: [[226, 137, 6], [505, 93, 4]], rain: [vitre(16, [438, 25, 530, 10, 516, 160, 470, 166])], prowl: { x: 160, y: 290, h: 150, hat: 'top', lean: -0.4, san: 1 } };
+  V['londres/03_hotel-chambre_jour'] = { lamps: [[110, 135, 5]] };
   V['londres/04_cheapside-chambre-meublee'] = { candles: [[265, 155]] };
   V['londres/05_scotland-yard_bureau-fleming'] = { lamps: [[446, 160, 6]] };
   V['londres/06_ambassade-de-turquie'] = {};

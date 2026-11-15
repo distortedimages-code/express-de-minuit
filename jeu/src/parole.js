@@ -851,7 +851,8 @@
       }
       // 9. un mot qu'il ne connaît pas : il le répète, intrigué
       // un mot inconnu dans une affirmation : on s'agace ; dans une question, c'est peut-être nous qui ne connaissons pas le mot
-      var motInconnu = a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75;
+      // dans une question, on ne fait répéter qu'un nom propre (« Zorglub ? ») : un mot ordinaire que l'on ne connaît pas n'a rien de bizarre
+      var motInconnu = a.unk.length && a.unk[0].length >= 5 && (!a.q || /^[A-ZÀ-Ý]/.test(a.unk[0])) && api.rand() < 0.75;
       if (motInconnu && !a.q && HUM()) return bizarre(api, id, f, a, m, st, caractere(id, f), 'mot');
       if (motInconnu) { st.patience -= 1; say(fill(val(api, Vx.mot, 'mot:' + id), a, null, a.unk[0]), true); saveMem(api, id, m); return true; }
       // 10. le type de question, à défaut de mieux : la voix du personnage fait le reste
@@ -879,6 +880,7 @@
         prior: !!(a.perso || a.meta || a.ana || a.insulte || a.nom || a.quisuisje || (a.claim && !a.q) || (a.compliment && !a.ents.length && a.words <= 12)),
         short: !a.ents.length && !a.unk.length && !cult && a.words <= 4,
         mine: a.suite && m.lastTurn === api.s.turn - 1,
+        connu: a.ents.some(function (x) { return (f.sait && f.sait[x]) || (f.avis && f.avis[x]); }),
         a: a
       };
     };
