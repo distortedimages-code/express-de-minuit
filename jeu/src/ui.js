@@ -204,6 +204,41 @@
   }
   var TYPED = { narr: 1, npc: 1, event: 1, intrusion: 1, sys: 1, push: 1 };
 
+  // ---------------------------------------------------------------- les illustrations dans le fil
+  // Le décor quand on arrive quelque part, le portrait quand quelqu'un prend la parole : même le clavier ouvert,
+  // même loin du haut de la page, on voit où l'on est et à qui l'on parle. La clé de l'image est notée sur l'entrée
+  // du journal (e.img, e.pt) pour qu'une partie rechargée retrouve les mêmes images.
+  var dernierPortrait = null;
+  function cleImage(scene, loc) {
+    var s = game.state;
+    try { return art.photoKey(scene, { san: 0, min: s.min, loc: loc, flags: s.flags || {} }) || ''; } catch (err) { return ''; }
+  }
+  function carteImage(key, nom, cls) {
+    var d = document.createElement('div');
+    d.className = 'e-vue ' + cls;
+    var im = document.createElement('img');
+    im.alt = 'Illustration : ' + nom; im.decoding = 'async'; im.src = (window.PHOTO_BASE || 'img/') + key + '.webp';
+    im.onerror = function () { if (d.parentNode) d.parentNode.removeChild(d); };
+    d.appendChild(im);
+    return d;
+  }
+  function vueDe(e) {
+    if (!art || !art.photoKey || art.photos === false) return null;
+    if (e.t === 'loc' || e.t === 'title') {
+      dernierPortrait = null;
+      var lieu = e.t === 'loc' ? e.loc : game.state.loc, L = SC.locations[lieu] || {};
+      // (une vieille sauvegarde, relue d'un coup : pas d'images pour tout l'historique)
+      if (e.img === undefined) e.img = instant ? '' : cleImage(L.art || lieu, lieu);
+      return e.img ? carteImage(e.img, e.name || L.name || '', 'lieu') : null;
+    }
+    if (e.t === 'npc') {
+      if (e.pt === undefined) e.pt = (instant || e.who === dernierPortrait || !art['pt_' + e.who]) ? '' : cleImage('pt_' + e.who, game.state.loc);
+      dernierPortrait = e.who;
+      return e.pt ? carteImage(e.pt, e.name || '', 'portrait') : null;
+    }
+    return null;
+  }
+
   function pump() {
     if (current) return;
     var e = queue.shift();
@@ -231,6 +266,9 @@
     var el = build(e);
     if (!el) { pump(); return; }
     logEl.appendChild(el);
+    // l'image dans le fil : après le nom du lieu, ou juste avant la première réplique de quelqu'un
+    var vue = vueDe(e);
+    if (vue) { if (e.t === 'npc') logEl.insertBefore(vue, el); else logEl.appendChild(vue); }
     scrollDown();
     if (TYPED[e.t] && !instant && !reduce) {
       current = el;

@@ -360,3 +360,18 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 .title-screen .tmsg { color: var(--red); text-transform: none; letter-spacing: .02em; }
 .menu-msg { margin: 4px 0 0; color: var(--red); font-size: 14px; }
 .menu-msg.ok { color: var(--text); }
+
+/* les illustrations dans le fil : le décor à l'arrivée, le portrait de celui qui prend la parole */
+.e-vue { position: relative; flex: none; align-self: flex-start; width: min(calc(100% - 8px), 520px); aspect-ratio: 2.4 / 1; background: #000; overflow: hidden; margin: 4px 0 2px 2px; box-shadow: 5px 5px 0 var(--red); }
+.e-vue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.e-vue::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgba(10, 10, 11, .55) 100%); }
+.e-vue.portrait { width: min(calc(100% - 8px), 440px); margin-top: 8px; box-shadow: 4px 4px 0 rgba(243, 239, 230, .16); }
+.e-vue.portrait + .e-npc { margin-top: 14px; }
+body[data-san="2"] .e-vue img { filter: contrast(1.08) sepia(.15) hue-rotate(-20deg); }
+body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35deg) saturate(1.6); }
+
+/* l'en-tête tient toujours dans la largeur de l'écran, même avec « Carnet 0/31 » */
+.top { min-width: 0; }
+.brand { min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+.nav { flex: none; }
+@media (max-width: 430px) { .nav { gap: 4px; } .nav .ghost { padding: 7px 6px; letter-spacing: .01em; font-size: 10.5px; min-height: 34px; } .brand { font-size: 15px; } }

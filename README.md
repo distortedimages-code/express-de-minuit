@@ -209,6 +209,10 @@ Quand on dit n'importe quoi à un personnage, qu'on l'insulte ou qu'on lui parle
 
 Plusieurs phrases d’un coup reçoivent plusieurs réponses, dans l’ordre (« T’es con ou quoi ? Où est passé le barman ? »). Un personnage insulté répond du bout des lèvres, puis ne répond plus sans excuses. Un compliment déclenche un jet de Charme : réussi, le personnage vous a à la bonne pour la journée (dé bonus à vos jets sociaux avec lui) ; s’il vous en veut, c’est un dé de malus. Des excuses font retomber la tension. Un même personnage ne dit jamais deux fois la même phrase. La vérification se lance avec `node jeu/tools/test_humeur.js`.
 
+## Les illustrations dans le fil
+
+En plus de la grande image du haut, le fil de la partie montre le décor quand on arrive quelque part, et le portrait d'un personnage quand il prend la parole pour la première fois (ou quand on change d'interlocuteur). Sur téléphone, clavier ouvert, la grande image sort de l'écran : celles du fil restent sous les yeux. L'image choisie est notée sur l'entrée du journal (`img`, `pt`), pour qu'une partie rechargée retrouve les mêmes. C'est dans `jeu/src/ui.js` (`vueDe`).
+
 ## Les sauvegardes
 
 La partie s’enregistre toute seule dans le navigateur après chaque geste (bouton « Continuer » à l’écran titre). Pour garder plusieurs parties ou faire des essais, le menu propose « Enregistrer dans un fichier » (un fichier `.json` nommé d’après le chapitre, l’investigateur et l’heure du jeu) et « Charger un fichier de sauvegarde ». L’écran titre a aussi « Charger une sauvegarde ». Un fichier se recharge sur n’importe quel appareil. Dans la visionneuse de Claude, l’enregistrement passe par sa fenêtre de confirmation.
