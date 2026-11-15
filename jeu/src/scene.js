@@ -109,8 +109,12 @@
       [/\bwagon restaurant\b|\bvoiture restaurant\b|\bsalle a manger\b/g, ' wagonrestaurant '],
       [/\b(wagon|wagons|voiture|voitures) (lit|lits|couchette|couchettes)\b|\bwagonlit\b/g, ' wagonlits '],
       [/\bmaitre d hotel\b/g, ' maitredhotel '],
+      // « les deux hommes », « les gens dont la vieille dame m'a parlé » : Ravel et l'homme en gris
+      [/\b(les|des|ces|aux) (deux )?(personnes|gens|hommes|types|individus|messieurs|voyageurs) (dont|que|qu)\b/g, ' ravel hommegris $4'],
+      [/\b(les|des|ces|aux) deux (hommes|types|messieurs|individus|voyageurs|personnes)\b|\b(les|ces) deux la\b/g, ' ravel hommegris '],
       [/\b(homme|type|monsieur|individu|mec|gars|bonhomme|personnage|silhouette|inconnu|grand) (en |au |a l )?(gris|manteau gris|costume gris|impermeable gris)\b/g, ' hommegris '],
       [/\bboutons? de manchettes?\b/g, ' manchette '],
+      [/\bravel et (l )?hommegris\b|\bhommegris et ravel\b/g, ' ravel hommegris '],
       [/\btraces? de pas\b|\bempreintes? de pas\b/g, ' traces '],
       [/\bgrand mere\b|\bvieille dame\b|\bdame en noir\b|\bvieille femme\b/g, ' veuve '],
       [/\bporte a soufflet\b|\bporte du fond\b|\bporte du bout\b|\bporte vitree\b/g, ' soufflet '],
@@ -989,7 +993,7 @@
         LANCER: ['Lancer quoi, et sur qui ? Le train tangue, et vous gardez vos mains pour vous tenir.', 'Votre bras se lève, puis retombe. Le serveur vous a vu, et il hausse un sourcil.'],
         VISITER: ['Aller voir quoi, ou qui ? Ici, il y a : {things}.', 'Voir quoi ? Il y a {things}.']
       },
-      again: ['Vous revenez à {x}. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.', '{X}, encore. Vous en connaissez chaque détail, maintenant.', 'Vous regardez de nouveau {x}. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.', 'Rien de neuf du côté de {x}. Il faudrait essayer autre chose.'],
+      again: ['Vous revenez vers {x}. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.', '{X}, encore. Vous en connaissez chaque détail, maintenant.', 'Vous regardez de nouveau {x}. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.', 'Rien de neuf du côté de {x}. Il faudrait essayer autre chose.'],
       againBare: ['Rien de neuf.', 'Comme tout à l’heure. Rien de plus.', 'Vous recommencez, sans rien apprendre de nouveau.', 'Rien ne change. Vous, peut-être.'],
       againPrefix: ['Vous y revenez. ', 'Une fois encore. ', 'Vous recommencez, plus lentement. ', 'Encore une fois, en détail. '],
       againMad: ['Vous regardez encore {x}. Était-ce déjà comme ça la première fois ? Vous n’en êtes plus sûr.', '{X}. Vous l’avez déjà vu. Vous l’avez toujours vu. Vous le reverrez.', 'Vous revenez à {x}, et pendant une seconde vous avez peur que ce soit lui qui vous regarde.'],
@@ -1290,8 +1294,37 @@
       run: function (api) { api.say(here(api) === 'lits' ? 'Un médecin ? Le conducteur doit savoir qui dort derrière chaque porte.' : 'Un médecin ? Le serveur ou le conducteur des voitures-lits sauront s’il y en a un à bord.'); } },
     { id: 'g_passagers', label: 'Observer les passagers', verbs: ['EXAMINER', 'FOUILLER'], nouns: ['PASSAGERS'],
       run: function (api) { api.say(here(api) === 'restaurant' ? 'À cette heure, il ne reste que vous, la vieille dame et le serveur. Les autres dorment, ou font semblant.' : 'Les autres passagers dorment derrière leurs portes. Ou font semblant.'); } },
-    { id: 'g_suite', label: 'Réfléchir', nouns: ['SUITE'],
-      run: function (api) { api.say('Vous repassez les faits dans votre tête. ' + (api.s.clues.length ? 'Vous avez ' + api.s.clues.length + ' indice' + (api.s.clues.length > 1 ? 's' : '') + ' dans votre carnet.' : 'Votre carnet est encore vide.') + ' Ravel n’est pas venu. Quelqu’un est venu à sa place.'); api.ui('notes'); } }
+    { id: 'g_chercher', label: 'Chercher Ravel', verbs: ['FOUILLER', 'ALLER', 'SUIVRE'], nouns: ['RAVEL', 'HOMMEGRIS'], needVerb: true, repeatable: true,
+      run: function (api) {
+        var h = here(api), sait7 = api.has('SERVEUR') || api.has('NOTE7') || api.has('CONDUCTEUR'), piste = sait7 || api.has('VEUVE') || api.has('TRACES') || api.has('MANCHETTE');
+        if (h === 'restaurant') {
+          if (piste) { api.say(sait7 ? 'Le compartiment 7. C’est là qu’ils sont allés. Vous vous levez.' : 'Ils ne sont plus dans ce wagon. Il ne reste qu’une direction : les voitures-lits.'); api.exec('r_go_couloir'); return; }
+          api.say('Ravel n’est nulle part dans le wagon-restaurant : sa table est servie, sa chaise est vide. Quelqu’un, ici, l’a forcément vu partir. Le serveur, ou la vieille dame en noir.');
+          return;
+        }
+        if (h === 'couloir') { api.say('Le soufflet ne mène qu’à un endroit : les voitures-lits.'); api.exec('c_go_lits'); return; }
+        api.say(sait7 ? 'La porte 7 est là, au milieu du couloir, fermée. Si Ravel est quelque part, c’est derrière.' : 'Huit portes closes. Ravel est derrière l’une d’elles, peut-être. Le conducteur, assoupi au bout du couloir, doit savoir laquelle.');
+      } },
+    { id: 'g_suite', label: 'Réfléchir', verbs: ['REFLECHIR'], nouns: ['SUITE'], bare: true, repeatable: true,
+      run: function (api) {
+        // ce que Lucien sait vraiment, dans l'ordre où il l'a appris, et ce qui reste à faire
+        var h = here(api), x = ['Vous faites le point.'];
+        var sait7 = api.has('SERVEUR') || api.has('NOTE7') || api.has('CONDUCTEUR');
+        if (api.has('SERVEUR')) x.push('Ravel est bien venu au wagon-restaurant, avant l’heure. Un homme en gris l’a rejoint, a payé le serveur pour qu’il se taise, et ils sont partis ensemble vers le compartiment 7.');
+        else if (api.has('VEUVE')) x.push('Ravel est bien venu, avant l’heure. Mme Vasseur l’a vu parler tout seul dans une langue « mouillée », puis un autre homme est venu le chercher.');
+        else x.push('Ravel vous a donné rendez-vous au wagon-restaurant à vingt-trois heures, pour vous montrer ce que Bertin cherchait. Sa table est servie, son cognac l’attend. Lui n’est pas là.');
+        if (api.has('VEUVE') && api.has('SERVEUR')) x.push('Mme Vasseur, elle, a vu passer cet homme en gris : il ruisselait et sentait le fond des étangs.');
+        else if (api.has('VEUVE')) x.push('Cet homme-là ruisselait, d’après elle, et sentait le fond des étangs.');
+        if (api.has('SYMBOLE')) x.push('Sur sa serviette, Ravel a dessiné une spirale entourée de sept cercles, et écrit : « il remonte ».');
+        if (api.has('NOTE7')) x.push('Le billet brûlé donnait rendez-vous au compartiment 7, à minuit.');
+        if (api.has('TRACES')) x.push('Des traces d’eau naissent au milieu du soufflet et filent vers les voitures-lits.');
+        if (api.has('MANCHETTE')) x.push('Le bouton de manchette de Ravel, dans le soufflet : on ne l’a pas emmené de son plein gré.');
+        if (api.has('CONDUCTEUR')) x.push('Le conducteur les a vus entrer au 7.');
+        if (sait7) x.push(h === 'lits' ? 'La porte 7 est là, dans ce couloir.' : 'Le compartiment 7 est dans la voiture-lits, de l’autre côté de la porte à soufflet.');
+        else if (api.has('VEUVE') || api.has('TRACES')) x.push('Où qu’ils soient allés, ce n’est pas vers la locomotive : derrière la porte à soufflet, il y a les voitures-lits.');
+        else if (h === 'restaurant') x.push('Quelqu’un, ici, a forcément vu quelque chose : le serveur, ou la vieille dame qui fait ses réussites.');
+        api.say(x.join(' '));
+      } }
   ]);
 
 

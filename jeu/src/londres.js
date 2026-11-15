@@ -1499,7 +1499,7 @@
       ALARME: ['Il n’y a pas de signal d’alarme ici.', 'Aucune sonnette à tirer.'],
       INSULTE: ['Vous jurez entre vos dents. Ça soulage un peu.', 'Votre juron se perd dans le brouillard.']
     },
-    again: ['Vous revenez à {x}. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.', '{X}, encore. Vous en connaissez chaque détail, maintenant.', 'Vous regardez de nouveau {x}. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.', 'Rien de neuf du côté de {x}. Il faudrait essayer autre chose.'],
+    again: ['Vous revenez vers {x}. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.', '{X}, encore. Vous en connaissez chaque détail, maintenant.', 'Vous regardez de nouveau {x}. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.', 'Rien de neuf du côté de {x}. Il faudrait essayer autre chose.'],
     againBare: ['Rien de neuf.', 'Comme tout à l’heure. Rien de plus.', 'Vous recommencez, sans rien apprendre de nouveau.', 'Rien ne change. Vous, peut-être.'],
     againPrefix: ['Vous y revenez. ', 'Une fois encore. ', 'Vous recommencez, plus lentement. ', 'Encore une fois, en détail. '],
     againMad: ['Vous regardez encore {x}. Était-ce déjà comme ça la première fois ? Vous n’en êtes plus sûr{e}.', '{X}. Vous l’avez déjà vu. Vous l’avez toujours vu. Vous le reverrez.', 'Vous revenez à {x}, et pendant une seconde, vous avez l’impression que la chose porte un visage.'],

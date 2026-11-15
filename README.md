@@ -149,6 +149,17 @@ pip install -r requirements.txt
 python generer.py --simulation --lot tout
 ```
 
+## L'humeur des personnages
+
+Quand on dit n'importe quoi à un personnage, qu'on l'insulte ou qu'on lui parle d'objets qui n'existent pas encore (un iPhone, Google, des euros…), il réagit selon son caractère (`jeu/src/humeur.js`) :
+
+- **Les absurdités** : il ne comprend pas, cherche une raison (« Vous avez bu ? »), conclut que vous perdez la tête, s'agace, puis passe à l'acte si vous insistez.
+- **Les insultes** : il essaie d'abord de vous calmer, vous avertit, vous menace, puis sévit. Un policier vous arrête (au bout de trois arrestations, c'est la prison), un costaud frappe, une dame gifle, un concierge vous fait raccompagner.
+- **Les personnages faibles** (serveur, réceptionniste, laitier…) cessent de répondre tant que vous ne redevenez pas raisonnable. Ils menacent ensuite de prévenir un supérieur ou la police, puis le font : une plainte arrive à la police, et un agent finit par vous trouver.
+- **Les mots d'un autre siècle** : le personnage répète le mot tel que vous l'avez écrit, s'en étonne, s'en méfie, puis vous croit dérangé.
+
+Des excuses font retomber la tension. Un même personnage ne dit jamais deux fois la même phrase. La vérification se lance avec `node jeu/tools/test_humeur.js`.
+
 ## Le testeur IA
 
 Le workflow **Testeur IA** fait jouer ChatGPT à des parties entières du jeu, qui tourne sans écran sur les serveurs de GitHub (sources dans `jeu/src`). À chaque tour, le modèle lit ce que le jeu vient d'écrire et tape l'action suivante, selon un profil de joueur : méthodique, bavard, absurde, menteur, pressé, ou qui fait des fautes de frappe. À la fin de chaque partie, il relit la transcription et relève ce qui sonne faux. Un filtre automatique gratuit s'ajoute à sa relecture.

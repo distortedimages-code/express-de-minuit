@@ -4,6 +4,7 @@
    et compose ses réponses à partir de la fiche du personnage et de la culture de 1923. */
 (function (G) {
   'use strict';
+  if (!(G.RPG && G.RPG.Humeur) && typeof require === 'function') { try { require('./humeur.js'); } catch (e) {} }
   function N(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, ' ').replace(/-/g, ' ').replace(/[^a-z0-9?! ]/g, ' ').replace(/\s+/g, ' ').trim(); }
   var STOP = {}; ('a au aux avec ce ces cet cette dans de des du elle en et eux il ils je la le les leur lui ma me mes moi mon ne ni nos notre nous on ou par pas pour qu que qui sa se ses si son sur ta te tes toi ton tu un une vos votre vous y est sont etes suis es ai as avez avons ont etait etre avoir fait faire dit dire bien tres plus moins tout tous toute toutes alors donc mais car comme quoi quel quelle quels quelles dont ici la-bas cela ca ceci celui celle ceux sont sera serait peut peux pouvez veux voulez sais savez connais connaissez pense pensez crois croyez trouve trouvez aime aimez monsieur madame mademoiselle docteur oui non merci bonjour bonsoir hein bon ben euh voila vraiment jamais toujours encore deja rien quelque chose chose quand comment pourquoi combien depuis parlez parler dites racontez').split(' ').forEach(function (w) { STOP[w] = 1; });
   var COMMON = {}; ('monsieur madame temps chose choses jour jours annee annees homme hommes femme femmes gens monde fois heure heures nuit soir matin grand grande grands petit petite beaucoup assez aussi autre autres meme faut avait avaient etaient sont avez etes vous nous leur leurs dans pour avec sans sous chez entre depuis apres avant encore juste vrai vraie tout tous bien tres plus moins quelque quelques chaque votre notre cette celle celui ceux alors donc mais comme parce quand comment pourquoi combien quel quelle quels quelles savoir connais connaissez pense pensez croyez aimez aime faire dire voir venir aller prendre parler question questions reponse vraiment peut etre deja toujours jamais rien personne quelqu quelquun chose ceci cela voila voici pardon merci bonjour bonsoir salut avoir etre fait faites dites disent savez sais crois pensez trouvez trouve aimeriez voulez veux pouvez peux connu connue mieux moins trop tant').split(' ').forEach(function (w) { COMMON[w] = 1; });
@@ -68,6 +69,12 @@
     ['envie', /\b(que voulez vous|vous voulez quoi|que veux tu|tu veux quoi|votre reve|vous revez|souhaitez|desirez)\b/],
     ['sante', /\b(malade|sante|toussez|blessure|vous saignez|medecin)\b/]
   ];
+  // retrouve un mot tel que le joueur l'a écrit (« iPhone », « jeux vidéo »), à partir de sa forme normalisée
+  function span(raw, m) {
+    var toks = String(raw).split(/[\s’'?!.,;:«»"()]+/).filter(Boolean), k = m.split(' ').length;
+    for (var i = 0; i < toks.length; i++) for (var j = i; j < Math.min(toks.length, i + k + 1); j++) { var w = toks.slice(i, j + 1).join(' '); if (N(w) === m) return w; }
+    return null;
+  }
   function analyse(api, npc, p, mem, f, scene) {
     f = f || {}; scene = scene || {};
     var raw = p.raw || '', t = ' ' + N(raw) + ' ', tt = t.trim();
@@ -98,10 +105,22 @@
     a.type = null; for (var i = 0; i < types.length; i++) if (RX[types[i]].test(t)) { a.type = types[i]; break; }
     if (!a.type && a.q) a.type = 'ouinon';
     if (!a.type) a.type = 'affirmation';
-    a.insulte = RX.insulte.test(t); a.compliment = RX.compliment.test(t) && !a.insulte; a.ana = (t.match(RX.ana) || [])[1] || null; a.meta = RX.meta.test(t) && (vous || a.q);
+    var HU = G.RPG && G.RPG.Humeur;
+    a.insulte = HU ? HU.RX.insulte.test(t) && (vous || !a.ents.length) : RX.insulte.test(t);
+    a.compliment = RX.compliment.test(t) && !a.insulte; a.ana = (t.match(RX.ana) || [])[1] || null; a.meta = RX.meta.test(t) && (vous || a.q);
+    if (HU) {
+      // l'humeur : jurons, menaces, excuses, absurdités, mots d'un autre siècle
+      a.juron = !a.insulte && HU.RX.juron.test(t);
+      a.menace = HU.RX.menace.test(t);
+      a.excuse = HU.RX.excuse.test(t);
+      a.absurde = HU.RX.absurde.test(t);
+      var am = t.match(HU.ANA), fm = am ? null : t.match(HU.FUTUR);
+      if (am || fm) { var mw = (am || fm)[0].trim().replace(/^(un|mon|ton|votre|son|des|vos|mes|le|par|ses) /, ''); a.anaW = HU.CANON[mw] || span(raw, mw) || mw; a.futur = !am; }
+    }
     a.oui = RX.oui.test(tt); a.non = RX.non.test(tt);
     var cx = null; CLAIMX.some(function (c) { if (c[0].test(t)) { cx = c[1]; return true; } return false; });
     var m = t.match(RX.jesuis); a.claim = cx || (m && !/^(desole|navre|perdu|fatigue|fatiguee|sur|sure|pret|prete|venu|venue|ici|la|en|de|pas|tres|bien|malade|curieux|curieuse|seul|seule|ami|amie|presse|pressee|inquiet|inquiete|content|contente|au|pour|avec|du|des|une|un|le|desolee|navree|occupe|occupee|perdue|ravi|ravie|enchante|enchantee)$/.test(m[2]) ? m[2] : null);
+    if (a.claim && HU && HU.RX.claimAbsurde.test(N(a.claim))) { a.absurde = true; a.claim = null; }
     m = t.match(RX.jemappelle); a.nom = m ? cap(m[1] || m[2]) : null;
     a.quisuisje = RX.quisuisje.test(t);
     a.suite = a.words <= 5 && /^(et )?(pourquoi|comment ca|comment cela|c est a dire|racontez|racontez moi|expliquez|expliquez vous|et alors|et puis|et ensuite|ensuite|vraiment|ah bon|precisez|dites m en plus|dites moi en plus|en quoi|continuez|c est tout|quoi d autre|et apres)\b/.test(tt) && !a.ents.length;
@@ -436,7 +455,7 @@
   function mem(api, id) { var m = api.flag('pm:' + id); if (!m) { m = { n: {}, last: null }; } return m; }
   function saveMem(api, id, m) { api.flag('pm:' + id, m); }
   function val(api, v, k) { if (typeof v === 'function') v = v(api); if (Array.isArray(v)) return api.fresh(k, v); return v; }
-  function voice(f) { return V[f.reg] || V.populaire; }
+  function voice(f) { var HU = G.RPG && G.RPG.Humeur; return V[f.reg] || V[HU && HU.REG[f.reg]] || V.populaire; }
   function fill(s, a, X, W, Aw) {
     return String(s).replace(/\{X\}/g, cap(X || '')).replace(/\{x\}/g, X || '').replace(/\{de\}/g, de(X || '')).replace(/\{W\}/g, W || '').replace(/\{A\}/g, Aw || '');
   }
@@ -515,6 +534,161 @@
       m.lie = null; saveMem(api, id, m);
       if (st.patience <= 0 && api.close) api.close(id);
     } };
+
+    // ---------------------------------------------------------------- l'humeur : ne pas comprendre, s'agacer, se taire, sévir
+    // chaque personnage a son caractère (humeur.js) : il ne comprend pas, cherche une raison, conclut que vous perdez la tête,
+    // s'agace, puis passe à l'acte ; les plus faibles se taisent, menacent de prévenir quelqu'un, et le font.
+    var SEUIL = { calme: [0, 2, 4, 6, 8], normal: [0, 1, 3, 5, 6], vif: [0, 1, 2, 3, 4] }, RATE = { calme: 0.75, normal: 1, vif: 1.5 };
+    function HUM() { return G.RPG && G.RPG.Humeur; }
+    function caractere(id, f) {
+      var T = (HUM().T || {})[id] || {}, k = T.kind || (/police/.test(f.groupe || '') ? 'police' : /domestique|fievreux/.test(f.reg) ? 'faible' : 'froid');
+      return { id: id, kind: k, vite: T.vite || (k === 'police' || f.reg === 'sec' ? 'vif' : 'normal'), sup: T.sup || null, police: !!T.police, f: !!T.f, coup: T.coup || null, T: T };
+    }
+    function registre(f) { var Hm = HUM(); return Hm.L.bz[f.reg] ? f.reg : (Hm.REG[f.reg] || 'populaire'); }
+    function pron(c, x) {
+      var n = scene.npcs[c.id] || {}, nom = n.short || n.name || 'On';
+      return String(x).replace(/\{PIl\}/g, c.f ? 'Elle' : 'Il').replace(/\{Pil\}/g, c.f ? 'elle' : 'il').replace(/\{Pe\}/g, c.f ? 'e' : '')
+        .replace(/\{N\}/g, cap(nom)).replace(/\{sup\}/g, c.sup || 'quelqu’un')
+        .replace(/(^|\s)à le /g, '$1au ').replace(/(^|\s)à les /g, '$1aux ').replace(/(^|\s)de le /g, '$1du ').replace(/(^|\s)de les /g, '$1des ');
+    }
+    // jamais deux fois la même réplique pour un même personnage ; on préfère aussi ce qu'aucun autre n'a dit récemment
+    function hsh(x) { var h = 5381; for (var i = 0; i < x.length; i++) h = ((h << 5) + h + x.charCodeAt(i)) | 0; return (h >>> 0).toString(36); }
+    function restant(m, tiers) { var used = m.u || []; return tiers.some(function (a) { return a && a.some(function (x) { return used.indexOf(hsh(x)) < 0; }); }); }
+    function uniq(api, m, tiers, rienPlutot) {
+      var used = m.u || (m.u = []), recent = api.flag('hu:recent') || [];
+      for (var t = 0; t < tiers.length; t++) {
+        var arr = tiers[t]; if (!arr || !arr.length) continue;
+        var free = arr.filter(function (x) { return used.indexOf(hsh(x)) < 0; });
+        if (!free.length) continue;
+        var pool = free.filter(function (x) { return recent.indexOf(hsh(x)) < 0; }); if (!pool.length) pool = free;
+        var x = pool[Math.floor(api.rand() * pool.length)], h = hsh(x);
+        used.push(h); recent.push(h); if (recent.length > 40) recent.splice(0, recent.length - 40); api.flag('hu:recent', recent);
+        return x;
+      }
+      // tout a été dit : on recommence, sans redire la toute dernière (ou l'on se tait, pour un geste)
+      if (rienPlutot) return null;
+      var all = []; tiers.forEach(function (a) { if (a) all = all.concat(a); }); if (!all.length) return '…';
+      var lastH = used[used.length - 1], cand = all.filter(function (x) { return hsh(x) !== lastH; }); if (!cand.length) cand = all;
+      var y = cand[Math.floor(api.rand() * cand.length)];
+      all.forEach(function (x) { var i = used.indexOf(hsh(x)); if (i >= 0) used.splice(i, 1); }); used.push(hsh(y));
+      return y;
+    }
+    function seuil(m, c, n) { var sl = SEUIL[c.vite] || SEUIL.normal; return sl[Math.min(n, sl.length - 1)] + 1 - ((m.ins || 0) > 0 ? 1 : 0); }
+    function niveau(m, c) { var sl = SEUIL[c.vite] || SEUIL.normal, v = (m.bz || 0) - 1 + ((m.ins || 0) > 0 ? 1 : 0), n = 0; for (var i = 0; i < sl.length; i++) if (v >= sl[i]) n = i; return n; }
+    function niveauIns(m, c) { var v = (m.ins || 0) + Math.floor((m.jur || 0) / 2) + ((m.bz || 0) >= 3 ? 1 : 0) - 1; return Math.max(0, Math.min(3, Math.floor(Math.max(0, v) * (RATE[c.vite] || 1)))); }
+    function garder(st) { if (st.patience < 2) st.patience = 2; }
+    function rafraichir(api, m) {
+      var d = H.day(api);
+      if (m.rompu && api.s.min >= m.rompu) { m.rompu = null; m.bz = 0; m.ins = Math.max(0, (m.ins || 0) - 2); m.jur = 0; m.sil = 0; m.nana = 0; m.supDit = 0; m.insN = undefined; }
+      if (m.hj !== d) { if (m.hj !== undefined) { m.ins = Math.max(0, (m.ins || 0) - 1); m.bz = 0; m.jur = 0; m.insN = m.ins ? 0 : undefined; } m.hj = d; }
+    }
+    function delai(k) { var hm = scene.humeur || {}; return (hm.cd || {})[k] || ({ bz: 90, ins: 240 })[k]; }
+    function rompre(api, id, m, st, mins, line) {
+      if (line) npcLine(api, id, line);
+      st.closedUntil = api.s.min + mins; st.patience = 0; st.refuse = 0;
+      m.rompu = api.s.min + mins; m.sil = 0; saveMem(api, id, m);
+      if (api.s.talk === id) api.endTalk(false);
+    }
+    // un coup de poing, avec une chance de l'esquiver
+    function coup(api, id, c) {
+      var k = c.coup || {}, pc = api.s.pc, esq = pc.skills && pc.skills['Esquive'] !== undefined ? pc.skills['Esquive'] : Math.floor(((pc.carac && pc.carac.DEX) || 50) / 2);
+      var r = 1 + Math.floor(api.rand() * 100);
+      npcLine(api, id, pron(c, k.txt || '{N} ne dit plus rien. Le poing part.'));
+      if (r <= esq) { api.say('Vous esquivez de justesse (Esquive ' + esq + ' : ' + r + ', réussite).'); return; }
+      var dmg = Math.min(Math.max(0, pc.pv - 1), 1 + Math.floor(api.rand() * (k.deg || 3)));
+      api.say('Le coup vous atteint (Esquive ' + esq + ' : ' + r + ', échec).' + (dmg ? '' : ' Plus de peur que de mal.'));
+      if (dmg) { api.hp(-dmg); if (api.fx) api.fx('shudder'); }
+    }
+    // au bout de la patience
+    function fin(api, id, m, st, c, piste) {
+      var Hm = HUM(), F = Hm.L.fin[c.kind] || Hm.L.fin.froid, own = (c.T.fin || {})[piste], hook = scene.humeur || {};
+      if (c.kind === 'faible') {
+        rompre(api, id, m, st, delai('ins'), pron(c, uniq(api, m, [own, c.sup ? F.sup : F.seul])));
+        if (c.sup && hook.plainte) hook.plainte(api, id, c);
+        return;
+      }
+      var line = pron(c, uniq(api, m, [own, F[piste] || F.bz]));
+      if (piste === 'ins' && c.kind === 'police') { rompre(api, id, m, st, delai('ins'), line); if (hook.arreter) hook.arreter(api, id, c); return; }
+      if (piste === 'ins' && c.kind === 'fort') { coup(api, id, c); if (api.s.ended) return; rompre(api, id, m, st, delai('ins'), line); return; }
+      rompre(api, id, m, st, delai(piste), line);
+      if (piste === 'ins' && c.kind === 'appel' && c.police && hook.plainte) hook.plainte(api, id, c);
+    }
+    // les faibles se taisent ; s'ils menacent de prévenir quelqu'un, c'est à la troisième fois ; à la cinquième, ils le font
+    function silence(api, id, m, st, c, grave) {
+      var Hm = HUM(); garder(st);
+      if (!m.sil) { m.sil = 1; npcLine(api, id, pron(c, uniq(api, m, [Hm.L.silDebut]))); saveMem(api, id, m); return true; }
+      if (grave) m.sil += grave === 2 && m.supDit ? 2 : 1;
+      if (m.sil >= 5) { fin(api, id, m, st, c, 'ins'); return true; }
+      if (m.sil >= 3 && c.sup && !m.supDit) { m.supDit = 1; npcLine(api, id, pron(c, uniq(api, m, [Hm.L.supMenace]))); saveMem(api, id, m); return true; }
+      if (!restant(m, [Hm.L.ignore])) { fin(api, id, m, st, c, 'ins'); return true; }
+      npcLine(api, id, pron(c, uniq(api, m, [Hm.L.ignore])));
+      saveMem(api, id, m); return true;
+    }
+    // l'incompréhension, de plus en plus agacée
+    function bizarre(api, id, f, a, m, st, c, kind, flou) {
+      var Hm = HUM(), R = registre(f), Vx = voice(f);
+      m.bz = (m.bz || 0) + 1; garder(st);
+      if (m.sil) return silence(api, id, m, st, c, true);
+      var n = niveau(m, c);
+      // tout ce qu'on avait à dire à ce stade a été dit : l'agacement monte d'un cran, on ne se répète pas
+      while (n < 4 && !restant(m, [c.T.bz && c.T.bz[n], Hm.L.bz[R][n]])) { n++; m.bz = Math.max(m.bz, seuil(m, c, n)); }
+      if (c.kind === 'faible' && n >= 3) return silence(api, id, m, st, c, true);
+      if (n >= 4) { fin(api, id, m, st, c, 'bz'); return true; }
+      var parole;
+      if (kind === 'mot' && n === 0 && a.unk[0]) parole = fill(uniq(api, m, [Vx.mot]), a, null, a.unk[0]);
+      else if (kind === 'flou' && n <= 1 && flou) parole = flou;
+      else parole = uniq(api, m, [c.T.bz && c.T.bz[n], Hm.L.bz[R][n]]);
+      var g = null;
+      if (n <= 2 && kind !== 'flou' && api.rand() < 0.6) g = uniq(api, m, [Hm.L.geste[Math.min(n, 1)]], true);
+      else if (n === 3 && api.rand() < 0.5) g = uniq(api, m, [Hm.L.geste[2]], true);
+      npcLine(api, id, pron(c, (g ? g + ' ' : '') + parole));
+      saveMem(api, id, m); return true;
+    }
+    // les insultes, les jurons, les menaces : on calme le jeu, on avertit, on menace, on sévit
+    function insulte(api, id, f, a, m, st, c) {
+      var Hm = HUM(), R = registre(f), own = c.T.ins || [];
+      if (a.menace) m.ins = (m.ins || 0) + (c.kind === 'police' ? 3 : 2); else if (a.insulte) m.ins = (m.ins || 0) + 1; else m.jur = (m.jur || 0) + 1;
+      garder(st);
+      // on ne saute pas d'étape : on calme, on avertit, on menace, puis on sévit (une vraie menace de mort va droit à la riposte)
+      var n = Math.min(niveauIns(m, c), (m.insN === undefined ? -1 : m.insN) + 1), line;
+      if (a.menace && /police|fort/.test(c.kind)) n = Math.max(n, 2);
+      m.insN = n;
+      if (c.kind === 'faible') {
+        if (m.sil && n >= 3) { fin(api, id, m, st, c, 'ins'); return true; }
+        if (m.sil || n >= 2) return silence(api, id, m, st, c, true);
+        if (a.menace) line = uniq(api, m, [Hm.L.contre.faible]);
+        else line = uniq(api, m, n === 0 ? [own[0], Hm.L.ins[R][0]] : [c.sup ? Hm.L.menace.faible : null, own[1], Hm.L.ins[R][1]]);
+        if (n >= 1 && c.sup && !a.menace) m.supDit = 1;
+        npcLine(api, id, pron(c, line)); saveMem(api, id, m); return true;
+      }
+      while (n < 3 && !a.menace && !restant(m, n === 2 ? [Hm.L.menace[c.kind] || Hm.L.menace.froid] : [own[n], Hm.L.ins[R][n]])) { n++; m.insN = n; }
+      if (n >= 3) { fin(api, id, m, st, c, 'ins'); return true; }
+      if (a.menace) line = uniq(api, m, [Hm.L.contre[c.kind] || Hm.L.contre.froid]);
+      else if (n === 2) line = uniq(api, m, [Hm.L.menace[c.kind] || Hm.L.menace.froid]);
+      else line = uniq(api, m, [own[n], Hm.L.ins[R][n]]);
+      npcLine(api, id, pron(c, line)); saveMem(api, id, m); return true;
+    }
+    // un mot d'un autre siècle : on le répète, on s'en méfie, puis on vous croit fou
+    function anachro(api, id, f, a, m, st, c) {
+      var Hm = HUM(), R = registre(f);
+      m.nana = (m.nana || 0) + 1; m.bz = (m.bz || 0) + 1; garder(st);
+      if (m.sil) return silence(api, id, m, st, c, true);
+      var n = niveau(m, c);
+      if (c.kind === 'faible' && n >= 3) return silence(api, id, m, st, c, true);
+      if (n >= 4) { fin(api, id, m, st, c, 'bz'); return true; }
+      var line;
+      if (a.futur) { var cl = f.reg === 'fievreux' ? 'f' : /formel|savant|mondain|soutenu/.test(f.reg) ? 'h' : 'p'; line = n >= 3 ? uniq(api, m, [Hm.L.bz[R][3]]) : uniq(api, m, [Hm.L.futur[cl]]); }
+      else {
+        var tier = Math.max(m.nana <= 1 ? 0 : m.nana === 2 ? 1 : 2, Math.min(n, 2)), A = Hm.L.ana[R], tiers = [c.T.ana && m.nana <= 2 ? c.T.ana : null], i;
+        for (i = tier; i < 3; i++) tiers.push(A[i]);
+        for (i = tier - 1; i >= 0; i--) tiers.push(A[i]);
+        if (!restant(m, tiers)) return bizarre(api, id, f, a, m, st, c, 'ana');
+        line = uniq(api, m, tiers);
+      }
+      var g0 = n <= 1 && api.rand() < 0.4 ? uniq(api, m, [Hm.L.geste[0]], true) : null, g = g0 ? g0 + ' ' : '';
+      npcLine(api, id, pron(c, g + line).replace(/\{A\}/g, a.anaW));
+      saveMem(api, id, m); return true;
+    }
     function converse(api, npc, p) {
       var f = (scene.fiches || {})[npc.id]; if (!f) return false;
       var id = npc.id, m = mem(api, id), a = analyse(api, npc, p, m, f, scene), Vx = voice(f), st = api.npcs(id);
@@ -643,15 +817,19 @@
       if (a.words >= 7 && bribes.length >= 2 && m.flou !== api.s.turn - 1) {
         m.flou = api.s.turn;
         var origW = function (w) { var o = a.raw.split(/[\s’'?!.,;:«»"()]+/).filter(function (x) { return N(x) === w; })[0]; return o || w; };
-        say(val(api, FLOU[f.reg] || FLOU.populaire, 'flou:' + id).replace(/\{1\}/g, origW(bribes[0])).replace(/\{2\}/g, origW(bribes[1])), false);
+        var fl = val(api, FLOU[f.reg] || FLOU.populaire, 'flou:' + id).replace(/\{1\}/g, origW(bribes[0])).replace(/\{2\}/g, origW(bribes[1]));
+        if (HUM()) return bizarre(api, id, f, a, m, st, caractere(id, f), 'flou', fl);
+        say(fl, false);
         saveMem(api, id, m); return true;
       }
       // 9. un mot qu'il ne connaît pas : il le répète, intrigué
+      if (a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75 && HUM()) return bizarre(api, id, f, a, m, st, caractere(id, f), 'mot');
       if (a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75) { st.patience -= 1; say(fill(val(api, Vx.mot, 'mot:' + id), a, null, a.unk[0]), true); saveMem(api, id, m); return true; }
       // 10. le type de question, à défaut de mieux : la voix du personnage fait le reste
       var tp = a.type, pool2 = (f.types && f.types[tp]) || Vx[tp];
       if (pool2) {
         if (tp === 'affirmation' && a.words <= 2) return false;
+        if (tp === 'affirmation' && HUM() && a.content.length >= 2 && !a.ents.length) return bizarre(api, id, f, a, m, st, caractere(id, f), 'phrase');
         st.patience -= (tp === 'affirmation' ? 1 : 0);
         say(val(api, pool2, 'type:' + id + ':' + tp), true);
         if (tp !== 'affirmation') relance(api, f, id, m);
@@ -674,6 +852,43 @@
         mine: a.suite && m.lastTurn === api.s.turn - 1,
         a: a
       };
+    };
+
+    // avant tout le reste : l'humeur du personnage (insultes, absurdités, anachronismes, silence)
+    converse.avant = function (api, npc, p, ctx) {
+      var f = (scene.fiches || {})[npc.id]; if (!f || !HUM()) return false;
+      ctx = ctx || {};
+      var Hm = HUM(), id = npc.id, m = mem(api, id), st = api.npcs(id), c = caractere(id, f), a = analyse(api, npc, p, m, f, scene);
+      rafraichir(api, m);
+      // une plainte contre vous est arrivée jusqu'à la police
+      var pl = api.flag('plainte');
+      if (pl && pl.n && /police/.test(f.groupe || '') && m.plainteVue !== pl.n) { m.plainteVue = pl.n; st.patience -= 1; garder(st); npcLine(api, id, uniq(api, m, [Hm.L.plaintePolice])); }
+      var grossier = a.insulte || a.menace || (a.juron && !a.ents.length && !a.q);
+      var bad = grossier || a.absurde || !!a.anaW;
+      // une menace qu'une scène écrite sait jouer (un jet d'Intimidation) passe par la scène
+      if (a.menace && !a.insulte && ctx.menaceTopic && !m.sil) { saveMem(api, id, m); return false; }
+      var ok = !bad && !!(ctx.topic || a.ents.length || a.perso || a.salut || a.compliment || a.nom || a.quisuisje || a.suite || (a.q && !a.unk.length) || (m.pending !== undefined && m.pending !== null && (a.oui || a.non)));
+      if (m.sil) {
+        if (a.excuse && !grossier) {
+          m.sil = 0; m.supDit = 0; m.ins = Math.max(0, (m.ins || 0) - 1); m.bz = 0;
+          npcLine(api, id, pron(c, uniq(api, m, [Hm.L.reprise])));
+          npcLine(api, id, uniq(api, m, [Hm.L.excuse[registre(f)]]));
+          saveMem(api, id, m); return true;
+        }
+        if (ok) { m.sil = 0; m.supDit = 0; m.bz = Math.max(0, (m.bz || 0) - 2); npcLine(api, id, pron(c, uniq(api, m, [Hm.L.reprise]))); saveMem(api, id, m); return false; }
+        return silence(api, id, m, st, c, grossier ? 2 : bad);
+      }
+      if (a.excuse && !grossier && ((m.ins || 0) > 0 || (m.jur || 0) > 0 || (m.bz || 0) >= 2)) {
+        m.ins = Math.max(0, (m.ins || 0) - 1); m.jur = 0; m.bz = Math.max(0, (m.bz || 0) - 2); if (m.insN !== undefined) m.insN = m.ins ? Math.max(-1, m.insN - 1) : undefined;
+        st.patience = Math.min(npc.patience || 6, st.patience + 1); garder(st);
+        npcLine(api, id, uniq(api, m, [Hm.L.excuse[registre(f)], Hm.L.excuseUsee]));
+        saveMem(api, id, m); return true;
+      }
+      if (grossier) return insulte(api, id, f, a, m, st, c);
+      if (a.anaW) return anachro(api, id, f, a, m, st, c);
+      if (a.absurde) return bizarre(api, id, f, a, m, st, c, 'absurde');
+      if (ok) { m.okN = (m.okN || 0) + 1; if (m.okN >= 2 && m.bz) { m.bz--; m.okN = 0; } } else if (bad) m.okN = 0;
+      saveMem(api, id, m); return false;
     };
     return converse;
   }

@@ -40,6 +40,7 @@
 
   // ================================================================ la ville répond selon l'endroit
   var V = L.generic.verbs;
+  V.REFLECHIR = function (api) { return 'Vous faites le point. ' + fil(api); };
   function selon(dedans, dehors_, gare) {
     return function (api) {
       var pool = api.s.loc === 'victoria' && gare ? gare : dehors(api) ? dehors_ : dedans;

@@ -6,6 +6,15 @@
   // 1. Normalisation du texte
   // ---------------------------------------------------------------------------
   var BASE_PHRASES = [
+    // « je me rends à… », « je me dirige vers… » : on y va (et pas « prendre »)
+    [/\b(je|nous|on) (me |nous |se )?(rends|rend|rendons|rendrai|rendrons|dirige|dirigeons|dirigerai)\b/g, ' $1 vais'],
+    [/\b(me|nous|se) (rendre|diriger)\b/g, ' aller '],
+    // « les gens dont la vieille dame m'a parlé » : celle qui en a parlé n'est pas celle qu'on cherche
+    [/\b(dont|que|qu)\s+((?:[a-z]+\s+){0,3})(m\s+a|m\s+avait|nous\s+a|nous\s+avait|vient\s+de|venait\s+de)\s+(parle|parlee|decrit|decrite|decrits|decrites|mentionne|mentionnee|mentionnes|cite|cites|evoque|evoques|dit|montre|montres|signale|signales)\b/g, ' '],
+    [/\bdont\s+(parlait|parlaient|a\s+parle|ont\s+parle)\s+((mme|madame|monsieur|mr|mrs|le|la|l)\s+)?[a-z]+\b/g, ' '],
+    // prendre congé, faire le point
+    [/\b(prendre|prends|prenez|prenons) conge\b/g, ' aurevoir '],
+    [/\b(reflechi\w*|faire le point|fais le point)\b/g, ' faitlepoint '],
     [/\bs il (vous|te) plait\b/g, ' '],
     [/\bsvp\b|\bstp\b/g, ' '],
     [/\b(qu est ce que|qu est ce qu|est ce que|est ce qu)\b/g, ' '],
@@ -192,7 +201,8 @@
     L.add('ASSEOIR', 'v', 'asseoir, assoir, assieds, assied, installer, assis, attabler, siege');
     L.add('COMMANDER', 'v', 'commander, reclamer, servir, sers, servez, consommer, serve');
     L.add('DONNER', 'v', 'donner, offrir, tendre, glisser, payer, soudoyer, corrompre, acheter, tenez, tiens, verser, remettre, preter');
-    L.add('ATTENDRE', 'v', 'attendre, patienter, rester, reflechir, penser, guetter le temps, souffler, respirer');
+    L.add('REFLECHIR', 'v', 'faitlepoint, cogiter');
+    L.add('ATTENDRE', 'v', 'attendre, patienter, rester, penser, guetter le temps, souffler, respirer');
     L.add('UTILISER', 'v', 'utiliser, montrer, presenter, exhiber, brandir, agiter, sortir de ma poche');
     L.add('FUMER', 'v', 'fumer, allumer, cigarette, cigarettes, clope, pipe, cigare, briquet, allumette');
     L.add('CRIER', 'v', 'crier, hurler, gueuler, siffler, applaudir, pleurer, rire, jurer, sangloter, gemir');
@@ -867,6 +877,14 @@
         try { ok = scene.converse(api, npc, p); } catch (err) { if (G.console) G.console.error(err); ok = s.seq > said0; }
         if (ok) afterConverse(npc, st);
         return ok;
+      }
+      // l'humeur passe avant tout : on ne répond pas sagement à une insulte, à une absurdité, à un mot d'un autre siècle
+      if (scene.converse && scene.converse.avant) {
+        var menaceTopic = p.c.MENACER !== undefined && (npc.topics || []).some(function (x) { return (x.keys || []).some(function (k) { return (typeof k === 'string' ? k : k[0]) === 'MENACER'; }); });
+        var pris = false;
+        try { pris = scene.converse.avant(api, npc, p, { topic: !!(tb && tb.score >= 0.64), menaceTopic: menaceTopic }); } catch (err) { if (G.console) G.console.error(err); }
+        if (pris) { s.tick = scene.talkTick || 1; return; }
+        if (s.talk !== npc.id) return;
       }
       // une réponse à la question que le PNJ vient de poser
       if (A && A.answer && talkBack()) return;

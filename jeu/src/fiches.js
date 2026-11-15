@@ -135,6 +135,49 @@
       GUERRE: function (api, f) { return null; }
     };
     L.converse = G.RPG.Parole.make(L);
+
+    // ---------------------------------------------------------------- l'humeur : ce qui arrive quand on pousse les gens à bout
+    function nomBas(id) { var n = (L.npcs[id] || {}).name || 'quelqu’un'; return /^(Le|La|Les|L’)\b/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n; }
+    L.humeur = {
+      cd: { bz: 120, ins: 360 },
+      // un personnage faible, ou outragé, porte plainte : la police finit par vous trouver
+      plainte: function (api, id) {
+        var p = api.flag('plainte') || { n: 0 };
+        p.n++; p.qui = id; p.depuis = api.s.min; p.traitee = false;
+        api.flag('plainte', p);
+      },
+      // l'outrage à agent : une nuit au poste ; à la troisième arrestation, le juge
+      arreter: function (api, id) {
+        var n = (api.flag('arrestations') || 0) + 1, D = 1440;
+        api.flag('arrestations', n);
+        api.endTalk(false);
+        if (n >= 3) { api.say('Le juge de Bow Street vous reconnaît. Il ne sourit pas.'); api.flag('fin', 'prison'); api.flag('combat', null); api.end(); return; }
+        api.say(n === 1
+          ? 'Outrage à agent. La nuit au poste de Bow Street, sur un banc de bois, entre un pickpocket et un marin qui chante. Au matin, on vous rend votre chapeau et vos lacets.'
+          : 'Outrage à agent, encore. Cette fois, on prend votre nom, vos empreintes et deux nuits de votre temps. Le juge vous inflige cinq livres d’amende.');
+        api.s.min = (Math.floor(api.s.min / D) + n) * D + 9 * 60; api.s.tick = 0;
+        if (n > 1) api.pay(Math.min(5, api.s.money));
+        api.go('yard');
+        if (!api.flag('mort:fleming')) api.npc('fleming', id === 'fleming'
+          ? '« Vous avez eu la nuit pour réfléchir. » Fleming ne lève pas les yeux de son dossier. « Je ne retiens rien contre vous. Cette fois. »'
+          : '« On m’a raconté votre soirée. » Fleming referme un dossier. « Insulter mes hommes ne vous avancera à rien. Une fois, je veux bien. Pas deux. »');
+        api.lose(1);
+      }
+    };
+    var evPlainte = L.everyTurn;
+    L.everyTurn = function (api, fired) {
+      var p = api.flag('plainte');
+      if (p && !p.traitee && !api.s.ended && !api.s.talk && !api.flag('combat') && api.s.min - p.depuis >= 90 && !(L._c && L._c.special && L._c.special(api))) {
+        p.traitee = true; api.flag('plainte', p);
+        var par = nomBas(p.qui);
+        if (p.n === 1) api.event((api.s.loc === 'hotel' ? 'Dans le hall, un agent en pèlerine vous attend, carnet à la main. ' : 'Un agent en pèlerine vous aborde, carnet à la main. ') + '« Une plainte contre vous, déposée par ' + par + '. Insultes, esclandre. » Il note votre nom, lentement. « Rien de bien grave. Mais je vous ai à l’œil, {m}. »');
+        else if (p.n === 2) { api.event('Le même agent, ou son frère. « Deuxième plainte, {m}. Par ' + par + ', cette fois. » Il vous tend un papier. « Deux livres d’amende, payables tout de suite. La prochaine fois, ce sera le poste. »'); api.pay(Math.min(2, api.s.money)); }
+        else { api.event('Deux agents vous attendent, l’un devant vous, l’autre derrière. « Encore une plainte. ' + cap0(par) + '. Vous allez nous suivre. »'); L.humeur.arreter(api, null); }
+        return true;
+      }
+      return evPlainte(api, fired);
+    };
+    function cap0(x) { return x.charAt(0).toUpperCase() + x.slice(1); }
   }
 
   // ================================================================ le prologue, à bord du Simplon-Orient-Express
@@ -159,5 +202,22 @@
     };
     PR.rumeurs = {};
     PR.converse = G.RPG.Parole.make(PR);
+    // à bord, c'est le chef de train qu'on prévient
+    PR.humeur = {
+      cd: { bz: 15, ins: 30 },
+      plainte: function (api, id) { var p = api.flag('plainte') || { n: 0 }; p.n++; p.qui = id; p.depuis = api.s.min; p.traitee = false; api.flag('plainte', p); }
+    };
+    var evPR = PR.everyTurn;
+    PR.everyTurn = function (api, fired) {
+      var p = api.flag('plainte');
+      if (p && !p.traitee && !api.s.ended && !api.s.talk && api.s.min - p.depuis >= 3) {
+        p.traitee = true; api.flag('plainte', p);
+        api.event(p.n === 1
+          ? 'Le chef de train vient vous trouver, sanglé dans son uniforme bleu nuit. « {M}, on me signale un voyageur qui importune le personnel. Je compte sur vous pour que ce soit la dernière fois. »'
+          : 'Le chef de train, de nouveau, et cette fois il ne salue pas. « {M}, deuxième plainte. Au prochain incident, je vous fais descendre à Lausanne, avec vos bagages et sans vos excuses. »');
+        return true;
+      }
+      return evPR ? evPR(api, fired) : false;
+    };
   }
 })(typeof window !== 'undefined' ? window : globalThis);
