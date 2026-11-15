@@ -152,6 +152,9 @@
       [/\b(la |une )?valise (dans|du|qui roule dans) (le )?couloir\b|\bla valise qui roule\b/g, ' couloir '],
       [/\b(la |une )?(dame|voisine|cliente|vieille dame) du (deuxieme|2e|second)( etage)?\b|\bpas au plafond\b|\bdeuxieme etage\b/g, ' damedeuxieme '],
       [/\bscotland yard\b|\bnew scotland yard\b/g, ' yard '],
+      // « j'adore vos moustaches » : celles de la personne à qui l'on parle, pas l'homme à la moustache
+      [/\b(quelles? |quels? |de |les |ces |des )?(belles?|magnifiques?|superbes?|jolies?|splendides?) (moustaches?|favoris|rouflaquettes|bacchantes|barbe)\b/g, ' belle allure '],
+      [/\b(vos|votre|ta|tes|ton) (belles? |beaux |magnifiques? |superbes? |jolies? |grosses? |longues? |enormes? |splendides? |fameuses? )?(moustaches?|favoris|rouflaquettes|bacchantes|barbe|favori)\b/g, ' votre allure '],
       [/\b(l |un |cet |ce |le )?(homme|monsieur|type|inconnu|individu) (brun|aux cheveux noirs|aux cheveux bruns|qui (m |nous )?(observait|regardait|epiait|fixait|surveillait))\b|\b(le |un )?grand brun\b/g, ' moustachu '],
       [/\bchelsea arms\b/g, ' chelsea '],
       [/\bbritish museum\b|\bsalle de lecture\b|\breading room\b/g, ' musee '],
@@ -600,8 +603,12 @@
         T('visite', [['STJOHN', 0.9], ['ACCOMPAGNER', 0.6]], ['« Chez moi ? Venez quand vous voudrez, {ami}… » Il s’interrompt, le regard ailleurs. « Pas ce week-end, peut-être. J’ai du travail. Beaucoup de travail. Je vous écrirai. »', '« Je vous écrirai, je vous dis. » Il sourit, mais ses doigts tremblent un peu sur sa coupe.'], { cond: function (api) { return api.s.loc === 'institut'; } }),
         T('beddows', ['BEDDOWS'], ['« Beddows ? Mon ombre, mon cuisinier, ma conscience. Il cire mes chaussures et censure mes lettres. Je ne sais pas ce que je ferais sans lui. »', '« Il désapprouve mon tabac depuis vingt ans. Une constance admirable. »'], { chip: 'Beddows' }),
         T('maison', ['HOTEL', ['TOIMEME', 0.7]], ['« Ma maison de St John’s Wood ? Éventrée ! Les ouvriers agrandissent ma bibliothèque. D’où votre hôtel, et toutes mes excuses. Dès que ce sera fini, je vous invite à dîner. Beddows fera son pâté en croûte. »'], { more: ['« Ma femme aurait détesté ces travaux. Margaret est morte en 1919. La grippe. » Il tire sur sa pipe et change de sujet.'] }),
-        T('moustachu', ['MOUSTACHU', ['QUELQUUN', 0.8]], function (api) {
-          if (!api.has('OBSERVATEUR')) { api.npc('smith', '« Un homme qui nous observe ? Mon {ami}, tout le monde nous observe : je viens de dire à l’Empire britannique que ses fantômes sont réels. »'); return; }
+        T('moustachu', ['MOUSTACHU', ['QUELQUUN', 0.8]], function (api, n, p) {
+          if (!api.has('OBSERVATEUR')) {
+            var regard = /observ|regard|epi|fix|surveill|guett|espion/.test(G.RPG.normalize((p && p.raw) || ''));
+            api.npc('smith', regard ? '« Un homme qui nous observe ? Mon {ami}, tout le monde nous observe : je viens de dire à l’Empire britannique que ses fantômes sont réels. »' : '« Un homme à moustache ? » Il balaie la salle d’un geste. « Mon {ami}, ce soir, c’est la moitié de l’Empire. Moi compris. »');
+            return;
+          }
           api.npc('smith', 'Il plisse les yeux vers la foule. « Brun, une moustache ? Je ne vois pas. Un admirateur. Ou un sceptique. Les deux me suivent partout, comme des corbeaux. »');
         }),
         T('continent', ['VOYAGE', 'TRAIN', 'PISTE'], ['« Le continent ! J’y ai passé ma jeunesse. Vienne, Venise, Constantinople… Je compte y retourner au printemps, si mes vieux os le permettent. »']),
