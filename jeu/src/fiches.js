@@ -220,4 +220,83 @@
       return evPR ? evPR(api, fired) : false;
     };
   }
+
+  // ================================================================ le fil de l'intrigue
+  // Quand le joueur s'égare avec un personnage important, celui-ci revient de lui-même à ce qui compte :
+  // une remarque en passant, dans sa voix. Une amorce par sujet (t = le sujet écrit qu'elle ouvre), dans l'ordre.
+  if (PR) {
+    PR.fils = {
+      serveur: [
+        { t: 'ravel', x: 'Son regard revient, malgré lui, vers la table du fond et son cognac intact. « Pardon, monsieur. C’est cette table. Je n’aime pas laisser un verre plein derrière un client. »' },
+        { t: 'traces', x: 'Il jette un coup d’œil au tapis, du côté de la porte à soufflet, et fronce le nez. « Excusez-moi. Cette humidité me tracasse. »' },
+        { t: 'hommegris', cond: function (api) { return !!api.npcs('serveur').asked.ravel; }, x: '« Enfin. Ce ne sont pas mes affaires, qui vient chercher qui. » Il essuie un verre déjà propre.' }
+      ],
+      veuve: [
+        { t: 'ravel', x: 'Elle retourne une carte, la regarde, puis regarde la table du fond. « Tiens. Encore celle-là. Elle sort sans arrêt depuis que le petit monsieur a quitté sa place. »' },
+        { t: 'hommegris', cond: function (api) { return !!api.npcs('veuve').asked.ravel; }, x: '« Remarquez, je regarde trop les gens. On ne devrait pas. Surtout ceux qui passent sans faire de bruit. »' },
+        { t: 'cartes', x: '« Vous parlez, vous parlez, et mes cartes refroidissent. Elles ont pourtant des choses à dire, ce soir. »' }
+      ],
+      conducteur: [
+        { t: 'ravel', x: '« Allora… Vous cherchez quelqu’un, signore ? À cette heure, on ne se promène pas dans mes voitures pour le plaisir. »' },
+        { t: 'traces', x: 'Il soulève un pied et regarde sa semelle. « Madonna, ce tapis. Trempé. Et ça vient de là-bas, du côté du 7. »' }
+      ]
+    };
+  }
+  if (L) {
+    var jour = function (api) { return Math.floor(api.s.min / 1440); };
+    L.fils = {
+      smith: [
+        { t: 'sujet', cond: function (api) { return api.s.loc === 'institut' && !api.flag('conference'); }, x: '« Mais je vous retiens avec des bêtises. Dans dix minutes je monte à cette tribune, et vous comprendrez pourquoi je ne dors plus depuis trois nuits. »' },
+        { t: 'hantises', cond: function (api) { return api.s.loc === 'institut' && !!api.flag('conference'); }, x: '« Vous ne m’avez rien dit de mes photographies, mon {ami}. Les trois positions. Vous avez vu, n’est-ce pas ? »' },
+        { t: 'moustachu', cond: function (api) { return api.s.loc === 'institut' && api.has('OBSERVATEUR'); }, x: '« Vous regardez sans cesse la salle, mon {ami}. Quelqu’un vous inquiète ? »' },
+        { t: 'beddows', cond: function (api) { return api.s.loc === 'institut'; }, x: '« Beddows me fait signe que je parle trop. Il a raison, il a toujours raison. C’est épuisant. »' }
+      ],
+      beddows: [
+        { t: 'attaque', x: 'Beddows baisse la voix, les yeux sur le lit. « {M}… vous ne me demandez pas ce qui est arrivé à Monsieur. » Il attend.' },
+        { t: 'plan', x: '« Le temps presse, {m}. Monsieur m’a fait répéter trois fois ce que je devais vous dire. »' },
+        { t: 'simulacre', x: 'Il lisse la couverture du lit, machinalement. « Il parle de la statue jusque dans son sommeil. Les morceaux. Toujours les morceaux. »' },
+        { t: 'voyage', x: '« Il faudra penser aux billets, {m}. Monsieur dit que chaque jour compte. »' }
+      ],
+      concierge: [
+        { t: 'courrier', cond: function (api) { return (api.flag('billetAttend') && !api.has('BILLET')) || (api.flag('courrier') || []).some(function (x) { return x.due <= api.s.min; }); }, x: '« À propos, {m}… » Il jette un œil aux casiers derrière lui. « Vous attendiez du courrier, je crois ? »' },
+        { t: 'smith', cond: function (api) { return api.s.min >= 1440 + 23 * 60 && !api.has('INCENDIE'); }, x: '« Vous avez vu les journaux, {m} ? St John’s Wood… On ne parle que de ça aux cuisines. »' },
+        { t: 'ragots', cond: function (api) { return jour(api) >= 3; }, x: '« Le quartier est nerveux, {m}. Le groom ne veut plus faire les courses du côté de Chelsea. »' },
+        { t: 'vane', cond: function (api) { return !api.has('VANE'); }, x: '« Une cliente me demandait hier l’adresse d’une médium. Les gens s’ennuient, par ce brouillard. »' },
+        { t: 'lieux', x: '« Si {m} cherche à s’occuper, Londres ne manque pas de vieux papiers. Je connais des adresses. »' }
+      ],
+      fleming: [
+        { t: 'meurtres', x: 'Fleming tapote un dossier fermé sur son bureau, celui du Chelsea Arms. « Vous n’êtes pas venu jusqu’ici pour parler de la pluie. »' },
+        { t: 'smith', cond: function (api) { return api.has('INCENDIE'); }, x: '« On me dit que vous connaissiez le professeur de St John’s Wood. Londres est petit, ces jours-ci. »' }
+      ],
+      rigby: [
+        { t: 'incendie', x: '« Bon. » Il rallume sa cigarette. « La maison de St John’s Wood. C’est pour ça que vous êtes là, non ? »' },
+        { t: 'beddows', x: '« Je cherche toujours le domestique. Si vous avez une idée de l’endroit où va un homme pareil, je prends. »' }
+      ],
+      pike: [
+        { t: 'aide', x: 'Mrs Pike tapote son fichier du bout de l’ongle. « Un nom, {m}. Donnez-moi un nom, et je vous dis ce que Londres en a imprimé. »' }
+      ],
+      vane: [
+        { t: 'seance', cond: function (api) { return !api.flag('seanceFaite'); }, x: '« Vous tournez autour de ma table depuis tout à l’heure, très {cher}. Elle ne mord pas. Pas avant neuf heures. »' },
+        { t: 'smith', cond: function (api) { return !api.flag('seanceFaite'); }, x: '« Vous venez de la part de Julius Smith, ou contre lui ? Avec lui, il n’y a jamais eu que ces deux façons de venir. »' },
+        { t: 'albert', cond: function (api) { return !!api.flag('seanceFaite'); }, x: 'Elle serre son châle. « Cette voix… Vous l’avez entendue comme moi. Dites-moi que vous l’avez entendue. »' }
+      ],
+      atkins: [
+        { t: 'soir', x: '« Vous êtes là pour M. Stanley, n’est-ce pas ? Personne ne monte plus jusqu’ici pour autre chose. »' },
+        { t: 'maquette', x: '« Et ce train, mon Dieu, ce train… » Elle s’interrompt, et vous ressert du thé.' }
+      ],
+      butter: [
+        { t: 'maquette', x: '« Vous n’êtes pas venu pour mes boggies, je le vois bien. C’est l’autre qui vous amène. Celle de la cave. »' },
+        { t: 'stanley', x: '« Ce pauvre Stanley… » Il ôte ses lunettes et les essuie longuement. « On ne m’a presque rien demandé, vous savez. »' }
+      ],
+      voisin: [
+        { t: 'vieux', x: '« La boutique d’à côté vous intéresse, hein ? Tout le monde la regarde, depuis qu’elle est fermée. »' }
+      ],
+      mustapha: [
+        { t: 'makryat', x: '« Je suppose que vous venez, vous aussi, pour ce nom dans les journaux. » Il repose sa tasse.' }
+      ],
+      alexis: [
+        { t: 'plan', x: '« Le temps, {m} ! Il ne coule pas ici comme chez vous. Écoutez-moi, pendant que je sais encore ce que je dis. »' }
+      ]
+    };
+  }
 })(typeof window !== 'undefined' ? window : globalThis);

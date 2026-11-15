@@ -289,7 +289,8 @@
     }
     if (c.loc !== api.s.loc) { api.flag('combat', null); return ic0(api, p, raw); }
     var t = ' ' + CX.norm(raw) + ' ';
-    return act(api, c, FUIR.test(t) || p.c.ALLER !== undefined ? 'fuir' : RENDRE.test(t) ? 'rendre' : SOINS.test(t) ? 'soins' : (CACHER.test(t) && c.mort) ? 'cacher' : ATT.test(t) ? (c.out ? 'achever' : 'frapper') : 'autre', p);
+    var conte = G.RPG.recit(raw); // en plein combat, un récit ne porte pas de coup
+    return act(api, c, FUIR.test(t) || p.c.ALLER !== undefined ? 'fuir' : RENDRE.test(t) ? 'rendre' : SOINS.test(t) ? 'soins' : (CACHER.test(t) && c.mort) ? 'cacher' : (ATT.test(t) && !conte) ? (c.out ? 'achever' : 'frapper') : 'autre', p);
   };
   function act(api, c, what, p) {
     var P = PROF[c.npc], who = c.npc;

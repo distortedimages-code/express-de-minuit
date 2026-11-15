@@ -32,8 +32,9 @@
     compliment: /\b(merci|bravo|charmant|charmante|gentil|gentille|aimable|belle|beau|elegant|elegante|intelligent|intelligente|admirable|remarquable|formidable|genial|courageux|courageuse|adorable|magnifique|superbe|splendide|ravissant|ravissante|epatant|epatante|distingue|distinguee)\b|\bj (adore|admire) (vos|votre|ton|ta|tes)\b|\bj aime (beaucoup |bien )?(vos|votre|ton|ta|tes)\b|\b(quelles?|quels?) (belles?|beaux?|jolie?s?|magnifiques?|superbes?)\b/,
     ana: /\b(portable|smartphone|internet|ordinateur|ordi|television|tele|teleportation|avion a reaction|fusee|nucleaire|atomique|bombe atomique|covid|facebook|google|wifi|jeu video|jeux video|playstation|euros?|selfie|hitler|nazis?|seconde guerre|deuxieme guerre|frigo|micro ondes|antibiotique|penicilline|television|ovni|extraterrestre|tiktok|instagram|youtube|netflix|mail|email|e mail|sms|robotique)\b/,
     meta: /\b(ia|intelligence artificielle|chatgpt|chat gpt|claude|robot|bot|programme informatique|un programme|une machine|vous etes reel|tu es reel|etes vous reel|vous existez|tu existes|joueur|jeu video|un jeu|personnage)\b/,
-    oui: /^(oui|ouais|bien sur|evidemment|certes|absolument|exactement|tout a fait|en effet|affirmatif|volontiers|ok|d accord|peut etre|sans doute|probablement)\b/,
-    non: /^(non|jamais|pas du tout|nullement|aucunement|certainement pas|pas vraiment|bof|nan)\b/,
+    oui: /^(oui|ouais|bien sur|bien entendu|evidemment|naturellement|certes|absolument|exactement|tout a fait|en effet|affirmatif|volontiers|avec plaisir|ok|d accord|peut etre|sans doute|probablement|je crois que oui|c est vrai|c est exact|helas oui)\b/,
+    ouiCourt: /^(si|un peu|assez|plutot|je crois|je pense|je le crois|je le pense|il me semble|quelques jours|quelque temps|pourquoi pas)\b/,
+    non: /^(non|jamais|pas du tout|nullement|aucunement|certainement pas|pas vraiment|pas encore|pas le moins du monde|bof|nan|helas non|malheureusement|je ne crois pas|je ne pense pas|je crains que non|je ne sais pas|aucune idee|surement pas)\b/,
     jesuis: /\bje suis (un |une |le |la |l )?([a-z]{3,})\b/, jemappelle: /\bje m appelle ([a-z]{2,})\b|\bmon nom est ([a-z]{2,})\b/,
     quisuisje: /\bqui (suis je|je suis)\b|\bmon nom\b|\bvous savez qui je suis\b/,
     salut: /^(bonjour|bonsoir|salut|hello|coucou|bien le bonjour|good (morning|evening)|rebonjour|re bonjour)\b/
@@ -108,7 +109,8 @@
     if (!a.type) a.type = 'affirmation';
     var HU = G.RPG && G.RPG.Humeur;
     a.insulte = HU ? HU.RX.insulte.test(t) && (vous || !a.ents.length) : RX.insulte.test(t);
-    a.compliment = RX.compliment.test(t) && !a.insulte; a.ana = (t.match(RX.ana) || [])[1] || null; a.meta = RX.meta.test(t) && (vous || a.q);
+    a.compliment = RX.compliment.test(t) && !a.insulte && (vous || a.words <= 3 || /\b(merci|bravo|felicitations|allure)\b/.test(t) || /\ballure\b/.test(p.text || '')); // « belle soirée » n'est pas un compliment qu'on lui fait
+    if (!a.insulte && (/\bbelle allure\b/.test(p.text || '') || (/\bvotre allure\b/.test(p.text || '') && /\b(adore|aime|admire|magnifique|superbe|jolie?s?|beaux?|belles?|vous va|vous vont|elegant|elegante|chic)\b/.test(t)))) a.compliment = true; a.ana = (t.match(RX.ana) || [])[1] || null; a.meta = RX.meta.test(t) && (vous || a.q);
     if (HU) {
       // l'humeur : jurons, menaces, excuses, absurdités, mots d'un autre siècle
       a.juron = !a.insulte && HU.RX.juron.test(t);
@@ -118,7 +120,7 @@
       var am = t.match(HU.ANA), fm = am ? null : t.match(HU.FUTUR);
       if (am || fm) { var mw = (am || fm)[0].trim().replace(/^(un|mon|ton|votre|son|des|vos|mes|le|par|ses) /, ''); a.anaW = HU.CANON[mw] || span(raw, mw) || mw; a.futur = !am; }
     }
-    a.oui = RX.oui.test(tt); a.non = RX.non.test(tt);
+    a.oui = RX.oui.test(tt) || (a.words <= 4 && RX.ouiCourt.test(tt)); a.non = RX.non.test(tt);
     var cx = null; CLAIMX.some(function (c) { if (c[0].test(t)) { cx = c[1]; return true; } return false; });
     var m = t.match(RX.jesuis); a.claim = cx || (m && !/^(desole|navre|perdu|fatigue|fatiguee|sur|sure|pret|prete|venu|venue|ici|la|en|de|pas|tres|bien|malade|curieux|curieuse|seul|seule|ami|amie|presse|pressee|inquiet|inquiete|content|contente|au|pour|avec|du|des|une|un|le|desolee|navree|occupe|occupee|perdue|ravi|ravie|enchante|enchantee)$/.test(m[2]) ? m[2] : null);
     if (a.claim && HU && HU.RX.claimAbsurde.test(N(a.claim))) { a.absurde = true; a.claim = null; }
@@ -443,6 +445,37 @@
       p: ['« Une pinte, ça se refuse pas. Mais pas pendant le service, {m}. »'],
       o: ['« Je ne bois pas en service. Je bois après, et pas qu’un peu. »'],
       fr: ['« Un petit cognac ? C’est la maison qui offre. Enfin, la Compagnie. »'] },
+    // la conversation de tous les jours : la soirée, le sommeil, les livres, la table, les voyages, la santé
+    { k: 'soiree', re: /\b(belle soiree|bonne soiree|quelle soiree|drole de soiree|cette soiree|ce banquet|belle reception|beau monde|que de monde|quelle foule|belle nuit|quelle nuit|drole de nuit|belle journee|quelle journee)\b/,
+      h: ['« Une soirée comme Londres sait en donner : trop de monde, trop peu d’air, et pas assez de vérité. »', '« On s’y fait. Regardez autour de vous : la moitié de ces gens voudrait être ailleurs, et l’autre moitié n’ose pas partir. »'],
+      p: ['« Si vous le dites, {m}. Moi, j’attends surtout qu’elle finisse. »', '« On a vu pire. On a vu mieux aussi, remarquez. »'],
+      o: ['« Pour nous, il n’y a pas de belle soirée, {m}. Il y a les soirs calmes, et les autres. »'],
+      fr: ['« Une drôle de nuit, monsieur. Sur cette ligne, on finit par reconnaître celles qui ne se passeront pas comme les autres. »', '« La nuit sera longue. Elles le sont toutes, après Dijon. »'] },
+    { k: 'sommeil', re: /\b(mal dormi|pas dormi|bien dormi|dormi|sommeil|insomnie|fatigue|fatiguee|epuise|epuisee|creve|crevee|cauchemars?|reves?|ereinte)\b/,
+      h: ['« Le sommeil est un luxe que Londres ne m’accorde plus. Trois heures, les bonnes nuits. »', '« Vous avez mauvaise mine, en effet. Dormez. C’est le seul remède que je connaisse qui ne coûte rien. »'],
+      p: ['« À qui le dites-vous. Avec ce brouillard, on ne sait même plus quand il fait nuit. »', '« Ma mère disait : qui dort mal a quelque chose sur la conscience. Elle dormait très bien, elle. »'],
+      o: ['« Dormir ? J’ai essayé une fois, en 1919. »', '« On dort quand le dossier est clos, {m}. »'],
+      fr: ['« On dort mal dans les trains, monsieur. Ceux qui dorment trop bien, je m’en méfie. »', '« À mon âge, on ne dort plus, on patiente. »'] },
+    { k: 'lecture', re: /\b(vous lisez|lisez vous|tu lis|lis tu|aimez lire|la lecture|vos lectures|un bon livre|des romans|romans policiers|sherlock holmes|conan doyle|dickens|la litterature|poesie)\b/,
+      h: ['« Je lis tout, et je crois peu. Les romans de M. Conan Doyle me reposent : au moins, là, les mystères ont une fin. »', '« Trop. Mes yeux ne me le pardonnent pas. »'],
+      p: ['« Le journal, {m}, quand on me le laisse. Et encore, je commence par la fin. »', '« Lire ? Avec quelles heures ? »'],
+      o: ['« Des rapports, {m}. Mal écrits, pour la plupart. »', '« Sherlock Holmes ? Dans les livres, les témoins disent la vérité. »'],
+      fr: ['« Des feuilletons, monsieur, entre deux gares. Je ne connais jamais la fin : on me les vole. »', '« Je lis les cartes. C’est plus court, et ça finit toujours mal. »'] },
+    { k: 'table', re: /\b(vous avez faim|j ai faim|bien mange|bon repas|la cuisine anglaise|la cuisine francaise|le diner|ce diner|le dejeuner|le menu|bonne table|bon restaurant)\b/,
+      h: ['« La cuisine anglaise est une pénitence que nous nous infligeons par patriotisme. »', '« On dîne mal partout à Londres, sauf chez les gens qui ont un cuisinier français. »'],
+      p: ['« Une tourte et une pinte, {m}. Le reste, c’est pour les messieurs. »', '« On mange ce qu’il y a. Depuis la guerre, il y a moins. »'],
+      o: ['« Un sandwich au bureau. Celui d’hier, en général. »'],
+      fr: ['« La carte du wagon-restaurant est la meilleure d’Europe, monsieur. Enfin, jusqu’à la frontière. »', '« Je picore. À mon âge, on ne dîne plus, on goûte. »'] },
+    { k: 'voyages', re: /\b(vous voyagez|voyagez vous|aimez voyager|les voyages|deja voyage|a l etranger|pays lointains|bout du monde|vu du pays)\b/,
+      h: ['« J’ai beaucoup voyagé, jeune. Maintenant, je fais venir le monde à moi, par la poste. »', '« Les voyages forment la jeunesse et ruinent les vieillards. »'],
+      p: ['« Margate, une fois, {m}. Il a plu. »', '« Moi ? Jamais plus loin que le terminus de l’omnibus. »'],
+      o: ['« Le service m’a emmené en France, de 1915 à 1918. Ça m’a suffi comme voyage. »'],
+      fr: ['« Je ne fais que ça, monsieur. Toujours la même ligne, jamais le même train. »', '« J’ai fait trois fois le tour du monde. On y trouve partout les mêmes veuves. »'] },
+    { k: 'sante', re: /\b(votre sante|la sante|vous portez bien|vous allez bien|comment vous sentez vous|vous avez l air (fatigue|fatiguee|malade|pale|soucieux|soucieuse|inquiet|inquiete|triste)|quelque chose ne va pas|ca ne va pas)\b/,
+      h: ['« Je me porte comme un homme de mon âge qui a trop de choses en tête. Merci de le demander. »', '« Assez bien pour m’en plaindre, ce qui est bon signe. »'],
+      p: ['« On fait aller, {m}. On fait aller. »', '« Tant qu’on tient debout, on ne se plaint pas. »'],
+      o: ['« En état de marche. »', '« Je vais bien quand Londres va bien. Tirez-en vos conclusions. »'],
+      fr: ['« On fait aller, monsieur. C’est gentil de demander : sur cette ligne, on ne nous demande que l’heure. »', '« Je vais comme une femme qui a enterré tout son monde. Très bien, donc. »'] },
     { k: 'tabac', re: /\b(cigarettes?|tabac|pipe|cigares?|fumer|fumez)\b/,
       h: ['« La pipe éclaircit les idées. Ou du moins les enfume agréablement. »'],
       p: ['« Une Woodbine ? J’en ai une, si vous voulez. La dernière. »'],
@@ -450,6 +483,21 @@
       fr: ['« Fumer ? Dans le wagon-restaurant, c’est permis après le café seulement. »'] }
   ];
   var H = { day: function (api) { return Math.floor((api.s.min || 0) / 1440); } };
+  // ce qu'on répond à quelqu'un qui avoue une violence
+  var AVEU_JE = /\b(j ai|j avais|je l ai|je lui ai|je les ai|je l avais|je voulais|j allais)\b/;
+  var AVEU_ACTE = /\b(tue|tuer|etrangl\w*|frapp\w*|cogn\w*|assomm\w*|poignard\w*|gifl\w*|tabass\w*|agress\w*|battu|attaqu\w*|blesse\w*|egorg\w*|empoisonn\w*|coups? de (poing|couteau|pied|tete)|saute dessus|saute a la gorge|tire dessus)\b/;
+  var AVEU = {
+    o: ['« Répétez-moi ça. » Il a posé son crayon. « Lentement. Et pesez chaque mot : je note tout. »', '« Au moins, vous ne niez pas. » Il écrit une ligne dans votre dossier. « La franchise ne vous évitera pas le juge. Mais elle m’évite du travail. »', '« Vous le dites comme on donne l’heure. C’est ce qui m’inquiète le plus, chez vous. »'],
+    h: ['Un silence. « Vous dites cela avec un calme qui ne me rassure pas. Pourquoi me le raconter, à moi ? »', '« J’aurais préféré ne pas l’entendre. » Une main cherche le dossier d’une chaise.', '« Et vous me le confiez comme une anecdote. Je ne sais pas ce qui m’effraie le plus : le geste, ou le ton. »'],
+    p: ['« Vous… vous avez fait quoi ? » Un pas en arrière. « Faut pas me raconter ça à moi, {m}. »', '« Je veux pas le savoir. J’ai rien entendu, {m}. Rien du tout. »', '« Ben dites donc. Et vous êtes là, tranquille, à me le dire. »'],
+    fr: ['« On ne plaisante pas avec ces choses-là, monsieur. Pas dans un train de nuit. »', '« Je n’ai rien entendu. Et vous feriez bien de ne pas le répéter. »', '« Monsieur… Ce sont des choses qu’on avoue à un prêtre, ou à un juge. Pas à moi. »']
+  };
+  var RECIT = {
+    o: ['« C’est votre version. Je la note. On verra ce qu’en disent les autres. »', '« Tout le monde a une bonne raison, {m}. Les cellules en sont pleines. »', '« Continuez. Les gens qui racontent finissent toujours par en dire trop. »'],
+    h: ['« Je vous écoute. Continuez, si cela vous soulage. »', '« Je vois. Et que voulez-vous que j’en fasse ? »', '« Voilà qui éclaire certaines choses. Pas toutes. »'],
+    p: ['« Ah. Ben, si vous le dites, {m}. »', '« Ça, c’est vos affaires. Moi, j’y étais pas. »', '« Eh bien. On en apprend, à vous écouter. »'],
+    fr: ['« Si vous le dites, monsieur. Je n’y étais pas. »', '« Je vous crois sur parole. C’est plus prudent. »', '« On entend de tout, dans un train de nuit. »']
+  };
   function classe(f) { var g = f.groupe || 'peuple'; return f.fr ? 'fr' : /police/.test(g) ? 'o' : /savant|diplomate|mondain|occultiste|hotel|domestique/.test(g) ? 'h' : 'p'; }
 
   // ---------------------------------------------------------------- composer une réponse
@@ -720,6 +768,21 @@
       var f = (scene.fiches || {})[npc.id]; if (!f) return false;
       var id = npc.id, m = mem(api, id), a = analyse(api, npc, p, m, f, scene), Vx = voice(f), st = api.npcs(id);
       var label = function (cid) { return (f.noms && f.noms[cid]) || api.label(cid); };
+      // le nom tel que le joueur l'a dit : s'il a écrit « la bibliothèque », on ne lui répond pas « le British Museum ? »
+      var nomDit = function (cid) {
+        var lb = label(cid), n = (p.nouns || []).filter(function (x) { return x.id === cid; })[0];
+        var w = n && n.pos >= 0 ? (p.text || '').split(' ')[n.pos] : null;
+        if (!w || w.length < 3 || (' ' + N(lb) + ' ').indexOf(w.slice(0, Math.max(4, w.length - 2))) >= 0) return lb;
+        var mots = String(p.raw || '').match(/[A-Za-zÀ-ÿœŒ]+/g) || [], i = -1;
+        for (var k = 0; k < mots.length; k++) if (N(mots[k]) === w) { i = k; break; }
+        if (i < 0) return lb; // le mot vient d'une tournure (« scotland yard ») : le nom du jeu convient
+        var mot = mots[i], det = i > 0 ? N(mots[i - 1]) : '';
+        if (/^[A-ZÀ-Ý]/.test(mot) && i > 0) return mot; // un nom propre
+        var D = { le: 'le ', la: 'la ', les: 'les ', l: 'l’', un: 'le ', une: 'la ', des: 'les ', du: 'le ', au: 'le ', aux: 'les ', ce: 'ce ', cet: 'cet ', cette: 'cette ', ces: 'ces ', mon: 'votre ', ma: 'votre ', mes: 'vos ', votre: null, vos: null };
+        if (D[det] === null) return lb;
+        if (D[det] && /^[aeiouyhàâéèêîôû]/i.test(mot) && /^(le |la )$/.test(D[det])) return 'l’' + mot.toLowerCase();
+        return (D[det] || '') + mot.toLowerCase();
+      };
       var said = false;
       function say(x, off) { npcLine(api, id, habille(api, f, id, x, a, off)); said = true; m.lastTurn = api.s.turn; }
       function count(k) { m.n[k] = (m.n[k] || 0) + 1; return m.n[k]; }
@@ -744,10 +807,12 @@
       // 2. réponse à une question que le PNJ avait posée
       if (m.pending !== undefined && m.pending !== null && f.relances && f.relances[m.pending]) {
         var r = f.relances[m.pending]; m.pending = null;
-        if (a.words <= 8 && (a.oui || a.non || a.type === 'affirmation')) {
-          say(a.oui ? r.oui : a.non ? r.non : (r.autre || r.non));
+        // seul un vrai oui ou un vrai non répond à sa question ; « j'ai mal dormi » parle d'autre chose
+        if (a.words <= 10 && (a.oui || a.non)) {
+          say(a.oui ? r.oui : r.non);
           saveMem(api, id, m); return true;
         }
+        if (r.autre && a.type === 'affirmation' && a.words <= 5 && !a.ents.length) { say(r.autre); saveMem(api, id, m); return true; }
       }
       // les salutations : une fois, puis on s'étonne
       if (a.salut) {
@@ -817,7 +882,7 @@
             var l2 = val(api, (f.sait && f.sait[e2]) || f.avis[e2], 'sait:' + id + ':' + e2);
             if (l2 && /^« /.test(l2)) { count('ent:' + e2); say('« ' + quantA(label(e2)) + ' : ' + lowFirst(stripName(l2.replace(/^« /, ''))), false); }
           }
-        } else say(fill(val(api, f.ignore || Vx.ignore, 'ign:' + id), a, label(e)), true);
+        } else say(fill(val(api, f.ignore || Vx.ignore, 'ign:' + id), a, nomDit(e)), true);
         relance(api, f, id, m); saveMem(api, id, m); return true;
       }
       // 7 bis. un mot de la question qui figure dans sa propre histoire : il y revient de lui-même
@@ -859,6 +924,8 @@
       var tp = a.type, pool2 = (f.types && f.types[tp]) || Vx[tp];
       if (pool2) {
         if (tp === 'affirmation' && a.words <= 2) return false;
+        // on lui raconte quelque chose (« il m'a menacé le premier ») : il écoute, à sa façon
+        if (p.recit && tp === 'affirmation') { say(val(api, RECIT[classe(f)] || RECIT.p, 'recit:' + id), true); relance(api, f, id, m); saveMem(api, id, m); return true; }
         if (tp === 'affirmation' && HUM() && a.content.length >= 2 && !a.ents.length) return bizarre(api, id, f, a, m, st, caractere(id, f), 'phrase');
         st.patience -= (tp === 'affirmation' ? 1 : 0);
         say(val(api, pool2, 'type:' + id + ':' + tp), true);
@@ -894,8 +961,15 @@
       // une plainte contre vous est arrivée jusqu'à la police
       var pl = api.flag('plainte');
       if (pl && pl.n && /police/.test(f.groupe || '') && m.plainteVue !== pl.n) { m.plainteVue = pl.n; st.patience -= 1; garder(st); npcLine(api, id, uniq(api, m, [Hm.L.plaintePolice])); }
-      var grossier = a.insulte || a.menace || (a.juron && !a.ents.length && !a.q);
-      var bad = grossier || a.absurde || !!a.anaW;
+      // un aveu (« j'ai essayé de l'étrangler ») : on ne le rejoue pas, on y réagit
+      if (p.recit && !a.q && AVEU_JE.test(a.t) && AVEU_ACTE.test(a.t)) {
+        var poolA = AVEU[classe(f)] || AVEU.p;
+        st.patience -= 1; garder(st);
+        npcLine(api, id, uniq(api, m, [poolA]));
+        saveMem(api, id, m); return true;
+      }
+      var grossier = (a.insulte || a.menace || (a.juron && !a.ents.length && !a.q)) && !(p.recit && !a.insulte);
+      var bad = grossier || (a.absurde && !p.recit) || !!a.anaW; // un récit qu'on comprend mal n'est pas une absurdité
       // une menace qu'une scène écrite sait jouer (un jet d'Intimidation) passe par la scène
       if (a.menace && !a.insulte && ctx.menaceTopic && !m.sil) { saveMem(api, id, m); return false; }
       var ok = !bad && !!(ctx.topic || a.ents.length || a.perso || a.salut || a.compliment || a.nom || a.quisuisje || a.suite || (a.q && !a.unk.length) || (m.pending !== undefined && m.pending !== null && (a.oui || a.non)));

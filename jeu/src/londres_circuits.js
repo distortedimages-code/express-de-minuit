@@ -499,6 +499,8 @@
     var here = loc(api);
     // ---- la violence a un prix
     var head = ' ' + t.trim().split(/\s+/).slice(0, 6).join(' ') + ' ';
+    // « j'ai essayé de l'étrangler », « il m'a frappé », « si je le tuais » : un récit, pas un geste
+    if (G.RPG.recit(raw)) return false;
     if (VIOLENCE.test(head) && raw.indexOf('?') < 0 && !/\b(qui|pourquoi|comment|quand|est ce|a ete|ont ete|a tue|ont tue|avait tue|le temps|porte|portes|fenetre|vitre|mur|table|comptoir|meurtres?|morts?)\b/.test(t) && CIVIL.test(here)) {
       var who = target(api, p);
       if (!who) return false;

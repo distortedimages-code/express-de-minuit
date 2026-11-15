@@ -163,6 +163,21 @@ Les idées (hors conversation) et les sujets (en conversation) sont repliés par
 
 Une suggestion de sujet n’apparaît que si ce sujet a déjà été abordé avec ce personnage : vous l’avez nommé devant lui, ou lui-même en a parlé. Les choses qu’on a sous les yeux comptent aussi (la table de Ravel, le serveur), et les gestes restent toujours proposés (prendre congé, glisser un pourboire, l’interroger sur lui-même). Ainsi, la vieille dame ne propose « l’homme qui est venu le chercher » qu’après avoir dit qu’un autre homme était venu. Vérification : `node jeu/tools/test_suggestions.js`.
 
+## Le moteur de dialogue
+
+Plusieurs règles générales évitent qu'un personnage réponde à côté :
+
+- **L'allure.** « J'adore vos moustaches », « joli chapeau », « mon manteau » parlent de l'apparence de quelqu'un, jamais d'un personnage qu'on reconnaît à ce détail (l'homme à la moustache, l'homme au chapeau). Seule une référence définie le désigne : « l'homme au chapeau », « le moustachu ».
+- **Le sujet de la phrase.** Un sujet écrit ne se déclenche que s'il porte sur ce que la phrase nomme : « où est Camberwell ? » parle de Camberwell.
+- **L'écho juste.** Une réplique qui reprend la question (« Un homme qui nous observe ? ») ne garde cette reprise que si le joueur a dit ces mots. Quand le personnage ne connaît pas un nom, il répète le mot du joueur, pas une étiquette du jeu.
+- **Le récit.** « J'ai essayé de l'étrangler », « si je le frappais », « je ne vais pas vous tuer », « il m'a menacé » racontent, supposent ou nient : aucun geste n'est joué. Le personnage réagit à l'aveu ou écoute le récit, selon ce qu'il est (policier, bourgeois, homme du peuple).
+- **Oui et non.** Seul un vrai oui ou un vrai non répond à une question qu'un personnage vient de poser.
+- **La conversation de tous les jours.** La soirée, le sommeil, les livres, la table, les voyages, la santé ont leurs réponses, par milieu.
+
+**Le fil de l'intrigue** (`fils`, dans `jeu/src/fiches.js`) : quand le joueur s'égare deux fois de suite avec un personnage important, celui-ci revient de lui-même à ce qui compte, par une remarque dans sa voix (« Vous regardez sans cesse la salle, mon ami. Quelqu'un vous inquiète ? »). Une amorce par sujet, jamais deux de suite, jamais sur un sujet déjà abordé, et jamais par-dessus une question qu'il vient de poser.
+
+Vérifications : `node jeu/tools/test_realisme.js` (phrases pièges), `node jeu/tools/test_fil.js` (retours à l'intrigue).
+
 ## Les personnages absents ne parlent pas
 
 Un verrou dans le moteur empêche toute réplique d’un personnage qui n’est pas là. Un personnage est là si on lui parle, si on peut lui parler à cet endroit, s’il fait partie du décor, ou si sa fiche déclare ses lieux (`lieux: ['stoke']`). Quand un personnage entre en scène le temps d’un événement (Beddows qui ouvre la porte, les passagers du train fantôme), le scénario l’annonce avec `api.arrive('beddows')`. Quand on change de lieu, la conversation en cours s’arrête. Si une réplique est bloquée, elle n’est pas affichée ; les tests automatiques comptent ces blocages pour qu’on corrige le scénario.

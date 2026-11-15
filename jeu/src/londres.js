@@ -152,9 +152,6 @@
       [/\b(la |une )?valise (dans|du|qui roule dans) (le )?couloir\b|\bla valise qui roule\b/g, ' couloir '],
       [/\b(la |une )?(dame|voisine|cliente|vieille dame) du (deuxieme|2e|second)( etage)?\b|\bpas au plafond\b|\bdeuxieme etage\b/g, ' damedeuxieme '],
       [/\bscotland yard\b|\bnew scotland yard\b/g, ' yard '],
-      // « j'adore vos moustaches » : celles de la personne à qui l'on parle, pas l'homme à la moustache
-      [/\b(quelles? |quels? |de |les |ces |des )?(belles?|magnifiques?|superbes?|jolies?|splendides?) (moustaches?|favoris|rouflaquettes|bacchantes|barbe)\b/g, ' belle allure '],
-      [/\b(vos|votre|ta|tes|ton) (belles? |beaux |magnifiques? |superbes? |jolies? |grosses? |longues? |enormes? |splendides? |fameuses? )?(moustaches?|favoris|rouflaquettes|bacchantes|barbe|favori)\b/g, ' votre allure '],
       [/\b(l |un |cet |ce |le )?(homme|monsieur|type|inconnu|individu) (brun|aux cheveux noirs|aux cheveux bruns|qui (m |nous )?(observait|regardait|epiait|fixait|surveillait))\b|\b(le |un )?grand brun\b/g, ' moustachu '],
       [/\bchelsea arms\b/g, ' chelsea '],
       [/\bbritish museum\b|\bsalle de lecture\b|\breading room\b/g, ' musee '],
@@ -576,7 +573,7 @@
 
   // ---------------------------------------------------------------- personnages
   L.npcs = {
-    morts: { id: 'morts', name: 'Les passagers', topics: [], deflect: ['…'] },
+    morts: { id: 'morts', name: 'Les passagers', topics: [], deflect: ['…'], lieux: ['wagon1', 'wagon2', 'retour'] },
     planton: { id: 'planton', name: 'Le planton', topics: [], deflect: ['…'], lieux: ['stoke', 'yard'] },
     brule: { id: 'brule', name: 'L’homme sur le lit', topics: [], deflect: ['…'] },
     smith: npc({ id: 'smith', name: 'Le professeur Smith', patience: 9, cooldown: 20, selfKeys: ['SMITH'],
