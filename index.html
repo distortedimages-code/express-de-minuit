@@ -372,6 +372,21 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 .menu-msg { margin: 4px 0 0; color: var(--red); font-size: 14px; }
 .menu-msg.ok { color: var(--text); }
 
+/* les illustrations dans le fil : le décor à l'arrivée, le portrait de celui qui prend la parole */
+.e-vue { position: relative; flex: none; align-self: flex-start; width: min(calc(100% - 8px), 520px); aspect-ratio: 2.4 / 1; background: #000; overflow: hidden; margin: 4px 0 2px 2px; box-shadow: 5px 5px 0 var(--red); }
+.e-vue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.e-vue::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgba(10, 10, 11, .55) 100%); }
+.e-vue.portrait { width: min(calc(100% - 8px), 440px); margin-top: 8px; box-shadow: 4px 4px 0 rgba(243, 239, 230, .16); }
+.e-vue.portrait + .e-npc { margin-top: 14px; }
+body[data-san="2"] .e-vue img { filter: contrast(1.08) sepia(.15) hue-rotate(-20deg); }
+body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35deg) saturate(1.6); }
+
+/* l'en-tête tient toujours dans la largeur de l'écran, même avec « Carnet 0/31 » */
+.top { min-width: 0; }
+.brand { min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+.nav { flex: none; }
+@media (max-width: 430px) { .nav { gap: 4px; } .nav .ghost { padding: 7px 6px; letter-spacing: .01em; font-size: 10.5px; min-height: 34px; } .brand { font-size: 15px; } }
+
 </style>
 </head>
 <body data-san="0">
@@ -11353,6 +11368,41 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
   }
   var TYPED = { narr: 1, npc: 1, event: 1, intrusion: 1, sys: 1, push: 1 };
 
+  // ---------------------------------------------------------------- les illustrations dans le fil
+  // Le décor quand on arrive quelque part, le portrait quand quelqu'un prend la parole : même le clavier ouvert,
+  // même loin du haut de la page, on voit où l'on est et à qui l'on parle. La clé de l'image est notée sur l'entrée
+  // du journal (e.img, e.pt) pour qu'une partie rechargée retrouve les mêmes images.
+  var dernierPortrait = null;
+  function cleImage(scene, loc) {
+    var s = game.state;
+    try { return art.photoKey(scene, { san: 0, min: s.min, loc: loc, flags: s.flags || {} }) || ''; } catch (err) { return ''; }
+  }
+  function carteImage(key, nom, cls) {
+    var d = document.createElement('div');
+    d.className = 'e-vue ' + cls;
+    var im = document.createElement('img');
+    im.alt = 'Illustration : ' + nom; im.decoding = 'async'; im.src = (window.PHOTO_BASE || 'img/') + key + '.webp';
+    im.onerror = function () { if (d.parentNode) d.parentNode.removeChild(d); };
+    d.appendChild(im);
+    return d;
+  }
+  function vueDe(e) {
+    if (!art || !art.photoKey || art.photos === false) return null;
+    if (e.t === 'loc' || e.t === 'title') {
+      dernierPortrait = null;
+      var lieu = e.t === 'loc' ? e.loc : game.state.loc, L = SC.locations[lieu] || {};
+      // (une vieille sauvegarde, relue d'un coup : pas d'images pour tout l'historique)
+      if (e.img === undefined) e.img = instant ? '' : cleImage(L.art || lieu, lieu);
+      return e.img ? carteImage(e.img, e.name || L.name || '', 'lieu') : null;
+    }
+    if (e.t === 'npc') {
+      if (e.pt === undefined) e.pt = (instant || e.who === dernierPortrait || !art['pt_' + e.who]) ? '' : cleImage('pt_' + e.who, game.state.loc);
+      dernierPortrait = e.who;
+      return e.pt ? carteImage(e.pt, e.name || '', 'portrait') : null;
+    }
+    return null;
+  }
+
   function pump() {
     if (current) return;
     var e = queue.shift();
@@ -11380,6 +11430,9 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
     var el = build(e);
     if (!el) { pump(); return; }
     logEl.appendChild(el);
+    // l'image dans le fil : après le nom du lieu, ou juste avant la première réplique de quelqu'un
+    var vue = vueDe(e);
+    if (vue) { if (e.t === 'npc') logEl.insertBefore(vue, el); else logEl.appendChild(vue); }
     scrollDown();
     if (TYPED[e.t] && !instant && !reduce) {
       current = el;
