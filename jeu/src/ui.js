@@ -278,7 +278,8 @@
   function closePanels() { ['ovSheet', 'ovNotes', 'ovMenu'].forEach(function (id) { $(id).hidden = true; }); }
   function fillSheet() {
     var pc = game.state.pc, s = game.state;
-    var h = '<div class="sheet-head"><div class="n">' + esc(pc.name) + '</div><div class="o">' + esc(pc.occupation) + ' · ' + pc.age + ' ans · ' + esc(pc.origin) + '</div></div>';
+    var pk = pc.key || (/Arnaud/.test(pc.name || '') ? 'arnaud' : '');
+    var h = (pk ? '<div class="sheet-img" style="background-image:url(img/portraits/pj_' + pk + '.webp)"></div>' : '') + '<div class="sheet-head"><div class="n">' + esc(pc.name) + '</div><div class="o">' + esc(pc.occupation) + ' · ' + pc.age + ' ans · ' + esc(pc.origin) + '</div></div>';
     h += '<h3>Caractéristiques</h3><div class="carac">';
     Object.keys(pc.carac).forEach(function (k) { var v = pc.carac[k]; h += '<div><div class="k">' + k.replace('EDU', 'ÉDU') + '</div><div class="v">' + v + ' <small>' + Math.floor(v / 2) + '/' + Math.floor(v / 5) + '</small></div></div>'; });
     h += '</div><div class="derived">' +
@@ -393,7 +394,7 @@
     c.pregens.forEach(function (p) {
       var card = document.createElement('div'); card.className = 'pcard';
       var top = Object.keys(p.skills).filter(function (k) { return p.skills[k] >= 45 && k !== 'Mythe de Cthulhu'; }).sort(function (a, b) { return p.skills[b] - p.skills[a]; }).slice(0, 5);
-      card.innerHTML = '<div class="pn">' + esc((p.title === 'Dr' ? 'Dr ' : '') + p.name) + '</div>' +
+      card.innerHTML = (p.key ? '<div class="pimg" style="background-image:url(img/portraits/pj_' + p.key + '.webp)"></div>' : '') + '<div class="pn">' + esc((p.title === 'Dr' ? 'Dr ' : '') + p.name) + '</div>' +
         '<div class="po">' + esc(p.occupation) + ' · ' + p.age + ' ans</div>' +
         '<p class="pb">' + esc(p.bio) + '</p>' +
         '<div class="ps">' + top.map(function (k) { return '<span>' + esc(k) + ' <b>' + p.skills[k] + '</b></span>'; }).join('') + '</div>' +

@@ -320,6 +320,8 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; width: 100%; max-width: 980px; padding-right: 8px; }
 .pcard { text-align: left; display: flex; flex-direction: column; gap: 8px; padding: 16px 16px 14px; border: 2px solid var(--text); background: var(--ink); transition: box-shadow .15s, transform .15s; }
 .pcard:hover { box-shadow: 8px 8px 0 var(--red); transform: translate(-2px, -2px); }
+.pcard .pimg { margin: -16px -16px 4px; aspect-ratio: 2.4 / 1; background: #000 center / cover no-repeat; border-bottom: 2px solid var(--text); }
+.sheet-img { aspect-ratio: 2.4 / 1; background: #000 center / cover no-repeat; border: 2px solid var(--text); box-shadow: 5px 5px 0 var(--red); margin-bottom: 12px; }
 .pcard .pn { font-family: var(--display); font-size: 30px; line-height: 1; text-transform: uppercase; color: var(--text); }
 .pcard .po { align-self: flex-start; font-family: var(--display); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--text); background: var(--red); padding: 2px 9px 1px; transform: skewX(-12deg); }
 .pcard .pb { margin: 0; color: #d6d1c8; font-size: 15px; line-height: 1.5; flex: 1; }
