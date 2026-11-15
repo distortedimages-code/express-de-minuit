@@ -43,3 +43,13 @@ Mme Irène Vasseur — wagon-restaurant, portrait 23
   elderly French widow in black, small hat with a veil, lace collar, earrings, old tarot cards in her ringed hands
 Paolo, le conducteur — voitures-lits, portrait 24
   32-year-old Italian sleeping-car attendant, uniform cap, thick moustache, heavy eyelids, dark uniform with brass buttons
+
+LES PERSONNAGES JOUEURS — portraits pj_*
+Lucien Arnaud, the investigator of the prologue — portraits/pj_arnaud
+  34-year-old Parisian newspaper reporter, lean, clean-shaven, sharp intelligent dark eyes, short dark hair slightly unruly, a loosened tie, a crumpled trench coat over a dark suit, a pencil behind his ear
+Dr Arthur Pemberton — portraits/pj_pemberton
+  52-year-old English physician of Harley Street and former war surgeon, tall and solid, short-cropped grey hair, neatly trimmed grey moustache, steady pale eyes with deep lines of fatigue, impeccable dark three-piece suit with a watch chain, a doctor's leather bag
+Miss Margaret « Maggie » Doyle — portraits/pj_doyle
+  31-year-old Irish newspaper reporter from Dublin, slim and quick, sharp cheekbones, a defiant half-smile, bright watchful eyes, wavy dark-auburn hair pinned under a cloche hat, a long tweed coat, a folding Kodak camera on a strap
+Mr Julian Ashby — portraits/pj_ashby
+  39-year-old English antiquarian, Oxford-educated, slender, a thoughtful narrow face, round wire-rimmed spectacles, neatly parted light-brown hair, a velvet-collared overcoat over a tweed waistcoat, a watchmaker's loupe, a cane with a silver knob

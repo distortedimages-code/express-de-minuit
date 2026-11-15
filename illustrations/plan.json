@@ -365,6 +365,26 @@
       "image": "documents/07_billet",
       "prompt": "prompts/documents/07_billet.txt",
       "references": []
+    },
+    {
+      "image": "portraits/pj_arnaud",
+      "prompt": "prompts/portraits/pj_arnaud.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/pj_pemberton",
+      "prompt": "prompts/portraits/pj_pemberton.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/pj_doyle",
+      "prompt": "prompts/portraits/pj_doyle.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/pj_ashby",
+      "prompt": "prompts/portraits/pj_ashby.txt",
+      "references": []
     }
   ]
 }
