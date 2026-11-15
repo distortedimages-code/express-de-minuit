@@ -151,13 +151,17 @@ def controles(im, sha, deja_vus):
     ecart = ImageStat.Stat(petit.convert('L')).stddev[0]
     if ecart < 3: erreurs.append('image vide (uniforme)')
     elif ecart < 12: avert.append('image très peu contrastée')
-    # noir et blanc avec une touche de rouge : on mesure la saturation et la part de rouge vif
+    # noir et blanc avec une touche de rouge. On mesure sur une vignette assez grande pour garder les petits accents,
+    # et on ignore les zones très sombres, où la moindre dominante fausse la mesure de saturation.
+    moyen = im.convert('RGB').resize((400, 300))
     def pixels(img):  # triplets de pixels, sans dépendre de la version de Pillow
         b = img.tobytes(); return [tuple(b[i:i + 3]) for i in range(0, len(b), 3)]
-    px, rgb = pixels(petit.convert('HSV')), pixels(petit)
-    sat_moy = sum(p[1] for p in px) / len(px)
-    rouges = sum(1 for (r, g, b) in rgb if r > 110 and r > 1.8 * g and r > 1.8 * b) / len(rgb)
-    couleurs = sum(1 for (h, s, v) in px if s > 90 and v > 60 and not (h < 18 or h > 235)) / len(px)
+    rgb = pixels(moyen); n = len(rgb)
+    clairs = [p for p in rgb if max(p) > 60]
+    sat_moy = (sum((max(p) - min(p)) / max(p) for p in clairs) / len(clairs) * 255) if clairs else 0
+    def rouge(p): r, g, b = p; return r > 70 and r > 1.6 * g and r > 1.6 * b and r - min(g, b) > 40
+    rouges = sum(1 for p in rgb if rouge(p)) / n
+    couleurs = sum(1 for p in rgb if max(p) - min(p) > 45 and not rouge(p)) / n
     if sat_moy > 60: avert.append(f'image peu « noir et blanc » (saturation moyenne {sat_moy:.0f}/255)')
     if couleurs > 0.03: avert.append(f'couleurs autres que le rouge sur {couleurs:.0%} de l’image')
     if rouges == 0: avert.append('aucune touche de rouge détectée')
