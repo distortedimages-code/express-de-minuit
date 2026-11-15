@@ -1300,7 +1300,9 @@
         return;
       }
       // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
-      if (!p.recit && GESTE.test(p.text) && !/\?\s*$/.test(p.raw) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde))) {
+      // en mode « Dire », les mots restent des mots : seul « je m'en vais », dit tout haut, met fin à la conversation
+      if (p.dit && /^(bon |bien |allez |alors |eh bien |sur ce |excusez moi |pardon )*(je (m en vais|pars|sors|file|vous laisse|te laisse|vous quitte|dois (y aller|partir|filer|vous laisser))|il faut que j y aille|a bientot|a plus tard|a demain|bonne (nuit|soiree|journee))\b/.test(normalize(p.raw))) { api.endTalk(); return; }
+      if (!p.dit && !p.recit && GESTE.test(p.text) && !/\?\s*$/.test(p.raw) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde))) {
         var seul = rankActions(p)[0];
         if (!(seul && seul.a.talkTo === npc.id)) { api.endTalk(false); handleWorld(p); return; }
       }
@@ -1319,12 +1321,12 @@
       if (A && A.mine && talkBack()) return;
       if (A && A.a && A.a.ents.length && scene.converse.note) scene.converse.note(api, npc, A.a.ents[0]);
       var addressed = A && A.addressed;
-      if (!selfOnly && worldVerb && !addressed && !/\?\s*$/.test(p.raw) && best && best.score >= THRESHOLD && (!tb || tb.score < 0.9 || best.score - tb.score > 0.9)) {
+      if (!p.dit && !selfOnly && worldVerb && !addressed && !/\?\s*$/.test(p.raw) && best && best.score >= THRESHOLD && (!tb || tb.score < 0.9 || best.score - tb.score > 0.9)) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
       // « je l'observe », « je le jauge » : sans sujet écrit pour ça, c'est un jet de Psychologie
-      if (/^(je|j) (l |le |la )?(observe|jauge|scrute|sonde|devisage|etudie son visage|cerne|examine son visage|lis dans son regard)/.test(normalize(p.raw)) && !tops.some(function (x) { return (x.t.keys || []).indexOf('PSY') >= 0; })) { doJet({ skill: 'Psychologie' }, p); return; }
+      if (!p.dit && /^(je|j) (l |le |la )?(observe|jauge|scrute|sonde|devisage|etudie son visage|cerne|examine son visage|lis dans son regard)/.test(normalize(p.raw)) && !tops.some(function (x) { return (x.t.keys || []).indexOf('PSY') >= 0; })) { doJet({ skill: 'Psychologie' }, p); return; }
       // une question sur lui, une insulte, une machine, un nom : le personnage d'abord, sauf si un sujet écrit vise précisément la chose
       if (A && A.prior && A.a.claim) {
         // une scène écrite pour ce mensonge-là (un jet de Baratin prévu) passe avant la règle générale
@@ -1343,7 +1345,7 @@
       var sureTop = A && tops.filter(function (x) { return sureScore(x.t, p, A) >= 0.64; })[0];
       if (sureTop) { runTopic(npc, sureTop.t.id, p); return; }
       if (p.c.SUITE !== undefined && (!A || A.short)) { followUp(npc); return; }
-      if (!p.recit && !selfOnly && !addressed && best && best.score >= THRESHOLD) {
+      if (!p.dit && !p.recit && !selfOnly && !addressed && best && best.score >= THRESHOLD) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
@@ -1351,7 +1353,7 @@
       if (A && talkBack()) return;
       if (tb && tb.score >= 0.64) { runTopic(npc, tb.t.id, p); return; }
       if (p.c.SUITE !== undefined) { followUp(npc); return; }
-      if (!selfOnly && best && best.score >= THRESHOLD) {
+      if (!p.dit && !selfOnly && best && best.score >= THRESHOLD) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
@@ -1632,11 +1634,14 @@
     }
 
     // ----- entrées publiques -----
-    function step(input) {
+    // mode : 'dire' = ce que le personnage dit, mot pour mot (aucun geste n'en sort) ;
+    //        'agir' ou rien = ce qu'il fait (« j'examine la table », « je lui demande où est Ravel »)
+    function step(input, mode) {
       if (s.ended) return;
       var raw = String(input || '').trim();
       if (!raw) return;
-      log({ t: 'player', x: raw });
+      var dire = mode === 'dire';
+      log(dire ? { t: 'player', x: raw, said: true } : { t: 'player', x: raw });
       var p = rewrite(lex, parse(lex, raw, scene.phrases));
       if (s.pending) {
         if (p.c.LANCER !== undefined || p.c.INSISTER !== undefined) { roll(); return; }
@@ -1648,6 +1653,7 @@
         s.pendingPush = null;
       }
       s.turn++;
+      if (dire) { s.tick = scene.talkTick || 1; parler(raw, p); afterTurn(); finish(); return; }
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
       // « dire qu'on est de la police » : c'est une parole. On la dit à son interlocuteur, ou à la seule personne présente.
@@ -1678,6 +1684,31 @@
       }
       if (apres) afterTurn();
       finish();
+    }
+    // une parole : à son interlocuteur ; sinon à la personne qu'on nomme, ou à la seule présente
+    function parler(raw, p) {
+      var texte = raw;
+      if (!s.talk) {
+        var gens = availableActions().filter(function (a) { return a.talkTo && !(scene.disponible && scene.disponible(api, a.talkTo)); });
+        var dst = destinataire(p);
+        var cible = dst ? gens.filter(function (a) { return a.talkTo === dst.id; })[0] : (gens.length === 1 ? gens[0] : null);
+        if (!cible) {
+          api.say(gens.length ? fresh('aQuiParler', ['À qui parlez-vous ?', 'Vous parlez, oui. Mais à qui ?', 'Plusieurs têtes se tournent. À qui vous adressez-vous ?']) : fresh('parlerSeul', ['Vous parlez dans le vide. Personne n’est là pour vous entendre.', 'Votre voix se perd. Il n’y a personne.', 'Personne ne répond. Vous êtes seul{e} à vous entendre.']));
+          if (gens.length) api.chips(gens.slice(0, 4).map(function (a) { return { label: a.label, action: a.id }; }));
+          s.tick = 0; return;
+        }
+        exec(cible, rewrite(lex, parse(lex, '', scene.phrases)));
+        if (dst && dst.reste && dst.reste.split(/\s+/).length >= 2) texte = dst.reste;
+        else if (dst) return; // on l'a seulement interpellé
+      }
+      var segs = phrasesDe(texte);
+      for (var i = 0; i < segs.length; i++) {
+        if (!s.talk || s.pending || s.ended) break;
+        var ps = rewrite(lex, parse(lex, segs[i], scene.phrases));
+        ps.dit = true;
+        handleDialogue(ps);
+        s.prefix = null;
+      }
     }
     // un geste ou une réplique ; renvoie vrai si le temps du monde doit passer ensuite
     function unGeste(raw, p) {

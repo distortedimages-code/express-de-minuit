@@ -331,7 +331,11 @@
     var input = $('cmd');
     input.placeholder = s.ended ? 'Fin du chapitre' : s.pending ? 'Lancez les dés…' : s.talk ? 'Que dites-vous ?' : 'Que faites-vous ?';
     input.disabled = !!s.ended;
-    $('go').disabled = !!s.ended;
+    $('go').disabled = !!s.ended; $('goDire').disabled = !!s.ended || !!s.pending;
+    // le bouton mis en avant est celui de la touche Entrée
+    var enDire = !!s.talk && !s.pending;
+    $('goDire').className = (enDire ? 'act' : 'ghost') + ' dire'; $('go').className = enDire ? 'ghost' : 'act';
+    input.setAttribute('enterkeyhint', 'send');
     actions();
   }
   function actions() {
@@ -354,14 +358,14 @@
       tb.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
       bar.appendChild(tb);
       if (ideasOpen) game.topicChips().forEach(function (t) { bar.appendChild(btn(esc(t.label), '', function () { act(function () { game.choose({ label: t.label, topic: t.topic }); }); })); });
-      else { var h2 = document.createElement('span'); h2.className = 'label'; h2.textContent = 'Parlez librement, comme à quelqu’un en face de vous'; bar.appendChild(h2); }
+      else { var h2 = document.createElement('span'); h2.className = 'label'; h2.textContent = '« Dire » : vos paroles · « Agir » : vos gestes'; bar.appendChild(h2); }
       return;
     }
     var ib = btn(ideasOpen ? 'Idées ▾' : 'Idées ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
     ib.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
     bar.appendChild(ib);
     if (ideasOpen) game.ideas(4).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
-    else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = 'Écrivez librement, comme à une table de jeu'; bar.appendChild(hint); }
+    else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(hint); }
   }
 
   function act(fn) {
@@ -478,6 +482,7 @@
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
     help.innerHTML = '<h3>Comment jouer</h3><p>Écrivez ce que fait ' + esc(game.state.pc.name) + ', comme vous le diriez à un meneur de jeu : ' + esc(SC.examples || '« j’examine la table », « je parle au serveur »') + '. En conversation, parlez librement : « pourquoi ? », « et ensuite ? ». Les fautes de frappe sont tolérées.</p>' +
+      '<p><b>Dire</b> envoie vos paroles, mot pour mot : le personnage les entend, et aucun geste n’en sort (« je vous étrangle », dit tout haut, n’est qu’une menace). <b>Agir</b> envoie ce que vous faites : « j’examine la table », « je sors », « je lui demande où est Ravel ». La touche Entrée utilise le bouton mis en avant : Dire en conversation, Agir le reste du temps.</p>' +
       '<p>Quand un jet est demandé, lancez les dés : il faut faire moins que la compétence. Une réussite majeure (moitié) ou extrême (cinquième) donne parfois plus. Après certains échecs, vous pouvez insister : c’est un jet forcé, et un nouvel échec coûte plus cher.</p>' +
       '<p>Surveillez votre santé mentale. Plus elle baisse, moins ce que vous lisez est sûr.</p>' +
       '<h3>À propos</h3><p>Prototype de jeu de rôle textuel entièrement scripté : analyseur de phrases tolérant aux fautes, dés d100, dialogues à sujets et relances, horloge, relances du meneur quand on s’égare, sauvegarde automatique dans ce navigateur. Aucune IA ne répond pendant la partie.</p>';
@@ -571,14 +576,19 @@
   }
 
   // ---------------------------------------------------------------- événements
-  $('form').addEventListener('submit', function (ev) {
-    ev.preventDefault();
+  // deux façons d'envoyer : « Dire » (les paroles du personnage, mot pour mot) et « Agir » (ce qu'il fait).
+  // La touche Entrée envoie avec le bouton mis en avant : Dire en conversation, Agir le reste du temps.
+  function modeParDefaut() { return game && game.state.talk && !game.state.pending ? 'dire' : 'agir'; }
+  function envoyer(mode) {
     var v = $('cmd').value.trim();
     if (!v) { skip(); return; }
     if (busy) return;
     $('cmd').value = '';
-    act(function () { game.step(v); });
-  });
+    act(function () { game.step(v, mode); });
+  }
+  $('form').addEventListener('submit', function (ev) { ev.preventDefault(); envoyer(modeParDefaut()); });
+  $('go').addEventListener('click', function () { envoyer('agir'); });
+  $('goDire').addEventListener('click', function () { envoyer('dire'); });
   logEl.addEventListener('click', function (ev) { if (!ev.target.closest('button')) skip(); });
   $('btnSheet').addEventListener('click', function () { openPanel('ovSheet'); });
   $('btnNotes').addEventListener('click', function () { openPanel('ovNotes'); });

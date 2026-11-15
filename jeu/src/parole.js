@@ -115,6 +115,8 @@
       // l'humeur : jurons, menaces, excuses, absurdités, mots d'un autre siècle
       a.juron = !a.insulte && HU.RX.juron.test(t);
       a.menace = HU.RX.menace.test(t);
+      // dit tout haut (« Dire »), « je vous étrangle » est une menace, pas un geste
+      if (p.dit && /\b(je|j) (vous|te|t) (tue|etrangle|frappe|cogne|egorge|assomme|poignarde|gifle|casse|descends|bute|creve)\w*\b/.test(t)) a.menace = true;
       a.excuse = HU.RX.excuse.test(t);
       a.absurde = HU.RX.absurde.test(t);
       var am = t.match(HU.ANA), fm = am ? null : t.match(HU.FUTUR);

@@ -163,6 +163,10 @@ Les idées (hors conversation) et les sujets (en conversation) sont repliés par
 
 Une suggestion de sujet n’apparaît que si ce sujet a déjà été abordé avec ce personnage : vous l’avez nommé devant lui, ou lui-même en a parlé. Les choses qu’on a sous les yeux comptent aussi (la table de Ravel, le serveur), et les gestes restent toujours proposés (prendre congé, glisser un pourboire, l’interroger sur lui-même). Ainsi, la vieille dame ne propose « l’homme qui est venu le chercher » qu’après avoir dit qu’un autre homme était venu. Vérification : `node jeu/tools/test_suggestions.js`.
 
+## Dire et Agir
+
+Deux boutons envoient ce qu'on écrit. **Dire** : les paroles du personnage, mot pour mot ; le moteur n'en tire jamais un geste (« je vous étrangle », dit tout haut, est une menace). Hors conversation, la parole va à la personne qu'on nomme (« Bastien, … »), ou à la seule présente ; sinon le Gardien demande à qui l'on parle. **Agir** : ce que fait le personnage, gestes, déplacements, et aussi « je lui demande… ». La touche Entrée utilise le bouton mis en avant : Dire en conversation, Agir le reste du temps. Dans le code : `game.step(texte, 'dire')` ou `game.step(texte, 'agir')`. Vérification : `node jeu/tools/test_dire.js`.
+
 ## Le moteur de dialogue
 
 Plusieurs règles générales évitent qu'un personnage réponde à côté :
