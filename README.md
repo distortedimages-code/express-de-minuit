@@ -185,6 +185,8 @@ Trois protections générales, dans le moteur, évitent d'avoir à corriger les 
 - **Le verrou des faits** (`faits`, dans `jeu/src/londres_circuits.js`). Chaque événement daté de l'intrigue est déclaré une fois : les mots qui en parlent, et la condition pour qu'il existe (l'incendie : samedi 23 h). Tant qu'il n'existe pas, aucune réplique d'aucun personnage ne peut le mentionner. Si le joueur en parle lui-même, le personnage s'étonne (« Quel incendie ? »). Vérification : `node jeu/tools/test_chrono.js`.
 - **Le terrain commun.** Un pronom (« je l'ai vu ») ne désigne quelqu'un, pour un personnage, que si on a déjà parlé de cette personne avec lui. La phrase qui ouvre une conversation passe par les mêmes garde-fous que les suivantes. Un mot qui est à la fois un nom et un verbe conjugué (« ne porte-t-il pas plainte ») n'est pas pris pour le nom.
 - **Le récit.** Passé, hypothèse, négation, troisième personne : rien n'est joué (voir plus haut).
+- **Le discours rapporté.** « Dire qu'on est de la police », « je lui réponds que… », « me faire passer pour un médecin » : ce qui suit est une parole. Elle est dite à l'interlocuteur, ou à la seule personne présente ; sinon le Gardien demande à qui.
+- **Assez de mots compris.** Une longue phrase (quatre vrais mots ou plus) ne déclenche pas un geste sur un seul mot reconnu : le Gardien dit qu'il n'est pas sûr et propose des choix.
 
 ## Les horaires
 

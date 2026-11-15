@@ -299,6 +299,19 @@
   // ---------------------------------------------------------------------------
   // 3. Analyse d'une phrase du joueur
   // ---------------------------------------------------------------------------
+  // ----- le discours rapporté -----
+  // « dire qu'on est de la police », « je lui réponds que je ne sais rien », « me faire passer pour un médecin » :
+  // ce qui suit « que » est ce que le personnage dit. On le joue comme une parole, pas comme un geste sur un mot.
+  var DIRE = /^\s*(?:alors\s+|puis\s+|et\s+)?(?:(?:je|j['’]|on|nous)\s*(?:lui\s+|leur\s+|vais\s+(?:lui\s+|leur\s+)?)?(?:dis|dit|disons|dire|réponds|reponds|répondre|repondre|affirme|affirmer|prétends|pretends|prétendre|pretendre|annonce|annoncer|déclare|declare|déclarer|declarer|explique|expliquer|jure|jurer|assure|assurer|crie|crier|hurle|hurler|murmure|murmurer|chuchote|chuchoter|raconte|raconter|fais\s+croire|faire\s+croire)|(?:lui\s+|leur\s+)?(?:dire|répondre|repondre|affirmer|prétendre|pretendre|annoncer|déclarer|declarer|expliquer|jurer|assurer|crier|hurler|murmurer|chuchoter|raconter|faire\s+croire))\s+(?:(?:à|a|au|aux)\s+[^,]{2,30}?\s+)?(?:que\s+|qu['’]\s*)(.+)$/i;
+  var PASSER_POUR = /^\s*(?:je\s+)?(?:me\s+fais\s+passer|me\s+faire\s+passer|se\s+faire\s+passer|prétends\s+être|pretends\s+etre|prétendre\s+être|pretendre\s+etre|je\s+me\s+présente\s+comme|me\s+présenter\s+comme|je\s+me\s+presente\s+comme|me\s+presenter\s+comme)\s+(?:pour\s+)?(.+)$/i;
+  function discoursRapporte(raw) {
+    var m = String(raw).match(DIRE), dit = null;
+    if (m) dit = m[1].trim().replace(/^on\s+est\b/i, 'je suis').replace(/^on\s+a\b/i, 'j’ai').replace(/^on\s+(?=[a-zà-ÿ])/i, 'nous ').replace(/^nous\s+sommes\b/i, 'je suis');
+    else if ((m = String(raw).match(PASSER_POUR))) dit = 'je suis ' + m[1].trim();
+    if (!dit || dit.split(/\s+/).length < 2) return null;
+    return dit.charAt(0).toUpperCase() + dit.slice(1);
+  }
+
   // ----- le récit -----
   // « j'ai essayé de l'étrangler », « si je le frappais », « je ne vais pas vous tuer », « il m'a menacé » :
   // on raconte, on suppose, on nie. Ce n'est pas un geste fait maintenant, et rien ne doit le jouer comme tel.
@@ -972,6 +985,15 @@
       if (chips.length) api.chips(chips);
     }
 
+    // combien de vrais mots de la phrase portent l'action choisie ? Une longue phrase ne s'interprète pas sur un seul mot.
+    var MOTS_VIDES = new Set('decide decidons commence commencons continue continuons souhaite souhaitons compte comptons entreprends mets prends temps moment instant peu beaucoup grand grande petit petite vieux vieille bon bonne tout toute meme autre chose facon maniere air'.split(' '));
+    function tropPeuCompris(a, p) {
+      var mots = p.text.split(' ').filter(function (w) { return w.length >= 3 && !STOP.has(w) && !/^\d+$/.test(w) && !/ment$/.test(w) && !MOTS_VIDES.has(w); });
+      if (mots.length < 4) return false;
+      var cles = {}; [a.verbs, a.nouns, a.extra, a.extraVerbs, a.also].forEach(function (l) { (l || []).forEach(function (k) { cles[k] = 1; }); });
+      var appui = p.all.filter(function (x) { return x.score >= 0.8 && cles[x.id]; }).length;
+      return appui < 2;
+    }
     function low1(x) { x = String(x); return /^(Le|La|Les|L’) /.test(x) || /^L’/.test(x) ? x.charAt(0).toLowerCase() + x.slice(1) : x; }
     function cap1(x) { x = String(x); return x.charAt(0).toUpperCase() + x.slice(1); }
     function handleWorld(p) {
@@ -1002,6 +1024,12 @@
       if (best) {
         var margin = second ? best.score - second.score : 9;
         if ((best.score >= THRESHOLD && margin >= 0.05) || (best.score >= SOFT && margin >= 0.15) || best.score >= THRESHOLD + 0.4) {
+          // une longue phrase dont un seul mot est compris : on ne devine pas, on demande
+          if (tropPeuCompris(best.a, p)) {
+            api.say(fresh('peuCompris', ['Votre phrase peut vouloir dire plusieurs choses, et un seul mot m’y accroche. Que faites-vous, au juste ?', 'Je ne suis pas sûr de vous suivre. Dites-le plus simplement, ou choisissez :', 'Trop de mots m’échappent dans cette phrase pour que je devine. Vous voulez :']));
+            api.chips(cands.filter(function (c) { return c.score >= best.score - 0.6; }).slice(0, 3).map(function (c) { return { label: c.a.label, action: c.a.id }; }));
+            s.tick = 0; return;
+          }
           exec(best.a, p); return;
         }
       }
@@ -1622,6 +1650,22 @@
       s.turn++;
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
+      // « dire qu'on est de la police » : c'est une parole. On la dit à son interlocuteur, ou à la seule personne présente.
+      var dit = discoursRapporte(raw);
+      if (dit) {
+        var pd = rewrite(lex, parse(lex, dit, scene.phrases));
+        if (!s.talk) {
+          var gens = availableActions().filter(function (a) { return a.talkTo && !(scene.disponible && scene.disponible(api, a.talkTo)); });
+          if (gens.length === 1) exec(gens[0], rewrite(lex, parse(lex, '', scene.phrases)));
+          else {
+            api.say(gens.length ? fresh('aQuiDire', ['À qui le dites-vous ?', 'Vous le dites, oui. Mais à qui ?']) : fresh('direSeul', ['Vous le dites à voix haute. Personne n’est là pour l’entendre.', 'Les mots restent en l’air. Il n’y a personne pour les recevoir.']));
+            if (gens.length) api.chips(gens.slice(0, 4).map(function (a) { return { label: a.label, action: a.id }; }));
+            s.tick = 0; finish(); return;
+          }
+        }
+        if (s.talk && !s.pending && !s.ended) handleDialogue(pd);
+        afterTurn(); finish(); return;
+      }
       // « je dors jusqu'à l'aube, puis je prends un taxi » : deux gestes, l'un après l'autre
       var sq = suites(raw), apres = false;
       if (sq.length < 2) apres = unGeste(raw, p);
