@@ -394,6 +394,8 @@ form.line .ghost { border: 2px solid var(--text); background: transparent; color
 form.line input { min-width: 0; flex: 1 1 auto; }
 @media (max-width: 430px) { form.line { padding-left: 8px; gap: 5px; } form.line .prompt { display: none; } form.line #go, form.line #goDire { padding-left: 9px; padding-right: 9px; font-size: 14px; } }
 
+.people .ancien { margin-top: 8px; opacity: .75; font-size: .92em; }
+
 </style>
 </head>
 <body data-san="0">
@@ -7526,7 +7528,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     brouillard: ['« De la pluie depuis Noël. La Seine monte ; à Bercy, on surveille les caves. »', '« Un temps de janvier, {m}. Gris le matin, gris le soir, et mouillé entre les deux. »'],
     roi: ['« Des rois ? Nous avons réglé la question il y a un moment. » Un demi-sourire. « Cela dit, les vôtres ont de la tenue. »', '« Ici, on a un président. Personne ne se retourne sur son passage, et c’est très bien ainsi. »'],
     gouvernement: ['« Poincaré gouverne comme un notaire : tout est en règle, et rien n’est gai. »', '« La politique ? On change de ministère comme de chemise, et la chemise reste sale. »'],
-    ruhr: ['« Nos soldats sont entrés dans la Ruhr cette semaine. On dit que l’Allemagne paiera. On le dit depuis quatre ans. »', '« La Ruhr ! Les journaux ne parlent que de ça. Du charbon pris à la baïonnette : je ne sais pas si ça chauffe mieux. »'],
+    // les troupes françaises entrent dans la Ruhr le jeudi 11 janvier 1923 (jour 6, en comptant du vendredi 5)
+    ruhr: function (api) { return Math.floor(api.s.min / 1440) >= 6
+      ? ['« Nos soldats sont entrés dans la Ruhr cette semaine. On dit que l’Allemagne paiera. On le dit depuis quatre ans. »', '« La Ruhr ! Les journaux ne parlent que de ça. Du charbon pris à la baïonnette : je ne sais pas si ça chauffe mieux. »']
+      : ['« Poincaré parle d’aller chercher le charbon dans la Ruhr, puisque l’Allemagne ne paie pas. Il le fera, croyez-moi. »', '« On dit que l’armée va entrer dans la Ruhr. Encore des garçons en uniforme sur les quais de gare. »']; },
     egypte: ['« Ce pharaon qu’un Anglais a déterré ? Les illustrés en sont pleins. De l’or jusqu’au plafond, paraît-il. On ferait mieux de laisser dormir les morts. »', '« Toutankhamon. Tout Paris sait le dire, maintenant. Personne ne sait l’écrire. »'],
     mussolini: ['« Les Italiens ont trouvé leur homme, à ce qu’on dit. Un ancien journaliste. Ça finit rarement bien, les journalistes au pouvoir. »', '« Des chemises noires qui marchent sur Rome… On a vu des carnavals plus drôles. »'],
     russie: ['« Paris est plein de Russes, {m}. Des princes qui conduisent des taxis, des colonels portiers. Ils attendent que ça passe. Ça ne passe pas. »', '« Les Soviets ? Demandez aux petits épargnants ce qu’ils pensent de l’emprunt russe. Mais pas à table. »'],
@@ -9533,6 +9538,11 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function jour(api) { return JOURS[(4 + day(api.s.min)) % 7]; }
   function nuit(api) { var h = hour(api.s.min); return h >= 21 || h < 7; }
+  // les troupes françaises entrent dans la Ruhr le jeudi 11 janvier 1923
+  function ruhr(api) {
+    var d = day(api.s.min);
+    return d >= 7 ? 'Les troupes françaises sont entrées dans la Ruhr jeudi.' : d === 6 ? 'Les troupes françaises sont entrées dans la Ruhr ce matin.' : 'Poincaré menace d’envoyer l’armée dans la Ruhr si l’Allemagne ne paie pas.';
+  }
   function francais(api) { return api.skill('Langue (français)') >= 50; }
 
   // ================================================================ les lieux de Paris
@@ -9607,10 +9617,11 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     short: 'Paris',
     tick: 5, talkTick: 2,
     sanLabels: L.sanLabels, perceive: L.perceive, money: L.money, beforeAction: L.beforeAction, onMadness: L.onMadness,
-    start: { loc: 'gare', min: at(0, 17, 40), money: 40, inv: [] },
+    // jour 0 = vendredi 5 janvier 1923, comme à Londres ; venu de Londres, on arrive le jour où l'on en est parti (voir P.intro)
+    start: { loc: 'gare', min: at(7, 17, 40), money: 40, inv: [] },
     investigator: null,
-    clock: function (min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1, 3) + ' ' + (12 + d) + ' · ' + pad(hour(min)) + ' h ' + pad(min % 60); },
-    where: function (min) { var h = hour(min), mom = h < 6 ? 'nuit' : h < 12 ? 'matin' : h < 18 ? 'après-midi' : h < 22 ? 'soir' : 'nuit'; return 'Paris · ' + (12 + day(min)) + ' janvier 1923 · ' + mom; },
+    clock: function (min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1, 3) + ' ' + (5 + d) + ' · ' + pad(hour(min)) + ' h ' + pad(min % 60); },
+    where: function (min) { var h = hour(min), mom = h < 6 ? 'nuit' : h < 12 ? 'matin' : h < 18 ? 'après-midi' : h < 22 ? 'soir' : 'nuit'; return 'Paris · ' + (5 + day(min)) + ' janvier 1923 · ' + mom; },
     examples: '« je vais à la Bibliothèque nationale », « je demande une carte de lecteur », « je cherche le comte Fenalik »',
     phrases: [
       [/\bbibliotheque nationale\b|\bsalle de travail\b|\brue de richelieu\b|\bla nationale\b/g, ' bn '],
@@ -9752,6 +9763,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     ending: { title: 'Fin de la première partie : Paris', text: 'Le train de banlieue vous emporte vers Poissy, et vers ce qui dort sous la maison du comte. La suite du chapitre arrive.' }
   };
   P.endingFor = function (s) {
+    if (s.flags && s.flags.fin === 'extrade') return { title: 'Fin : rendu à Londres', text: 'Ce que vous aviez fait à Londres vous a rattrapé à Paris. Deux inspecteurs vous raccompagnent à Calais, menottes aux poignets, et le comte Fenalik retourne à son oubli.' };
     if (s.flags && s.flags.fin === 'prison') return { title: 'Fin : la Santé', text: 'Trois fois devant le commissaire, c’est une fois de trop. La prison de la Santé a des murs épais, et l’Orient-Express partira sans vous.' };
     return null;
   };
@@ -10022,8 +10034,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
           extra: ['BN', 'SMITH', 'CHARENTON', 'FENALIK', 'POISSY', 'DESTINATIONS', 'TAXI', 'VOYAGE', 'TRAIN'], run: function (api, p) { api.talk('gerant', p); } },
         { id: 'ph_journal', label: 'Lire les journaux', idea: true, verbs: ['EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['JOURNAL'], repeatable: true, time: 15,
           run: function (api) {
-            if (!api.flag('journalParis')) { api.flag('journalParis', true); api.say('Le Petit Parisien, Le Matin. Les troupes françaises viennent d’entrer dans la Ruhr ; on ne parle que de cela. En page trois, entre un vol de bijoux et un chien écrasé : « À la maison de santé de Charenton, le docteur Leroux prend la direction après la mort accidentelle du docteur Delplace. » Trois lignes.'); return; }
-            api.say(api.fresh('journalP', ['La Ruhr, toujours la Ruhr. Le franc baisse. Rien qui vous regarde.', 'Un feuilleton, des réclames, le prix du charbon. Vous repliez le journal.']));
+            if (!api.flag('journalParis')) { api.flag('journalParis', true); api.say('Le Petit Parisien, Le Matin. ' + ruhr(api) + ' On ne parle que de cela. En page trois, entre un vol de bijoux et un chien écrasé : « À la maison de santé de Charenton, le docteur Leroux prend la direction après la mort accidentelle du docteur Delplace. » Trois lignes.'); return; }
+            api.say(api.fresh('journalP', [day(api.s.min) >= 6 ? 'La Ruhr, toujours la Ruhr. Le franc baisse. Rien qui vous regarde.' : 'La Ruhr, encore : on attend l’ultimatum. Rien qui vous regarde.', 'Un feuilleton, des réclames, le prix du charbon. Vous repliez le journal.']));
           } },
         { id: 'ph_dormir', label: 'Dormir jusqu’au matin', idea: true, ideaCond: function (api) { return hour(api.s.min) >= 15 || hour(api.s.min) < 6; }, verbs: ['DORMIR', 'ATTENDRE'], nouns: ['CHAMBRE', 'HEURE'], bare: true, repeatable: true,
           run: function (api) {
@@ -10221,6 +10233,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     arreter: function (api, id) {
       var n = (api.flag('arrestations') || 0) + 1; api.flag('arrestations', n);
       api.endTalk(false);
+      if (api.flag('fugitif')) { api.say('Au poste de la rue de la Banque, on relève votre nom. Une heure plus tard, un inspecteur de la Sûreté pose devant vous un télégramme de Scotland Yard, avec votre signalement. « Londres vous réclame, ' + (api.pc.sex === 'f' ? 'madame' : 'monsieur') + '. »'); api.flag('fin', 'extrade'); api.end(); return; }
       if (n >= 3) { api.say('Le commissaire ne lève même plus les yeux. « Encore lui. Le dépôt, puis le juge. »'); api.flag('fin', 'prison'); api.end(); return; }
       api.say(n === 1 ? 'Deux agents à pèlerine vous prennent chacun par un coude. La nuit au poste de la rue de la Banque, sur un bat-flanc, entre un camelot et un ivrogne qui récite du Racine. Au matin, un commissaire fatigué vous rend vos papiers. « Vous êtes étranger. Je veux bien croire à un malentendu. Une fois. »' : 'Le même poste, le même bat-flanc. Cette fois, on relève votre identité, et l’amende est de cent francs. « La prochaine fois, c’est le dépôt. »');
       api.s.min = (day(api.s.min) + 1) * D + 9 * 60; api.s.tick = 0;
@@ -10242,12 +10255,30 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     return true;
   };
 
+  // ce que Londres a laissé (porté par l'investigateur d'un chapitre à l'autre : pc.passe.londres)
+  function passe(api) { return ((api.pc && api.pc.passe) || {}).londres || null; }
+  function dateLongue(min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1) + ' ' + (5 + d) + ' janvier 1923'; }
+  // les drapeaux de Londres qui comptent pour la suite (le moteur ne transmet que ceux-là)
+  L.memoire = ['discours', 'demasque', 'cheapsideFini', 'stanleySauve', 'maquetteDetruite', 'seanceFaite', 'fin', 'arrestations'];
   P.intro = function (api) {
+    var pa = passe(api), f = (pa && pa.drapeaux) || {}, a = function (id) { return !!pa && (pa.indices || []).indexOf(id) >= 0; };
+    // Victoria, Douvres, le ferry, Calais, la gare du Nord : sept heures quarante de voyage
+    if (pa && typeof pa.min === 'number') { api.s.min = pa.min + 460; api.s.tick = 0; }
+    if (f.fin === 'fugitif') api.flag('fugitif', true);
+    var h = hour(api.s.min), nuitTombee = h >= 21 || h < 6;
     api.title('L’Express de minuit', 'Paris · Le comte oublié');
-    api.say('Vendredi 12 janvier 1923. Le train de Calais entre en gare du Nord avec une heure de retard, sous une pluie qui a remplacé le brouillard de Londres sans rien y gagner.');
-    api.say('Dans votre portefeuille, la liste que Smith vous a dictée entre deux souffles, à Cheapside : Paris, Venise, Trieste, Belgrade, Sofia, Constantinople. Une statue en morceaux, et un morceau par ville. À côté de Paris, un seul nom : le comte Fenalik, disparu à la veille de la Révolution. Smith n’a pas eu le temps d’en dire plus.');
-    api.say('Le Simplon-Orient-Express vous attendra gare de Lyon. Rien ne presse encore. Personne, que vous sachiez, ne vous suit.');
-    api.sys('Vous incarnez ' + api.pc.name + '. Écrivez ce que vous faites (« Agir ») ou ce que vous dites (« Dire »).');
+    api.say(dateLongue(api.s.min) + '. Le train de Calais entre en gare du Nord' + (nuitTombee ? ' en pleine nuit, sous une pluie froide.' : h < 12 ? ' au petit matin, sous une pluie fine.' : ', sous une pluie qui a remplacé le brouillard de Londres sans rien y gagner.'));
+    var listeDe;
+    if (f.demasque) listeDe = 'une feuille roussie, ramassée dans les cendres d’un lit, à Cheapside, à deux pas du corps de Beddows, et couverte de l’écriture pointue de Smith';
+    else if (a('VISAGE') || a('BRULURES') || a('SEUL') || a('BEDDOWS')) listeDe = 'la liste que l’homme bandé de Cheapside, celui qui se faisait appeler Smith, vous a dictée entre deux souffles';
+    else listeDe = 'la liste que Smith vous a dictée entre deux souffles, à Cheapside';
+    api.say('Dans votre portefeuille, ' + listeDe + ' : Paris, Venise, Trieste, Belgrade, Sofia, Constantinople. Une statue en morceaux, et un morceau par ville. À côté de Paris, un seul nom : le comte Fenalik, qui la possédait avant la Révolution.' + (a('BIBLIO') ? ' Et, recopiée au British Museum, une piste plus sûre : des documents sur le simulacre dorment à la Bibliothèque nationale.' : ''));
+    if (a('BEDDOWS') && !f.demasque) api.say('Vous n’arrivez pas à oublier le cadavre écorché du British Museum. Si c’était Beddows, qui donc vous a ouvert la porte, à Cheapside ?');
+    if (f.maquetteDetruite && !f.stanleySauve) api.say('Dans le train, vous vous êtes assoupi{e} une minute. Un visage écrasé contre une vitre, Henry Stanley, qui hurle sans bruit. Vous vous êtes réveillé{e} en sursaut, et la dame d’en face a changé de compartiment.');
+    if (f.fin === 'fugitif') api.say('À Londres, Scotland Yard a votre signalement. À Calais, le douanier a regardé votre passeport une seconde de trop, puis il l’a tamponné. À Paris, la police n’a pas encore reçu votre nom. Mieux vaut ne pas lui en donner l’occasion.');
+    if (pa && api.sanState() >= 2) api.say('Sur le quai, vous vous surprenez à dévisager les porteurs, un par un, en cherchant lequel n’a pas de visage à lui.');
+    api.say('Le Simplon-Orient-Express vous attendra gare de Lyon. Rien ne presse encore.' + (f.fin === 'fugitif' ? '' : ' Personne, que vous sachiez, ne vous suit.'));
+    api.sys('Vous incarnez ' + api.pc.name + (pa ? ', tel' + (api.pc.sex === 'f' ? 'le' : '') + ' que Londres vous a laissé' + (api.pc.sex === 'f' ? 'e' : '') : '') + '. Écrivez ce que vous faites (« Agir ») ou ce que vous dites (« Dire »).');
   };
   P.help = function (api) { api.sys('Écrivez ce que fait votre investigateur : « je vais à la Bibliothèque nationale », « je demande une carte de lecteur », « je cherche le comte Fenalik ». Pour vous déplacer : « aller à… », ou « où aller ? ».'); };
   P.people = { gerant: 'M. Blain, gérant de l’hôtel du Cygne', gaudry: 'M. Gaudry, secrétariat de la Bibliothèque nationale', remi: 'Rémi Vangeim, étudiant et traducteur', brevin: 'Mlle Brévin, bibliothèque de l’Arsenal', rogniat: 'Mme Rogniat, secrétaire de la direction de Charenton', leroux: 'Le docteur Leroux, directeur par intérim', mandrin: 'Paul Mandrin, infirmier à Charenton' };
@@ -10342,6 +10373,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   });
 
   L.suite = 'paris';
+  P.precedent = 'londres';
   G.CHAPTERS.paris = P;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -12362,7 +12394,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 /* Interface : rendu du récit, dés, fiches, sauvegarde, ambiance. */
 (function () {
   'use strict';
-  var KEY = 'express-minuit-v1', SKEY = 'express-minuit-son';
+  var KEY = 'express-minuit-v1', SKEY = 'express-minuit-son', PKEY = 'express-minuit-progression';
   var $ = function (id) { return document.getElementById(id); };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Les documents : un support de papier (photographié, sans texte) et le texte composé par le jeu,
@@ -12520,15 +12552,42 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     }
     return d;
   }
-  // le chapitre suivant, avec le même investigateur : sa santé, ses compétences, ses poches
+  // ---------------------------------------------------------------- d'un chapitre à l'autre
+  // La campagne se joue dans l'ordre, avec le même investigateur. Un chapitre fini laisse un « passé » (pc.passe) :
+  // sa date de fin, ses indices, ses documents, les gens rencontrés et quelques faits que le chapitre suivant lira
+  // (SC.memoire). Le chapitre suivant ne s'ouvre qu'avec un investigateur qui a fini le précédent.
+  function suiteOuverte(s) {
+    var suite = SC.suite && CH[SC.suite], fin = s.flags && s.flags.fin;
+    return !!(suite && s.ended && (!fin || fin === 'fugitif'));
+  }
+  function investigateurSuivant(s) {
+    var pc = JSON.parse(JSON.stringify(s.pc)), f = s.flags || {}, drapeaux = {};
+    (SC.memoire || []).forEach(function (k) { if (f[k] !== undefined && f[k] !== null && typeof f[k] !== 'object') drapeaux[k] = f[k]; });
+    var carnet = s.clues.map(function (id) { var c = SC.clues[id]; if (!c) return null; if (SC.clueView) c = SC.clueView(s, id, c); return { title: c.title, text: c.text }; }).filter(Boolean);
+    var docs = (s.docs || []).slice(), vus = {}; docs.forEach(function (d) { vus[d.x] = 1; });
+    s.log.forEach(function (e) { if (e.t === 'doc' && !vus[e.x]) { vus[e.x] = 1; docs.push({ x: e.x, title: e.title || '' }); } });
+    var P = SC.people || {}, gens = Object.keys(s.npcs).filter(function (k) { return s.npcs[k].met && P[k]; }).map(function (k) { return P[k]; });
+    pc.inv = s.inv.slice(); pc.money = s.money;
+    pc.passe = Object.assign({}, pc.passe || {});
+    pc.passe[s.chapter] = { titre: SC.short || s.chapter, fin: f.fin || 'ok', min: s.min, quand: game.clock(), indices: s.clues.slice(), carnet: carnet, docs: docs, gens: gens, drapeaux: drapeaux };
+    return pc;
+  }
+  function lireProgression() { try { return JSON.parse(localStorage.getItem(PKEY) || '{}') || {}; } catch (e) { return {}; } }
+  // on garde, par chapitre ouvert, chaque investigateur qui y est arrivé (le dernier passage l'emporte)
+  function noterProgression(chap, pc) {
+    var p = lireProgression(), k = pc.key || pc.name || 'pj';
+    p[chap] = p[chap] || {}; p[chap][k] = pc;
+    try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) {}
+  }
+  function enAttente(chap) { var p = lireProgression()[chap] || {}; return Object.keys(p).map(function (k) { return p[k]; }); }
   function boutonSuite() {
-    var s = game.state, suite = SC.suite && CH[SC.suite], fin = s.flags && s.flags.fin;
-    if (!suite || !s.ended || (fin && fin !== 'fugitif')) return null;
-    return btn('Continuer : ' + (suite.short || 'la suite'), 'act', function () {
-      var pc = JSON.parse(JSON.stringify(s.pc));
-      pc.inv = s.inv.slice(); pc.money = s.money; pc.passe = { chapitre: s.chapter, fin: fin || 'ok', indices: s.clues.slice() };
+    var s = game.state;
+    if (!suiteOuverte(s)) return null;
+    var suite = SC.suite, pc = investigateurSuivant(s);
+    noterProgression(suite, pc);
+    return btn('Continuer : ' + (CH[suite].short || 'la suite'), 'act', function () {
       try { localStorage.removeItem(KEY); } catch (e) {}
-      closePanels(); mount(null, SC.suite, pc);
+      closePanels(); mount(null, suite, JSON.parse(JSON.stringify(pc)));
     });
   }
   function endCard() {
@@ -12583,6 +12642,14 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   // même loin du haut de la page, on voit où l'on est et à qui l'on parle. La clé de l'image est notée sur l'entrée
   // du journal (e.img, e.pt) pour qu'une partie rechargée retrouve les mêmes images.
   var dernierPortrait = null;
+  // L'image d'en-tête est-elle à l'écran ? (sur iPhone, le clavier ouvert la fait sortir de la partie visible)
+  // Si oui, c'est elle qui change : pas de seconde image dans le fil.
+  function enteteVisible() {
+    var st = document.querySelector('.stage'); if (!st || !st.offsetParent) return false;
+    var r = st.getBoundingClientRect(); if (r.height < 40) return false;
+    var vv = window.visualViewport, haut = vv ? vv.offsetTop : 0, h = vv ? vv.height : window.innerHeight;
+    return Math.min(r.bottom, haut + h) - Math.max(r.top, haut) >= r.height * 0.6;
+  }
   function cleImage(scene, loc) {
     var s = game.state;
     try { return art.photoKey(scene, { san: 0, min: s.min, loc: loc, flags: s.flags || {} }) || ''; } catch (err) { return ''; }
@@ -12602,11 +12669,13 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       dernierPortrait = null;
       var lieu = e.t === 'loc' ? e.loc : game.state.loc, L = SC.locations[lieu] || {};
       // (une vieille sauvegarde, relue d'un coup : pas d'images pour tout l'historique)
-      if (e.img === undefined) e.img = instant ? '' : cleImage(L.art || lieu, lieu);
+      // l'en-tête montre ce décor (sauf si l'on parle déjà à quelqu'un : il montre alors son portrait)
+      if (e.img === undefined) e.img = (instant || (!game.state.talk && enteteVisible())) ? '' : cleImage(L.art || lieu, lieu);
       return e.img ? carteImage(e.img, e.name || L.name || '', 'lieu') : null;
     }
     if (e.t === 'npc') {
-      if (e.pt === undefined) e.pt = (instant || e.who === dernierPortrait || !art['pt_' + e.who]) ? '' : cleImage('pt_' + e.who, game.state.loc);
+      // l'en-tête montre le portrait de l'interlocuteur : un autre personnage qui intervient garde le sien dans le fil
+      if (e.pt === undefined) e.pt = (instant || e.who === dernierPortrait || !art['pt_' + e.who] || (game.state.talk === e.who && enteteVisible())) ? '' : cleImage('pt_' + e.who, game.state.loc);
       dernierPortrait = e.who;
       return e.pt ? carteImage(e.pt, e.name || '', 'portrait') : null;
     }
@@ -12811,6 +12880,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     var docs = (s.docs || []).slice(), vus = {};
     docs.forEach(function (d) { vus[d.x] = 1; });
     s.log.forEach(function (e) { if (e.t === 'doc' && !vus[e.x]) { vus[e.x] = 1; docs.push(e); } });
+    var anciens = (s.pc && s.pc.passe) || {};
+    Object.keys(anciens).forEach(function (ch) { (anciens[ch].docs || []).forEach(function (d) { if (!vus[d.x]) { vus[d.x] = 1; docs.push(d); } }); });
     if (docs.length) h += '<h3>Documents</h3><div class="docs">' + docs.map(function (e) {
       var dh = docHTML(e), k = dh.cls.slice(2), m = (e.x || '').match(/^([^—]{6,90}?) — /);
       var lib = (k === 'journal' || k === 'page') && m ? m[1] : (e.title || (k === 'roussie' ? 'Adressée à un professeur' : DOC_TITRE[k]));
@@ -12822,12 +12893,17 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       if (SC.clueView && s.clues.indexOf(id) >= 0) c = SC.clueView(s, id, c);
       h += s.clues.indexOf(id) >= 0 ? '<div class="c"><div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>' : '<div class="c unk">Indice non découvert</div>';
     });
+    Object.keys(anciens).forEach(function (ch) {
+      var a = anciens[ch]; if (!a.carnet || !a.carnet.length) return;
+      h += '</div><h3>Indices · ' + esc(a.titre || ch) + '</h3><div class="clues">' + a.carnet.map(function (c) { return '<div class="c"><div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>'; }).join('');
+    });
     var scr = SC.notesScrawl ? SC.notesScrawl(s) : [];
     if (scr.length) h += '</div><h3>En marge, de votre écriture</h3><div class="scrawl">' + scr.map(esc).join('<br>');
     h += '</div><h3>Personnes rencontrées</h3><div class="people">';
     var PEOPLE = SC.people || {};
     var met = Object.keys(s.npcs).filter(function (k) { return s.npcs[k].met && PEOPLE[k]; });
     h += met.length ? met.map(function (k) { return '<div>' + esc(PEOPLE[k]) + '</div>'; }).join('') : '<div>Personne pour l’instant.</div>';
+    Object.keys(anciens).forEach(function (ch) { var g = anciens[ch].gens || []; if (g.length) h += '<div class="ancien"><b>' + esc(anciens[ch].titre || ch) + ' :</b> ' + g.map(esc).join(' · ') + '</div>'; });
     h += '</div><h3>Heure</h3><div>' + esc(game.clock()) + ' · ' + esc(game.where()) + '</div>';
     $('notesBody').innerHTML = h;
   }
@@ -12889,6 +12965,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     chap = saved ? (saved.chapter || 'prologue') : (chap || 'prologue');
     SC = CH[chap] || window.SCENE;
     game = window.RPG.createGame(SC, saved || null, pc ? { pc: pc } : {});
+    // l'investigateur tel qu'il est entré dans ce chapitre : « Rejouer le chapitre » repart de lui
+    if (!saved && pc && SC.precedent) game.state.depart = JSON.parse(JSON.stringify(pc));
     window.__partie = game; // pour les tests automatiques
     var s = game.state;
     document.title = 'L’Express de minuit · ' + (SC.chapter || '');
@@ -12903,13 +12981,14 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   }
   // rejouer le même chapitre, avec le même investigateur
   function newGame() {
-    var chap = game ? game.state.chapter : 'prologue', key = game && game.state.pc.key;
+    var chap = game ? game.state.chapter : 'prologue', key = game && game.state.pc.key, dep = game && game.state.depart;
     try { localStorage.removeItem(KEY); } catch (e) {}
-    closePanels(); mount(null, chap, pregen(chap, key));
+    closePanels(); mount(null, chap, dep ? JSON.parse(JSON.stringify(dep)) : pregen(chap, key));
   }
   function hideTitle() { $('title').hidden = true; if (soundOn) sound.start(); }
   function showTitle() {
     $('title').hidden = false; $('tpick').hidden = true; $('tmain').hidden = false;
+    if ($('btnParis')) $('btnParis').hidden = !(CH.paris && enAttente('paris').length);
     var saved = loadSave();
     $('btnCont').hidden = !(saved && saved.v === 1);
     if (saved && saved.v === 1) $('btnCont').textContent = 'Continuer · ' + ((CH[saved.chapter || 'prologue'] || {}).short || 'partie en cours');
@@ -12918,18 +12997,19 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     titleArt.trans = 0;
     if (sound.on) sound.set('title', 0);
   }
-  function showPick(chap) {
+  function showPick(chap, suite) {
     var c = CH[chap], box = $('cards');
     box.innerHTML = '';
-    c.pregens.forEach(function (p) {
+    (suite || c.pregens).forEach(function (p) {
       var card = document.createElement('div'); card.className = 'pcard';
       var top = Object.keys(p.skills).filter(function (k) { return p.skills[k] >= 45 && k !== 'Mythe de Cthulhu'; }).sort(function (a, b) { return p.skills[b] - p.skills[a]; }).slice(0, 5);
+      var avant = suite && p.passe && p.passe[c.precedent];
       card.innerHTML = (p.key ? '<div class="pimg" style="background-image:url(img/portraits/pj_' + p.key + '.webp)"></div>' : '') + '<div class="pn">' + esc((p.title === 'Dr' ? 'Dr ' : '') + p.name) + '</div>' +
         '<div class="po">' + esc(p.occupation) + ' · ' + p.age + ' ans</div>' +
-        '<p class="pb">' + esc(p.bio) + '</p>' +
+        (avant ? '<p class="pb">' + esc(avant.titre + ' : parti' + (p.sex === 'f' ? 'e' : '') + ' ' + String(avant.quand || '').replace(/^\S+\s/, 'le ').replace(/\s·.*/, '') + ' janvier, ' + avant.indices.length + ' indice' + (avant.indices.length > 1 ? 's' : '') + ' au carnet' + (avant.fin === 'fugitif' ? ', recherché' + (p.sex === 'f' ? 'e' : '') + ' par Scotland Yard' : '') + '.') + '</p>' : '<p class="pb">' + esc(p.bio) + '</p>') +
         '<div class="ps">' + top.map(function (k) { return '<span>' + esc(k) + ' <b>' + p.skills[k] + '</b></span>'; }).join('') + '</div>' +
         '<div class="pst"><span>SAN <b>' + p.san + '</b></span><span>PV <b>' + p.pv + '</b></span><span>Chance <b>' + p.chance + '</b></span></div>';
-      card.appendChild(btn('Incarner ' + esc(p.first), 'act', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, chap, p); }));
+      card.appendChild(btn((suite ? 'Reprendre ' : 'Incarner ') + esc(p.first), 'act', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, chap, JSON.parse(JSON.stringify(p))); }));
       box.appendChild(card);
     });
     $('tmain').hidden = true; $('tpick').hidden = false;
@@ -12988,7 +13068,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     var saved = hotState || loadSave();
     showTitle();
     $('btnLondres').addEventListener('click', function () { if (CH.londres) showPick('londres'); });
-    if ($('btnParis')) { $('btnParis').hidden = !CH.paris; $('btnParis').addEventListener('click', function () { if (CH.paris) showPick('paris'); }); }
+    if ($('btnParis')) $('btnParis').addEventListener('click', function () { var l = enAttente('paris'); if (CH.paris && l.length) showPick('paris', l); });
     $('btnProlo').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'prologue'); });
     $('btnBack').addEventListener('click', function () { $('tpick').hidden = true; $('tmain').hidden = false; });
     $('fichierSauvegarde').addEventListener('change', function () {
