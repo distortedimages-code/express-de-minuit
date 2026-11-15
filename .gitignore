@@ -1,0 +1,4 @@
+# états et images générées : jamais dans le dépôt
+illustrations/etat*/
+illustrations/final*/
+__pycache__/

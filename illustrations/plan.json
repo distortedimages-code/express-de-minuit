@@ -1,0 +1,323 @@
+{
+  "archive": "illustrations-express-de-minuit",
+  "largeur": 1600,
+  "hauteur": 1200,
+  "images": [
+    {
+      "image": "portraits/01_smith_institut",
+      "prompt": "prompts/portraits/01_smith_institut.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/03_beddows_institut",
+      "prompt": "prompts/portraits/03_beddows_institut.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/05_brule",
+      "prompt": "prompts/portraits/05_brule.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/06_fleming",
+      "prompt": "prompts/portraits/06_fleming.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/08_chelseaclerk",
+      "prompt": "prompts/portraits/08_chelseaclerk.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/09_mustapha",
+      "prompt": "prompts/portraits/09_mustapha.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/12_sergent",
+      "prompt": "prompts/portraits/12_sergent.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/13_butter",
+      "prompt": "prompts/portraits/13_butter.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/14_alexis",
+      "prompt": "prompts/portraits/14_alexis.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/15_stanley",
+      "prompt": "prompts/portraits/15_stanley.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/16_bibliothecaire",
+      "prompt": "prompts/portraits/16_bibliothecaire.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/19_agentsj",
+      "prompt": "prompts/portraits/19_agentsj.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/20_laitier",
+      "prompt": "prompts/portraits/20_laitier.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/21_pike",
+      "prompt": "prompts/portraits/21_pike.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/22_serveur",
+      "prompt": "prompts/portraits/22_serveur.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/23_veuve",
+      "prompt": "prompts/portraits/23_veuve.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/24_conducteur",
+      "prompt": "prompts/portraits/24_conducteur.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/07_rigby",
+      "prompt": "prompts/portraits/07_rigby.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/10_voisin",
+      "prompt": "prompts/portraits/10_voisin.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/11_atkins",
+      "prompt": "prompts/portraits/11_atkins.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/17_planton",
+      "prompt": "prompts/portraits/17_planton.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/18_concierge",
+      "prompt": "prompts/portraits/18_concierge.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/25_mort",
+      "prompt": "prompts/portraits/25_mort.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/02_smith_cheapside",
+      "prompt": "prompts/portraits/02_smith_cheapside.txt",
+      "references": [
+        "portraits/01_smith_institut"
+      ]
+    },
+    {
+      "image": "portraits/04_beddows_cheapside",
+      "prompt": "prompts/portraits/04_beddows_cheapside.txt",
+      "references": [
+        "portraits/03_beddows_institut"
+      ]
+    },
+    {
+      "image": "ecran-titre/titre",
+      "prompt": "prompts/ecran-titre/titre.txt",
+      "references": []
+    },
+    {
+      "image": "londres/01_institut-imperial",
+      "prompt": "prompts/londres/01_institut-imperial.txt",
+      "references": [
+        "portraits/01_smith_institut",
+        "portraits/03_beddows_institut"
+      ]
+    },
+    {
+      "image": "londres/02_hotel-chambre_nuit",
+      "prompt": "prompts/londres/02_hotel-chambre_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "londres/03_hotel-chambre_jour",
+      "prompt": "prompts/londres/03_hotel-chambre_jour.txt",
+      "references": []
+    },
+    {
+      "image": "londres/04_cheapside-chambre-meublee",
+      "prompt": "prompts/londres/04_cheapside-chambre-meublee.txt",
+      "references": [
+        "portraits/05_brule",
+        "portraits/04_beddows_cheapside"
+      ]
+    },
+    {
+      "image": "londres/05_scotland-yard_bureau-fleming",
+      "prompt": "prompts/londres/05_scotland-yard_bureau-fleming.txt",
+      "references": [
+        "portraits/06_fleming"
+      ]
+    },
+    {
+      "image": "londres/06_ambassade-de-turquie",
+      "prompt": "prompts/londres/06_ambassade-de-turquie.txt",
+      "references": [
+        "portraits/09_mustapha"
+      ]
+    },
+    {
+      "image": "londres/07_chelsea-arms_reception",
+      "prompt": "prompts/londres/07_chelsea-arms_reception.txt",
+      "references": [
+        "portraits/08_chelseaclerk"
+      ]
+    },
+    {
+      "image": "londres/08_camberwell_salon-butter",
+      "prompt": "prompts/londres/08_camberwell_salon-butter.txt",
+      "references": [
+        "portraits/13_butter"
+      ]
+    },
+    {
+      "image": "londres/09_fleet-street_archives",
+      "prompt": "prompts/londres/09_fleet-street_archives.txt",
+      "references": [
+        "portraits/21_pike"
+      ]
+    },
+    {
+      "image": "londres/10_st-johns-wood_villa_jour",
+      "prompt": "prompts/londres/10_st-johns-wood_villa_jour.txt",
+      "references": []
+    },
+    {
+      "image": "londres/11_st-johns-wood_villa_nuit",
+      "prompt": "prompts/londres/11_st-johns-wood_villa_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "londres/12_st-johns-wood_ruines",
+      "prompt": "prompts/londres/12_st-johns-wood_ruines.txt",
+      "references": [
+        "portraits/19_agentsj"
+      ]
+    },
+    {
+      "image": "londres/13_islington_brophy-lane_jour",
+      "prompt": "prompts/londres/13_islington_brophy-lane_jour.txt",
+      "references": []
+    },
+    {
+      "image": "londres/14_islington_brophy-lane_nuit",
+      "prompt": "prompts/londres/14_islington_brophy-lane_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "londres/15_stoke-newington_jour",
+      "prompt": "prompts/londres/15_stoke-newington_jour.txt",
+      "references": [
+        "portraits/12_sergent"
+      ]
+    },
+    {
+      "image": "londres/16_stoke-newington_nuit",
+      "prompt": "prompts/londres/16_stoke-newington_nuit.txt",
+      "references": [
+        "portraits/12_sergent"
+      ]
+    },
+    {
+      "image": "londres/17_boutique-makryat",
+      "prompt": "prompts/londres/17_boutique-makryat.txt",
+      "references": []
+    },
+    {
+      "image": "londres/18_british-museum_salle-de-lecture",
+      "prompt": "prompts/londres/18_british-museum_salle-de-lecture.txt",
+      "references": [
+        "portraits/16_bibliothecaire"
+      ]
+    },
+    {
+      "image": "londres/19_chambre-henry-stanley",
+      "prompt": "prompts/londres/19_chambre-henry-stanley.txt",
+      "references": []
+    },
+    {
+      "image": "londres/20_cave-butter_maquette",
+      "prompt": "prompts/londres/20_cave-butter_maquette.txt",
+      "references": []
+    },
+    {
+      "image": "londres/21_train-fantome_voiture-1",
+      "prompt": "prompts/londres/21_train-fantome_voiture-1.txt",
+      "references": []
+    },
+    {
+      "image": "londres/22_train-fantome_voiture-2",
+      "prompt": "prompts/londres/22_train-fantome_voiture-2.txt",
+      "references": [
+        "portraits/14_alexis",
+        "portraits/15_stanley"
+      ]
+    },
+    {
+      "image": "londres/23_train-fantome_retour",
+      "prompt": "prompts/londres/23_train-fantome_retour.txt",
+      "references": []
+    },
+    {
+      "image": "londres/24_campagne_au-petit-matin",
+      "prompt": "prompts/londres/24_campagne_au-petit-matin.txt",
+      "references": []
+    },
+    {
+      "image": "londres/25_gare-victoria",
+      "prompt": "prompts/londres/25_gare-victoria.txt",
+      "references": []
+    },
+    {
+      "image": "londres/26_brouillard_trajet",
+      "prompt": "prompts/londres/26_brouillard_trajet.txt",
+      "references": []
+    },
+    {
+      "image": "prologue/01_wagon-restaurant",
+      "prompt": "prompts/prologue/01_wagon-restaurant.txt",
+      "references": [
+        "portraits/22_serveur",
+        "portraits/23_veuve"
+      ]
+    },
+    {
+      "image": "prologue/02_soufflet",
+      "prompt": "prompts/prologue/02_soufflet.txt",
+      "references": []
+    },
+    {
+      "image": "prologue/03_voitures-lits",
+      "prompt": "prompts/prologue/03_voitures-lits.txt",
+      "references": [
+        "portraits/24_conducteur"
+      ]
+    },
+    {
+      "image": "prologue/04_compartiment-7",
+      "prompt": "prompts/prologue/04_compartiment-7.txt",
+      "references": []
+    }
+  ]
+}

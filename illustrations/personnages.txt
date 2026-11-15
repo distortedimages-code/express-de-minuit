@@ -1,0 +1,45 @@
+LES PERSONNAGES RÉCURRENTS — description fixe de chaque visage, conforme au texte du jeu
+(déjà recopiée dans les prompts ; à réutiliser si vous retouchez un prompt)
+
+Le professeur Julius Smith — banquet, portraits 01 et 02
+  64-year-old Englishman, big walrus moustache and enormous bushy grey mutton-chop sideburns, receding grey hair, heavy brows, ruddy theatrical face, briar pipe
+James Beddows, son domestique — banquet, Cheapside, portraits 03 et 04
+  58-year-old English butler, gaunt and very pale, slicked-back thinning dark hair, raised anxious eyebrows, hollow cheeks, black tailcoat, white wing collar, black bow tie
+L'homme bandagé de Cheapside — Cheapside, portrait 05
+  man lying in bed, head and hands entirely wrapped in yellowed bandages, only one wet eye and cracked lips visible
+L'inspecteur Fleming — Scotland Yard, portrait 06
+  46-year-old police inspector, thin and wiry, dark circles under tired eyes, side-parted dark hair, crumpled grey three-piece suit, long dark tie, cigarette
+Le sergent Rigby — portrait 07
+  51-year-old stocky Scottish fire-brigade sergeant, short red hair, thick red moustache, tobacco-stained fingers, dark uniform jacket with brass buttons
+Albert Tilbury, réceptionniste — Chelsea Arms, portrait 08
+  34-year-old hotel clerk, stiff high collar, thin pencil moustache, slicked hair, livid exhausted face
+Mustapha Köprülü — ambassade, portrait 09
+  31-year-old Turkish diplomat, elegant, thin moustache, dark intelligent eyes, impeccable Savile Row suit, red fez
+Pruett, le buraliste — Islington, portrait 10
+  small 60-year-old tobacconist, round spectacles, grey stubble, knitted wool cardigan over a waistcoat
+Mrs Constance Atkins — Stoke Newington, portrait 11
+  robust English landlady in her fifties, hair in curlers, quilted dressing gown, cheap earrings, lipstick, broad mercenary smile
+Le sergent Hobbs — Stoke Newington, portrait 12
+  55-year-old London police sergeant, bobby helmet, grey walrus moustache, dark uniform cape
+Arthur Butter — Camberwell, portrait 13
+  jovial round-faced 55-year-old man, crooked tie, cardigan, pipe, railway enthusiast
+Randolph Alexis — train fantôme, portrait 14
+  gaunt man frozen since 1897, wild white hair, feverish staring eyes, greedy smile, worn Victorian frock coat and bow tie
+Henry Stanley — train fantôme, portrait 15
+  thin 41-year-old clerk, messy hair, terrified tearful eyes, ink-stained cuffs, cheap suit
+Le conservateur du British Museum — salle de lecture, portrait 16
+  elderly severe librarian, pince-nez, neatly parted white hair, black bow tie, finger raised for silence
+Mr Pratt, le concierge — portrait 18
+  pink-faced hotel concierge, perfectly combed hair, thin moustache, polite smile, bow tie, gold keys on his lapels
+L'agent Purvis — St John's Wood, portrait 19
+  tall 23-year-old London constable, red cheeks, soaked rain cape, bobby helmet
+Tom Haskins, le laitier — St John's Wood, portrait 20
+  small 40-year-old milkman, flat cap, moustache, stubble, apron
+Mrs Pike, l'archiviste — Fleet Street, portrait 21
+  old stern woman archivist, round glasses, grey hair in a tight bun, lace collar, black sleeve protectors
+Bastien, le serveur — wagon-restaurant, portrait 22
+  39-year-old French dining-car waiter, white jacket, thin moustache, slicked hair, brass name plate on his waistcoat
+Mme Irène Vasseur — wagon-restaurant, portrait 23
+  elderly French widow in black, small hat with a veil, lace collar, earrings, old tarot cards in her ringed hands
+Paolo, le conducteur — voitures-lits, portrait 24
+  32-year-old Italian sleeping-car attendant, uniform cap, thick moustache, heavy eyelids, dark uniform with brass buttons

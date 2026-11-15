@@ -1,0 +1,154 @@
+# Génère les 56 illustrations de L'Express de Minuit avec l'API Images d'OpenAI.
+# Se lance à la main (onglet Actions → Illustrations → Run workflow), y compris depuis l'app GitHub sur iPhone.
+# Par défaut, c'est une SIMULATION gratuite : aucun appel à OpenAI.
+name: Illustrations
+run-name: "Illustrations — ${{ inputs.simulation && 'simulation gratuite' || 'génération RÉELLE' }} — lot ${{ inputs.lot }}${{ inputs.refaire != '' && format(' — refaire {0}', inputs.refaire) || '' }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      simulation:
+        description: "Simulation gratuite (aucun appel à OpenAI). Décochez pour la vraie génération, payante."
+        type: boolean
+        default: true
+      lot:
+        description: "Nombre d'images à générer : 5, ou 56 pour tout ce qui reste"
+        type: choice
+        options: ["5", "56"]
+        default: "5"
+      plafond:
+        description: "Plafond de dépense estimée, en dollars, toutes séances confondues"
+        type: string
+        default: "20"
+      qualite:
+        description: "Qualité demandée à OpenAI"
+        type: choice
+        options: [medium, high, xhigh]
+        default: high
+      modele:
+        description: "Modèle d'image OpenAI"
+        type: choice
+        options: [gpt-image-2.5-sunburst, gpt-image-2.6-sunburst, gpt-image-2.5-flare]
+        default: gpt-image-2.5-sunburst
+      refaire:
+        description: "Facultatif : refaire seulement ces images (ex. 01_smith ou 01_smith,03_beddows)"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  actions: write  # relire l'état du lancement précédent, puis effacer les anciennes copies
+
+concurrency:
+  group: illustrations
+  cancel-in-progress: false
+
+jobs:
+  generer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    env:
+      ETAT: ${{ inputs.simulation && 'etat-simulation' || 'etat-illustrations' }}
+      ZIP: ${{ inputs.simulation && 'SIMULATION_L_Express_de_Minuit_56_illustrations' || 'L_Express_de_Minuit_56_illustrations' }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: illustrations/requirements.txt
+
+      - name: Installer les dépendances
+        run: pip install -r illustrations/requirements.txt
+
+      - name: Vérifier la clé OpenAI
+        if: ${{ !inputs.simulation }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::Le secret OPENAI_API_KEY est absent : Settings → Secrets and variables → Actions → New repository secret."
+            exit 1
+          fi
+          echo "Clé présente (sa valeur n'est jamais affichée)."
+
+      - name: Retrouver l'état du lancement précédent
+        id: precedent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          run=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=$ETAT&per_page=100" \
+            --jq '[.artifacts[] | select(.expired == false)] | sort_by(.created_at) | last | .workflow_run.id // empty')
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+          if [ -n "$run" ]; then echo "Reprise à partir du lancement $run."; else echo "Aucun état précédent : on part de zéro."; fi
+
+      - name: Restaurer l'état précédent
+        if: steps.precedent.outputs.run != ''
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ env.ETAT }}
+          path: illustrations/${{ env.ETAT }}
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.precedent.outputs.run }}
+
+      - name: Générer les images
+        id: gen
+        timeout-minutes: 300
+        working-directory: illustrations
+        env:
+          # la clé n'est transmise qu'en génération réelle, et seulement à cette étape
+          OPENAI_API_KEY: ${{ !inputs.simulation && secrets.OPENAI_API_KEY || '' }}
+          SIMULATION: ${{ inputs.simulation }}
+          LOT: ${{ inputs.lot }}
+          PLAFOND: ${{ inputs.plafond }}
+          QUALITE: ${{ inputs.qualite }}
+          MODELE: ${{ inputs.modele }}
+          REFAIRE: ${{ inputs.refaire }}
+        run: |
+          options=()
+          if [ "$SIMULATION" = "true" ]; then options+=(--simulation); fi
+          python generer.py "${options[@]}" --lot "$LOT" --plafond "$PLAFOND" --qualite "$QUALITE" \
+            --modele "$MODELE" --refaire "$REFAIRE" --etat "$ETAT" --final "final" --minutes 285
+
+      - name: Sauver l'état (pour reprendre au prochain lancement)
+        id: sauver
+        if: ${{ always() && steps.gen.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ETAT }}
+          path: illustrations/${{ env.ETAT }}/
+          retention-days: 90
+          compression-level: 0
+          if-no-files-found: ignore
+
+      - name: Effacer les anciennes copies de l'état
+        if: ${{ always() && steps.sauver.outputs.artifact-id != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GARDER: ${{ steps.sauver.outputs.artifact-id }}
+        run: |
+          for id in $(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/artifacts?name=$ETAT&per_page=100" --jq '.artifacts[].id'); do
+            if [ "$id" != "$GARDER" ]; then gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$id" >/dev/null && echo "ancienne copie $id effacée"; fi
+          done
+
+      - name: Joindre le ZIP final des 56 illustrations
+        id: zip
+        if: ${{ steps.gen.outputs.complet == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ZIP }}
+          path: illustrations/final/
+          retention-days: 30
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: Effacer les anciens ZIP finaux
+        if: ${{ steps.zip.outputs.artifact-id != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GARDER: ${{ steps.zip.outputs.artifact-id }}
+        run: |
+          for id in $(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/artifacts?name=$ZIP&per_page=100" --jq '.artifacts[].id'); do
+            if [ "$id" != "$GARDER" ]; then gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$id" >/dev/null && echo "ancien ZIP $id effacé"; fi
+          done
