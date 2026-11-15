@@ -95,14 +95,14 @@ Quand toutes les images sont prêtes, le lancement joint un artifact **`L_Expres
 
 Si l'app GitHub n'affiche pas cette section, passez par Safari. Le ZIP reste disponible 30 jours.
 
-Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londres/`, `portraits/` et `prologue/`, plus `documents/` pour les supports des documents. Ce sont tous les PNG en 1600 × 1200, sous les noms exacts que le jeu attend.
+Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londres/`, `portraits/` et `prologue/`, plus `documents/` pour les supports des documents. Ce sont tous les PNG, au format cinéma (documents en 1600 × 1200), sous les noms exacts que le jeu attend.
 
 ## Comment les images sont faites
 
 - **Une image par appel.** Chaque appel envoie le prompt existant, tel quel, et demande une seule image : pas de planche, pas de collage.
-- **Format :** 1600 × 1200 (4:3), qu'OpenAI accepte directement.
+- **Format :** 2304 × 960 (2,4:1), qu'OpenAI accepte directement.
   - Si un modèle refusait ce format, le générateur demanderait du 1536 × 1024.
-  - Il recadrerait ensuite en 4:3, en coupant la partie la moins détaillée.
+  - Il recadrerait ensuite au bon format, en coupant la partie la moins détaillée.
   - Enfin, il mettrait l'image à l'échelle uniformément. Elle n'est jamais déformée.
 - **Personnages récurrents :** leurs portraits sont générés en premier. Ils sont ensuite joints comme références d'identité aux scènes où ces personnages reviennent : Smith, Beddows, Fleming, Mustapha, le sergent Hobbs, Butter, Pike, etc. (voir `plan.json`).
 - **Contrôles automatiques, écrits en texte :**
@@ -116,9 +116,11 @@ Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londre
 
   Seuls les vrais défauts (image vide, doublon) rejettent une image. Les autres points sont signalés « à vérifier ».
 
-## Le format des nouvelles images
+## Le format des images
 
-Le jeu affiche les illustrations en largeur, recadrées en format cinéma (2,4:1 sur ordinateur et iPad, 3:2 sur iPhone). Les images d'origine restent recadrées. Les nouvelles (`"cadre": "large"` dans `plan.json`) utilisent `style_large.txt` : tout ce qui compte est placé dans la bande centrale, entre 25 % et 75 % de la hauteur, et rien n'est coupé au recadrage. Le fichier reste en 1600 × 1200.
+Depuis la version 2 du plan, les illustrations sont générées au format cinéma 2,4:1, en **2304 × 960**, comme le cadre du jeu. Les supports de documents restent en 1600 × 1200, parce qu'ils s'affichent en entier dans le dossier de l'enquêteur.
+
+Une image produite dans une version plus ancienne du plan est considérée comme à refaire : il suffit de lancer **lot = tout** pour tout régénérer au nouveau format. L'ancienne version reste en place tant que la nouvelle n'est pas prête.
 
 ## Les supports des documents
 

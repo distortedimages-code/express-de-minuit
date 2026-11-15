@@ -1,7 +1,7 @@
 {
   "archive": "illustrations-express-de-minuit",
-  "largeur": 1600,
-  "hauteur": 1200,
+  "largeur": 2304,
+  "hauteur": 960,
   "images": [
     {
       "image": "portraits/01_smith_institut",
@@ -322,75 +322,77 @@
     {
       "image": "portraits/26_vane",
       "prompt": "prompts/portraits/26_vane.txt",
-      "references": [],
-      "cadre": "large"
+      "references": []
     },
     {
       "image": "londres/27_gordon-square_seance",
       "prompt": "prompts/londres/27_gordon-square_seance.txt",
       "references": [
         "portraits/26_vane"
-      ],
-      "cadre": "large"
+      ]
     },
     {
       "image": "documents/01_coupure-journal",
       "prompt": "prompts/documents/01_coupure-journal.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "documents/02_page-reliee",
       "prompt": "prompts/documents/02_page-reliee.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "documents/03_telegramme",
       "prompt": "prompts/documents/03_telegramme.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "documents/04_lettre",
       "prompt": "prompts/documents/04_lettre.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "documents/05_lettre-roussie",
       "prompt": "prompts/documents/05_lettre-roussie.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "documents/06_carte-de-visite",
       "prompt": "prompts/documents/06_carte-de-visite.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "documents/07_billet",
       "prompt": "prompts/documents/07_billet.txt",
-      "references": []
+      "references": [],
+      "taille": "1600x1200"
     },
     {
       "image": "portraits/pj_arnaud",
       "prompt": "prompts/portraits/pj_arnaud.txt",
-      "references": [],
-      "cadre": "large"
+      "references": []
     },
     {
       "image": "portraits/pj_pemberton",
       "prompt": "prompts/portraits/pj_pemberton.txt",
-      "references": [],
-      "cadre": "large"
+      "references": []
     },
     {
       "image": "portraits/pj_doyle",
       "prompt": "prompts/portraits/pj_doyle.txt",
-      "references": [],
-      "cadre": "large"
+      "references": []
     },
     {
       "image": "portraits/pj_ashby",
       "prompt": "prompts/portraits/pj_ashby.txt",
-      "references": [],
-      "cadre": "large"
+      "references": []
     }
-  ]
+  ],
+  "version": 2
 }

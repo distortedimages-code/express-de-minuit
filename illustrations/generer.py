@@ -16,7 +16,8 @@ from pathlib import Path
 from PIL import Image, ImageFilter, ImageStat
 
 ICI = Path(__file__).resolve().parent
-LARGEUR, HAUTEUR = 1600, 1200
+LARGEUR, HAUTEUR = 1600, 1200  # valeurs par défaut ; plan.json peut en fixer d'autres, image par image
+VERSION = 1  # remplacé par la version du plan : une image d'une version plus ancienne est refaite
 
 # Tarifs de l'API (dollars par million de jetons), d'après la documentation OpenAI de novembre 2026.
 # Les modèles GPT Image 2.5 et 2.6 partagent les mêmes tarifs standard.
@@ -95,7 +96,7 @@ class Etat:
 
     def faite(self, nom):
         s = self.statut.get(nom)
-        return bool(s and s.get('etat') == 'ok' and self.chemin(nom).is_file())
+        return bool(s and s.get('etat') == 'ok' and self.chemin(nom).is_file() and s.get('version', 1) >= VERSION)
 
     def enregistrer(self):
         ecrire_json(self.f_statut, self.statut); ecrire_json(self.f_couts, self.couts)
@@ -117,7 +118,7 @@ def estimer(entree, qualite, etat):
 
 
 # ---------------------------------------------------------------- l'image : format, recadrage, contrôles
-def recadrage_intelligent(im):
+def recadrage_intelligent(im, LARGEUR=LARGEUR, HAUTEUR=HAUTEUR):
     """Ramène n'importe quel format au 4:3 sans déformation : on coupe ce qui dépasse, à l'endroit où l'image
     a le moins de détails (bords, contrastes), puis on met à l'échelle uniformément en 1600 × 1200."""
     w, h = im.size
@@ -142,7 +143,7 @@ def recadrage_intelligent(im):
     return im
 
 
-def controles(im, sha, deja_vus):
+def controles(im, sha, deja_vus, LARGEUR=LARGEUR, HAUTEUR=HAUTEUR):
     """Contrôles automatiques. Les « erreurs » rejettent l'image ; les « avertissements » sont seulement notés."""
     erreurs, avert = [], []
     if im.size != (LARGEUR, HAUTEUR): erreurs.append(f'dimensions {im.size[0]}×{im.size[1]}')
@@ -177,7 +178,7 @@ def controles(im, sha, deja_vus):
 # ---------------------------------------------------------------- l'appel à l'API (ou sa simulation)
 class Generateur:
     def __init__(self, args):
-        self.args = args; self.taille = '1600x1200'; self.client = None
+        self.args = args; self.client = None; self.repli = set()
         if not args.simulation:
             if not os.environ.get('OPENAI_API_KEY'):
                 sys.exit('La clé OPENAI_API_KEY est absente. Ajoutez le secret dans le dépôt, ou lancez en simulation.')
@@ -198,6 +199,7 @@ class Generateur:
 
     def produire(self, entree, prompt, refs):
         """Renvoie (image PIL, coût en dollars, jetons)."""
+        self.taille = entree['_taille'] if entree['_taille'] not in self.repli else ('1536x1024' if entree['_w'] >= entree['_h'] else '1024x1536')
         if self.args.simulation:
             return self.simuler(entree, refs)
         from openai import BadRequestError
@@ -210,8 +212,8 @@ class Generateur:
             except BadRequestError as e:
                 # format non accepté par ce modèle : on se rabat sur le paysage standard, recadré ensuite en 4:3
                 if essai == 1 and self.taille != '1536x1024' and 'size' in str(e).lower():
-                    print('   Format 1600x1200 refusé par le modèle : repli sur 1536x1024, recadré ensuite en 4:3.')
-                    self.taille = params['size'] = '1536x1024'; continue
+                    print(f'   Format {self.taille} refusé par le modèle : repli sur 1536x1024, recadré ensuite au bon format.')
+                    self.repli.add(entree['_taille']); self.taille = params['size'] = '1536x1024'; continue
                 raise
             finally:
                 for f in fichiers: f.close()
@@ -224,7 +226,7 @@ class Generateur:
         """Image factice abstraite (jamais une illustration) : sert à tester tout le circuit sans rien payer."""
         graine = int(hashlib.sha256(entree['image'].encode()).hexdigest()[:8], 16)
         rnd = random.Random(graine)
-        taille = (1536, 1024) if rnd.random() < 0.3 else (LARGEUR, HAUTEUR)  # teste aussi le recadrage
+        taille = (1536, 1024) if rnd.random() < 0.3 else (entree['_w'], entree['_h'])  # teste aussi le recadrage
         im = Image.new('RGB', taille, (12, 12, 12))
         px = im.load()
         for _ in range(40):
@@ -253,6 +255,11 @@ def main():
     args = ap.parse_args()
 
     plan = charger_plan()
+    global VERSION
+    VERSION = int(plan.get('version', 1))
+    for e in plan['images']:
+        t = e.get('taille') or f"{plan.get('largeur', LARGEUR)}x{plan.get('hauteur', HAUTEUR)}"
+        e['_taille'] = t; e['_w'], e['_h'] = map(int, t.split('x'))
     etat = Etat(args.etat or ICI / ('etat-simulation' if args.simulation else 'etat'))
     final = Path(args.final or ICI / ('final-simulation' if args.simulation else 'final'))
     images = plan['images']
@@ -332,16 +339,16 @@ def main():
             cout = est  # l'API n'a pas renvoyé sa consommation : on compte l'estimation, par prudence
         etat.ajouter_cout(nom, cout, jetons, args.simulation)
         taille_recue = f'{im.size[0]}x{im.size[1]}'
-        im = recadrage_intelligent(im.convert('RGB'))
+        im = recadrage_intelligent(im.convert('RGB'), e['_w'], e['_h'])
         buf = io.BytesIO(); im.save(buf, 'PNG', optimize=True); octets = buf.getvalue()
         sha = hashlib.sha256(octets).hexdigest()
-        err, avert, mesures = controles(im, sha, {k: v for k, v in deja_vus.items() if v != nom})
+        err, avert, mesures = controles(im, sha, {k: v for k, v in deja_vus.items() if v != nom}, e['_w'], e['_h'])
         if err:
             noter_echec(nom, '; '.join(err)); echecs.append(nom); print('   rejetée : ' + '; '.join(err), flush=True)
             continue
         dest = etat.chemin(nom); dest.parent.mkdir(parents=True, exist_ok=True); dest.write_bytes(octets)
         deja_vus[sha] = nom
-        etat.statut[nom] = {'etat': 'ok', 'sha256': sha, 'cout': round(cout, 4), 'taille_recue': taille_recue,
+        etat.statut[nom] = {'etat': 'ok', 'version': VERSION, 'taille': e['_taille'], 'sha256': sha, 'cout': round(cout, 4), 'taille_recue': taille_recue,
                             'avertissements': avert, 'mesures': mesures, 'secondes': round(time.time() - debut), 'date': maintenant()}
         etat.enregistrer(); nouvelles.append(nom)
         print(f'   ok ({cout:.3f} $, reçue en {taille_recue})' + (' — ' + ' ; '.join(avert) if avert else ''), flush=True)
@@ -373,7 +380,7 @@ def main():
         hashes = {hashlib.sha256((racine / (e['image'] + '.png')).read_bytes()).hexdigest() for e in images}
         assert len(hashes) == total, 'doublon dans le dossier final'
         (final / 'LISEZMOI.txt').write_text(
-            f'Les {total} illustrations de L’Express de Minuit, en PNG 1600 × 1200, rangées comme le jeu les attend.\n'
+            f'Les {total} illustrations de L’Express de Minuit, en PNG au format cinéma 2,4:1 (2304 × 960 ; les documents en 1600 × 1200), rangées comme le jeu les attend.\n'
             + ('ATTENTION : ce sont des images FACTICES de simulation.\n' if args.simulation else ''), encoding='utf-8')
         dire(f'**Les {total} images sont prêtes** : le ZIP final est joint à ce lancement (section « Artifacts »).')
     else:
