@@ -31,7 +31,7 @@ for (const ch of ['prologue', 'londres', 'paris']) {
       const g = partie(ch), s = g.state;
       Object.keys(sc.locations).forEach(k => { g.api.flag('known:' + k, true); g.api.flag('connu:' + k, true); });
       if (ch === 'londres') { s.min = 3 * 1440 + 630; ['conference', 'discours'].forEach(k => g.api.flag(k, true)); }
-      if (ch === 'paris') { s.min = 1440 + 630; ['carteBN', 'mandrinVu'].forEach(k => g.api.flag(k, true)); }
+      if (ch === 'paris') { s.min = 8 * 1440 + 630; ['carteBN', 'mandrinVu'].forEach(k => g.api.flag(k, true)); }
       try { if (s.loc !== loc) g.api.go(loc); g.choose({ label: a.label || a.id, action: a.id }); roll(g); } catch (e) { continue; }
       if (s.talk !== a.talkTo) continue;
       let ti = 0;

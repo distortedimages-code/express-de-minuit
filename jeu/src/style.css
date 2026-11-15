@@ -382,3 +382,5 @@ form.line #go, form.line #goDire { flex: none; min-height: 40px; padding-left: 1
 form.line .ghost { border: 2px solid var(--text); background: transparent; color: var(--text); font-family: var(--display); text-transform: uppercase; letter-spacing: .04em; font-size: 15px; transform: skewX(-8deg); }
 form.line input { min-width: 0; flex: 1 1 auto; }
 @media (max-width: 430px) { form.line { padding-left: 8px; gap: 5px; } form.line .prompt { display: none; } form.line #go, form.line #goDire { padding-left: 9px; padding-right: 9px; font-size: 14px; } }
+
+.people .ancien { margin-top: 8px; opacity: .75; font-size: .92em; }

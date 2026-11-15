@@ -1,7 +1,7 @@
 /* Interface : rendu du récit, dés, fiches, sauvegarde, ambiance. */
 (function () {
   'use strict';
-  var KEY = 'express-minuit-v1', SKEY = 'express-minuit-son';
+  var KEY = 'express-minuit-v1', SKEY = 'express-minuit-son', PKEY = 'express-minuit-progression';
   var $ = function (id) { return document.getElementById(id); };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Les documents : un support de papier (photographié, sans texte) et le texte composé par le jeu,
@@ -159,15 +159,42 @@
     }
     return d;
   }
-  // le chapitre suivant, avec le même investigateur : sa santé, ses compétences, ses poches
+  // ---------------------------------------------------------------- d'un chapitre à l'autre
+  // La campagne se joue dans l'ordre, avec le même investigateur. Un chapitre fini laisse un « passé » (pc.passe) :
+  // sa date de fin, ses indices, ses documents, les gens rencontrés et quelques faits que le chapitre suivant lira
+  // (SC.memoire). Le chapitre suivant ne s'ouvre qu'avec un investigateur qui a fini le précédent.
+  function suiteOuverte(s) {
+    var suite = SC.suite && CH[SC.suite], fin = s.flags && s.flags.fin;
+    return !!(suite && s.ended && (!fin || fin === 'fugitif'));
+  }
+  function investigateurSuivant(s) {
+    var pc = JSON.parse(JSON.stringify(s.pc)), f = s.flags || {}, drapeaux = {};
+    (SC.memoire || []).forEach(function (k) { if (f[k] !== undefined && f[k] !== null && typeof f[k] !== 'object') drapeaux[k] = f[k]; });
+    var carnet = s.clues.map(function (id) { var c = SC.clues[id]; if (!c) return null; if (SC.clueView) c = SC.clueView(s, id, c); return { title: c.title, text: c.text }; }).filter(Boolean);
+    var docs = (s.docs || []).slice(), vus = {}; docs.forEach(function (d) { vus[d.x] = 1; });
+    s.log.forEach(function (e) { if (e.t === 'doc' && !vus[e.x]) { vus[e.x] = 1; docs.push({ x: e.x, title: e.title || '' }); } });
+    var P = SC.people || {}, gens = Object.keys(s.npcs).filter(function (k) { return s.npcs[k].met && P[k]; }).map(function (k) { return P[k]; });
+    pc.inv = s.inv.slice(); pc.money = s.money;
+    pc.passe = Object.assign({}, pc.passe || {});
+    pc.passe[s.chapter] = { titre: SC.short || s.chapter, fin: f.fin || 'ok', min: s.min, quand: game.clock(), indices: s.clues.slice(), carnet: carnet, docs: docs, gens: gens, drapeaux: drapeaux };
+    return pc;
+  }
+  function lireProgression() { try { return JSON.parse(localStorage.getItem(PKEY) || '{}') || {}; } catch (e) { return {}; } }
+  // on garde, par chapitre ouvert, chaque investigateur qui y est arrivé (le dernier passage l'emporte)
+  function noterProgression(chap, pc) {
+    var p = lireProgression(), k = pc.key || pc.name || 'pj';
+    p[chap] = p[chap] || {}; p[chap][k] = pc;
+    try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) {}
+  }
+  function enAttente(chap) { var p = lireProgression()[chap] || {}; return Object.keys(p).map(function (k) { return p[k]; }); }
   function boutonSuite() {
-    var s = game.state, suite = SC.suite && CH[SC.suite], fin = s.flags && s.flags.fin;
-    if (!suite || !s.ended || (fin && fin !== 'fugitif')) return null;
-    return btn('Continuer : ' + (suite.short || 'la suite'), 'act', function () {
-      var pc = JSON.parse(JSON.stringify(s.pc));
-      pc.inv = s.inv.slice(); pc.money = s.money; pc.passe = { chapitre: s.chapter, fin: fin || 'ok', indices: s.clues.slice() };
+    var s = game.state;
+    if (!suiteOuverte(s)) return null;
+    var suite = SC.suite, pc = investigateurSuivant(s);
+    noterProgression(suite, pc);
+    return btn('Continuer : ' + (CH[suite].short || 'la suite'), 'act', function () {
       try { localStorage.removeItem(KEY); } catch (e) {}
-      closePanels(); mount(null, SC.suite, pc);
+      closePanels(); mount(null, suite, JSON.parse(JSON.stringify(pc)));
     });
   }
   function endCard() {
@@ -222,6 +249,14 @@
   // même loin du haut de la page, on voit où l'on est et à qui l'on parle. La clé de l'image est notée sur l'entrée
   // du journal (e.img, e.pt) pour qu'une partie rechargée retrouve les mêmes images.
   var dernierPortrait = null;
+  // L'image d'en-tête est-elle à l'écran ? (sur iPhone, le clavier ouvert la fait sortir de la partie visible)
+  // Si oui, c'est elle qui change : pas de seconde image dans le fil.
+  function enteteVisible() {
+    var st = document.querySelector('.stage'); if (!st || !st.offsetParent) return false;
+    var r = st.getBoundingClientRect(); if (r.height < 40) return false;
+    var vv = window.visualViewport, haut = vv ? vv.offsetTop : 0, h = vv ? vv.height : window.innerHeight;
+    return Math.min(r.bottom, haut + h) - Math.max(r.top, haut) >= r.height * 0.6;
+  }
   function cleImage(scene, loc) {
     var s = game.state;
     try { return art.photoKey(scene, { san: 0, min: s.min, loc: loc, flags: s.flags || {} }) || ''; } catch (err) { return ''; }
@@ -241,11 +276,13 @@
       dernierPortrait = null;
       var lieu = e.t === 'loc' ? e.loc : game.state.loc, L = SC.locations[lieu] || {};
       // (une vieille sauvegarde, relue d'un coup : pas d'images pour tout l'historique)
-      if (e.img === undefined) e.img = instant ? '' : cleImage(L.art || lieu, lieu);
+      // l'en-tête montre ce décor (sauf si l'on parle déjà à quelqu'un : il montre alors son portrait)
+      if (e.img === undefined) e.img = (instant || (!game.state.talk && enteteVisible())) ? '' : cleImage(L.art || lieu, lieu);
       return e.img ? carteImage(e.img, e.name || L.name || '', 'lieu') : null;
     }
     if (e.t === 'npc') {
-      if (e.pt === undefined) e.pt = (instant || e.who === dernierPortrait || !art['pt_' + e.who]) ? '' : cleImage('pt_' + e.who, game.state.loc);
+      // l'en-tête montre le portrait de l'interlocuteur : un autre personnage qui intervient garde le sien dans le fil
+      if (e.pt === undefined) e.pt = (instant || e.who === dernierPortrait || !art['pt_' + e.who] || (game.state.talk === e.who && enteteVisible())) ? '' : cleImage('pt_' + e.who, game.state.loc);
       dernierPortrait = e.who;
       return e.pt ? carteImage(e.pt, e.name || '', 'portrait') : null;
     }
@@ -450,6 +487,8 @@
     var docs = (s.docs || []).slice(), vus = {};
     docs.forEach(function (d) { vus[d.x] = 1; });
     s.log.forEach(function (e) { if (e.t === 'doc' && !vus[e.x]) { vus[e.x] = 1; docs.push(e); } });
+    var anciens = (s.pc && s.pc.passe) || {};
+    Object.keys(anciens).forEach(function (ch) { (anciens[ch].docs || []).forEach(function (d) { if (!vus[d.x]) { vus[d.x] = 1; docs.push(d); } }); });
     if (docs.length) h += '<h3>Documents</h3><div class="docs">' + docs.map(function (e) {
       var dh = docHTML(e), k = dh.cls.slice(2), m = (e.x || '').match(/^([^—]{6,90}?) — /);
       var lib = (k === 'journal' || k === 'page') && m ? m[1] : (e.title || (k === 'roussie' ? 'Adressée à un professeur' : DOC_TITRE[k]));
@@ -461,12 +500,17 @@
       if (SC.clueView && s.clues.indexOf(id) >= 0) c = SC.clueView(s, id, c);
       h += s.clues.indexOf(id) >= 0 ? '<div class="c"><div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>' : '<div class="c unk">Indice non découvert</div>';
     });
+    Object.keys(anciens).forEach(function (ch) {
+      var a = anciens[ch]; if (!a.carnet || !a.carnet.length) return;
+      h += '</div><h3>Indices · ' + esc(a.titre || ch) + '</h3><div class="clues">' + a.carnet.map(function (c) { return '<div class="c"><div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>'; }).join('');
+    });
     var scr = SC.notesScrawl ? SC.notesScrawl(s) : [];
     if (scr.length) h += '</div><h3>En marge, de votre écriture</h3><div class="scrawl">' + scr.map(esc).join('<br>');
     h += '</div><h3>Personnes rencontrées</h3><div class="people">';
     var PEOPLE = SC.people || {};
     var met = Object.keys(s.npcs).filter(function (k) { return s.npcs[k].met && PEOPLE[k]; });
     h += met.length ? met.map(function (k) { return '<div>' + esc(PEOPLE[k]) + '</div>'; }).join('') : '<div>Personne pour l’instant.</div>';
+    Object.keys(anciens).forEach(function (ch) { var g = anciens[ch].gens || []; if (g.length) h += '<div class="ancien"><b>' + esc(anciens[ch].titre || ch) + ' :</b> ' + g.map(esc).join(' · ') + '</div>'; });
     h += '</div><h3>Heure</h3><div>' + esc(game.clock()) + ' · ' + esc(game.where()) + '</div>';
     $('notesBody').innerHTML = h;
   }
@@ -528,6 +572,8 @@
     chap = saved ? (saved.chapter || 'prologue') : (chap || 'prologue');
     SC = CH[chap] || window.SCENE;
     game = window.RPG.createGame(SC, saved || null, pc ? { pc: pc } : {});
+    // l'investigateur tel qu'il est entré dans ce chapitre : « Rejouer le chapitre » repart de lui
+    if (!saved && pc && SC.precedent) game.state.depart = JSON.parse(JSON.stringify(pc));
     window.__partie = game; // pour les tests automatiques
     var s = game.state;
     document.title = 'L’Express de minuit · ' + (SC.chapter || '');
@@ -542,13 +588,14 @@
   }
   // rejouer le même chapitre, avec le même investigateur
   function newGame() {
-    var chap = game ? game.state.chapter : 'prologue', key = game && game.state.pc.key;
+    var chap = game ? game.state.chapter : 'prologue', key = game && game.state.pc.key, dep = game && game.state.depart;
     try { localStorage.removeItem(KEY); } catch (e) {}
-    closePanels(); mount(null, chap, pregen(chap, key));
+    closePanels(); mount(null, chap, dep ? JSON.parse(JSON.stringify(dep)) : pregen(chap, key));
   }
   function hideTitle() { $('title').hidden = true; if (soundOn) sound.start(); }
   function showTitle() {
     $('title').hidden = false; $('tpick').hidden = true; $('tmain').hidden = false;
+    if ($('btnParis')) $('btnParis').hidden = !(CH.paris && enAttente('paris').length);
     var saved = loadSave();
     $('btnCont').hidden = !(saved && saved.v === 1);
     if (saved && saved.v === 1) $('btnCont').textContent = 'Continuer · ' + ((CH[saved.chapter || 'prologue'] || {}).short || 'partie en cours');
@@ -557,18 +604,19 @@
     titleArt.trans = 0;
     if (sound.on) sound.set('title', 0);
   }
-  function showPick(chap) {
+  function showPick(chap, suite) {
     var c = CH[chap], box = $('cards');
     box.innerHTML = '';
-    c.pregens.forEach(function (p) {
+    (suite || c.pregens).forEach(function (p) {
       var card = document.createElement('div'); card.className = 'pcard';
       var top = Object.keys(p.skills).filter(function (k) { return p.skills[k] >= 45 && k !== 'Mythe de Cthulhu'; }).sort(function (a, b) { return p.skills[b] - p.skills[a]; }).slice(0, 5);
+      var avant = suite && p.passe && p.passe[c.precedent];
       card.innerHTML = (p.key ? '<div class="pimg" style="background-image:url(img/portraits/pj_' + p.key + '.webp)"></div>' : '') + '<div class="pn">' + esc((p.title === 'Dr' ? 'Dr ' : '') + p.name) + '</div>' +
         '<div class="po">' + esc(p.occupation) + ' · ' + p.age + ' ans</div>' +
-        '<p class="pb">' + esc(p.bio) + '</p>' +
+        (avant ? '<p class="pb">' + esc(avant.titre + ' : parti' + (p.sex === 'f' ? 'e' : '') + ' ' + String(avant.quand || '').replace(/^\S+\s/, 'le ').replace(/\s·.*/, '') + ' janvier, ' + avant.indices.length + ' indice' + (avant.indices.length > 1 ? 's' : '') + ' au carnet' + (avant.fin === 'fugitif' ? ', recherché' + (p.sex === 'f' ? 'e' : '') + ' par Scotland Yard' : '') + '.') + '</p>' : '<p class="pb">' + esc(p.bio) + '</p>') +
         '<div class="ps">' + top.map(function (k) { return '<span>' + esc(k) + ' <b>' + p.skills[k] + '</b></span>'; }).join('') + '</div>' +
         '<div class="pst"><span>SAN <b>' + p.san + '</b></span><span>PV <b>' + p.pv + '</b></span><span>Chance <b>' + p.chance + '</b></span></div>';
-      card.appendChild(btn('Incarner ' + esc(p.first), 'act', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, chap, p); }));
+      card.appendChild(btn((suite ? 'Reprendre ' : 'Incarner ') + esc(p.first), 'act', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, chap, JSON.parse(JSON.stringify(p))); }));
       box.appendChild(card);
     });
     $('tmain').hidden = true; $('tpick').hidden = false;
@@ -627,7 +675,7 @@
     var saved = hotState || loadSave();
     showTitle();
     $('btnLondres').addEventListener('click', function () { if (CH.londres) showPick('londres'); });
-    if ($('btnParis')) { $('btnParis').hidden = !CH.paris; $('btnParis').addEventListener('click', function () { if (CH.paris) showPick('paris'); }); }
+    if ($('btnParis')) $('btnParis').addEventListener('click', function () { var l = enAttente('paris'); if (CH.paris && l.length) showPick('paris', l); });
     $('btnProlo').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'prologue'); });
     $('btnBack').addEventListener('click', function () { $('tpick').hidden = true; $('tmain').hidden = false; });
     $('fichierSauvegarde').addEventListener('change', function () {

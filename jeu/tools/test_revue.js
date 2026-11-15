@@ -4,7 +4,7 @@ global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
 for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris']) require('../src/' + f + '.js');
 const ch = process.argv[2] || 'londres', sc = CHAPTERS[ch], J = 1440;
 const MAUVAIS = /undefined|NaN|\[object|\{[A-Za-z]{1,8}\}|\bnull\b|  +«|«\s*»/;
-const temps = ch === 'londres' ? [['lundi 10 h', 3 * J + 600], ['samedi 23 h 30', J + 23 * 60 + 30], ['dimanche 15 h', 2 * J + 900], ['mardi 9 h', 4 * J + 540]] : ch === 'paris' ? [['samedi 10 h 30', J + 630], ['samedi 17 h 30', J + 1050], ['dimanche 11 h', 2 * J + 660], ['lundi 23 h', 3 * J + 1380]] : [['début', null]];
+const temps = ch === 'londres' ? [['lundi 10 h', 3 * J + 600], ['samedi 23 h 30', J + 23 * 60 + 30], ['dimanche 15 h', 2 * J + 900], ['mardi 9 h', 4 * J + 540]] : ch === 'paris' ? [['jeudi 10 h 30', 6 * J + 630], ['samedi 17 h 30', 8 * J + 1050], ['dimanche 11 h', 9 * J + 660], ['lundi 23 h', 10 * J + 1380]] : [['début', null]];
 const profils = [['débutant', g => {}], ['avancé', g => { Object.keys(sc.clues || {}).forEach(k => { try { if (!g.api.has(k)) g.state.clues.push(k); } catch (e) {} }); ['conference', 'discours', 'cheapsideVu', 'stanleyDispo', 'presse1', 'tableVue', 'carteBN', 'registresOuverts', 'caissesVues', 'cahierVu', 'remiVu', 'journalParis'].forEach(k => g.api.flag(k, true)); }]];
 let actions = 0, sujets = 0, plantages = 0, abimes = 0, lignes = 0; const vus = new Set(), notes = [];
 function scan(g, b, ctx) {

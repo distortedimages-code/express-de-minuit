@@ -405,7 +405,10 @@
     brouillard: ['« De la pluie depuis Noël. La Seine monte ; à Bercy, on surveille les caves. »', '« Un temps de janvier, {m}. Gris le matin, gris le soir, et mouillé entre les deux. »'],
     roi: ['« Des rois ? Nous avons réglé la question il y a un moment. » Un demi-sourire. « Cela dit, les vôtres ont de la tenue. »', '« Ici, on a un président. Personne ne se retourne sur son passage, et c’est très bien ainsi. »'],
     gouvernement: ['« Poincaré gouverne comme un notaire : tout est en règle, et rien n’est gai. »', '« La politique ? On change de ministère comme de chemise, et la chemise reste sale. »'],
-    ruhr: ['« Nos soldats sont entrés dans la Ruhr cette semaine. On dit que l’Allemagne paiera. On le dit depuis quatre ans. »', '« La Ruhr ! Les journaux ne parlent que de ça. Du charbon pris à la baïonnette : je ne sais pas si ça chauffe mieux. »'],
+    // les troupes françaises entrent dans la Ruhr le jeudi 11 janvier 1923 (jour 6, en comptant du vendredi 5)
+    ruhr: function (api) { return Math.floor(api.s.min / 1440) >= 6
+      ? ['« Nos soldats sont entrés dans la Ruhr cette semaine. On dit que l’Allemagne paiera. On le dit depuis quatre ans. »', '« La Ruhr ! Les journaux ne parlent que de ça. Du charbon pris à la baïonnette : je ne sais pas si ça chauffe mieux. »']
+      : ['« Poincaré parle d’aller chercher le charbon dans la Ruhr, puisque l’Allemagne ne paie pas. Il le fera, croyez-moi. »', '« On dit que l’armée va entrer dans la Ruhr. Encore des garçons en uniforme sur les quais de gare. »']; },
     egypte: ['« Ce pharaon qu’un Anglais a déterré ? Les illustrés en sont pleins. De l’or jusqu’au plafond, paraît-il. On ferait mieux de laisser dormir les morts. »', '« Toutankhamon. Tout Paris sait le dire, maintenant. Personne ne sait l’écrire. »'],
     mussolini: ['« Les Italiens ont trouvé leur homme, à ce qu’on dit. Un ancien journaliste. Ça finit rarement bien, les journalistes au pouvoir. »', '« Des chemises noires qui marchent sur Rome… On a vu des carnavals plus drôles. »'],
     russie: ['« Paris est plein de Russes, {m}. Des princes qui conduisent des taxis, des colonels portiers. Ils attendent que ça passe. Ça ne passe pas. »', '« Les Soviets ? Demandez aux petits épargnants ce qu’ils pensent de l’emprunt russe. Mais pas à table. »'],

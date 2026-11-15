@@ -42,7 +42,7 @@ for (let seed0 = 1; seed0 <= 20; seed0++) for (let pi = 0; pi < 3; pi++) {
     dodo();
     garde = 0; while (!s.ended && garde++ < 6) { act('go_poissy'); if (!s.ended) act('go_poissy'); if (!s.ended) dodo(); }
   } catch (e) { notes.push('PLANTAGE graine ' + seed0 + ' pj ' + pi + ' : ' + e.stack.split('\n').slice(0, 3).join(' | ')); }
-  if (s.ended && s.flags.fin === 'poissy') { ok++; jours.push(Math.floor(s.min / J)); indices.push(s.clues.length); }
+  if (s.ended && s.flags.fin === 'poissy') { ok++; jours.push(Math.floor(s.min / J) - Math.floor(P.start.min / J)); indices.push(s.clues.length); }
   else { ko++; notes.push('NON TERMINÉ graine ' + seed0 + ' pj ' + pi + ' @' + s.loc + ' ' + g.clock() + ' indices ' + s.clues.join(',') + ' fin ' + s.flags.fin); }
 }
 notes.slice(0, 10).forEach(n => console.log(n));

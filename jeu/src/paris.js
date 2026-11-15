@@ -12,6 +12,11 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function jour(api) { return JOURS[(4 + day(api.s.min)) % 7]; }
   function nuit(api) { var h = hour(api.s.min); return h >= 21 || h < 7; }
+  // les troupes françaises entrent dans la Ruhr le jeudi 11 janvier 1923
+  function ruhr(api) {
+    var d = day(api.s.min);
+    return d >= 7 ? 'Les troupes françaises sont entrées dans la Ruhr jeudi.' : d === 6 ? 'Les troupes françaises sont entrées dans la Ruhr ce matin.' : 'Poincaré menace d’envoyer l’armée dans la Ruhr si l’Allemagne ne paie pas.';
+  }
   function francais(api) { return api.skill('Langue (français)') >= 50; }
 
   // ================================================================ les lieux de Paris
@@ -86,10 +91,11 @@
     short: 'Paris',
     tick: 5, talkTick: 2,
     sanLabels: L.sanLabels, perceive: L.perceive, money: L.money, beforeAction: L.beforeAction, onMadness: L.onMadness,
-    start: { loc: 'gare', min: at(0, 17, 40), money: 40, inv: [] },
+    // jour 0 = vendredi 5 janvier 1923, comme à Londres ; venu de Londres, on arrive le jour où l'on en est parti (voir P.intro)
+    start: { loc: 'gare', min: at(7, 17, 40), money: 40, inv: [] },
     investigator: null,
-    clock: function (min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1, 3) + ' ' + (12 + d) + ' · ' + pad(hour(min)) + ' h ' + pad(min % 60); },
-    where: function (min) { var h = hour(min), mom = h < 6 ? 'nuit' : h < 12 ? 'matin' : h < 18 ? 'après-midi' : h < 22 ? 'soir' : 'nuit'; return 'Paris · ' + (12 + day(min)) + ' janvier 1923 · ' + mom; },
+    clock: function (min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1, 3) + ' ' + (5 + d) + ' · ' + pad(hour(min)) + ' h ' + pad(min % 60); },
+    where: function (min) { var h = hour(min), mom = h < 6 ? 'nuit' : h < 12 ? 'matin' : h < 18 ? 'après-midi' : h < 22 ? 'soir' : 'nuit'; return 'Paris · ' + (5 + day(min)) + ' janvier 1923 · ' + mom; },
     examples: '« je vais à la Bibliothèque nationale », « je demande une carte de lecteur », « je cherche le comte Fenalik »',
     phrases: [
       [/\bbibliotheque nationale\b|\bsalle de travail\b|\brue de richelieu\b|\bla nationale\b/g, ' bn '],
@@ -231,6 +237,7 @@
     ending: { title: 'Fin de la première partie : Paris', text: 'Le train de banlieue vous emporte vers Poissy, et vers ce qui dort sous la maison du comte. La suite du chapitre arrive.' }
   };
   P.endingFor = function (s) {
+    if (s.flags && s.flags.fin === 'extrade') return { title: 'Fin : rendu à Londres', text: 'Ce que vous aviez fait à Londres vous a rattrapé à Paris. Deux inspecteurs vous raccompagnent à Calais, menottes aux poignets, et le comte Fenalik retourne à son oubli.' };
     if (s.flags && s.flags.fin === 'prison') return { title: 'Fin : la Santé', text: 'Trois fois devant le commissaire, c’est une fois de trop. La prison de la Santé a des murs épais, et l’Orient-Express partira sans vous.' };
     return null;
   };
@@ -501,8 +508,8 @@
           extra: ['BN', 'SMITH', 'CHARENTON', 'FENALIK', 'POISSY', 'DESTINATIONS', 'TAXI', 'VOYAGE', 'TRAIN'], run: function (api, p) { api.talk('gerant', p); } },
         { id: 'ph_journal', label: 'Lire les journaux', idea: true, verbs: ['EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['JOURNAL'], repeatable: true, time: 15,
           run: function (api) {
-            if (!api.flag('journalParis')) { api.flag('journalParis', true); api.say('Le Petit Parisien, Le Matin. Les troupes françaises viennent d’entrer dans la Ruhr ; on ne parle que de cela. En page trois, entre un vol de bijoux et un chien écrasé : « À la maison de santé de Charenton, le docteur Leroux prend la direction après la mort accidentelle du docteur Delplace. » Trois lignes.'); return; }
-            api.say(api.fresh('journalP', ['La Ruhr, toujours la Ruhr. Le franc baisse. Rien qui vous regarde.', 'Un feuilleton, des réclames, le prix du charbon. Vous repliez le journal.']));
+            if (!api.flag('journalParis')) { api.flag('journalParis', true); api.say('Le Petit Parisien, Le Matin. ' + ruhr(api) + ' On ne parle que de cela. En page trois, entre un vol de bijoux et un chien écrasé : « À la maison de santé de Charenton, le docteur Leroux prend la direction après la mort accidentelle du docteur Delplace. » Trois lignes.'); return; }
+            api.say(api.fresh('journalP', [day(api.s.min) >= 6 ? 'La Ruhr, toujours la Ruhr. Le franc baisse. Rien qui vous regarde.' : 'La Ruhr, encore : on attend l’ultimatum. Rien qui vous regarde.', 'Un feuilleton, des réclames, le prix du charbon. Vous repliez le journal.']));
           } },
         { id: 'ph_dormir', label: 'Dormir jusqu’au matin', idea: true, ideaCond: function (api) { return hour(api.s.min) >= 15 || hour(api.s.min) < 6; }, verbs: ['DORMIR', 'ATTENDRE'], nouns: ['CHAMBRE', 'HEURE'], bare: true, repeatable: true,
           run: function (api) {
@@ -700,6 +707,7 @@
     arreter: function (api, id) {
       var n = (api.flag('arrestations') || 0) + 1; api.flag('arrestations', n);
       api.endTalk(false);
+      if (api.flag('fugitif')) { api.say('Au poste de la rue de la Banque, on relève votre nom. Une heure plus tard, un inspecteur de la Sûreté pose devant vous un télégramme de Scotland Yard, avec votre signalement. « Londres vous réclame, ' + (api.pc.sex === 'f' ? 'madame' : 'monsieur') + '. »'); api.flag('fin', 'extrade'); api.end(); return; }
       if (n >= 3) { api.say('Le commissaire ne lève même plus les yeux. « Encore lui. Le dépôt, puis le juge. »'); api.flag('fin', 'prison'); api.end(); return; }
       api.say(n === 1 ? 'Deux agents à pèlerine vous prennent chacun par un coude. La nuit au poste de la rue de la Banque, sur un bat-flanc, entre un camelot et un ivrogne qui récite du Racine. Au matin, un commissaire fatigué vous rend vos papiers. « Vous êtes étranger. Je veux bien croire à un malentendu. Une fois. »' : 'Le même poste, le même bat-flanc. Cette fois, on relève votre identité, et l’amende est de cent francs. « La prochaine fois, c’est le dépôt. »');
       api.s.min = (day(api.s.min) + 1) * D + 9 * 60; api.s.tick = 0;
@@ -721,12 +729,30 @@
     return true;
   };
 
+  // ce que Londres a laissé (porté par l'investigateur d'un chapitre à l'autre : pc.passe.londres)
+  function passe(api) { return ((api.pc && api.pc.passe) || {}).londres || null; }
+  function dateLongue(min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1) + ' ' + (5 + d) + ' janvier 1923'; }
+  // les drapeaux de Londres qui comptent pour la suite (le moteur ne transmet que ceux-là)
+  L.memoire = ['discours', 'demasque', 'cheapsideFini', 'stanleySauve', 'maquetteDetruite', 'seanceFaite', 'fin', 'arrestations'];
   P.intro = function (api) {
+    var pa = passe(api), f = (pa && pa.drapeaux) || {}, a = function (id) { return !!pa && (pa.indices || []).indexOf(id) >= 0; };
+    // Victoria, Douvres, le ferry, Calais, la gare du Nord : sept heures quarante de voyage
+    if (pa && typeof pa.min === 'number') { api.s.min = pa.min + 460; api.s.tick = 0; }
+    if (f.fin === 'fugitif') api.flag('fugitif', true);
+    var h = hour(api.s.min), nuitTombee = h >= 21 || h < 6;
     api.title('L’Express de minuit', 'Paris · Le comte oublié');
-    api.say('Vendredi 12 janvier 1923. Le train de Calais entre en gare du Nord avec une heure de retard, sous une pluie qui a remplacé le brouillard de Londres sans rien y gagner.');
-    api.say('Dans votre portefeuille, la liste que Smith vous a dictée entre deux souffles, à Cheapside : Paris, Venise, Trieste, Belgrade, Sofia, Constantinople. Une statue en morceaux, et un morceau par ville. À côté de Paris, un seul nom : le comte Fenalik, disparu à la veille de la Révolution. Smith n’a pas eu le temps d’en dire plus.');
-    api.say('Le Simplon-Orient-Express vous attendra gare de Lyon. Rien ne presse encore. Personne, que vous sachiez, ne vous suit.');
-    api.sys('Vous incarnez ' + api.pc.name + '. Écrivez ce que vous faites (« Agir ») ou ce que vous dites (« Dire »).');
+    api.say(dateLongue(api.s.min) + '. Le train de Calais entre en gare du Nord' + (nuitTombee ? ' en pleine nuit, sous une pluie froide.' : h < 12 ? ' au petit matin, sous une pluie fine.' : ', sous une pluie qui a remplacé le brouillard de Londres sans rien y gagner.'));
+    var listeDe;
+    if (f.demasque) listeDe = 'une feuille roussie, ramassée dans les cendres d’un lit, à Cheapside, à deux pas du corps de Beddows, et couverte de l’écriture pointue de Smith';
+    else if (a('VISAGE') || a('BRULURES') || a('SEUL') || a('BEDDOWS')) listeDe = 'la liste que l’homme bandé de Cheapside, celui qui se faisait appeler Smith, vous a dictée entre deux souffles';
+    else listeDe = 'la liste que Smith vous a dictée entre deux souffles, à Cheapside';
+    api.say('Dans votre portefeuille, ' + listeDe + ' : Paris, Venise, Trieste, Belgrade, Sofia, Constantinople. Une statue en morceaux, et un morceau par ville. À côté de Paris, un seul nom : le comte Fenalik, qui la possédait avant la Révolution.' + (a('BIBLIO') ? ' Et, recopiée au British Museum, une piste plus sûre : des documents sur le simulacre dorment à la Bibliothèque nationale.' : ''));
+    if (a('BEDDOWS') && !f.demasque) api.say('Vous n’arrivez pas à oublier le cadavre écorché du British Museum. Si c’était Beddows, qui donc vous a ouvert la porte, à Cheapside ?');
+    if (f.maquetteDetruite && !f.stanleySauve) api.say('Dans le train, vous vous êtes assoupi{e} une minute. Un visage écrasé contre une vitre, Henry Stanley, qui hurle sans bruit. Vous vous êtes réveillé{e} en sursaut, et la dame d’en face a changé de compartiment.');
+    if (f.fin === 'fugitif') api.say('À Londres, Scotland Yard a votre signalement. À Calais, le douanier a regardé votre passeport une seconde de trop, puis il l’a tamponné. À Paris, la police n’a pas encore reçu votre nom. Mieux vaut ne pas lui en donner l’occasion.');
+    if (pa && api.sanState() >= 2) api.say('Sur le quai, vous vous surprenez à dévisager les porteurs, un par un, en cherchant lequel n’a pas de visage à lui.');
+    api.say('Le Simplon-Orient-Express vous attendra gare de Lyon. Rien ne presse encore.' + (f.fin === 'fugitif' ? '' : ' Personne, que vous sachiez, ne vous suit.'));
+    api.sys('Vous incarnez ' + api.pc.name + (pa ? ', tel' + (api.pc.sex === 'f' ? 'le' : '') + ' que Londres vous a laissé' + (api.pc.sex === 'f' ? 'e' : '') : '') + '. Écrivez ce que vous faites (« Agir ») ou ce que vous dites (« Dire »).');
   };
   P.help = function (api) { api.sys('Écrivez ce que fait votre investigateur : « je vais à la Bibliothèque nationale », « je demande une carte de lecteur », « je cherche le comte Fenalik ». Pour vous déplacer : « aller à… », ou « où aller ? ».'); };
   P.people = { gerant: 'M. Blain, gérant de l’hôtel du Cygne', gaudry: 'M. Gaudry, secrétariat de la Bibliothèque nationale', remi: 'Rémi Vangeim, étudiant et traducteur', brevin: 'Mlle Brévin, bibliothèque de l’Arsenal', rogniat: 'Mme Rogniat, secrétaire de la direction de Charenton', leroux: 'Le docteur Leroux, directeur par intérim', mandrin: 'Paul Mandrin, infirmier à Charenton' };
@@ -821,5 +847,6 @@
   });
 
   L.suite = 'paris';
+  P.precedent = 'londres';
   G.CHAPTERS.paris = P;
 })(typeof window !== 'undefined' ? window : globalThis);
