@@ -9,6 +9,8 @@
   function vitre(n, pts) { return { n: n || 20, a: 0.4, pts: pts }; }
   // cadrage des anciennes images 4:3, s'il en reste (0 = haut, 100 = bas) ; les images cinéma remplissent le cadre
   G.PixelArt.PHOTO_FOCUS = {};
+  // recadrage horizontal d'une image cinéma dans un cadre 4:3 (en %, 50 = centre) : le sujet reste dans le cadre
+  G.PixelArt.PHOTO_FOCUSX = { 'ecran-titre/titre': 74, 'londres/26_brouillard_trajet': 50 };
 
   // ---------------------------------------------------------------- écran-titre et prologue
   V['ecran-titre/titre'] = { rain: [dehors(90)] };

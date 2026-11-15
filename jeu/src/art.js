@@ -597,12 +597,22 @@
     var kx = CWd / W, top = (H - H / kx) * ((this._fy === undefined ? 46 : this._fy) / 100);
     var wideImg = ph && ph.naturalWidth && ph.naturalWidth / ph.naturalHeight > 1.6;
     if (this.on('blackout')) { if (CWd > W) { g.save(); g.scale(kx, kx); g.translate(0, -top); this.blackout(g, t); g.restore(); } else this.blackout(g, t); }
+    // l'image peinte n'est pas encore arrivée : du noir, jamais l'ancien dessin (il ne reste qu'en secours, si l'image manque)
+    else if (pk && !ph && !(this.imgs && this.imgs[pk] && this.imgs[pk]._bad)) { (this._attendu || (this._attendu = {}))[pk] = true; }
     else if (ph) {
       // une respiration de caméra, très lente : l'image et ce qui bouge dessus restent solidaires
       var zs = 1.012 + 0.006 * Math.sin(t * 0.11), zx = (W * (zs - 1)) * (0.5 + 0.4 * Math.sin(t * 0.07)), zy = (H * (zs - 1)) * (0.5 + 0.4 * Math.cos(t * 0.05));
       zx = (CWd * (zs - 1)) * (0.5 + 0.4 * Math.sin(t * 0.07));
       g.save(); g.translate(-zx, -zy); g.scale(zs, zs);
-      if (wideImg || CWd === W) {
+      var imgW = ph.naturalWidth ? H * ph.naturalWidth / ph.naturalHeight : CWd;
+      if (wideImg && imgW > CWd + 2) {
+        // image cinéma dans un cadre 4:3 (l'écran titre) : on la recadre sans la déformer, autour de son sujet
+        var fx = (Art.PHOTO_FOCUSX && Art.PHOTO_FOCUSX[pk] !== undefined) ? Art.PHOTO_FOCUSX[pk] : 50;
+        g.translate(-(imgW - CWd) * fx / 100, 0);
+        g.drawImage(ph, 0, 0, imgW, H);
+        if (PHOTO_V2[pk]) this.ph_v2(g, t, st, PHOTO_V2[pk]);
+        else { var ov0 = this['ph_' + (this.scene.indexOf('pt_') === 0 ? 'portrait' : this.scene)]; if (ov0) ov0.call(this, g, t, st); }
+      } else if (wideImg || CWd === W) {
         // image au format du cadre : elle le remplit, ses animations sont mesurées dans le même repère
         g.drawImage(ph, 0, 0, CWd, H);
         if (PHOTO_V2[pk]) this.ph_v2(g, t, st, PHOTO_V2[pk]);
@@ -614,6 +624,10 @@
         else { var ov2 = this['ph_' + (this.scene.indexOf('pt_') === 0 ? 'portrait' : this.scene)]; if (ov2) ov2.call(this, g, t, st); }
       }
       g.restore();
+      // arrivée d'une image qu'on attendait : elle sort du noir, au lieu d'apparaître d'un coup
+      if (this._attendu && this._attendu[pk]) { this._attendu[pk] = false; (this._fondu || (this._fondu = {}))[pk] = this.t; }
+      var f0 = this._fondu && this._fondu[pk];
+      if (f0 !== undefined) { var fa = (this.t - f0) / 0.9; if (fa < 1) D.rect(g, 0, 0, CWd, H, 'rgba(10,10,11,' + (1 - fa).toFixed(3) + ')'); else delete this._fondu[pk]; }
     }
     else if (CWd > W) { g.save(); g.scale(kx, kx); g.translate(0, -top); (this[this.scene] || this.restaurant).call(this, g, t, st); g.restore(); }
     else (this[this.scene] || this.restaurant).call(this, g, t, st);
@@ -647,7 +661,7 @@
     // changement de plan : l'iris se ferme sur l'ancien décor, s'ouvre sur le nouveau
     if (this.trans < 1) {
       // l'iris attend, fermé, que l'image du nouveau décor soit arrivée (deux secondes au plus)
-      var hold = pk && !ph && this.photoPending(pk) && this.trans >= 0.45 && (this.phWait = (this.phWait || 0) + dt) < 2;
+      var hold = pk && !ph && this.photoPending(pk) && this.trans >= 0.45 && (this.phWait = (this.phWait || 0) + dt) < 6;
       if (!hold) this.trans = Math.min(1, this.trans + dt * 1.3);
       var tr = this.trans;
       o.save(); o.setTransform(RS, 0, 0, RS, 0, 0);
