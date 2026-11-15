@@ -3,10 +3,11 @@
   'use strict';
   function Sound() { this.on = false; this.ctx = null; this.loc = 'restaurant'; this.san = 0; this.musicOn = true; this.decks = {}; this.track = null; }
   // ---- musique : trois morceaux, choisis selon le lieu et la santé mentale, en fondu enchaîné
-  var TRACKS = { haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3' };
-  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56 };
+  // house : « The House That Breathes », de Yoann, pour la maison de santé de Charenton (puis la maison du comte, à Poissy)
+  var TRACKS = { haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3' };
+  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48 };
   var MUSIC = { title: 'train', restaurant: 'train', couloir: 'train', lits: 'train', compartiment: 'dissolve', victoria: 'train',
-    wagon1: 'dissolve', wagon2: 'dissolve', retour: 'dissolve', cave: 'dissolve' };
+    wagon1: 'dissolve', wagon2: 'dissolve', retour: 'dissolve', cave: 'dissolve', charenton: 'house' };
   Sound.musicFor = function (loc, san) { if (san >= 3 && loc !== 'title') return 'dissolve'; return MUSIC[loc] || 'haze'; };
   Sound.prototype.start = function () {
     if (this.ctx) { this.ctx.resume(); this.on = true; this.master.gain.setTargetAtTime(0.9, this.ctx.currentTime, 0.4); this.musicBus.gain.setTargetAtTime(1, this.ctx.currentTime, 0.4); this.pickMusic(); return; }
