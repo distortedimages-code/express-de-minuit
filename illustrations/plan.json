@@ -322,14 +322,16 @@
     {
       "image": "portraits/26_vane",
       "prompt": "prompts/portraits/26_vane.txt",
-      "references": []
+      "references": [],
+      "cadre": "large"
     },
     {
       "image": "londres/27_gordon-square_seance",
       "prompt": "prompts/londres/27_gordon-square_seance.txt",
       "references": [
         "portraits/26_vane"
-      ]
+      ],
+      "cadre": "large"
     },
     {
       "image": "documents/01_coupure-journal",
@@ -369,22 +371,26 @@
     {
       "image": "portraits/pj_arnaud",
       "prompt": "prompts/portraits/pj_arnaud.txt",
-      "references": []
+      "references": [],
+      "cadre": "large"
     },
     {
       "image": "portraits/pj_pemberton",
       "prompt": "prompts/portraits/pj_pemberton.txt",
-      "references": []
+      "references": [],
+      "cadre": "large"
     },
     {
       "image": "portraits/pj_doyle",
       "prompt": "prompts/portraits/pj_doyle.txt",
-      "references": []
+      "references": [],
+      "cadre": "large"
     },
     {
       "image": "portraits/pj_ashby",
       "prompt": "prompts/portraits/pj_ashby.txt",
-      "references": []
+      "references": [],
+      "cadre": "large"
     }
   ]
 }

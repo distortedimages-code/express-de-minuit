@@ -116,6 +116,10 @@ Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londre
 
   Seuls les vrais défauts (image vide, doublon) rejettent une image. Les autres points sont signalés « à vérifier ».
 
+## Le format des nouvelles images
+
+Le jeu affiche les illustrations en largeur, recadrées en format cinéma (2,4:1 sur ordinateur et iPad, 3:2 sur iPhone). Les images d'origine restent recadrées. Les nouvelles (`"cadre": "large"` dans `plan.json`) utilisent `style_large.txt` : tout ce qui compte est placé dans la bande centrale, entre 25 % et 75 % de la hauteur, et rien n'est coupé au recadrage. Le fichier reste en 1600 × 1200.
+
 ## Les supports des documents
 
 Les images de `documents/` (coupure de journal, télégramme, lettre, carte de visite…) sont générées **sans aucun texte**. Le jeu compose le texte par-dessus, dans des polices d'époque : il est donc toujours exact, et corrigeable sans rien regénérer.
