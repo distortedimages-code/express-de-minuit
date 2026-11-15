@@ -12143,7 +12143,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 
 </script>
 <script>
-/* Ambiance sonore synthétisée : rails, pluie, bourdonnement qui se dérègle avec la santé mentale. */
+/* Ambiance sonore : rails et bourdonnement synthétisés, pluie enregistrée (bruit blanc filtré en secours). */
 (function (G) {
   'use strict';
   function Sound() { this.on = false; this.ctx = null; this.loc = 'restaurant'; this.san = 0; this.musicOn = true; this.decks = {}; this.track = null; }
@@ -12171,7 +12171,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     var rain = ctx.createBufferSource(); rain.buffer = buf; rain.loop = true;
     var bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 2600; bp.Q.value = 0.6;
     this.rainGain = ctx.createGain(); this.rainGain.gain.value = 0.05;
-    rain.connect(bp); bp.connect(this.rainGain); this.rainGain.connect(this.master); rain.start();
+    this.rainSynth = ctx.createGain(); this.rainSynth.gain.value = 1;
+    rain.connect(bp); bp.connect(this.rainSynth); this.rainSynth.connect(this.rainGain); this.rainGain.connect(this.master); rain.start();
+    this.vraiePluie();
     // grondement du train
     var rum = ctx.createBufferSource(); rum.buffer = buf; rum.loop = true;
     var lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 160;
@@ -12192,6 +12194,41 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     this.timer = setInterval(function () { self.tick(); }, 120);
     this.apply();
     this.pickMusic();
+  };
+  // ---- la pluie enregistrée : elle remplace le bruit blanc dès qu'elle est chargée ; sans fichier, le bruit blanc reste
+  // audio/pluie.mp3 : quatre pluies de Ylmir (OpenGameArt, CC0) enchaînées en une boucle d'environ deux minutes.
+  // gain : réglé pour que la pluie enregistrée ait le même niveau moyen (LUFS) que l'ancien bruit blanc filtré.
+  var PLUIE = { src: 'audio/pluie.mp3', gain: 4.6, fondu: 2.5 };
+  Sound.PLUIE = PLUIE;
+  // une boucle sans couture, faite sur place : la fin de l'enregistrement se fond dans son début (fondu à puissance
+  // constante), et l'on écarte les quelques millisecondes de silence que le MP3 ajoute aux deux bouts.
+  // Renvoie les bornes de la boucle, en secondes ; le tampon lui-même est modifié, sans copie (mémoire des téléphones).
+  function boucle(buf, fondu) {
+    var sr = buf.sampleRate, bord = Math.floor(0.06 * sr), n = buf.length - 2 * bord;
+    if (n < sr * 2) return { debut: 0, fin: buf.duration };
+    var f = Math.min(Math.floor(fondu * sr), Math.floor(n / 4)), len = n - f;
+    for (var c = 0; c < buf.numberOfChannels; c++) {
+      var a = buf.getChannelData(c);
+      for (var i = 0; i < f; i++) { var k = i / f * Math.PI / 2; a[bord + i] = a[bord + i] * Math.sin(k) + a[bord + len + i] * Math.cos(k); }
+    }
+    return { debut: bord / sr, fin: (bord + len) / sr };
+  }
+  Sound.boucle = boucle;
+  Sound.prototype.vraiePluie = function () {
+    var self = this, ctx = this.ctx;
+    if (this.pluie || typeof fetch !== 'function') return;
+    this.pluie = 'chargement';
+    fetch(PLUIE.src).then(function (r) { if (!r.ok) throw new Error('absente'); return r.arrayBuffer(); })
+      .then(function (ab) { return new Promise(function (ok, ko) { ctx.decodeAudioData(ab, ok, ko); }); })
+      .then(function (buf) {
+        var b = boucle(buf, PLUIE.fondu), src = ctx.createBufferSource();
+        src.buffer = buf; src.loop = true; src.loopStart = b.debut; src.loopEnd = b.fin;
+        var g = ctx.createGain(); g.gain.value = 0; src.connect(g); g.connect(self.rainGain);
+        // on n'entre pas toujours au même endroit de la boucle : la pluie ne recommence pas à chaque partie
+        src.start(0, b.debut + Math.random() * (b.fin - b.debut));
+        var t = ctx.currentTime; g.gain.setTargetAtTime(PLUIE.gain, t, 1.2); self.rainSynth.gain.setTargetAtTime(0, t, 1.2);
+        self.pluie = 'ok'; self.pluieDuree = b.fin - b.debut;
+      }).catch(function () { self.pluie = 'absente'; });
   };
   Sound.prototype.stop = function () {
     if (!this.ctx) return; this.on = false;
@@ -12254,8 +12291,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   Sound.prototype.apply = function () {
     if (!this.ctx) return;
     var t = this.ctx.currentTime;
-    var rain = { restaurant: 0.04, couloir: 0.14, lits: 0.025, compartiment: 0.2, title: 0.06, institut: 0.01, hotel: 0.05, cheapside: 0.04, chelsea: 0.03, yard: 0.03, ambassade: 0.02, islington: 0.12, boutique: 0.03, musee: 0.1, stoke: 0.12, chambre_stanley: 0.04, camberwell: 0.03, cave: 0, wagon1: 0, wagon2: 0, retour: 0.02, campagne: 0.07, victoria: 0.05 }[this.loc];
-    var rum = { restaurant: 0.2, couloir: 0.38, lits: 0.12, compartiment: 0.1, title: 0.15, institut: 0.06, hotel: 0.08, islington: 0.14, stoke: 0.14, musee: 0.05, cave: 0.05, wagon1: 0.3, wagon2: 0.26, retour: 0.45, campagne: 0.06, victoria: 0.3 }[this.loc];
+    var rain = { restaurant: 0.04, couloir: 0.14, lits: 0.025, compartiment: 0.2, title: 0.06, institut: 0.01, hotel: 0.05, cheapside: 0.04, chelsea: 0.03, yard: 0.03, ambassade: 0.02, islington: 0.12, boutique: 0.03, musee: 0.1, stoke: 0.12, chambre_stanley: 0.04, camberwell: 0.03, cave: 0, wagon1: 0, wagon2: 0, retour: 0.02, campagne: 0.07, victoria: 0.05,
+      gare: 0.09, bn: 0.06, arsenal: 0.045, charenton: 0.1, cafe: 0.05 }[this.loc];
+    var rum = { restaurant: 0.2, couloir: 0.38, lits: 0.12, compartiment: 0.1, title: 0.15, institut: 0.06, hotel: 0.08, islington: 0.14, stoke: 0.14, musee: 0.05, cave: 0.05, wagon1: 0.3, wagon2: 0.26, retour: 0.45, campagne: 0.06, victoria: 0.3,
+      gare: 0.3, bn: 0.04, arsenal: 0.04, charenton: 0.05, cafe: 0.07 }[this.loc];
     if (rain === undefined) rain = 0.04;
     if (rum === undefined) rum = 0.1;
     this.rainGain.gain.setTargetAtTime(rain, t, 0.8);
