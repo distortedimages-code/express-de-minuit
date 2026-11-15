@@ -4,6 +4,29 @@
   var KEY = 'express-minuit-v1', SKEY = 'express-minuit-son';
   var $ = function (id) { return document.getElementById(id); };
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Les documents : un support de papier (photographié, sans texte) et le texte composé par le jeu,
+  // dans la typographie de son époque. Le texte est toujours exact : il ne vient jamais de l'image.
+  function docKind(x) {
+    if (/\bSTOP\b/.test(x)) return 'telegramme';
+    if (/^Très honoré Professeur/.test(x)) return 'roussie';
+    if (/^(Cher|Chère|Monsieur|Madame)\b/.test(x)) return 'lettre';
+    if (/^[A-ZÀ-Ý0-9’'« »,.:!?-]{8,} — /.test(x)) return /DÉRAILLEMENT|PIÈCE PLEINE DE FUMÉE/.test(x) ? 'page' : 'journal';
+    return 'note';
+  }
+  var DOC_IMG = { telegramme: '03_telegramme', roussie: '05_lettre-roussie', lettre: '04_lettre', journal: '01_coupure-journal', page: '02_page-reliee', note: '07_billet' };
+  var DOC_TITRE = { telegramme: 'Télégramme', roussie: 'Lettre à demi brûlée', lettre: 'Lettre', journal: 'Coupure de presse', page: 'Archives du Daily Courier', note: 'Document' };
+  function docHTML(e) {
+    var k = docKind(e.x || ''), x = e.x || '', head = '', body = x;
+    var m = x.match(/^(.+?) — ([\s\S]*)$/);
+    if ((k === 'journal' || k === 'page' || k === 'telegramme') && m) { head = m[1]; body = m[2]; }
+    var h = '<div class="d-img" style="background-image:url(img/documents/' + DOC_IMG[k] + '.webp)"></div><div class="d-paper">';
+    h += '<div class="d-kind">' + esc(e.title || DOC_TITRE[k]) + '</div>';
+    if (head) h += '<div class="d-head">' + (k === 'telegramme' ? 'Destinataire : ' : '') + esc(head) + '</div>';
+    if (k === 'telegramme') h += '<div class="d-body">' + esc(body).split(/\s*\bSTOP\b\s*/).filter(Boolean).map(function (l) { return '<span>' + l + '</span>'; }).join('<span class="stop">STOP</span>') + '</div>';
+    else h += '<div class="d-body">' + esc(body) + '</div>';
+    return { cls: 'k-' + k, html: h + '</div>' };
+  }
+  window.__docHTML = docHTML;
   var game = null, art = null, titleArt = null, sound = new window.Sound();
   window.__sound = sound;
   var CH = window.CHAPTERS || { prologue: window.SCENE };
@@ -45,7 +68,7 @@
       case 'sys': case 'push': case 'item': d.textContent = e.x; break;
       case 'ask': d.textContent = (e.san >= 3 && Math.random() < 0.25) ? 'Qu’avez-vous fait ?' : e.x; break;
       case 'loc': d.textContent = e.name; break;
-      case 'doc': d.innerHTML = '<div class="h">' + esc(e.title) + '</div><div class="b">' + esc(e.x) + '</div>'; break;
+      case 'doc': var dh = docHTML(e); d.classList.add(dh.cls); d.innerHTML = dh.html; break;
       case 'clue': d.innerHTML = '<div class="h">Nouvel indice · noté dans le carnet</div><div class="t">' + esc(e.title) + '</div><div class="x">' + esc(e.x) + '</div>'; break;
       case 'stat': d.textContent = (e.stat === 'Mythe' ? 'Mythe de Cthulhu' : e.stat) + ' ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v; if (e.stat === 'Mythe') d.className = 'e-san'; break;
       case 'san': d.textContent = e.d ? 'Santé mentale ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v : 'Santé mentale : aucune perte'; if (!e.d) d.classList.add('none'); if (e.d > 0) d.classList.add('gain'); break;
@@ -295,7 +318,17 @@
     $('sheetBody').innerHTML = h;
   }
   function fillNotes() {
-    var s = game.state, h = '<h3>Indices</h3><div class="clues">';
+    var s = game.state, h = '';
+    // les papiers réunis : en tête du carnet, repliés, on les déplie pour relire
+    var docs = (s.docs || []).slice(), vus = {};
+    docs.forEach(function (d) { vus[d.x] = 1; });
+    s.log.forEach(function (e) { if (e.t === 'doc' && !vus[e.x]) { vus[e.x] = 1; docs.push(e); } });
+    if (docs.length) h += '<h3>Documents</h3><div class="docs">' + docs.map(function (e) {
+      var dh = docHTML(e), k = dh.cls.slice(2), m = (e.x || '').match(/^([^—]{6,90}?) — /);
+      var lib = (k === 'journal' || k === 'page') && m ? m[1] : (e.title || (k === 'roussie' ? 'Adressée à un professeur' : DOC_TITRE[k]));
+      return '<details class="doc-fold"><summary><span class="dk">' + esc(DOC_TITRE[k]) + '</span><span class="dt">' + esc(lib === DOC_TITRE[k] ? 'Sans titre' : lib) + '</span></summary><div class="e-doc ' + dh.cls + '">' + dh.html + '</div></details>';
+    }).join('') + '</div>';
+    h += '<h3>Indices</h3><div class="clues">';
     Object.keys(SC.clues).forEach(function (id) {
       var c = SC.clues[id];
       if (SC.clueView && s.clues.indexOf(id) >= 0) c = SC.clueView(s, id, c);

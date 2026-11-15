@@ -495,7 +495,7 @@
       fresh: function (key, pool) { return fresh(key, pool); },
       sys: function (x) { log({ t: 'sys', x: x }); },
       event: function (x) { log({ t: 'event', x: x }); },
-      doc: function (x, title) { log({ t: 'doc', x: x, title: title || '' }); },
+      doc: function (x, title) { log({ t: 'doc', x: x, title: title || '' }); var D = s.docs || (s.docs = []); if (!D.some(function (d) { return d.x === x; })) D.push({ x: x, title: title || '' }); },
       title: function (x, sub) { log({ t: 'title', x: x, sub: sub || '' }); },
       things: function () { return listThings(); },
       where: function () { return scene.where ? scene.where(s.min) : ''; },

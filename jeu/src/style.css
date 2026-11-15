@@ -152,6 +152,28 @@ body[data-san="2"] .sanstate, body[data-san="3"] .sanstate { background: var(--r
   background: var(--text); color: var(--ink); padding: 12px 14px 14px; transform: rotate(-.8deg); box-shadow: 6px 6px 0 var(--red);
   clip-path: polygon(0 4%, 4% 0, 9% 3%, 15% 0, 22% 2%, 30% 0, 38% 3%, 47% 0, 55% 2%, 63% 0, 71% 3%, 80% 0, 88% 2%, 96% 0, 100% 3%, 100% 97%, 95% 100%, 88% 98%, 79% 100%, 70% 97%, 61% 100%, 52% 98%, 43% 100%, 34% 97%, 25% 100%, 16% 98%, 8% 100%, 0 97%);
 }
+.e-doc[class*="k-"] { background: none; padding: 0; transform: rotate(-.6deg); clip-path: none; box-shadow: 6px 6px 0 var(--red); max-width: 560px; }
+.e-doc .d-img { aspect-ratio: 2.4 / 1; background: #000 center / cover no-repeat; filter: contrast(1.05); }
+.e-doc .d-paper { background: #e8e1cf; color: #1b1712; padding: 12px 16px 14px; background-image: radial-gradient(rgba(0,0,0,.05) 1px, transparent 1px); background-size: 3px 3px; }
+.e-doc .d-kind { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #8a1018; margin-bottom: 6px; }
+.e-doc .d-head { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; font-size: 18px; line-height: 1.15; text-transform: uppercase; letter-spacing: .02em; border-bottom: 1px solid #1b1712; padding-bottom: 6px; margin-bottom: 8px; }
+.e-doc .d-body { font-family: Georgia, 'Times New Roman', serif; font-size: 15.5px; line-height: 1.5; }
+.e-doc.k-journal .d-body, .e-doc.k-page .d-body { columns: 2 220px; column-gap: 18px; text-align: justify; hyphens: auto; font-size: 14.5px; }
+.e-doc.k-lettre .d-body, .e-doc.k-roussie .d-body { font-style: italic; font-size: 16.5px; line-height: 1.55; }
+.e-doc.k-roussie .d-paper { background-color: #ded3b8; box-shadow: inset 0 0 28px rgba(60,25,5,.55), inset 0 0 6px rgba(20,10,0,.8); }
+.e-doc.k-telegramme .d-paper { background-color: #ece3c4; }
+.e-doc.k-telegramme .d-body { font-family: var(--mono); font-size: 14px; text-transform: uppercase; line-height: 1.7; letter-spacing: .03em; }
+.e-doc.k-telegramme .d-body span { background: #f4efdc; padding: 1px 4px; box-shadow: 0 0 0 1px rgba(0,0,0,.12); }
+.e-doc.k-telegramme .d-body .stop { background: none; box-shadow: none; color: #8a1018; margin: 0 4px; }
+.e-doc.k-telegramme .d-head { font-family: var(--mono); font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: .04em; border-bottom: 1px dashed #6b5d40; }
+.docs { display: grid; gap: 8px; }
+.doc-fold summary { cursor: pointer; list-style: none; padding: 12px 14px; min-height: 44px; box-sizing: border-box; border: 1px solid rgba(232,225,207,.35); font-family: Georgia, 'Times New Roman', serif; font-size: 15px; color: #e8e1cf; display: grid; grid-template-columns: 14px 1fr; column-gap: 8px; row-gap: 3px; align-items: baseline; }
+.doc-fold summary::-webkit-details-marker { display: none; }
+.doc-fold summary::before { content: '▸'; color: var(--red); grid-row: 1 / span 2; }
+.doc-fold summary .dt { grid-column: 2; }
+.doc-fold[open] summary::before { content: '▾'; }
+.doc-fold summary .dk { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #c9474f; grid-column: 2; }
+.doc-fold .e-doc { margin: 10px 4px 16px; }
 .e-doc .h { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a1018; margin-bottom: 4px; }
 .e-doc .b { font-family: var(--body); font-weight: 600; font-size: 15.5px; line-height: 1.45; }
 .e-clue { position: relative; padding: 12px 14px; background: var(--ink); border: 2px solid var(--red); animation: cluein .7s ease both; }

@@ -272,7 +272,7 @@
         if (!api.has('ADRESSE')) api.clue('ADRESSE'); learn(api, 'islington');
       } else if (x.k === 'adTrain') {
         api.say('Une lettre à l’en-tête de l’Association des amateurs de modèles ferroviaires de Camberwell, d’une écriture ronde et enthousiaste.');
-        api.doc('Cher Monsieur, cher Madame, votre annonce m’a fait bondir. Il se trouve que je détiens moi-même une pièce remarquable, qui m’a été confiée, et sur laquelle je serais ravi d’échanger avec un connaisseur. Passez donc me voir à Camberwell, à l’heure qui vous plaira. Votre dévoué, Arthur Butter, président.', 'Une lettre de Camberwell');
+        api.doc('Cher Monsieur, chère Madame, votre annonce m’a fait bondir. Il se trouve que je détiens moi-même une pièce remarquable, qui m’a été confiée, et sur laquelle je serais ravi d’échanger avec un connaisseur. Passez donc me voir à Camberwell, à l’heure qui vous plaira. Votre dévoué, Arthur Butter, président.', 'Une lettre de Camberwell');
         learn(api, 'camberwell');
       }
     });
