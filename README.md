@@ -231,6 +231,10 @@ Plusieurs phrases d’un coup reçoivent plusieurs réponses, dans l’ordre («
 
 En plus de la grande image du haut, le fil de la partie montre le décor quand on arrive quelque part, et le portrait d'un personnage quand il prend la parole pour la première fois (ou quand on change d'interlocuteur). Sur téléphone, clavier ouvert, la grande image sort de l'écran : celles du fil restent sous les yeux. L'image choisie est notée sur l'entrée du journal (`img`, `pt`), pour qu'une partie rechargée retrouve les mêmes. C'est dans `jeu/src/ui.js` (`vueDe`).
 
+## La pluie
+
+La pluie n'est plus un bruit blanc filtré : c'est un enregistrement, `audio/pluie.mp3` (branche `gh-pages`), fait des quatre pluies de « Rain (loopable) » de Ylmir, sur OpenGameArt, sous licence CC0 (aucune obligation, le crédit est une politesse). `jeu/tools/pluie.sh` refait le fichier à partir des quatre MP3 d'origine : niveaux rapprochés, fondus enchaînés, une boucle d'environ deux minutes. Dans le jeu (`jeu/src/audio.js`), la fin de l'enregistrement se fond dans son début, pour une boucle sans couture ; on entre dans la boucle à un endroit pris au hasard ; le volume par lieu est celui d'avant, et le niveau moyen a été réglé sur celui de l'ancien son. Si le fichier manque ou ne se charge pas, l'ancien bruit blanc reste en secours. Le grondement du train et le claquement des rails restent synthétisés.
+
 ## Les sauvegardes
 
 La partie s’enregistre toute seule dans le navigateur après chaque geste (bouton « Continuer » à l’écran titre). Pour garder plusieurs parties ou faire des essais, le menu propose « Enregistrer dans un fichier » (un fichier `.json` nommé d’après le chapitre, l’investigateur et l’heure du jeu) et « Charger un fichier de sauvegarde ». L’écran titre a aussi « Charger une sauvegarde ». Un fichier se recharge sur n’importe quel appareil. Dans la visionneuse de Claude, l’enregistrement passe par sa fenêtre de confirmation.
