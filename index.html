@@ -12181,11 +12181,18 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   function Sound() { this.on = false; this.ctx = null; this.loc = 'restaurant'; this.san = 0; this.musicOn = true; this.decks = {}; this.track = null; }
   // ---- musique : trois morceaux, choisis selon le lieu et la santé mentale, en fondu enchaîné
   // house : « The House That Breathes », de Yoann, pour la maison de santé de Charenton (puis la maison du comte, à Poissy)
-  var TRACKS = { haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3' };
-  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48 };
+  // deep : « The Deep Ones Sing », de Yoann : le chant qu'entend un esprit fragile, et les quais de la Tamise
+  var TRACKS = { haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3', deep: 'audio/the_deep_ones_sing.mp3' };
+  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48, deep: 0.6 };
   var MUSIC = { title: 'train', restaurant: 'train', couloir: 'train', lits: 'train', compartiment: 'dissolve', victoria: 'train',
-    wagon1: 'dissolve', wagon2: 'dissolve', retour: 'dissolve', cave: 'dissolve', charenton: 'house' };
-  Sound.musicFor = function (loc, san) { if (san >= 3 && loc !== 'title') return 'dissolve'; return MUSIC[loc] || 'haze'; };
+    wagon1: 'dissolve', wagon2: 'dissolve', retour: 'dissolve', cave: 'dissolve', charenton: 'house', quais: 'deep' };
+  // un lieu qui a sa musique la garde ; ailleurs, la musique suit la raison : la brume, puis le chant des profondeurs
+  // quand l'investigateur devient fragile, puis la dissolution quand il est au bord du gouffre
+  Sound.musicFor = function (loc, san) {
+    if (loc === 'title') return MUSIC.title;
+    if (san >= 3) return 'dissolve';
+    return MUSIC[loc] || (san >= 2 ? 'deep' : 'haze');
+  };
   Sound.prototype.start = function () {
     if (this.ctx) { this.ctx.resume(); this.on = true; this.master.gain.setTargetAtTime(0.9, this.ctx.currentTime, 0.4); this.musicBus.gain.setTargetAtTime(1, this.ctx.currentTime, 0.4); this.pickMusic(); return; }
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
