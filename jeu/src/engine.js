@@ -12,6 +12,10 @@
     // « les gens dont la vieille dame m'a parlé » : celle qui en a parlé n'est pas celle qu'on cherche
     [/\b(dont|que|qu)\s+((?:[a-z]+\s+){0,3})(m\s+a|m\s+avait|nous\s+a|nous\s+avait|vient\s+de|venait\s+de)\s+(parle|parlee|decrit|decrite|decrits|decrites|mentionne|mentionnee|mentionnes|cite|cites|evoque|evoques|dit|montre|montres|signale|signales)\b/g, ' '],
     [/\bdont\s+(parlait|parlaient|a\s+parle|ont\s+parle)\s+((mme|madame|monsieur|mr|mrs|le|la|l)\s+)?[a-z]+\b/g, ' '],
+    // « je m'approche d'elle » : on y va
+    [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
+    // « je vais le voir », « je vais la trouver » : on va lui parler
+    [/\b(vais|va|allons|allez|aller|vas|retourne|retournons)\s+(le|la|l|les)\s+(voir|trouver|rejoindre|retrouver)\b/g, ' $2 aborder '],
     // prendre congé, faire le point
     [/\b(prendre|prends|prenez|prenons) conge\b/g, ' aurevoir '],
     [/\b(reflechi\w*|faire le point|fais le point)\b/g, ' faitlepoint '],
@@ -205,7 +209,7 @@
     L.add('ECOUTER', 'v', 'ecouter, entendre, espionner, epier, ouie, bruit, bruits, son, sons');
     L.add('PARLER', 'v', 'parler, discuter, interroger, questionner, demander, aborder, saluer, causer, adresser, interpeller, appeler, bonjour, bonsoir, salut, hello, excuser, converser, dire, raconter, repondre, apostropher, hey, he, ho, hep, psst');
     L.add('VISITER', 'v', 'visiter, rendre visite');
-    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons');
+    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons');
     L.add('OUVRIR', 'v', 'ouvrir, ouvre, pousser, tirer, forcer, actionner, entrouvrir, crocheter, defoncer, enfoncer, deverrouiller, tourner, poignee');
     L.add('FRAPPER', 'v', 'frapper, toquer, cogner, tambouriner');
     L.add('ASSEOIR', 'v', 'asseoir, assoir, assieds, assied, installer, assis, attabler, siege');
@@ -647,6 +651,51 @@
       if (a.boost) sc += a.boost;
       return sc;
     }
+    // ----- la mémoire des référents : « je regarde la vieille dame », puis « je lui parle » -----
+    var npcConcept = null;
+    function conceptDuPnj(npcId) {
+      if (!npcConcept) { npcConcept = {}; Object.keys(lex.concepts).forEach(function (k) { var c = lex.concepts[k]; if (c.npc && !npcConcept[c.npc]) npcConcept[c.npc] = k; }); }
+      return npcConcept[npcId];
+    }
+    function genreDe(id) {
+      var c = lex.concepts[id] || {}, H = G.RPG && G.RPG.Humeur, T = H && c.npc && H.T[c.npc];
+      if (T && T.f !== undefined) return T.f ? 'f' : 'm';
+      if (c.npc) return /^(Mme|Mrs|Miss|Madame|La )/.test(((scene.npcs[c.npc] || {}).name) || '') ? 'f' : 'm';
+      var lb = String(c.label || '');
+      if (/^(la |une |sa |cette )/i.test(lb)) return 'f';
+      if (/^(le |un |son |ce |cet )/i.test(lb)) return 'm';
+      if (/^(les |des |ses |ces )/i.test(lb)) return 'p';
+      return '?';
+    }
+    function retenir(id) {
+      var c = id && lex.concepts[id]; if (!c || c.type !== 'n') return;
+      s.refs = (s.refs || []).filter(function (r) { return r.id !== id; });
+      s.refs.unshift({ id: id, g: genreDe(id), t: s.turn });
+      if (s.refs.length > 4) s.refs.length = 4;
+    }
+    // un pronom qui renvoie à quelqu'un ou à quelque chose : la, le, l', les, lui, leur, elle, il
+    function pronomDe(p) {
+      var t = ' ' + p.text + ' ', m;
+      if ((m = t.match(/\b(?:je|j|on|nous|tu|vous|pour|de|d|a|vais|veux|dois|peux|pourrais|voudrais|aller|tente|essaie|essaye|puis)\s+(?:ne\s+)?(la|le|l|les|lui|leur)\s+[a-z]/))) return m[1];
+      if ((m = t.match(/\b(?:avec|vers|pres d|aupres d|de|d|a|sur|pour|chez|contre|derriere|devant|apres|sans)\s+(elle|lui|eux|elles)\b/))) return m[1] === 'elle' ? 'elle' : m[1] === 'elles' || m[1] === 'eux' ? 'les' : 'lui';
+      if ((m = t.match(/\b[a-z]{3,}\s+(la|le|lui|les|leur)\s*$/))) return m[1];
+      if ((m = t.match(/^\s*(elle|il)\s+[a-z]/))) return m[1] === 'elle' ? 'la' : 'le';
+      return null;
+    }
+    function resoudre(p) {
+      if (!s.refs || !s.refs.length) return;
+      if (p.nouns.some(function (n) { return n.type === 'n'; })) return;
+      var pr = pronomDe(p); if (!pr) return;
+      var veut = pr === 'la' || pr === 'elle' ? 'f' : pr === 'le' ? 'm' : pr === 'les' ? 'p' : null;
+      // « lui », « leur », « avec elle » : c'est presque toujours une personne
+      var personne = pr === 'lui' || pr === 'leur' || pr === 'elle' || ['PARLER', 'MENACER', 'FLATTER', 'PERSUADER', 'BARATIN', 'INSULTE', 'EMBRASSER', 'REVEILLER', 'SUIVRE', 'PSY', 'INSISTER', 'FRAPPER', 'DONNER'].some(function (v) { return p.c[v] !== undefined; });
+      var recents = s.refs.filter(function (r) { return s.turn - r.t <= 8; });
+      var ok = function (x) { return (!veut || x.g === veut || x.g === '?') && (!personne || lex.concepts[x.id].npc); };
+      var r = recents.filter(ok)[0] || (personne ? recents.filter(function (x) { return lex.concepts[x.id].npc; })[0] : (veut === 'p' ? null : recents[0]));
+      if (!r || p.c[r.id] !== undefined) return;
+      var item = { id: r.id, score: 0.95, pos: -1, type: 'n' };
+      p.all.push(item); p.nouns.push(item); p.c[r.id] = 0.95; p.pronom = r.id;
+    }
     function rankActions(p) {
       return availableActions().map(function (a) { return { a: a, score: scoreAction(a, p) }; })
         .filter(function (x) { return x.score > 0; })
@@ -657,6 +706,8 @@
       s.tick = a.time !== undefined ? a.time : (scene.tick || 1);
       if (!forced && scene.beforeAction && scene.beforeAction(api, a, p) === true) return;
       s.done[a.id] = (s.done[a.id] || 0) + 1;
+      var visee = p && p.nouns ? p.nouns.filter(function (n) { return n.type === 'n' && (!a.nouns || a.nouns.indexOf(n.id) >= 0); }).sort(function (x, y) { return y.score - x.score; })[0] : null;
+      if (visee) retenir(visee.id); else if (a.talkTo) retenir(conceptDuPnj(a.talkTo)); else if (a.nouns && a.nouns.length === 1) retenir(a.nouns[0]);
       var startSeq = s.seq; // le journal est plafonné : on repère les nouvelles entrées par leur numéro
       inExec = !a.repeatable;
       try { a.run(api, p); } finally { inExec = false; }
@@ -673,12 +724,19 @@
       var obj = a.obj || ((a.label || '').indexOf(' ') > 0 ? a.label.replace(/^\S+\s+/, '').replace(/^(par|à|au|aux|dans|sur|vers|avec|de)\s+/i, '') : '');
       obj = obj.charAt(0).toLowerCase() + obj.slice(1);
       var cap = function (t) { return t.charAt(0).toUpperCase() + t.slice(1); };
-      if (k === 1 && g.againPrefix) {
+      var MJr = mjModule(), deja = MJr && MJr.deja ? MJr.deja(a.label || '', obj) : null;
+      if (k === 1 && deja) {
+        // « Vous avez déjà examiné la table de Ravel. » + l'essentiel de ce qu'on avait vu, en une ou deux phrases
+        var tout = produced.map(function (e) { return e.x; }).join(' '), phr = tout.match(/[^.!?…]+[.!?…]+(\s*»)?/g) || [tout], res = '';
+        for (var pi = 0; pi < phr.length && (res + phr[pi]).length < 170; pi++) res += phr[pi];
+        produced[0].x = deja + ' ' + (res.trim() || phr[0].trim()) + ' ' + fresh('rienNeuf', ['Rien n’a changé.', 'Rien de neuf.', 'Tout est comme tout à l’heure.']);
+        for (var pj = 1; pj < produced.length; pj++) { var ix = s.log.indexOf(produced[pj]); if (ix >= 0) s.log.splice(ix, 1); }
+      } else if (k === 1 && g.againPrefix) {
         produced[0].x = fresh('againPre', g.againPrefix) + produced[0].x;
       } else {
         var pool = !obj && g.againBare ? g.againBare : sanState() >= 2 && g.againMad ? g.againMad : g.again;
         var line = cap(fresh(obj ? 'again' : 'againBare', pool).replace(/\{x\}/g, obj).replace(/\{X\}/g, cap(obj)))
-          .replace(/\bà le /g, 'au ').replace(/\bà les /g, 'aux ').replace(/\bde le /g, 'du ').replace(/\bde les /g, 'des ');
+          .replace(/(^|\s)à le /g, '$1au ').replace(/(^|\s)à les /g, '$1aux ').replace(/(^|\s)de le /g, '$1du ').replace(/(^|\s)de les /g, '$1des ');
         produced[0].x = line;
         for (var i = 1; i < produced.length; i++) { var idx = s.log.indexOf(produced[i]); if (idx >= 0) s.log.splice(idx, 1); }
         if (k >= 3 && g.loop) {
@@ -817,6 +875,7 @@
       s.tick = scene.talkTick || 1;
     }
     function startTalk(npcId, p) {
+      retenir(conceptDuPnj(npcId));
       var npc = scene.npcs[npcId];
       var st = npcState(npcId);
       if (st.closedUntil > s.min) {
@@ -1237,6 +1296,7 @@
       s.turn++;
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
+      if (!s.talk) resoudre(p);
       // l'improvisation passe avant les jets demandés (« je me cache » avec une caisse dans les bras…)
       if (!s.talk && !s.pending && scene.improvise && scene.improvise(api, p)) { finish(); return; }
       var jr = jetRequest(raw);

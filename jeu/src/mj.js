@@ -91,7 +91,17 @@
     var x = (d.refl ? 'vous ' : '') + (d.pron ? low(d.pron) : '') + low(d.verbe) + (d.o ? ' ' + d.o : '');
     return x;
   }
+  // le participe passé des gestes qu'on refait : « Vous avez déjà examiné la table de Ravel. »
+  var PP = { examiner: 'examiné', regarder: 'regardé', observer: 'observé', fouiller: 'fouillé', ecouter: 'écouté', humer: 'humé', gouter: 'goûté', sentir: 'senti', lire: 'lu', relire: 'relu', consulter: 'consulté', ouvrir: 'ouvert', contempler: 'contemplé', inspecter: 'inspecté', visiter: 'visité', chercher: 'cherché', toucher: 'touché' };
   var MJ = {
+    deja: function (label, obj) {
+      var d = decoupe(label); if (!d) return null;
+      var pp = PP[d.n]; if (!pp) return null;
+      var o = d.o || obj || '';
+      if (d.n === 'regarder' && /^autour/.test(o)) return 'Vous avez déjà regardé autour de vous.';
+      if (!o) return 'Vous l’avez déjà fait tout à l’heure.';
+      return 'Vous avez déjà ' + pp + ' ' + o + ' tout à l’heure.';
+    },
     // une action du monde choisie parmi les idées ou les suggestions
     action: function (label, pick) {
       var dest = String(label || '').match(/^Aller\s*:\s*(.+)$/);

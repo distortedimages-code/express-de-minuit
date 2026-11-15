@@ -153,6 +153,10 @@ python generer.py --simulation --lot tout
 
 Le jeu tolère les fautes de frappe : « tabel » devient « table ». Mais un vrai mot français ne doit jamais être pris pour un autre (« je me rends » n’est pas « je prends », « hommes » n’est pas « comment »). La liste `jeu/src/mots.js` contient environ 24 000 vrais mots français qui ressemblent à un mot du jeu sans en être : pour eux, aucun rapprochement. Après avoir ajouté beaucoup de vocabulaire au jeu, on la régénère avec les scripts de `jeu/tools/garde_mots/` (`liste_fr.py`, puis `audit.js`).
 
+## La mémoire du joueur
+
+Le jeu se souvient des quatre dernières personnes ou choses dont il a été question. « Je regarde la vieille dame », puis « je lui parle » : c’est à elle qu’on parle. « Lui », « leur », « avec elle » et les verbes de conversation désignent une personne ; « la », « le », « l’ » peuvent désigner un objet (« j’examine la table », puis « je la fouille »). Une action déjà faite n’est pas redite en entier : le Gardien rappelle qu’on l’a déjà faite et résume ce qu’on avait vu. Vérification : `node jeu/tools/test_pronoms.js`.
+
 ## Les idées et les sujets
 
 Les idées (hors conversation) et les sujets (en conversation) sont repliés par défaut, et se replient après chaque geste. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.
