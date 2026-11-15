@@ -44,6 +44,24 @@ Mme Irène Vasseur — wagon-restaurant, portrait 23
 Paolo, le conducteur — voitures-lits, portrait 24
   32-year-old Italian sleeping-car attendant, uniform cap, thick moustache, heavy eyelids, dark uniform with brass buttons
 
+PARIS (chapitre 2) — portraits 27 à 34 ; les décors de Paris s'y réfèrent (« references » dans plan.json)
+M. Octave Blain, gérant de l'hôtel du Cygne — portrait 27
+  small round 58-year-old French hotel manager, bald crown ringed with grey hair, small waxed grey moustache, round shiny cheeks, tapestry-patterned waistcoat with a watch chain, sleeve garters
+M. Gaudry, secrétariat de la Bibliothèque nationale — portrait 28
+  thin grey 60-year-old French library clerk, pince-nez low on a long nose, thin lips, sparse grey hair combed flat, stiff collar, black glazed-cotton oversleeves
+Rémi Vangeim, étudiant et traducteur — Bibliothèque nationale, portrait 29
+  tall thin nervous 24-year-old French student, tousled wavy red hair, round gold-rimmed spectacles, freckles, long neck, threadbare dark jacket shiny at the elbows, knitted scarf
+Mlle Marguerite Brévin — bibliothèque de l'Arsenal, portrait 30 et décor 06
+  thin 45-year-old French librarian, grey work smock over a dark dress, tight bun with a pencil stuck through it, sharp kind eyes, ink-stained fingers
+Mme Rogniat, secrétaire de la direction — Charenton, portrait 31 et décor 08
+  massive 55-year-old French secretary all in black, high-necked dress with a small cameo brooch, iron-grey hair pulled back hard, heavy jaw, small watchful eyes, large hands
+Le docteur François Leroux, directeur par intérim — Charenton, portrait 32
+  narrow immaculate 46-year-old French physician, pince-nez, thin dark moustache, hair parted as if with a ruler, wing collar, black frock coat buttoned high
+Paul Mandrin, infirmier — café de Charenton, portrait 33 et décor 10
+  chubby 31-year-old French male nurse, tired frightened eyes, unshaven round face, three fresh parallel scratches on his left cheek, flat cap, worn overcoat over a white hospital tunic
+Le guetteur (le comte Fenalik) — rue de Richelieu, portrait 34 et décor 04 ; reviendra à Poissy et dans le train
+  very tall emaciated ageless man, hairless skull, parchment skin stretched over the bones, sunken eyes lost in shadow, arms slightly too long, rags of an eighteenth-century aristocrat's coat
+
 LES PERSONNAGES JOUEURS — portraits pj_*
 Lucien Arnaud, the investigator of the prologue — portraits/pj_arnaud
   34-year-old Parisian newspaper reporter, lean, clean-shaven, sharp intelligent dark eyes, short dark hair slightly unruly, a loosened tie, a crumpled trench coat over a dark suit, a pencil behind his ear

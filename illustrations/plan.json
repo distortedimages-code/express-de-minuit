@@ -392,6 +392,109 @@
       "image": "portraits/pj_ashby",
       "prompt": "prompts/portraits/pj_ashby.txt",
       "references": []
+    },
+    {
+      "image": "portraits/27_blain",
+      "prompt": "prompts/portraits/27_blain.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/28_gaudry",
+      "prompt": "prompts/portraits/28_gaudry.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/29_remi",
+      "prompt": "prompts/portraits/29_remi.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/30_brevin",
+      "prompt": "prompts/portraits/30_brevin.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/31_rogniat",
+      "prompt": "prompts/portraits/31_rogniat.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/32_leroux",
+      "prompt": "prompts/portraits/32_leroux.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/33_mandrin",
+      "prompt": "prompts/portraits/33_mandrin.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/34_guetteur",
+      "prompt": "prompts/portraits/34_guetteur.txt",
+      "references": []
+    },
+    {
+      "image": "paris/01_gare-du-nord",
+      "prompt": "prompts/paris/01_gare-du-nord.txt",
+      "references": []
+    },
+    {
+      "image": "paris/02_hotel-du-cygne_chambre_jour",
+      "prompt": "prompts/paris/02_hotel-du-cygne_chambre_jour.txt",
+      "references": []
+    },
+    {
+      "image": "paris/03_hotel-du-cygne_chambre_nuit",
+      "prompt": "prompts/paris/03_hotel-du-cygne_chambre_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "paris/04_hotel-du-cygne_guetteur",
+      "prompt": "prompts/paris/04_hotel-du-cygne_guetteur.txt",
+      "references": [
+        "portraits/34_guetteur"
+      ]
+    },
+    {
+      "image": "paris/05_bibliotheque-nationale_salle-de-travail",
+      "prompt": "prompts/paris/05_bibliotheque-nationale_salle-de-travail.txt",
+      "references": []
+    },
+    {
+      "image": "paris/06_bibliotheque-de-l-arsenal",
+      "prompt": "prompts/paris/06_bibliotheque-de-l-arsenal.txt",
+      "references": [
+        "portraits/30_brevin"
+      ]
+    },
+    {
+      "image": "paris/07_charenton_arcades",
+      "prompt": "prompts/paris/07_charenton_arcades.txt",
+      "references": []
+    },
+    {
+      "image": "paris/08_charenton_secretariat",
+      "prompt": "prompts/paris/08_charenton_secretariat.txt",
+      "references": [
+        "portraits/31_rogniat"
+      ]
+    },
+    {
+      "image": "paris/09_charenton_registres",
+      "prompt": "prompts/paris/09_charenton_registres.txt",
+      "references": []
+    },
+    {
+      "image": "paris/10_cafe-de-charenton",
+      "prompt": "prompts/paris/10_cafe-de-charenton.txt",
+      "references": [
+        "portraits/33_mandrin"
+      ]
+    },
+    {
+      "image": "paris/11_saint-lazare_train-de-banlieue",
+      "prompt": "prompts/paris/11_saint-lazare_train-de-banlieue.txt",
+      "references": []
     }
   ],
   "version": 2
