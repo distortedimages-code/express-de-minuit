@@ -148,3 +148,11 @@ cd illustrations
 pip install -r requirements.txt
 python generer.py --simulation --lot tout
 ```
+
+## Le testeur IA
+
+Le workflow **Testeur IA** fait jouer ChatGPT à des parties entières du jeu, qui tourne sans écran sur les serveurs de GitHub (sources dans `jeu/src`). À chaque tour, le modèle lit ce que le jeu vient d'écrire et tape l'action suivante, selon un profil de joueur : méthodique, bavard, absurde, menteur, pressé, ou qui fait des fautes de frappe. À la fin de chaque partie, il relit la transcription et relève ce qui sonne faux. Un filtre automatique gratuit s'ajoute à sa relecture.
+
+- Par défaut, c'est une **simulation gratuite** : des actions tirées au hasard, aucun appel à OpenAI.
+- En réel, le **plafond** arrête tout dès que la dépense estimée l'atteint. Avec `gpt-5.6-luna`, une partie de 120 tours coûte quelques centimes.
+- Les transcriptions et le rapport sont publiés sur la branche `tests-ia`, où Claude les récupère pour corriger le jeu. Ils sont aussi joints au lancement (section « Artifacts »).

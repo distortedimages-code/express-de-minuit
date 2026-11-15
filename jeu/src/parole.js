@@ -1,0 +1,682 @@
+/* La parole : un moteur de conversation sans IA, qui en donne l'illusion.
+   Il comprend le type de question, les sujets nommés, les mots qu'il ne connaît pas ;
+   il se souvient de ce qu'on lui a dit, renvoie la balle, digresse, s'agace,
+   et compose ses réponses à partir de la fiche du personnage et de la culture de 1923. */
+(function (G) {
+  'use strict';
+  function N(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, ' ').replace(/-/g, ' ').replace(/[^a-z0-9?! ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  var STOP = {}; ('a au aux avec ce ces cet cette dans de des du elle en et eux il ils je la le les leur lui ma me mes moi mon ne ni nos notre nous on ou par pas pour qu que qui sa se ses si son sur ta te tes toi ton tu un une vos votre vous y est sont etes suis es ai as avez avons ont etait etre avoir fait faire dit dire bien tres plus moins tout tous toute toutes alors donc mais car comme quoi quel quelle quels quelles dont ici la-bas cela ca ceci celui celle ceux sont sera serait peut peux pouvez veux voulez sais savez connais connaissez pense pensez crois croyez trouve trouvez aime aimez monsieur madame mademoiselle docteur oui non merci bonjour bonsoir hein bon ben euh voila vraiment jamais toujours encore deja rien quelque chose chose quand comment pourquoi combien depuis parlez parler dites racontez').split(' ').forEach(function (w) { STOP[w] = 1; });
+  var COMMON = {}; ('monsieur madame temps chose choses jour jours annee annees homme hommes femme femmes gens monde fois heure heures nuit soir matin grand grande grands petit petite beaucoup assez aussi autre autres meme faut avait avaient etaient sont avez etes vous nous leur leurs dans pour avec sans sous chez entre depuis apres avant encore juste vrai vraie tout tous bien tres plus moins quelque quelques chaque votre notre cette celle celui ceux alors donc mais comme parce quand comment pourquoi combien quel quelle quels quelles savoir connais connaissez pense pensez croyez aimez aime faire dire voir venir aller prendre parler question questions reponse vraiment peut etre deja toujours jamais rien personne quelqu quelquun chose ceci cela voila voici pardon merci bonjour bonsoir salut avoir etre fait faites dites disent savez sais crois pensez trouvez trouve aimeriez voulez veux pouvez peux connu connue mieux moins trop tant').split(' ').forEach(function (w) { COMMON[w] = 1; });
+  function pick(api, key, arr) { return api.fresh(key, arr); }
+  function isLow(w) { return LOW.test(w) || /^(J|L|C|D|Qu|S|N|M)[’']/.test(w); }
+  function lowFirst(s) { var w = (s.match(/^([A-Za-zÀ-ÿ’']+)/) || [])[1]; return w && isLow(w) ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function de(label) {
+    var l = String(label || '');
+    if (/^le /.test(l)) return 'du ' + l.slice(3);
+    if (/^les /.test(l)) return 'des ' + l.slice(4);
+    if (/^(la |l’|l')/.test(l)) return 'de ' + l;
+    if (/^[aeiouhéèêàâîôûAEIOUHÉ]/.test(l)) return 'd’' + l;
+    return 'de ' + l;
+  }
+
+  // ---------------------------------------------------------------- l'analyse d'une phrase
+  var RX = {
+    qui: /\bqui\b/, ou: /\b(d ou|par ou|ou (est|sont|etes|es|habitez|habite|vivez|vit|allez|va|se trouve|trouver|travaillez|etiez|etait|aller|irait))\b|^ou\b|\bou ca\b/,
+    quand: /\b(quand|depuis quand|a quelle heure|quel jour|quelle heure|quelle date|combien de temps)\b/, pourquoi: /\b(pourquoi|pour quelle raison|comment se fait il)\b/,
+    comment: /\bcomment\b/, combien: /\bcombien\b/, quoi: /\b(quoi|qu est ce|que (faites|savez|voulez|pensez|cherchez|voyez|dites|cachez)|quel|quelle|quels|quelles)\b/,
+    avis: /\b(pensez|penses|avis|opinion|croyez|crois|trouvez|aimez|aimes|detestez|preferez|que dites vous de)\b/,
+    demande: /\b(pouvez vous|pourriez vous|voulez vous|voudriez vous|aidez|aidez moi|donnez moi|montrez moi|dites moi|racontez moi|expliquez|accompagnez|emmenez)\b/,
+    insulte: /\b(idiot|imbecile|con|conne|connard|crétin|cretin|abruti|menteur|menteuse|salaud|salope|ordure|minable|vieux fou|vieille folle|incapable|nul|nulle|stupide|bete|ta gueule|ferme la|degage|crapule|vermine|pourriture|batard)\b/,
+    compliment: /\b(merci|bravo|charmant|charmante|gentil|gentille|aimable|belle|beau|elegant|elegante|intelligent|intelligente|admirable|remarquable|formidable|genial|courageux|courageuse|adorable)\b/,
+    ana: /\b(portable|smartphone|internet|ordinateur|ordi|television|tele|teleportation|avion a reaction|fusee|nucleaire|atomique|bombe atomique|covid|facebook|google|wifi|jeu video|jeux video|playstation|euros?|selfie|hitler|nazis?|seconde guerre|deuxieme guerre|frigo|micro ondes|antibiotique|penicilline|television|ovni|extraterrestre|tiktok|instagram|youtube|netflix|mail|email|e mail|sms|robotique)\b/,
+    meta: /\b(ia|intelligence artificielle|chatgpt|chat gpt|claude|robot|bot|programme informatique|un programme|une machine|vous etes reel|tu es reel|etes vous reel|vous existez|tu existes|joueur|jeu video|un jeu|personnage)\b/,
+    oui: /^(oui|ouais|bien sur|evidemment|certes|absolument|exactement|tout a fait|en effet|affirmatif|volontiers|ok|d accord|peut etre|sans doute|probablement)\b/,
+    non: /^(non|jamais|pas du tout|nullement|aucunement|certainement pas|pas vraiment|bof|nan)\b/,
+    jesuis: /\bje suis (un |une |le |la |l )?([a-z]{3,})\b/, jemappelle: /\bje m appelle ([a-z]{2,})\b|\bmon nom est ([a-z]{2,})\b/,
+    quisuisje: /\bqui (suis je|je suis)\b|\bmon nom\b|\bvous savez qui je suis\b/,
+    salut: /^(bonjour|bonsoir|salut|hello|coucou|bien le bonjour|good (morning|evening)|rebonjour|re bonjour)\b/
+  };
+  // les identités qu'on peut revendiquer, et ce qu'elles valent auprès des gens
+  var CLAIMX = [
+    [/\b(je suis|je travaille|je viens) (de|pour|a|au) (la police|scotland yard|yard|la surete|la brigade)\b|\bje suis du yard\b|\bje suis de la maison\b/, 'policier'],
+    [/\b(je travaille|j ecris) (pour|dans) (le|un|une|la) (journal|gazette|times|courier|daily)\b|\bje suis de la presse\b/, 'journaliste'],
+    [/\bje suis (le|la) (neveu|niece|cousin|cousine|fils|fille|frere|soeur) (du professeur|de smith|du defunt|de monsieur)\b/, 'neveu']
+  ];
+  var ROLES = [['police', /^(polic|inspect|agent|detecti|flic|constab|sergen|commiss|yard)/], ['presse', /^(journal|report|redact|pigist|chroniq)/], ['medecin', /^(medec|docteu|chirur|infirm|pratic)/],
+    ['avocat', /^(avoca|notai|juge|magist)/], ['clerge', /^(pretr|pasteu|abbe|vicai|revere|moine|religi)/], ['famille', /^(neveu|niece|cousi|fils|fille|frere|soeur|herit)/],
+    ['assureur', /^(assur|exper)/], ['antiquaire', /^(antiq|collec|marcha)/], ['savant', /^(profe|savan|cherch|univer|archeo|histor|egypt)/],
+    ['militaire', /^(offic|capit|colon|major|soldat|milit|lieut)/], ['diplomate', /^(diplom|consul|ambass|attach)/]];
+  function roleOf(w) { w = N(w || ''); for (var i = 0; i < ROLES.length; i++) if (ROLES[i][1].test(w)) return ROLES[i][0]; return null; }
+  // les questions personnelles : à qui parle-t-on ?
+  var PERSO = [
+    ['nom', /\b(comment vous appelez|votre nom|qui etes vous|vous etes qui|vous vous appelez|comment tu t appelles|tu t appelles|ton nom|qui es tu|t es qui|tu es qui)\b/],
+    ['age', /\b(quel age|votre age|ton age|vous avez quel age|t as quel age|vieux|vieille|jeune|ne en|nee en)\b/],
+    ['origine', /\b(vous etes de [a-z]+|vous venez de [a-z]+|vous etes ne a|vous etes nee a|vous etes anglaise|vous etes francaise|d ou venez|d ou viens|tu viens d ou|t es d ou|tu es d ou|d ou etes|ou etes vous ne|vous etes d ou|ton pays|ton accent|votre pays|vous etes anglais|vous etes francais|vous etes italien|vous etes turc|votre accent|ou avez vous grandi)\b/],
+    ['domicile', /\b(ou habitez|ou vivez|ou logez|votre maison|chez vous|ou dormez|ou habites|tu habites|ou vis tu|tu vis ou|ta maison|chez toi)\b/],
+    ['famille', /\b(marie|mariee|epouse|votre femme|votre mari|enfants?|famille|fiance|fiancee|veuf|veuve|celibataire|parents|freres?|soeurs?|amoureux|amoureuse)\b/],
+    ['metier', /\b(votre metier|votre travail|votre profession|ton metier|ton travail|que fais tu|tu fais quoi|tu travailles|que faites vous dans la vie|vous faites quoi|vous travaillez|depuis combien de temps vous|votre patron|votre poste)\b/],
+    ['loisirs', /\b(loisirs?|passe temps|aimez faire|temps libre|dimanche|week end|hobby|passion)\b/],
+    ['peur', /\b(peur|effraye|effrayee|crainte|craignez|angoisse|terrifie|terrifiee)\b/],
+    ['croit', /\b(croyez aux|croyez vous aux|croyez en|croyant|musulman|musulmane|chretien|chretienne|catholique|protestant|protestante|juif|juive|anglican|anglicane|methodiste|athee|pratiquant|pratiquante|fantomes?|revenants?|esprits|surnaturel|au dela|dieu|religion|eglise|priez|croyant|croyante|diable|enfer|paradis)\b/],
+    ['humeur', /\b(comment allez|ca va|vous allez bien|comment vas tu|tu vas bien|tu te sens|comment vous sentez|comment ca va|vous etes triste|vous etes fatigue|heureux|heureuse|malheureux)\b/],
+    ['argent', /\b(combien gagnez|riche|salaire|paye|fortune|argent)\b/],
+    ['guerre', /\b(la guerre|front|tranchees|soldat|somme|verdun|ypres|mobilise|blesse a la guerre)\b/],
+    ['boire', /\b(boire|un verre|whisky|biere|gin|vin|alcool|cognac|the|cafe)\b/],
+    ['secret', /\b(cachez|secret|mentez|mentir|vous me mentez|la verite|honnete)\b/],
+    ['joueur', /\b(que pensez vous de moi|vous m aimez|vous me trouvez|je vous plais|vous me croyez|vous avez confiance)\b/],
+    ['envie', /\b(que voulez vous|vous voulez quoi|que veux tu|tu veux quoi|votre reve|vous revez|souhaitez|desirez)\b/],
+    ['sante', /\b(malade|sante|toussez|blessure|vous saignez|medecin)\b/]
+  ];
+  function analyse(api, npc, p, mem, f, scene) {
+    f = f || {}; scene = scene || {};
+    var raw = p.raw || '', t = ' ' + N(raw) + ' ', tt = t.trim();
+    var a = { raw: raw, t: t, words: tt.split(' ').length, q: /\?\s*$/.test(raw) || /^(est ce|qu |qui |quoi|ou |quand|pourquoi|comment|combien|quel|quelle|avez vous|etes vous|connaissez|savez|croyez|pensez|aimez|vous |tu )/.test(tt) };
+    var toks = (G.RPG && G.RPG.normalize ? G.RPG.normalize(raw) : N(raw)).split(' ');
+    // un nom reconnu à coup sûr : exact, ou approché sur un mot assez long pour que ce ne soit pas un hasard
+    var soi = f.soi || [String(npc.id).toUpperCase()];
+    var known = function (id) { return (f.sait && f.sait[id]) || (f.avis && f.avis[id]) || (scene.rumeurs && scene.rumeurs[id]); };
+    var sure = p.nouns.filter(function (n) { var w = toks[n.pos] || ''; return (n.type === 'n' || known(n.id)) && (n.score >= 0.95 || (n.score >= 0.8 && w.length >= 5)); });
+    a.soi = sure.some(function (n) { return soi.indexOf(n.id) >= 0; });
+    a.ents = sure.filter(function (n) { return soi.indexOf(n.id) < 0; }).map(function (n) { return n.id; });
+    var unkN = (p.unknown || []).map(N);
+    a.content = tt.split(' ').filter(function (w) { return (w.length >= 5 || (w.length === 4 && unkN.indexOf(w) >= 0)) && !STOP[w] && !COMMON[w] && !/^(fais|fait|faites|vais|allez|suis|sommes|peux|peut|dois|doit|devez|veux|vois|voyez|sais|savez|crois|prends|prenez|mets|donne|donnez|cherche|cherchez|regarde|regardez|parle|parlez|demande|demandez|tente|essaie|essaye|lance|lancer|utilise|utiliser)$/.test(w) && !/^(jet|jets|test|competence)$/.test(w); });
+    var vous = /\b(vous|votre|vos|toi|tu|ton|ta|tes|vous meme)\b/.test(t), je = /\b(je|j|moi|mon|ma|mes|m)\b/.test(t);
+    a.vous = vous;
+    a.tu = !/\bvous\b/.test(t) && /\b(tu|toi|ton|ta|tes|t es|t as|te|t appelles|t en)\b/.test(t);
+    if (a.tu) vous = true;
+    a.perso = null;
+    if (vous || /^(quel age|comment vous|d ou)/.test(tt)) PERSO.some(function (pp) { if (pp[1].test(t)) { a.perso = pp[0]; return true; } return false; });
+    // pronoms : « et lui ? », « elle était comment ? »
+    var cultHit = CULT.some(function (c) { return c.re.test(t); });
+    var tp = t.replace(/\b(il fait|fait il|il y a|y a t il|il faut|faut il|il est (\d+|tard|tot|l heure|temps)|quelle heure est il|il pleut|pleut il|il neige|s il vous plait|s il te plait|il parait|parait il|il me semble|il semble|il se peut|il reste|reste t il|il vaut mieux)\b/g, ' ');
+    if (!a.ents.length && !a.perso && !cultHit && mem.last && (/\b(il|elle|lui|ils|elles|eux)\b/.test(tp) || /\b(vous|tu|je|j|on|nous) (le|la|les|l) /.test(tp) || /^et (lui|elle|eux|elles)\b/.test(tt))) { a.ents = [mem.last]; a.pron = true; }
+    // mots inconnus, à faire répéter
+    var orig = raw.split(/[\s’'?!.,;:«»"()]+/).filter(Boolean);
+    a.unk = (p.unknown || []).filter(function (w) { return w.length >= 4 && !STOP[w] && !/^\d+$/.test(w); }).map(function (w) { var o = orig.filter(function (x) { return N(x) === w; })[0]; return o || w; });
+    var types = ['pourquoi', 'quand', 'combien', 'comment', 'ou', 'qui', 'avis', 'quoi', 'demande'];
+    a.type = null; for (var i = 0; i < types.length; i++) if (RX[types[i]].test(t)) { a.type = types[i]; break; }
+    if (!a.type && a.q) a.type = 'ouinon';
+    if (!a.type) a.type = 'affirmation';
+    a.insulte = RX.insulte.test(t); a.compliment = RX.compliment.test(t) && !a.insulte; a.ana = (t.match(RX.ana) || [])[1] || null; a.meta = RX.meta.test(t) && (vous || a.q);
+    a.oui = RX.oui.test(tt); a.non = RX.non.test(tt);
+    var cx = null; CLAIMX.some(function (c) { if (c[0].test(t)) { cx = c[1]; return true; } return false; });
+    var m = t.match(RX.jesuis); a.claim = cx || (m && !/^(desole|navre|perdu|fatigue|fatiguee|sur|sure|pret|prete|venu|venue|ici|la|en|de|pas|tres|bien|malade|curieux|curieuse|seul|seule|ami|amie|presse|pressee|inquiet|inquiete|content|contente|au|pour|avec|du|des|une|un|le|desolee|navree|occupe|occupee|perdue|ravi|ravie|enchante|enchantee)$/.test(m[2]) ? m[2] : null);
+    m = t.match(RX.jemappelle); a.nom = m ? cap(m[1] || m[2]) : null;
+    a.quisuisje = RX.quisuisje.test(t);
+    a.suite = a.words <= 5 && /^(et )?(pourquoi|comment ca|comment cela|c est a dire|racontez|racontez moi|expliquez|expliquez vous|et alors|et puis|et ensuite|ensuite|vraiment|ah bon|precisez|dites m en plus|dites moi en plus|en quoi|continuez|c est tout|quoi d autre|et apres)\b/.test(tt) && !a.ents.length;
+    a.salut = RX.salut.test(tt) && a.words - (a.soi ? 1 : 0) <= 4 && !a.perso && !a.ents.length;
+    return a;
+  }
+
+  // ---------------------------------------------------------------- les voix
+  // chaque registre a sa manière de ne pas savoir, de s'étonner, de refuser
+  var V = {
+    formel: {
+      ignore: ['« {X} ? Je crains de ne rien savoir à ce sujet, {m}. »', '« {X}… Non. Le nom ne me dit rien, je suis navré. »', '« Je n’ai pas l’honneur de connaître {x}, {m}. »'],
+      mot: ['« “{W}” ? Je ne vois pas bien où vous voulez en venir, {m}. »', '« “{W}”… Je ne suis pas certain de saisir le sens de votre question. »', '« Pourquoi me parlez-vous de “{W}”, {m} ? »'],
+      pourquoi: ['« Pourquoi ? Il ne m’appartient pas d’en juger, {m}. »', '« Les raisons des choses, {m}, sont rarement à ma portée. »'],
+      comment: ['« Comment ? Je ne saurais vous le dire avec précision, {m}. »', '« De la manière habituelle, j’imagine. »'],
+      quand: ['« Je ne saurais vous donner de date, {m}. »', '« Il y a quelque temps. Ma mémoire n’est pas un registre. »'],
+      ou: ['« Je l’ignore, {m}. Peut-être pourriez-vous vous adresser ailleurs. »', '« Je ne suis pas en mesure de vous l’indiquer. »'],
+      combien: ['« Je ne tiens pas ce genre de compte, {m}. »', '« Un certain nombre. Je ne saurais être plus précis. »'],
+      quoi: ['« Je ne vois pas ce que je pourrais vous en dire, {m}. »', '« Voilà une question à laquelle je n’ai pas de réponse convenable. »'],
+      qui: ['« Je ne saurais vous dire qui, {m}. »', '« Personne que je connaisse. »'],
+      ouinon: ['« Je ne crois pas, {m}. »', '« Il est possible que oui. Il est possible que non. »', '« Certainement, {m}. Enfin… je le suppose. »'],
+      avis: ['« Mon opinion importe peu, {m}. »', '« Je n’ai pas d’avis tranché sur la question. »'],
+      demande: ['« Je ferai ce que je pourrai, {m}, dans les limites de ma fonction. »', '« Ce n’est guère de mon ressort, je le crains. »'],
+      affirmation: ['« Vraiment ? »', '« Je prends note, {m}. »', '« Si vous le dites. »'],
+      insulte: ['« Je vous demanderai de surveiller votre langage, {m}. »', 'Un silence glacé. « Je n’ai rien entendu. »'],
+      compliment: ['« Vous êtes trop aimable, {m}. »', '« C’est très obligeant de votre part. »'],
+      ana: ['« Un… “{A}” ? Je crains de ne pas connaître cette invention, {m}. »', '« “{A}” ? Est-ce américain ? »'],
+      meta: ['« Une machine, moi ? » Il a un sourire pincé. « On me l’a déjà dit, mais jamais aussi franchement. »', '« Vous avez vu cette pièce tchèque, avec des hommes artificiels ? Je vous assure que je suis fait de chair, {m}. »'],
+      deja: ['« Je vous l’ai dit tout à l’heure, {m} : ', '« Comme je vous le disais : ']
+    },
+    sec: {
+      ignore: ['« {X} ? Connais pas. »', '« Jamais entendu parler. »', '« {X}. Non. Suivant. »'],
+      mot: ['« “{W}” ? Et alors ? »', '« “{W}”. Je ne vois pas le rapport. »', '« Je ne comprends pas la question. Reformulez. »'],
+      pourquoi: ['« Pourquoi. Toujours pourquoi. Je n’en sais rien. »', '« Si je le savais, l’affaire serait close. »'],
+      comment: ['« Mal, en général. »', '« Je n’ai pas le détail. »'],
+      quand: ['« Pas de date. »', '« Récemment. Ne me demandez pas plus. »'],
+      ou: ['« Aucune idée. »', '« Pas ici, en tout cas. »'],
+      combien: ['« Trop. »', '« Je n’ai pas compté. »'],
+      quoi: ['« Rien que je puisse vous dire. »', '« Question suivante. »'],
+      qui: ['« Personne. »', '« Si je le savais. »'],
+      ouinon: ['« Non. »', '« Oui. »', '« Peut-être. Je n’ai pas que ça à faire. »'],
+      avis: ['« Je n’ai pas d’avis. J’ai des faits, ou je n’ai rien. »', '« Mon avis ne vous servira à rien. »'],
+      demande: ['« Non. »', '« Ce n’est pas mon travail. »'],
+      affirmation: ['« Hm. »', '« Possible. »', '« Si vous le dites. »'],
+      insulte: ['« Encore un mot comme ça et vous dormez au poste. »', 'Un regard qui vous jauge, puis vous classe.'],
+      compliment: ['« Ça ne vous avancera à rien. »', '« Gardez vos politesses. »'],
+      ana: ['« “{A}”. Encore un mot américain ? »', '« Je ne sais pas ce qu’est un “{A}”, et je n’ai pas envie de le savoir. »'],
+      meta: ['« Une machine ? Si seulement. Je dormirais moins mal. »', '« Je suis aussi réel que le rapport que je dois écrire ce soir. »'],
+      deja: ['« Je vous l’ai déjà dit : ', '« Deuxième fois : ']
+    },
+    populaire: {
+      ignore: ['« {X} ? Connais pas, {m}. Faudrait demander à quelqu’un de plus instruit. »', '« Ça me dit rien, {x}. »', '« {X} ? Jamais vu, jamais entendu. »'],
+      mot: ['« “{W}” ? Vous parlez comme dans les livres, {m}. »', '« “{W}” ? Pourquoi vous me demandez ça ? »', '« J’ai pas bien compris, {m}. “{W}”, vous dites ? »'],
+      pourquoi: ['« Pourquoi ? Ah, ça… Les gens font des choses, voilà tout. »', '« Allez savoir. C’est pas à moi qu’on explique les choses. »'],
+      comment: ['« Comme d’habitude, j’imagine. »', '« Comment ? Ben… Comme on peut. »'],
+      quand: ['« Y a un moment, déjà. »', '« Je saurais pas dire le jour. Avec ce brouillard, tous les jours se ressemblent. »'],
+      ou: ['« Par là-bas, quelque part. »', '« J’en sais trop rien, {m}. »'],
+      combien: ['« Oh, un paquet. »', '« Combien ? Plus que ma paye, sûrement. »'],
+      quoi: ['« Ça, j’en sais rien. »', '« Rien de spécial. »'],
+      qui: ['« Personne que je connaisse. »', '« Un type. Comme il en passe cent par jour. »'],
+      ouinon: ['« Ben… non. »', '« Ça oui ! »', '« Faut voir. »'],
+      avis: ['« Moi, j’ai pas d’avis, {m}. On me demande jamais. »', '« Ce que j’en pense ? Que ça me regarde pas. »'],
+      demande: ['« J’peux pas, {m}. Pas le droit. »', '« Faudrait voir. »'],
+      affirmation: ['« Ah bon ? »', '« Ben ça alors. »', '« Si vous le dites, {m}. »'],
+      insulte: ['« Hé ! On se calme, {m}. »', '« Vous pouvez parler autrement, quand même. »'],
+      compliment: ['« Oh, ben, merci, {m}. » On rougit un peu.', '« Faut pas vous moquer. »'],
+      ana: ['« Un quoi ? Un “{A}” ? Jamais vu ça, {m}. »', '« “{A}” ? C’est une marque de savon ? »'],
+      meta: ['« Une machine ? Moi ? » Un rire gras. « Si j’étais une machine, je me fatiguerais pas tant. »', '« Je suis aussi vrai que mes cors aux pieds, {m}. »'],
+      deja: ['« Je vous l’ai déjà dit, {m} : ', '« Comme je disais : ']
+    },
+    savant: {
+      ignore: ['« {X} ? Le nom ne m’évoque rien, ce qui en soi est intéressant. »', '« Je n’ai rien lu sur {x}, je le confesse. »'],
+      mot: ['« “{W}” ? Voilà une question singulière. À quel propos ? »', '« “{W}”… Précisez votre pensée, je vous prie. »'],
+      pourquoi: ['« Pourquoi ? La question est légitime. La réponse, hélas, est rarement à la hauteur de la question. »', '« Il y a toujours une raison. Elle n’est pas toujours de ce monde. »'],
+      comment: ['« Par des voies que nous ne comprenons qu’imparfaitement. »', '« Le comment est toujours plus simple que le pourquoi. »'],
+      quand: ['« La chronologie est incertaine. »', '« Les dates mentent moins que les hommes, mais je n’ai pas celle-là. »'],
+      ou: ['« Il faudrait consulter les sources. »', '« Je l’ignore. Le British Museum, peut-être ? »'],
+      combien: ['« Je n’ai pas de chiffre fiable. »', '« Davantage qu’on ne le croit. C’est toujours davantage. »'],
+      quoi: ['« Question vaste. Précisez, je vous prie. »', '« Voilà qui mériterait une conférence entière. »'],
+      qui: ['« Je ne saurais le dire. »', '« Quelqu’un qui savait, sans doute. »'],
+      ouinon: ['« Probablement. »', '« Je ne le pense pas. »', '« Ni oui ni non, malheureusement. »'],
+      avis: ['« Mon avis ? Que nous en savons trop peu. »', '« J’ai un avis, mais il n’est pas encore publiable. »'],
+      demande: ['« Je ferai de mon mieux. »', '« Hélas, je ne le peux pas. »'],
+      affirmation: ['« Fascinant. »', '« Vous avez des preuves ? »', '« Intéressant. Très intéressant. »'],
+      insulte: ['« L’invective n’est pas un argument. »', '« Je vous croyais plus raisonnable. »'],
+      compliment: ['« Vous me flattez. »', '« C’est aimable. Inexact, mais aimable. »'],
+      ana: ['« “{A}” ? Je ne connais pas ce mot. Un néologisme ? »', '« Un “{A}” ? Est-ce une théorie nouvelle ? »'],
+      meta: ['« Un automate ? Voilà une hypothèse que je n’avais pas envisagée. Je ne crois pas, non. »', '« Si j’étais une machine, je me poserais moins de questions. »'],
+      deja: ['« Je vous l’ai dit : ', '« Je me répète : ']
+    },
+    domestique: {
+      ignore: ['« {X}, {m} ? Je ne connais pas. »', '« Je ne saurais dire, {m}. »'],
+      mot: ['« Pardon, {m}, “{W}” ? »', '« Je ne suis pas sûr de comprendre, {m}. »'],
+      pourquoi: ['« Ce n’est pas à moi de le savoir, {m}. »', '« On ne me dit pas ces choses-là. »'],
+      comment: ['« Comme d’ordinaire, {m}. »', '« Je ne saurais dire. »'],
+      quand: ['« Je ne me rappelle plus le jour, {m}. »', '« Il y a peu. »'],
+      ou: ['« Je l’ignore, {m}. »', '« On ne me l’a pas dit. »'],
+      combien: ['« Je n’ai pas compté, {m}. »', '« Beaucoup. »'],
+      quoi: ['« Rien, {m}. »', '« Je ne sais pas, {m}. »'],
+      qui: ['« Personne, {m}. »', '« Je ne sais pas qui, {m}. »'],
+      ouinon: ['« Non, {m}. »', '« Oui, {m}. »', '« Je ne crois pas, {m}. »'],
+      avis: ['« Je n’ai pas d’avis, {m}. On ne me demande pas le mien. »', '« Ce n’est pas ma place, {m}. »'],
+      demande: ['« Je ne peux pas, {m}. »', '« Si je le peux, {m}. »'],
+      affirmation: ['« Bien, {m}. »', '« Oui, {m}. »'],
+      insulte: ['On baisse les yeux, sans répondre.', '« Comme vous voudrez, {m}. »'],
+      compliment: ['« Merci, {m}. »', 'Un petit salut, gêné.'],
+      ana: ['« Un “{A}”, {m} ? Je ne connais pas. »', '« Pardon, {m}… “{A}” ? »'],
+      meta: ['« Une machine, {m} ? » On ne comprend pas la plaisanterie, mais on sourit par politesse.', '« Je suis de chair, {m}. Trop, parfois. »'],
+      deja: ['« Je vous l’ai dit, {m} : ', '« Comme je disais, {m} : ']
+    },
+    mondain: {
+      ignore: ['« {X} ? Ma foi, non. Je ne fréquente pas. »', '« Je ne crois pas connaître, et je ne crois pas le regretter. »'],
+      mot: ['« “{W}” ? Quelle drôle de question. »', '« Vous parlez comme les jeunes gens d’aujourd’hui. “{W}”… et puis quoi encore ? »'],
+      pourquoi: ['« Pourquoi ? Parce que le monde est ainsi fait, mon ami. »', '« On ne pose pas cette question-là, voyons. »'],
+      comment: ['« Avec élégance, j’espère. »', '« Comment… Je n’en ai pas la moindre idée. »'],
+      quand: ['« Oh, il y a un siècle. Ou la semaine dernière. »', '« Je ne compte plus les jours, à mon âge. »'],
+      ou: ['« Ailleurs. Toujours ailleurs. »', '« Je n’en sais rien, et je m’en porte fort bien. »'],
+      combien: ['« Trop, sans doute. Tout coûte trop. »', '« On ne parle pas de chiffres. »'],
+      quoi: ['« Rien qui vaille d’être dit. »', '« Voilà une question bien vaste pour un si petit voyage. »'],
+      qui: ['« Personne de convenable. »', '« Je ne sais pas, et je ne veux pas savoir. »'],
+      ouinon: ['« Non, mon ami. »', '« Mais oui. »', '« Qui sait ? »'],
+      avis: ['« Mon avis ? On ne me le demande plus depuis la mort de mon mari. »', '« J’ai un avis sur tout, mais je le garde. »'],
+      demande: ['« Je ne crois pas, non. »', '« Si cela vous fait plaisir. »'],
+      affirmation: ['« Vraiment ? »', '« Comme c’est étrange. »'],
+      insulte: ['« Je vous ai mal jugé, visiblement. »', 'On détourne la tête avec une lenteur étudiée.'],
+      compliment: ['« Flatteur. »', '« Vous êtes un enjôleur. Ou un menteur. Les deux, sans doute. »'],
+      ana: ['« Un “{A}” ? Comme c’est moderne. Je n’y comprends rien. »', '« “{A}” ? Vous avez de drôles de lectures. »'],
+      meta: ['« Une poupée mécanique ? Mon pauvre ami, on me l’a dit plus méchamment. »', '« Je suis trop vieille pour être une machine. »'],
+      deja: ['« Je vous l’ai dit, mon ami : ', '« Vous radotez, ou c’est moi ? ']
+    },
+    fievreux: {
+      ignore: ['« {X} ? {X}… Le nom sonne comme une gare où l’on ne s’arrête pas. »', '« Je ne connais plus personne. Ils sont tous descendus. »'],
+      mot: ['« “{W}”… C’est le nom d’une station, n’est-ce pas ? »', '« Répétez. “{W}”. Oui. Le train l’a dit, cette nuit. »'],
+      pourquoi: ['« Parce que la voie est circulaire. »', '« Pourquoi ? Il n’y a pas de pourquoi, ici. Il n’y a que la suite. »'],
+      comment: ['« En roulant. Toujours en roulant. »', '« Comme on tombe. »'],
+      quand: ['« Le temps ne passe pas ici. Il tourne. »', '« Hier. Dans vingt ans. »'],
+      ou: ['« Là où mènent les rails. »', '« Plus loin. Toujours plus loin. »'],
+      combien: ['« Quarante-trois. Il y en a toujours quarante-trois. »', '« Assez pour remplir un wagon. »'],
+      quoi: ['« Le bruit. Vous ne l’entendez pas ? »', '« Rien. Tout. »'],
+      qui: ['« Le conducteur. Personne ne l’a jamais vu. »', '« Nous tous. »'],
+      ouinon: ['« Oui. Non. Le train décide. »', '« Peut-être, au prochain arrêt. »'],
+      avis: ['« Je ne pense plus. Je compte les traverses. »', '« Penser est dangereux, ici. »'],
+      demande: ['« Personne ne descend. »', '« Je ne peux pas. Mes mains sont cousues au siège. »'],
+      affirmation: ['« Oui. Oui. Et alors ? »', '« Vous croyez ? »'],
+      insulte: ['Un rire qui ne finit pas.', '« Ils disaient la même chose, les autres. »'],
+      compliment: ['« Merci. » Le mot sonne faux dans sa bouche, comme une pièce étrangère.', '« Vous êtes gentil. Vous ne resterez pas gentil. »'],
+      ana: ['« “{A}”… Oui. Ça viendra. Tout vient. »', '« Vous parlez comme quelqu’un qui n’est pas encore né. »'],
+      meta: ['« Une machine ? Nous sommes tous dans la machine. »', '« Le train est une machine. Nous sommes ses pensées. »'],
+      deja: ['« Encore. Encore. ', '« Vous l’avez déjà demandé. La voie est circulaire : ']
+    }
+  };
+  V.etranger = V.populaire;
+  // quand on n'a saisi que des bribes d'une longue phrase
+  var FLOU = {
+    formel: ['« Pardonnez-moi, {m} : vous me parlez de « {1} », et de « {2} » ? Je crains de ne pas saisir où vous voulez en venir. »'],
+    sec: ['« « {1} », « {2} »… Posez une question claire, je vous répondrai. »'],
+    populaire: ['« Attendez, j’ai pas tout suivi. « {1} », « {2} »… vous voulez savoir quoi, au juste ? »'],
+    savant: ['« Hm. « {1} », « {2} »… Reformulez, mon cher, je ne vois pas le lien. »'],
+    domestique: ['« Pardon, {m}… « {1} », « {2} » ? Je ne suis pas certain de comprendre ce que vous me demandez. »'],
+    mondain: ['« Vous parlez trop vite, mon ami. « {1} », « {2} »… et alors ? »'],
+    fievreux: ['« « {1} »… « {2} »… Les mots se mélangent, ici. Redites. Plus lentement. »']
+  };
+  var SUITE = {
+    formel: ['« Je n’en sais pas davantage, {m}. »', '« Je vous ai dit ce que je savais. »'], sec: ['« C’est tout. »', '« Rien à ajouter. »'],
+    populaire: ['« Ben… c’est tout, {m}. J’en sais pas plus. »', '« Que voulez-vous que je vous dise de plus ? »'], savant: ['« Je n’ai pas d’autre élément, hélas. La science s’arrête où s’arrêtent les faits. »'],
+    domestique: ['« Je n’en sais pas plus, {m}. »'], mondain: ['« Vous êtes bien curieux. Je ne sais rien de plus, et si je savais, je ne vous le dirais pas. »'],
+    fievreux: ['« Pourquoi ? Il n’y a pas de pourquoi, ici. Il y a des gares. »']
+  };
+  // bonjour, bonsoir
+  var SALUT = {
+    formel: ['« {B}, {m}. »', '« {B}, {m}. Que puis-je pour vous ? »'],
+    sec: ['« Oui ? »', '« {B}. Faites vite. »'],
+    populaire: ['« {B}, {m} ! »', '« {B}. Qu’est-ce qui vous amène ? »'],
+    savant: ['« Ah ! {B}, {m}, {B} ! »', '« {B}, mon cher. »'],
+    domestique: ['« {B}, {m}. »', 'Une légère inclinaison de la tête. « {B}, {m}. »'],
+    mondain: ['« {B}, mon ami. Asseyez-vous donc, vous me donnez le tournis. »'],
+    fievreux: ['« {B}… C’est déjà le jour ? Ici, on ne sait jamais. »']
+  };
+  var RESALUT = {
+    formel: ['« Nous nous sommes déjà salués, {m}. »'], sec: ['« Oui, {B}, on l’a déjà dit. Et ensuite ? »'], populaire: ['« Encore {B} ? Vous êtes poli, vous. »'],
+    savant: ['« Vous me l’avez déjà souhaité, mon cher. Venons-en au fait. »'], domestique: ['« {B} encore, {m}. »'], mondain: ['« Vous l’avez déjà dit, jeune homme. Vous radotez. »'], fievreux: ['« {B}, {B}, {B}… comme les gares. Toutes les mêmes. »']
+  };
+  // quand un inconnu tutoie : en 1923, ça ne passe pas inaperçu
+  var TU = {
+    formel: ['« Je ne crois pas que nous ayons gardé les cochons ensemble, {m}. »', '« Nous nous tutoyons, à présent ? Je n’avais pas remarqué. »'],
+    sec: ['« On se connaît ? Non. Alors c’est « vous ». »', '« Vous me tutoierez quand on aura bu ensemble. Ce n’est pas pour demain. »'],
+    populaire: ['« Tiens, on se tutoie, maintenant ? Bon. Si ça vous chante. »', '« Hé, pas de familiarités, hein. Enfin… »'],
+    savant: ['« Le tutoiement, {m} ? Voilà qui est bien familier. Passons. »'],
+    domestique: ['Un léger temps d’arrêt devant cette familiarité, puis on vous répond comme si de rien n’était.'],
+    mondain: ['« Vous me tutoyez ? Mon défunt mari lui-même ne s’y risquait pas. »'],
+    fievreux: ['« Tu… Oui. Ici, tout le monde se tutoie. Les morts sont familiers. »']
+  };
+
+  // ---------------------------------------------------------------- la culture de janvier 1923, selon le milieu
+  // h : savants, mondains, diplomates ; p : peuple, commerçants, domestiques ; o : police ; fr : les Français du prologue
+  var CULT = [
+    { k: 'brouillard', re: /\b(brouillard|temps qu il fait|quel temps|le temps est|il fait (beau|froid|chaud|mauvais|humide|doux)|fait il (beau|froid)|meteo|pluie|il pleut|froid|neige|fog|smog)\b/,
+      h: ['« Ce brouillard est un scandale sanitaire. Le charbon, voilà le coupable. »', '« Londres en janvier. On s’y habitue, on ne s’y résigne pas. »'],
+      p: ['« Une vraie purée de pois, {m}. Hier, un omnibus est entré dans une vitrine à Holborn. »', '« Ça vous colle aux poumons, ce brouillard. Ma mère dit que c’est les morts qui respirent. »'],
+      o: ['« Le brouillard, c’est le meilleur ami des pickpockets. Et le pire des nôtres. »'],
+      fr: ['« Ce froid, ce noir… Dehors, on ne voit même plus les gares. »', '« Le temps ? Mauvais. Comme toujours en janvier, sur cette ligne. »'] },
+    { k: 'roi', re: /\b(roi|le roi|george v|reine|reine mary|prince de galles|famille royale|monarchie|couronne)\b/,
+      h: ['« Sa Majesté se porte bien, dit-on. Le prince de Galles, lui, danse trop. »', '« Le roi George est un homme de devoir. C’est rare, et un peu ennuyeux. »'],
+      p: ['« God save the King, {m}. Et qu’il nous sauve aussi, tant qu’il y est. »', '« Le prince de Galles ? Toutes les filles du quartier ont sa photo. »'],
+      o: ['« Je ne discute pas de Sa Majesté en service. »'],
+      fr: ['« Le roi d’Angleterre ? Un homme sérieux, paraît-il. Pas comme nos ministres. »'] },
+    { k: 'gouvernement', re: /\b(premier ministre|gouvernement|bonar law|lloyd george|parlement|elections?|politique|ministre|poincare|millerand|chambre des deputes|conservateurs|travaillistes|socialistes?|communistes?)\b/,
+      h: ['« Bonar Law ? Un homme malade à la tête d’un pays fatigué. »', '« La politique, {m}, c’est l’art d’arriver après les événements. »'],
+      p: ['« Les ministres ? Ils ont des chaussures neuves, nous on a des trous dans les nôtres. »', '« Les travaillistes vont finir par gagner, vous verrez. »'],
+      o: ['« Je ne fais pas de politique. Je fais des rapports. »'],
+      fr: ['« Poincaré ? Il veut faire payer les Allemands, et il a bien raison. »', '« La politique, monsieur, ça ne m’a jamais rempli une assiette. »'] },
+    { k: 'ruhr', re: /\b(ruhr|reparations|allemagne|allemands|boches|mark|inflation|berlin)\b/,
+      h: function (api) { return ['« Les Français ' + (H.day(api) >= 6 ? 'sont entrés dans la Ruhr. Ils veulent leur charbon. Ils auront la haine.' : 'parlent d’occuper la Ruhr. S’ils le font, l’Europe recommencera à brûler.') + ' »', '« Le mark ne vaut plus rien. Une brouette de billets pour un pain, là-bas. »']; },
+      p: ['« Les Allemands ? Qu’ils paient. Mon frère est resté à Ypres. »', '« On dit qu’à Berlin, on se chauffe avec des billets de banque. »'],
+      o: ['« L’Allemagne, c’est le problème des Français, pas le mien. »'],
+      fr: ['« La Ruhr ? Nos soldats y sont depuis janvier. Les Allemands font la grève, et le mark ne vaut plus le papier. »', '« On dit qu’à Berlin, un pain coûte un milliard. Un milliard, monsieur ! »'] },
+    { k: 'egypte', re: /\b(toutankhamon|tutankhamun|carnarvon|carter|egypte|pharaon|tombeau|momie|louxor|vallee des rois)\b/,
+      h: ['« Le tombeau de Toutankhamon ! Lord Carnarvon et Carter ont trouvé l’antichambre intacte en novembre. Tout Londres ne parle que de ça. »', '« De l’or, des chars, des lits funéraires. Et la chambre scellée n’est même pas encore ouverte. »'],
+      p: ['« Le pharaon en or ? Ma femme a acheté un chapeau égyptien. Un chapeau ! »', '« Des trésors plein un trou dans le sable. Et nous, on gratte pour le charbon. »'],
+      o: ['« Toutankhamon ? Si on m’apporte une momie volée, je saurai à qui la rendre. »'],
+      fr: ['« L’Égypte ? Les Anglais y ont trouvé un roi en or. Toujours les Anglais. »'] },
+    { k: 'mussolini', re: /\b(mussolini|fascistes?|chemises noires|marche sur rome|italie|rome)\b/,
+      h: ['« Mussolini ? Un journaliste devenu dictateur. Les trains vont peut-être arriver à l’heure, en Italie. »', '« Les chemises noires m’inquiètent. Le Continent a la fièvre. »'],
+      p: ['« Le gros Italien qui crie ? On le voit aux actualités, au cinéma. Il fait rire la salle. »'],
+      o: ['« Les fascistes ? Qu’ils restent chez eux. »'],
+      fr: ['« Mussolini ? Un braillard. Mais les Italiens l’aiment, alors… »'] },
+    { k: 'russie', re: /\b(russie|russes|bolcheviques?|bolcheviks?|lenine|trotsky|soviets?|soviétique|revolution russe|tsar)\b/,
+      h: ['« Les bolcheviks viennent de fonder leur union de républiques. Le tsar est mort, et le monde qui allait avec. »', '« Lénine est malade, dit-on. Après lui, je crains pire. »'],
+      p: ['« Les rouges ? Y en a qui en parlent, aux docks. Moi je dis rien. »'],
+      o: ['« Nous surveillons quelques Russes à Whitechapel. Ils parlent beaucoup, ils boivent beaucoup. »'],
+      fr: ['« Les bolcheviks ? Ils ont tué le tsar et volé les emprunts russes de ma tante. »'] },
+    { k: 'turquie', re: /\b(kemal|mustafa kemal|ataturk|lausanne|sultan|califat|ottomans?|empire ottoman|smyrne|angora|ankara|constantinople|stamboul)\b/,
+      h: ['« À Lausanne, on négocie la paix avec Kemal. Le sultan est parti en exil sur un navire anglais. Un empire qui finit dans une valise. »', '« Smyrne a brûlé en septembre. Les Grecs, les Arméniens… On ne veut pas savoir. »'],
+      p: ['« Les Turcs ? On s’est battu contre eux à Gallipoli. Mon cousin y est resté. »'],
+      o: ['« Les Turcs, en ce moment, on les surveille. Trois sont morts à Chelsea, vous savez. »'],
+      fr: ['« Constantinople ? C’est le terminus, monsieur. Mais depuis la guerre, on ne sait plus à qui elle est. »'] },
+    { k: 'irlande', re: /\b(irlande|irlandais|irlandaise|dublin|ira|sinn fein|etat libre|fenians?)\b/,
+      h: ['« L’État libre d’Irlande existe depuis décembre. Et les Irlandais s’y entretuent déjà. »'],
+      p: ['« Les Irlandais ? Y en a plein le quartier. Des braves gens, quand ils sont pas soûls. »'],
+      o: ['« L’Irlande, c’est la Special Branch. Moi, je m’occupe des morts de Londres. »'],
+      fr: ['« L’Irlande ? Ils ont eu leur indépendance, comme nous la Lorraine. Enfin, presque. »'] },
+    { k: 'guerre', re: /\b(la guerre|grande guerre|front|tranchees|armistice|verdun|ypres|la somme|gallipoli|gaz|poilus?|tommies?)\b/,
+      h: ['« La guerre ? Nous avons perdu une génération et gagné des monuments. »', '« On n’en parle pas, {m}. C’est la règle tacite des survivants. »'],
+      p: ['« La guerre ? J’y étais. J’en parle pas. »', '« Mon mari est revenu. Enfin, son corps est revenu. »'],
+      o: ['« Quatre ans dans les tranchées. Ensuite on m’a donné un uniforme bleu à la place du kaki. »'],
+      fr: ['« La guerre ? Vous avez vu les gueules cassées, dans le métro ? Voilà la guerre. »'] },
+    { k: 'tsf', re: /\b(tsf|radio|bbc|wireless|poste a galene|emission|ondes)\b/,
+      h: ['« La BBC émet depuis novembre. Des concerts dans l’air, invisibles. Vous trouvez ça rassurant ? Moi pas. »'],
+      p: ['« La TSF ? Mon beau-frère s’est fabriqué un poste. On entend de la musique qui vient de nulle part. »'],
+      o: ['« La radio ? Un jour, on diffusera les avis de recherche comme ça. »'],
+      fr: ['« La TSF ? Il paraît qu’on entend Paris jusqu’en Suisse. »'] },
+    { k: 'spiritisme', re: /\b(spiritisme|spirites?|medium|mediums|seance|seances|tables tournantes|conan doyle|ectoplasme|ouija|voyante|voyantes|houdini|occultisme|occulte)\b/,
+      h: ['« Sir Arthur Conan Doyle croit dur comme fer aux esprits. Le créateur de Sherlock Holmes ! Il faut croire que la logique se fatigue. »', '« Houdini démasque les médiums un par un. Comme Smith. Ils sont amis, d’ailleurs, je crois. »'],
+      p: ['« Les séances ? Ma voisine y va le jeudi. Elle parle à son fils mort à la guerre. Ça lui fait du bien, alors… »', '« Des tables qui tournent ? Dans mon pub, elles tournent aussi, à partir de onze heures. »'],
+      o: ['« Les médiums, c’est l’escroquerie la plus rentable de Londres depuis la guerre. Toutes ces veuves… »'],
+      fr: ['« Les tables tournantes ? Ma patronne y croyait. Elle a parlé à Napoléon, une fois. Il était aimable. »'] },
+    { k: 'einstein', re: /\b(einstein|relativite|science|sciences|savants?|physique|atome|electricite)\b/,
+      h: ['« Einstein a reçu le Nobel en novembre. On dit que l’espace se courbe. Je trouve que ça explique bien des choses. »'],
+      p: ['« Les savants ? Ils ont inventé le gaz, aussi. »'],
+      o: ['« La science, chez nous, c’est les empreintes digitales. Et ça suffit à remplir les prisons. »'],
+      fr: ['« Les savants ? Madame Curie, voilà une femme. »'] },
+    { k: 'cinema', re: /\b(cinema|film|films|chaplin|charlot|actualites|picture house|acteurs?|actrices?)\b/,
+      h: ['« Le cinématographe ? Une distraction pour les foules. J’avoue un faible pour Chaplin. »'],
+      p: ['« Charlot ! J’y vais le samedi, au Palladium. On rit, on oublie. »'],
+      o: ['« Le cinéma, c’est là que les pickpockets travaillent le mieux. Dans le noir. »'],
+      fr: ['« Au cinéma, j’ai vu Max Linder. On a ri. Puis il a fallu rentrer. »'] },
+    { k: 'musique', re: /\b(jazz|danse|danser|dancing|foxtrot|tango|musique|orchestre|chanson)\b/,
+      h: ['« Le jazz ? Des cuivres qui hurlent pour des jeunes filles qui fument. Enfin, c’est ce que dit ma sœur. Moi, j’aime assez. »', '« Il y a un orchestre américain au Savoy. On danse jusqu’à deux heures. La jeunesse rattrape la guerre. »'],
+      p: ['« Le samedi, au dancing de Hammersmith, on danse le foxtrot jusqu’à minuit. »'],
+      o: ['« La musique ? Les clubs de jazz de Soho, on les ferme une fois par mois. Ils rouvrent le lendemain. »'],
+      fr: ['« Le jazz ? À Paris, les Américains en jouent partout. C’est gai, et un peu fou. »'] },
+    { k: 'femmes', re: /\b(suffragettes?|vote des femmes|femmes? (qui )?votent|droit de vote|emancipation|garconne)\b/,
+      h: ['« Les femmes votent depuis 1918, au-dessus de trente ans. Le pays ne s’est pas effondré. Pas encore. »'],
+      p: ['« Les suffragettes ? Elles ont bien fait. Ma mère en était. »'],
+      o: ['« J’en ai arrêté, des suffragettes, avant la guerre. Elles mordaient. »'],
+      fr: ['« Chez nous, les femmes ne votent pas. Et on ne leur a pas demandé leur avis. »'] },
+    { k: 'argent', re: /\b(prix|ca coute|cher|vie chere|chomage|chomeurs?|pauvres?|pauvrete|salaires?|greves?|loyer)\b/,
+      h: ['« Tout coûte le double d’avant la guerre, et les chômeurs défilent sur l’Embankment. »'],
+      p: ['« Une pinte, sept pence ! Avant la guerre, c’était trois. Et les gages, eux, n’ont pas doublé. »', '« Un million de chômeurs, qu’ils disent. Moi, je compte ceux de ma rue. »'],
+      o: ['« Le chômage fait les voleurs. Les voleurs font mon travail. »'],
+      fr: ['« La vie est chère, monsieur. Le franc ne vaut plus rien, et les pourboires non plus. »'] },
+    { k: 'amerique', re: /\b(amerique|americains?|etats unis|new york|prohibition|harding|hollywood)\b/,
+      h: ['« L’Amérique a interdit l’alcool. Le résultat est que tout le monde y boit davantage, et plus mal. »'],
+      p: ['« L’Amérique ? Mon cousin y est parti. Il écrit qu’il est riche. Il ment, sûrement. »'],
+      o: ['« La prohibition ? On en voit les effets jusqu’ici. Le whisky part en Amérique par bateaux entiers. »'],
+      fr: ['« Les Américains ? Ils boivent en cachette et paient bien. Mes meilleurs clients. »'] },
+    { k: 'sport', re: /\b(football|cricket|rugby|boxe|courses? de chevaux|derby|match|arsenal|chelsea football|tottenham|aviron)\b/,
+      h: ['« Le cricket, {m}, est la seule chose qui tienne l’Empire ensemble. »'],
+      p: ['« Arsenal ? Ils jouent comme des pieds, cette saison. »', '« La boxe, au Ring de Blackfriars. Le samedi soir. »'],
+      o: ['« Le sport ? Le samedi, j’ai six bagarres à Highbury pour un match de football. Le cricket, au moins, ne se bat pas. »'],
+      fr: ['« Le sport ? Georges Carpentier, voilà un boxeur. Enfin, avant qu’il perde. »'] },
+    { k: 'londres', re: /\b(londres|london|la ville|la tamise|piccadilly|soho|whitechapel|east end|west end|city)\b/,
+      h: ['« Londres est la plus grande ville du monde, et la plus seule. »'],
+      p: ['« Londres ? On y naît, on y tousse, on y meurt. Je connais pas mieux. »'],
+      o: ['« Huit millions d’âmes, et autant de raisons de mentir à la police. »'],
+      fr: ['« Londres ? Grand, gris, et la cuisine… n’en parlons pas. »'] },
+    { k: 'paris', re: /\b(paris|la france|francais|francaise|parisiens?)\b/,
+      h: ['« Paris ? On y vit mieux et on y pense moins bien. »'],
+      p: ['« Paris ? J’y suis jamais allé. Il paraît qu’on y boit du vin au petit déjeuner. »'],
+      o: ['« La Sûreté parisienne ? Des gens compétents. Un peu bavards. »'],
+      fr: ['« Paris ? C’est chez moi. On y rentre toujours. »'] },
+    { k: 'dieu', re: /\b(dieu|eglise|bible|priere|prier|religion|pasteur|cure|messe|paradis|enfer|diable|satan)\b/,
+      h: ['« Dieu ? Je L’ai cherché dans les textes anciens. J’ai trouvé d’autres noms, plus vieux que Lui. »', '« Je vais à l’église pour les mariages et les enterrements. Surtout les enterrements, ces temps-ci. »'],
+      p: ['« Le bon Dieu ? Il a dû déménager pendant la guerre. »', '« Je vais à la messe le dimanche, quand mes jambes veulent bien. »'],
+      o: ['« Dieu ne témoigne jamais. C’est bien dommage. »'],
+      fr: ['« Dieu ? Je le prie quand le train déraille. Il m’a toujours écouté, jusqu’ici. »'] },
+    { k: 'mort', re: /\b(la mort|mourir|mort|morts|cadavres?|tuer|assassinat|meurtre|tueur)\b/,
+      h: ['« La mort est un sujet sérieux. Les journaux la traitent comme un feuilleton. »'],
+      p: ['« Faut pas parler de ça, {m}. Ça porte malheur. »'],
+      o: ['« La mort, c’est mon métier. Ce qui vient avant m’intéresse davantage. »'],
+      fr: ['« La mort ? Sur cette ligne, on en a vu, monsieur. Des accidents. Et d’autres choses. »'] },
+    { k: 'train', re: /\b(orient express|simplon|wagons? lits|compagnie internationale|chemin de fer|chemins de fer|locomotives?|gares?|voyager en train)\b/,
+      h: ['« L’Orient-Express ? Trois jours de Londres à Constantinople, en dormant dans des draps brodés. La civilisation, sur des rails. »'],
+      p: ['« Les grands trains de luxe ? J’en ai vu passer à Victoria. Les riches derrière les vitres, comme des poissons. »'],
+      o: ['« Les trains de luxe, c’est là qu’on vole les bijoux. Et qu’on cache les fugitifs. »'],
+      fr: ['« Le train ? C’est ma maison, monsieur. Plus que ma maison. »'] },
+    { k: 'boisson', re: /\b(pub|pinte|biere|whisky|gin|cognac|vin|boire un verre|alcool|soif)\b/,
+      h: ['« Un doigt de whisky, le soir. Pour le cœur, dit mon médecin. Il en prend deux. »'],
+      p: ['« Une pinte, ça se refuse pas. Mais pas pendant le service, {m}. »'],
+      o: ['« Je ne bois pas en service. Je bois après, et pas qu’un peu. »'],
+      fr: ['« Un petit cognac ? C’est la maison qui offre. Enfin, la Compagnie. »'] },
+    { k: 'tabac', re: /\b(cigarettes?|tabac|pipe|cigares?|fumer|fumez)\b/,
+      h: ['« La pipe éclaircit les idées. Ou du moins les enfume agréablement. »'],
+      p: ['« Une Woodbine ? J’en ai une, si vous voulez. La dernière. »'],
+      o: ['« Une cigarette ? Volontiers. Ça m’empêche de dire ce que je pense. »'],
+      fr: ['« Fumer ? Dans le wagon-restaurant, c’est permis après le café seulement. »'] }
+  ];
+  var H = { day: function (api) { return Math.floor((api.s.min || 0) / 1440); } };
+  function classe(f) { var g = f.groupe || 'peuple'; return f.fr ? 'fr' : /police/.test(g) ? 'o' : /savant|diplomate|mondain|occultiste|hotel|domestique/.test(g) ? 'h' : 'p'; }
+
+  // ---------------------------------------------------------------- composer une réponse
+  function mem(api, id) { var m = api.flag('pm:' + id); if (!m) { m = { n: {}, last: null }; } return m; }
+  function saveMem(api, id, m) { api.flag('pm:' + id, m); }
+  function val(api, v, k) { if (typeof v === 'function') v = v(api); if (Array.isArray(v)) return api.fresh(k, v); return v; }
+  function voice(f) { return V[f.reg] || V.populaire; }
+  function fill(s, a, X, W, Aw) {
+    return String(s).replace(/\{X\}/g, cap(X || '')).replace(/\{x\}/g, X || '').replace(/\{de\}/g, de(X || '')).replace(/\{W\}/g, W || '').replace(/\{A\}/g, Aw || '');
+  }
+  // un tic en ouverture, une digression, une question renvoyée
+  var LOW = /^(Je|J’|J'|Le|La|Les|L’|Un|Une|Il|Elle|Ils|Elles|Nous|Vous|On|Ce|C’|Ça|Cela|Mon|Ma|Mes|Votre|Vos|Notre|Pas|Trop|Assez|Toujours|Jamais|Rien|Personne|Tout|Tous|Depuis|Quand|Si|Mais|Et|Oh|Ah|De|Du|Des|Dans|En|Au|Aux|Pour|Moi|Lui|Quarante|Trente|Vingt|Cinquante|Soixante|Deux|Trois|Une)$/;
+  function habille(api, f, id, line, a, offTopic) {
+    var out = line;
+    var w1 = (out.match(/^« ([A-Za-zÀ-ÿ’']+)/) || [])[1];
+    if (f.tics && f.tics.length && w1 && isLow(w1) && api.rand() < 0.22) {
+      var tic = api.fresh('tic:' + id, f.tics), core = tic.replace(/[,:.!]\s*$/, '').replace(/\{m\}/g, '');
+      var ADDR = /(\{m\}|monsieur|madame|mon ami|mon cher|signore|docteur|mon petit)/i;
+      if (out.toLowerCase().indexOf(core.toLowerCase()) < 0 && !(ADDR.test(tic) && ADDR.test(out))) out = '« ' + tic + ' ' + out.charAt(2).toLowerCase() + out.slice(3);
+    }
+    if (offTopic && f.dada && f.dada.length && api.rand() < 0.2) { var dd = api.fresh('dada:' + id, f.dada); out = / »$/.test(out) ? out.replace(/ »$/, ' ' + dd + ' »') : out + ' « ' + dd + ' »'; }
+    return out;
+  }
+  function relance(api, f, id, m) {
+    if (!f.relances || !f.relances.length || api.rand() > 0.28) return;
+    var free = f.relances.filter(function (r, i) { return !m.n['rel' + i]; });
+    if (!free.length) return;
+    var r = free[Math.floor(api.rand() * free.length)], i = f.relances.indexOf(r);
+    m.n['rel' + i] = 1; m.pending = i;
+    api.npc(id, r.q);
+  }
+  // cherche dans la fiche une réplique où revient un mot de la question
+  function stemRe(w) { var s = w.length > 6 ? w.replace(/(es|s|x|e)$/, '') : w.replace(/(s|x)$/, ''); return new RegExp('\\b' + s.replace(/[^a-z0-9]/g, '') + '(s|x|e|es|ent|er)?\\b'); }
+  function inFiche(api, f, words, unk) {
+    if (!words || !words.length) return null;
+    var cands = [];
+    function add(k, v) { try { if (typeof v === 'function') v = v(api); } catch (e) { v = null; } if (!v) return; (Array.isArray(v) ? v : [v]).forEach(function (x) { if (typeof x === 'string') cands.push({ k: k, line: x, n: ' ' + N(x) + ' ' }); }); }
+    Object.keys(f.moi || {}).forEach(function (k) { if (k !== 'defaut') add('moi:' + k, f.moi[k]); });
+    Object.keys(f.sait || {}).forEach(function (k) { add('sait:' + k, f.sait[k]); });
+    var best = null, unkN = (unk || []).map(N);
+    cands.forEach(function (c) {
+      var sc = 0;
+      words.forEach(function (w) {
+        var re = stemRe(w); if (!re.test(c.n)) return;
+        var spread = cands.filter(function (o) { return re.test(o.n); }).length;
+        sc += (spread <= 1 ? 1.5 : spread <= 3 ? 1 : 0.4) + (w.length >= 7 ? 0.5 : 0) + (unkN.indexOf(w) >= 0 ? 0.5 : 0);
+      });
+      if (sc > 0 && (!best || sc > best.score)) best = { k: c.k, line: c.line, score: sc };
+    });
+    return best && best.score >= 1 ? best : null;
+  }
+  // retrouve une entrée de fiche par sa clé (moi:x, sait:X, avis:X)
+  function lookup(api, f, key) {
+    var p = String(key).split(':'), v = p[0] === 'moi' ? f.moi && f.moi[p[1]] : p[0] === 'sait' ? f.sait && f.sait[p[1]] : f.avis && f.avis[p[1]];
+    try { if (typeof v === 'function') v = v(api); } catch (e) { v = null; }
+    return v;
+  }
+  // « Rigby ? Bon sergent. » → « bon sergent. » quand on l'enchaîne après « Quant à Rigby : »
+  function quantA(l) { l = String(l); return /^le /.test(l) ? 'Quant au ' + l.slice(3) : /^les /.test(l) ? 'Quant aux ' + l.slice(4) : 'Quant à ' + l; }
+  function stripName(s) { return String(s).replace(/^[^?»]{1,40}\? /, ''); }
+  function make(scene) {
+    function npcLine(api, id, x) { api.npc(id, x); }
+    scene.checks = scene.checks || {};
+    scene.checks.parole_baratin = { skill: 'Baratin', why: 'qu’on vous croie', push: 'Insister, en rajouter (jet forcé)', resolve: function (api, r) {
+      var id = api.s.talk; if (!id) return;
+      var f = (scene.fiches || {})[id] || {}, m = mem(api, id), st = api.npcs(id), lie = m.lie; if (!lie) return;
+      var Vx = voice(f);
+      if (r.success) {
+        m.claim = lie.claim; m.cru = true;
+        var rl = lie.role && f.roles && f.roles[lie.role];
+        api.npc(id, val(api, rl || f.croire || ['« ' + cap(lie.claim) + ' ? Je ne l’aurais pas deviné. »', '« ' + cap(lie.claim) + '. Bien. Que puis-je pour vous ? »'], 'cru:' + id));
+        if (!rl) api.calm(id, 1);
+        if (lie.role === 'police' && !/police/.test(f.groupe)) api.flag('usurpe', { qui: scene.npcs[id] ? scene.npcs[id].name : id, min: api.s.min, cru: true });
+      } else if (!r.pushed && r.level > 0 && scene.checks.parole_baratin.push) {
+        // premier échec : on hésite, on vous regarde de travers ; vous pouvez encore en rajouter
+        api.npc(id, val(api, ['« ' + cap(lie.claim) + ', vous dites ? » On vous dévisage, sans répondre tout de suite.', 'Un silence un peu trop long. On n’a pas l’air convaincu.'], 'doute:' + id));
+        saveMem(api, id, m); return;
+      } else {
+        m.menteur = true; st.patience -= r.pushed ? 6 : 2;
+        if (lie.role === 'police' && /police/.test(f.groupe)) { api.npc(id, '« ' + cap(lie.claim) + ' ? Alors montrez-moi votre carte. » Un temps. « C’est bien ce que je pensais. Usurper la qualité d’officier de police, c’est un délit. Ne refaites jamais ça. »'); api.flag('usurpeVu', true); }
+        else api.npc(id, val(api, f.pasCru || ['« ' + cap(lie.claim) + ', vraiment ? » On vous regarde de haut en bas. On n’y croit pas une seconde.', '« Vous, ' + lie.claim + ' ? » Un petit rire sans joie. « Et moi, je suis la reine de Saba. »'], 'pascru:' + id));
+      }
+      m.lie = null; saveMem(api, id, m);
+      if (st.patience <= 0 && api.close) api.close(id);
+    } };
+    function converse(api, npc, p) {
+      var f = (scene.fiches || {})[npc.id]; if (!f) return false;
+      var id = npc.id, m = mem(api, id), a = analyse(api, npc, p, m, f, scene), Vx = voice(f), st = api.npcs(id);
+      var label = function (cid) { return (f.noms && f.noms[cid]) || api.label(cid); };
+      var said = false;
+      function say(x, off) { npcLine(api, id, habille(api, f, id, x, a, off)); said = true; m.lastTurn = api.s.turn; }
+      function count(k) { m.n[k] = (m.n[k] || 0) + 1; return m.n[k]; }
+      // 1. l'état du joueur, une fois par jour : on remarque le sang, la folie, le déguisement
+      var d = H.day(api);
+      if (m.etatJour !== d) {
+        var pc = api.s.pc, rem = null;
+        if (pc.pv <= pc.pvMax / 2) rem = f.etat && f.etat.blesse || '« Vous saignez, {m}. Vous devriez voir un médecin. »';
+        else if (api.sanState && api.sanState() >= 2) rem = f.etat && f.etat.fou || '« Vous avez une mine affreuse, {m}. Vous dormez, au moins ? »';
+        else if (api.flag('deguise')) rem = f.etat && f.etat.deguise || '« Je ne vous avais pas reconnu, avec ce manteau. »';
+        if (rem && api.rand() < 0.7) { m.etatJour = d; npcLine(api, id, rem); }
+        else m.etatJour = d;
+      }
+      // la rumeur d'une usurpation remonte jusqu'à la police
+      var us = api.flag('usurpe');
+      if (us && /police/.test(f.groupe) && !api.flag('usurpeVu') && us.qui !== npc.name && api.s.min - us.min >= 60) {
+        api.flag('usurpeVu', true); st.patience -= 2;
+        npcLine(api, id, val(api, f.usurpe || ['« Avant toute chose. Quelqu’un se fait passer pour un policier auprès de mes témoins, ces jours-ci. Le signalement vous ressemble beaucoup. Si ça se reproduit, ce sera le poste, et pas pour un thé. »'], 'usurpe:' + id));
+      }
+      // le tutoiement, relevé une fois
+      if (a.tu && !m.tu) { m.tu = 1; npcLine(api, id, val(api, f.tu || TU[f.reg] || TU.populaire, 'tu:' + id)); if (/formel|mondain|sec/.test(f.reg)) st.patience -= 1; }
+      // 2. réponse à une question que le PNJ avait posée
+      if (m.pending !== undefined && m.pending !== null && f.relances && f.relances[m.pending]) {
+        var r = f.relances[m.pending]; m.pending = null;
+        if (a.words <= 8 && (a.oui || a.non || a.type === 'affirmation')) {
+          say(a.oui ? r.oui : a.non ? r.non : (r.autre || r.non));
+          saveMem(api, id, m); return true;
+        }
+      }
+      // les salutations : une fois, puis on s'étonne
+      if (a.salut) {
+        var hs = +((String(api.clock()).match(/(\d+) h/) || [])[1] || 12), B = (hs >= 18 || hs < 5) ? 'Bonsoir' : 'Bonjour';
+        var ns = count('salut');
+        say(String(ns > 1 ? val(api, f.resalut || RESALUT[f.reg] || RESALUT.populaire, 'resal:' + id) : val(api, f.salut || SALUT[f.reg] || SALUT.populaire, 'sal:' + id)).replace(/\{B\}/g, B));
+        saveMem(api, id, m); return true;
+      }
+      // « pourquoi ? », « racontez », « et alors ? » juste après une réponse libre : on approfondit, ou on botte en touche
+      if (a.suite && m.lastTurn === api.s.turn - 1) {
+        var src0 = m.lastSrc && lookup(api, f, m.lastSrc), idx = (m.n['suite:' + m.lastSrc] || 0) + 1;
+        if (Array.isArray(src0) && idx < src0.length) { m.n['suite:' + m.lastSrc] = idx; say(src0[idx]); }
+        else { var ns2 = count('suiteVide'); say(val(api, f.suite || SUITE[f.reg] || SUITE.populaire, 'suite:' + id)); if (ns2 > 2) st.patience -= 1; }
+        saveMem(api, id, m); return true;
+      }
+      // 3. ce que le joueur dit de lui-même
+      if (a.nom) { m.nomJoueur = a.nom; say(val(api, f.enchante || ['« Enchanté, ' + a.nom + '. »', '« ' + a.nom + '. Je m’en souviendrai. »'], 'ench:' + id)); saveMem(api, id, m); return true; }
+      if (a.quisuisje) { say(m.claim ? (m.menteur ? '« Vous m’avez dit être ' + m.claim + '. Je n’en crois pas un mot. »' : '« Vous m’avez dit être ' + m.claim + '. Je n’ai aucune raison d’en douter. Pas encore. »') : m.nomJoueur ? '« Vous m’avez dit vous appeler ' + m.nomJoueur + '. »' : '« Vous êtes {m}. C’est tout ce que je sais de vous. »'); saveMem(api, id, m); return true; }
+      if (a.claim && !a.q) {
+        var role = roleOf(a.claim), occ = N(api.s.pc.occupation || ''), vrai = occ.indexOf(N(a.claim).slice(0, 5)) >= 0 || (role && role === roleOf(occ.split(' ')[0]));
+        var oldRole = m.claim && roleOf(m.claim);
+        if (m.claim && N(m.claim) === N(a.claim)) { say('« Oui, vous me l’avez dit. ' + cap(a.claim) + '. »'); saveMem(api, id, m); return true; }
+        if (m.claim && role !== oldRole && !m.claimVrai) { m.menteur = true; st.patience -= 1; say(val(api, f.contradiction || ['« Tout à l’heure, vous étiez ' + m.claim + '. Il faudrait savoir, {m}. »', '« ' + cap(a.claim) + ', maintenant ? Vous changez de métier comme de chemise. »'], 'contra:' + id)); saveMem(api, id, m); return true; }
+        if (vrai) { m.claim = a.claim; m.claimVrai = true; m.cru = true; say(val(api, (role && f.roles && f.roles[role]) || f.croire || ['« ' + cap(a.claim) + ' ? Je vois. »', '« Ah. ' + cap(a.claim) + '. Ça se voit, maintenant que vous le dites. »'], 'claim:' + id)); saveMem(api, id, m); return true; }
+        if (f.connait) { m.menteur = true; say(val(api, f.connaitLine || ['« Allons, {m}. Je vous connais. Qu’est-ce qui vous prend ? »'], 'connait:' + id)); saveMem(api, id, m); return true; }
+        if (m.menteur) { say(val(api, f.plusCru || ['« Après ce que vous m’avez déjà raconté ? Non, {m}. »', 'Un regard las. On ne vous croit plus, quoi que vous disiez.'], 'pluscru:' + id)); saveMem(api, id, m); return true; }
+        // un mensonge : Baratin, plus ou moins difficile selon la méfiance de celui qu'on veut berner
+        var diff = role === 'police' && /police/.test(f.groupe) ? 'extreme' : (f.mefiant || 0) >= 0.6 ? 'difficile' : 'normal';
+        m.lie = { claim: a.claim, role: role, npc: id };
+        if (role === 'police') api.flag('usurpe', { qui: npc.name, min: api.s.min });
+        saveMem(api, id, m);
+        var ck = scene.checks && scene.checks.parole_baratin;
+        if (ck && api.check) { ck.why = 'lui faire croire que vous êtes ' + a.claim + (diff !== 'normal' ? ' (on se méfie de vous)' : ''); ck.push = diff === 'extreme' ? null : 'Insister, en rajouter (jet forcé)'; api.check('parole_baratin', { diff: diff }); return true; }
+        say('« ' + cap(a.claim) + ' ? Je ne l’aurais pas deviné. »'); return true;
+      }
+      // 4. insultes et compliments : l'humeur bouge
+      if (a.insulte) { st.patience -= 2; say(val(api, f.insulte || Vx.insulte, 'ins:' + id)); saveMem(api, id, m); return true; }
+      if (a.compliment && !a.ents.length && a.words <= 12) { st.patience = Math.min(st.patience + 1, npc.patience || 6); say(val(api, f.compliment || Vx.compliment, 'cpl:' + id)); saveMem(api, id, m); return true; }
+      // 5. hors du temps : machines, anachronismes
+      if (a.meta) { say(val(api, f.meta || Vx.meta, 'meta:' + id)); saveMem(api, id, m); return true; }
+      if (a.ana) { st.patience -= 1; say(fill(val(api, Vx.ana, 'ana:' + id), a, null, null, a.ana)); saveMem(api, id, m); return true; }
+      // 6. les questions sur lui-même
+      if (a.perso) {
+        var v = f.moi && f.moi[a.perso];
+        var n = count('moi:' + a.perso);
+        if (v) { var x = val(api, v, 'moi:' + id + ':' + a.perso); say(n > 1 && /^« /.test(x) ? val(api, Vx.deja, 'deja:' + id) + lowFirst(x.replace(/^« /, '')) : x); }
+        else say(val(api, (f.moi && f.moi.defaut) || ['« Je ne vois pas en quoi ça vous regarde, {m}. »', '« Parlons d’autre chose, voulez-vous ? »'], 'moidef:' + id));
+        if (n > 2) st.patience -= 1;
+        relance(api, f, id, m); saveMem(api, id, m); return true;
+      }
+      // 7. un sujet nommé : ce qu'il en sait, ce qu'il en pense, sinon ce que tout le monde en dit
+      var e = a.ents.filter(function (x) { return (f.sait && f.sait[x]) || (f.avis && f.avis[x]) || (scene.rumeurs && scene.rumeurs[x]); })[0] || a.ents[0];
+      var cult = null; CULT.some(function (c) { if (c.re.test(a.t)) { cult = c; return true; } return false; });
+      if (e && !(cult && !(f.sait && f.sait[e]) && !(f.avis && f.avis[e]))) {
+        m.last = e;
+        var k = 'ent:' + e, nn = count(k), src = (a.type === 'avis' && f.avis && f.avis[e]) || (f.sait && f.sait[e]) || (f.avis && f.avis[e]);
+        if (!src && scene.rumeurs && scene.rumeurs[e]) { var ru = scene.rumeurs[e](api, f); if (ru) src = ru; }
+        var line = src ? val(api, src, 'sait:' + id + ':' + e) : null;
+        if (!line && scene.rumeurs && scene.rumeurs[e]) { var ru2 = scene.rumeurs[e](api, f); if (ru2) line = val(api, ru2, 'ru:' + id + ':' + e); }
+        if (line) {
+          m.lastSrc = (f.sait && f.sait[e]) ? 'sait:' + e : (f.avis && f.avis[e]) ? 'avis:' + e : null;
+          say(nn > 1 ? val(api, Vx.deja, 'deja:' + id) + lowFirst(line.replace(/^« /, '')) : line, false);
+          if (nn > 2) st.patience -= 1;
+          // deux sujets dans la même question : « et de Rigby ? » n'attend pas
+          var e2 = a.ents.filter(function (x) { return x !== e && ((f.sait && f.sait[x]) || (f.avis && f.avis[x])); })[0];
+          if (e2 && /^« /.test(line)) {
+            var l2 = val(api, (f.sait && f.sait[e2]) || f.avis[e2], 'sait:' + id + ':' + e2);
+            if (l2 && /^« /.test(l2)) { count('ent:' + e2); say('« ' + quantA(label(e2)) + ' : ' + lowFirst(stripName(l2.replace(/^« /, ''))), false); }
+          }
+        } else say(fill(val(api, f.ignore || Vx.ignore, 'ign:' + id), a, label(e)), true);
+        relance(api, f, id, m); saveMem(api, id, m); return true;
+      }
+      // 7 bis. un mot de la question qui figure dans sa propre histoire : il y revient de lui-même
+      var hit = inFiche(api, f, a.content, a.unk);
+      if (hit && hit.score < 2 && a.words >= 7) hit = null;
+      if (hit) {
+        m.lastSrc = hit.k;
+        var nh = count('fi:' + hit.k);
+        say(nh > 1 && /^« /.test(hit.line) ? val(api, Vx.deja, 'deja:' + id) + lowFirst(hit.line.replace(/^« /, '')) : hit.line, false);
+        if (nh > 2) st.patience -= 1;
+        relance(api, f, id, m); saveMem(api, id, m); return true;
+      }
+      // 8. la culture du temps
+      if (cult) {
+        var ov = f.avis && f.avis[cult.k];
+        var pool = ov || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
+        count('cult:' + cult.k);
+        say(val(api, pool, 'cult:' + id + ':' + cult.k), true);
+        relance(api, f, id, m); saveMem(api, id, m); return true;
+      }
+      // 8 bis. une longue phrase dont on n'a saisi que des bribes : on vérifie, plutôt que de répondre à côté
+      var bribes = a.unk.map(N).filter(function (w) { return w.length >= 4; }).concat(a.content.filter(function (w) { return w.length >= 5 && !/(ais|ait|ions|iez|aient|er|ir|re|ez|ons|ent)$/.test(w); }));
+      bribes = bribes.filter(function (w, i) { return bribes.indexOf(w) === i; });
+      if (a.words >= 7 && bribes.length >= 2 && m.flou !== api.s.turn - 1) {
+        m.flou = api.s.turn;
+        var origW = function (w) { var o = a.raw.split(/[\s’'?!.,;:«»"()]+/).filter(function (x) { return N(x) === w; })[0]; return o || w; };
+        say(val(api, FLOU[f.reg] || FLOU.populaire, 'flou:' + id).replace(/\{1\}/g, origW(bribes[0])).replace(/\{2\}/g, origW(bribes[1])), false);
+        saveMem(api, id, m); return true;
+      }
+      // 9. un mot qu'il ne connaît pas : il le répète, intrigué
+      if (a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75) { st.patience -= 1; say(fill(val(api, Vx.mot, 'mot:' + id), a, null, a.unk[0]), true); saveMem(api, id, m); return true; }
+      // 10. le type de question, à défaut de mieux : la voix du personnage fait le reste
+      var tp = a.type, pool2 = (f.types && f.types[tp]) || Vx[tp];
+      if (pool2) {
+        if (tp === 'affirmation' && a.words <= 2) return false;
+        st.patience -= (tp === 'affirmation' ? 1 : 0);
+        say(val(api, pool2, 'type:' + id + ':' + tp), true);
+        if (tp !== 'affirmation') relance(api, f, id, m);
+        saveMem(api, id, m); return true;
+      }
+      return false;
+    }
+    // le moteur signale le sujet d'une réplique écrite, pour que « et lui ? » s'y rapporte
+    converse.note = function (api, npc, id) { if (!(scene.fiches || {})[npc.id]) return; var m = mem(api, npc.id); m.last = id; saveMem(api, npc.id, m); };
+    // ce que le moteur doit savoir avant de choisir qui répond
+    converse.peek = function (api, npc, p) {
+      var f = (scene.fiches || {})[npc.id]; if (!f) return null;
+      var m = mem(api, npc.id), a = analyse(api, npc, p, m, f, scene), tt = a.t.trim();
+      var cult = CULT.some(function (c) { return c.re.test(a.t); });
+      return {
+        answer: m.pending !== undefined && m.pending !== null && a.words <= 8 && (a.oui || a.non),
+        addressed: a.q || (a.vous && !/^(je|j) /.test(tt)),
+        prior: !!(a.perso || a.meta || a.ana || a.insulte || a.nom || a.quisuisje || (a.claim && !a.q) || (a.compliment && !a.ents.length && a.words <= 12)),
+        short: !a.ents.length && !a.unk.length && !cult && a.words <= 4,
+        mine: a.suite && m.lastTurn === api.s.turn - 1,
+        a: a
+      };
+    };
+    return converse;
+  }
+  G.RPG = G.RPG || {};
+  G.RPG.Parole = { make: make, analyse: analyse, CULT: CULT, V: V };
+})(typeof window !== 'undefined' ? window : globalThis);

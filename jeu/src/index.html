@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L’Express de minuit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/*STYLE*/
+</style>
+</head>
+<body data-san="0">
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">L’Express<span>/</span>de minuit</div>
+    <nav class="nav">
+      <button class="ghost" id="btnSheet" type="button">Fiche</button>
+      <button class="ghost" id="btnNotes" type="button">Carnet <b id="clueCount">0</b></button>
+      <button class="ghost" id="btnMenu" type="button" aria-label="Menu">Menu</button>
+    </nav>
+  </header>
+
+  <section class="stage" aria-label="Illustration du lieu">
+    <canvas id="art" width="400" height="300" aria-hidden="true"></canvas>
+    <canvas id="artBloom" class="bloom" width="400" height="300" aria-hidden="true"></canvas>
+    <div class="veil" aria-hidden="true"></div>
+    <div class="hud">
+      <div class="place" id="locName">Wagon-restaurant</div>
+      <div class="clock" id="clock">23 h 12</div>
+    </div>
+    <div class="where" id="where">Express Paris – Lausanne</div>
+    <div class="sanstate" id="sSanState">Lucide</div>
+  </section>
+
+  <section class="stats" id="stats" aria-label="État de l’investigateur">
+    <div class="stat pv"><span class="k">PV</span><span class="v" id="sPV">11/11</span><span class="meter" id="mPV"></span></div>
+    <div class="stat pm"><span class="k">PM</span><span class="v" id="sPM">12</span><span class="meter" id="mPM"></span></div>
+    <div class="stat san"><span class="k">SAN</span><span class="v" id="sSAN">60</span><span class="meter" id="mSAN"></span></div>
+    <div class="stat chance"><span class="k">Chance</span><span class="v" id="sCH">55</span><span class="meter" id="mCH"></span></div>
+  </section>
+
+  <main class="story" aria-label="Récit">
+    <div class="log" id="log" role="log" aria-live="polite"></div>
+    <span id="turnInfo" class="turn" aria-hidden="true"></span>
+  </main>
+
+  <footer class="cmd">
+    <div class="actions" id="actions"></div>
+    <form class="line" id="form" autocomplete="off">
+      <span class="prompt" aria-hidden="true">/</span>
+      <label for="cmd" class="sr">Votre action</label>
+      <input id="cmd" type="text" enterkeyhint="send" autocapitalize="sentences" spellcheck="false" placeholder="Que faites-vous ?">
+      <button class="act" id="go" type="submit">Agir</button>
+    </form>
+  </footer>
+</div>
+
+<div class="overlay" id="ovSheet" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="tSheet">
+    <div class="phead"><h2 id="tSheet">Fiche d’investigateur</h2><button class="ghost" data-close type="button">Fermer</button></div>
+    <div class="body" id="sheetBody"></div>
+  </div>
+</div>
+<div class="overlay" id="ovNotes" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="tNotes">
+    <div class="phead"><h2 id="tNotes">Carnet de Lucien</h2><button class="ghost" data-close type="button">Fermer</button></div>
+    <div class="body" id="notesBody"></div>
+  </div>
+</div>
+<div class="overlay" id="ovMenu" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="tMenu">
+    <div class="phead"><h2 id="tMenu">Menu</h2><button class="ghost" data-close type="button">Fermer</button></div>
+    <div class="body" id="menuBody"></div>
+  </div>
+</div>
+<div class="overlay dice-req" id="ovDice" hidden>
+  <div class="panel dicebox" role="dialog" aria-modal="true" aria-labelledby="diceSkill">
+    <div id="diceSkill" class="dice-cap"></div>
+    <div class="dice"><div><div class="die" id="dT">00</div><div class="dice-cap">dizaines</div></div><div><div class="die" id="dU">0</div><div class="dice-cap">unités</div></div></div>
+    <div class="dice-res" id="diceRes"></div>
+  </div>
+</div>
+
+<div class="title-screen" id="title">
+  <div class="tart"><canvas id="titleArt" width="400" height="300" aria-hidden="true"></canvas><canvas id="titleBloom" class="bloom" width="400" height="300" aria-hidden="true"></canvas></div>
+  <div class="tveil" aria-hidden="true"></div>
+  <div class="tcontent" id="tmain">
+    <div class="chap" id="tchap">Campagne de l’Orient-Express</div>
+    <h2 class="name">L’Express<br><span>de minuit</span></h2>
+    <p class="lede">Un jeu de rôle textuel entièrement scripté. Écrivez ce que fait votre investigateur : le meneur raconte, les dés tranchent, et votre santé mentale colore tout ce que vous voyez.</p>
+    <div class="row">
+      <button class="act" id="btnLondres" type="button">Campagne : Londres</button>
+      <button class="ghost" id="btnCont" type="button" hidden>Continuer</button>
+    </div>
+    <div class="row">
+      <button class="ghost" id="btnProlo" type="button">Prologue : le wagon-restaurant</button>
+      <button class="ghost" id="btnSound" type="button" aria-pressed="true">Son : oui</button>
+      <button class="ghost" id="btnMusic" type="button" aria-pressed="true">Musique : oui</button>
+    </div>
+    <div class="fine">Janvier 1923 · un vieil ami, un brouillard, une statue en morceaux</div>
+  </div>
+  <div class="tpick" id="tpick" hidden>
+    <div class="chap">Londres · Danseurs dans le brouillard</div>
+    <h3 class="pick-h">Qui êtes-vous&nbsp;?</h3>
+    <p class="lede">Trois vieux amis du professeur Smith. Choisissez celui ou celle que vous incarnerez.</p>
+    <div class="cards" id="cards"></div>
+    <button class="ghost" id="btnBack" type="button">Retour</button>
+  </div>
+</div>
+
+<script>
+/*ENGINE*/
+</script>
+<script>
+/*SCENE*/
+</script>
+<script>
+/*LONDRES*/
+/*LONDRESX*/
+/*LONDRESC*/
+/*PAROLE*/
+/*FICHES*/
+/*JETS*/
+/*SEANCE*/
+/*IMPRO*/
+/*OBJETS*/
+</script>
+<script>
+/*ART*/
+</script>
+<script>
+/*ARTL*/
+</script>
+<script>
+/*ARTP*/
+/*PHOTOS2*/
+</script>
+<script>
+/*AUDIO*/
+</script>
+<script>
+/*UI*/
+</script>
+</body>
+</html>
