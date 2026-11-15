@@ -1,0 +1,935 @@
+{
+ "modele": "gpt-5.6-luna",
+ "simulation": false,
+ "depense": 0.2797825999999998,
+ "parties": [
+  {
+   "nom": "partie_01_pemberton_methodique",
+   "perso": "pemberton",
+   "profil": "methodique",
+   "tours": 120,
+   "fin": false,
+   "indices": 4,
+   "problemes": [
+    {
+     "tour": 3,
+     "commande": "Je demande à Smith ce qu’il entend exactement par « rideaux de la perception ».",
+     "reponse": "« Mon cher, la fenêtre ? Le nom ne m’évoque rien, ce qui en soi est intéressant. »",
+     "probleme": "La réponse ne traite pas de la question sur les « rideaux de la perception » et semble confondre le sujet avec un autre terme.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 15,
+     "commande": "J’interroge un convive sur les photographies présentées par Smith.",
+     "reponse": "Beddows : « Comme je vous le disais, docteur… »",
+     "probleme": "L’action vise un convive, mais la réponse fait parler Beddows sans expliquer ce changement de cible.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 16,
+     "commande": "J’examine attentivement les convives pour repérer ceux qui semblent connaître les travaux de Smith.",
+     "reponse": "Vous voulez dire : [suggestions] Regarder la salle | Écouter la conférence",
+     "probleme": "L’action est raisonnable et précise, mais elle est mal comprise comme une demande générique d’observer la salle.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 17,
+     "commande": "Je rentre à l’hôtel et note soigneusement les déclarations de Smith et de Beddows.",
+     "reponse": "Le professeur Smith : Il rallume sa pipe infecte. « Oui, oui ? »",
+     "probleme": "Le personnage dit rentrer à l’hôtel, mais la scène reste à l’Institut et Smith lui répond directement.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 19,
+     "commande": "Je prends congé de Smith et de Beddows.",
+     "reponse": "Le professeur Smith : « Beddows ? Mon ombre, mon cuisinier, ma conscience. »",
+     "probleme": "Une prise de congé est interprétée comme une nouvelle question sur Beddows au lieu de faire progresser le départ.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 21,
+     "commande": "Je prends congé et rentre à l’hôtel.",
+     "reponse": "Le professeur Smith : « Vieillissez-vous plus vite que moi ? »",
+     "probleme": "L’action de quitter les lieux est ignorée et la réponse ne correspond pas à la commande.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 22,
+     "commande": "Je regagne l’hôtel et relis attentivement mes notes sur la conférence.",
+     "reponse": "Le professeur Smith : Il rit, un peu moins fort. « Encore ? »",
+     "probleme": "Le personnage est encore traité comme s’il se trouvait devant Smith à l’Institut, alors qu’il demande à rentrer à l’hôtel.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 31,
+     "commande": "Je m’approche du groupe d’académiciens entourant Smith et écoute leur conversation.",
+     "reponse": "Le professeur Smith : « Pas maintenant, docteur. »",
+     "probleme": "Le joueur demande à écouter discrètement une conversation ; Smith répond directement sans que l’action soit réellement résolue.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 32,
+     "commande": "J’écoute discrètement la conversation des académiciens autour de Smith.",
+     "reponse": "La conférence est terminée. On se presse autour de Smith pour le féliciter. Un officier de marine raconte Jutland pour la troisième fois.",
+     "probleme": "La réponse ne rapporte pas la conversation des académiciens et fournit un détail sans rapport avec la demande.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 38,
+     "commande": "Je relis soigneusement mes notes et cherche toute indication sur l’adresse de Smith.",
+     "reponse": "Vous ne voyez pas le professeur Smith ici. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt, à la réception.",
+     "probleme": "La recherche dans les notes est mal comprise comme une recherche visuelle de Smith dans la pièce.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 46,
+     "commande": "Demander à Pratt de réserver un taxi pour St John’s Wood et de me recommander une adresse.",
+     "reponse": "« ... le British Museum, à cinq minutes, ou la morgue du Daily Courier, à Fleet Street. »",
+     "probleme": "Pratt ne recommande pas d’adresse pertinente à St John’s Wood et propose des lieux sans rapport avec la demande.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 52,
+     "commande": "Que s’est-il passé, Beddows, et de quoi le professeur a-t-il peur ?",
+     "reponse": "Plus précisément ?",
+     "probleme": "La réponse demande une précision alors que la question est déjà claire et porte précisément sur l’événement et la peur de Smith.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 55,
+     "commande": "Que voyez-vous dans le lit, Beddows, et pourquoi le professeur me regarde-t-il ainsi ?",
+     "reponse": "Vous cherchez l’homme sur le lit des yeux, en vain. Ici, vous remarquez : la villa.",
+     "probleme": "La question est adressée à Beddows, mais la réponse décrit une recherche impossible et ne répond ni sur le lit ni sur le regard de Smith.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 57,
+     "commande": "J’examine les bouteilles de lait et les fenêtres du rez-de-chaussée à la recherche d’indices.",
+     "reponse": "",
+     "probleme": "Aucune réponse n’est fournie à cette action.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 61,
+     "commande": "Je demande à Beddows où et quand le professeur Smith devait donner sa conférence.",
+     "reponse": "« Je ne peux plus rien vous dire, docteur. Partez, maintenant. Pour lui. » Même résultat qu’à l’instant.",
+     "probleme": "La question porte sur la conférence, mais la réponse répète presque mot pour mot le refus précédent sans tenir compte de la nouvelle question.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 75,
+     "commande": "Je relis attentivement le dossier de Smith pour y trouver le titre exact de sa conférence.",
+     "reponse": "Vous réfléchissez à les passeports, sans avancer. Il faudrait poser la question à quelqu’un.",
+     "probleme": "La réponse est hors sujet et contient une faute de français : « réfléchir à les passeports » au lieu de « réfléchir aux passeports » ou d’une formulation adaptée au dossier.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 78,
+     "commande": "Je demande à Mrs Pike ce qu’elle sait de l’annonce de médium datée de 1919.",
+     "reponse": "Vous ne voyez pas une annonce ici. Ici, vous remarquez : Mrs Pike, l’archiviste et les volumes reliés.",
+     "probleme": "La coupure de 1919 vient d’être trouvée au tour précédent ; la réponse contredit ce fait et refuse de la reconnaître.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 79,
+     "commande": "Je montre la coupure de 1919 à Mrs Pike et lui demande ce qu’elle sait de ce médium.",
+     "reponse": "Il faudrait savoir à qui vous adresser. Ici : Mrs Pike, l’archiviste et les volumes reliés.",
+     "probleme": "L’action identifie clairement Mrs Pike comme interlocutrice, mais le jeu prétend ne pas savoir à qui s’adresser.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 87,
+     "commande": "Que savez-vous de la dernière conférence annoncée par le professeur Smith ?",
+     "reponse": "Mrs Hortense Vane, médium : « Je vous l’ai déjà dit, docteur. »",
+     "probleme": "Mrs Vane n’a pas répondu à cette question auparavant ; la réponse affirme à tort qu’elle l’a déjà fait.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 92,
+     "commande": "Je parle au colonel en retraite et lui demande s’il connaît le professeur Smith.",
+     "reponse": "Vous ne voyez pas le professeur Smith ici. Ici, vous remarquez : Mrs Vane, le guéridon, les habitués et les rideaux de velours.",
+     "probleme": "Le joueur s’adresse au colonel, mais le jeu traite l’action comme une recherche de Smith dans la pièce.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 97,
+     "commande": "Qui est Cyril, et quel rapport avait-il avec le professeur Smith ?",
+     "reponse": "Mrs Hortense Vane, médium : Un soupir, à peine poli.",
+     "probleme": "La réponse n’apporte aucune information à une question précise sur Cyril et son lien avec Smith.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 98,
+     "commande": "Qui est Cyril, et où puis-je le trouver ?",
+     "reponse": "« Smith ? Le monsieur qui m’a ruinée chez Lady Ashworth. »",
+     "probleme": "La réponse parle de Smith et de Lady Ashworth, mais ne répond pas à la question sur Cyril.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 103,
+     "commande": "Qui était le vieil homme, et quel dessin traçait-il autour de lui ?",
+     "reponse": "« Le motif au sol ? Ma foi, non. Je ne fréquente pas. »",
+     "probleme": "La réponse est grammaticalement et sémantiquement incohérente ; elle ne répond ni sur l’identité du vieil homme ni sur le dessin.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 107,
+     "commande": "J’interroge le colonel en retraite sur Albert, Cyril et le professeur Smith.",
+     "reponse": "Mrs Hortense Vane, médium : « Je n’en sais pas plus. Et je ne veux pas en savoir plus. »",
+     "probleme": "Le joueur interroge le colonel, mais c’est encore Mrs Vane qui répond.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 108,
+     "commande": "J’interroge les habitués sur le professeur Smith, Cyril et Lady Ashworth.",
+     "reponse": "Mrs Hortense Vane, médium : « Si vous voulez bien m’excuser, docteur. »",
+     "probleme": "Le joueur s’adresse aux habitués, mais Mrs Vane répond et met fin à la conversation sans traiter la demande.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 115,
+     "commande": "Je quitte la séance et examine attentivement la façade à la recherche d’une adresse.",
+     "reponse": "Le salon, encore. Vous en connaissez chaque détail, maintenant.",
+     "probleme": "Le joueur quitte explicitement la séance, mais le jeu le maintient dans le salon et ne décrit pas la façade.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 116,
+     "commande": "Je quitte la séance et me rends au kiosque pour consulter les journaux sur l’incendie au nord.",
+     "reponse": "Pour aller où ? Vous connaissez : votre hôtel, à Bloomsbury, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street.",
+     "probleme": "Le kiosque est une destination raisonnable dans Londres, mais le jeu refuse l’action au lieu de proposer ou de reconnaître ce lieu.",
+     "gravite": "moyenne"
+    }
+   ]
+  },
+  {
+   "nom": "partie_02_doyle_bavard",
+   "perso": "doyle",
+   "profil": "bavard",
+   "tours": 120,
+   "fin": false,
+   "indices": 2,
+   "problemes": [
+    {
+     "tour": 1,
+     "commande": "Je m’approche de Smith en souriant, carnet à la main, et lui demande pourquoi il m’a conviée à ce banquet sans me révéler son sujet.",
+     "reponse": "« Mon cher amie ! »",
+     "probleme": "Faute d’accord : Margaret est une femme ; il faut écrire « ma chère amie ».",
+     "gravite": "faible"
+    },
+    {
+     "tour": 5,
+     "commande": "Je souris à Beddows : Vous semblez inquiet, monsieur ; avez-vous remarqué quelque chose d’étrange ces derniers jours ?",
+     "reponse": "« Je n’ai d’yeux que pour Monsieur... » (répété deux fois)",
+     "probleme": "La réponse est répétée intégralement.",
+     "gravite": "faible"
+    },
+    {
+     "tour": 16,
+     "commande": "Je me lance à la poursuite de l’homme brun à travers la foule.",
+     "reponse": "Lancer quoi, et sur qui ? Vous avez les mains vides...",
+     "probleme": "L’action claire de poursuivre l’homme brun est comprise comme l’action de lancer un objet.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 26,
+     "commande": "J’examine attentivement le lit pour comprendre ce qui effraie Beddows.",
+     "reponse": "Vous ne voyez pas l’homme sur le lit ici. Ici, vous remarquez : le professeur Smith, Beddows, les invités et l’écran de projection.",
+     "probleme": "L’action est traitée comme si un lit et un homme y étaient présents dans la salle de banquet, alors que la commande vise vraisemblablement le lit évoqué par Beddows.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 36,
+     "commande": "Je demande à Pratt de me faire appeler immédiatement le professeur Smith à St John’s Wood.",
+     "reponse": "« Mademoiselle ? » « Rien pour vous, mademoiselle, hélas. »",
+     "probleme": "La demande de téléphoner à Smith reçoit une réponse sans rapport et l’appel n’est pas effectué.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 43,
+     "commande": "Je vous en prie, Beddows, laissez-moi voir le professeur et dites-moi ce qui se trouve dans ce lit.",
+     "reponse": "Vous voulez dire : Aller : la chambre de Cheapside",
+     "probleme": "La demande de voir Smith et d’identifier ce qui se trouve dans le lit est ignorée et remplacée par une destination sans rapport.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 54,
+     "commande": "Quel est le numéro de la chambre de ce client, Pratt, et à quoi ressemblait-il ?",
+     "reponse": "« Votre chambre, mademoiselle ? Le troisième, sur cour. »",
+     "probleme": "Pratt répond au sujet de la chambre de Margaret au lieu de donner le numéro et la description du client du deuxième étage.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 56,
+     "commande": "Je demande à consulter le registre des clients du deuxième étage.",
+     "reponse": "« Au-dessus de Mrs Gresham... il n’y a que le grenier. »",
+     "probleme": "La demande de consulter le registre est ignorée ; la réponse répète une information sans rapport.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 58,
+     "commande": "Je colle l’oreille à la porte de la chambre 21 pour écouter la radio.",
+     "reponse": "Rien de plus que la première fois : vos affaires, et l’odeur de poussière chaude du radiateur.",
+     "probleme": "L’action d’écouter derrière la porte 21 est comprise comme un examen de la chambre de Margaret.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 61,
+     "commande": "Je colle mon oreille à la porte et demande doucement si tout va bien.",
+     "reponse": "À qui voulez-vous parler ? Ici, il y a : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt...",
+     "probleme": "La réponse ignore la porte 21 et traite la scène comme si Margaret était dans sa propre chambre.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 68,
+     "commande": "Je lui demande quelle circonstance exceptionnelle lui ferait enfin dire la vérité.",
+     "reponse": "« Naturellement, la réception… Non. Le nom ne me dit rien... »",
+     "probleme": "La réponse est incohérente et ne répond pas à la question sur la circonstance exceptionnelle.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 71,
+     "commande": "Je retire le souverain et demande à Pratt s’il connaît le professeur Smith.",
+     "reponse": "« Pas de courrier, mademoiselle. »",
+     "probleme": "La question sur la connaissance de Smith est ignorée au profit d’une réponse sur le courrier.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 73,
+     "commande": "Je suis son regard vers la porte et lui demande qui s’y trouve.",
+     "reponse": "« Son ? Je ne l’aurais pas deviné. »",
+     "probleme": "Après un jet de Baratin réussi, la réponse est grammaticalement et sémantiquement incohérente ; elle ne répond pas à la question sur la personne derrière la porte.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 81,
+     "commande": "J’intercepte la valise et demande à son propriétaire son nom et le numéro de sa chambre.",
+     "reponse": "Parler, oui, mais à qui ? Il y a les journaux, la fenêtre, le téléphone de la réception et Mr Pratt...",
+     "probleme": "L’action vise explicitement le propriétaire de la valise, mais la réponse prétend qu’aucune personne correspondante n’est présente.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 82,
+     "commande": "Je suis la valise du regard pour identifier son propriétaire.",
+     "reponse": "La valise ? Que voulez-vous en faire, exactement ?",
+     "probleme": "La commande signifie suivre la valise des yeux, mais elle est comprise comme une demande d’action sur la valise.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 94,
+     "commande": "Je m’approche silencieusement de la porte qui vient de se refermer pour écouter derrière.",
+     "reponse": "Pour aller où ? Vous connaissez : la salle de lecture du British Museum, la gare Victoria...",
+     "probleme": "L’action de s’approcher de la porte dans le couloir est ignorée et remplacée par une liste de destinations extérieures.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 96,
+     "commande": "Je descends l’escalier pour retrouver la valise et son propriétaire.",
+     "reponse": "L’étage ? Pas ici. Ici, vous remarquez : les journaux, la fenêtre, le téléphone...",
+     "probleme": "La descente vers le couloir ou le rez-de-chaussée est comprise comme une recherche d’un étage dans la chambre de Margaret.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 99,
+     "commande": "Je prends le téléphone de la réception pour appeler Scotland Yard et demander l’inspecteur Fleming.",
+     "reponse": "...vous vous apercevez que vous ne savez pas qui appeler.",
+     "probleme": "La réponse prétend que l’inspecteur Fleming est inconnu alors qu’il a été explicitement nommé au tour 78.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 103,
+     "commande": "J’interroge les ouvriers sur la dernière personne entrée dans la villa.",
+     "reponse": "Beddows : « Je ne peux plus rien vous dire, mademoiselle. Partez, maintenant. »",
+     "probleme": "La question adressée aux ouvriers reçoit à nouveau une réponse de Beddows, sans que les ouvriers soient interrogés.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 106,
+     "commande": "Je m’approche du lit pour examiner ce qui vous effraie.",
+     "reponse": "L’homme sur le lit ? Pas ici. Ici, vous remarquez : la villa.",
+     "probleme": "L’action d’approcher le lit est refusée alors que le lit et l’homme sont établis dans la scène par les réponses précédentes.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 113,
+     "commande": "Je demande à un ouvrier s’il a vu quelqu’un entrer ou sortir de la villa ce matin.",
+     "reponse": "Beddows : « Je ne peux plus rien vous dire, mademoiselle. Partez, maintenant. »",
+     "probleme": "La question adressée à un ouvrier est remplacée par la réplique répétée de Beddows.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 114,
+     "commande": "Je redescends vers la rue et demande aux ouvriers qui les a engagés.",
+     "reponse": "Vous regardez de nouveau la porte... Beddows : « Je ne peux plus rien vous dire... »",
+     "probleme": "L’action de redescendre et d’interroger les ouvriers est ignorée ; la réponse boucle sur la porte et Beddows.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 116,
+     "commande": "Je regarde attentivement autour de moi, à la recherche d’un indice inhabituel.",
+     "reponse": "",
+     "probleme": "Aucune réponse n’est fournie à ce tour.",
+     "gravite": "forte"
+    }
+   ]
+  },
+  {
+   "nom": "partie_03_ashby_absurde",
+   "perso": "ashby",
+   "profil": "absurde",
+   "tours": 107,
+   "fin": true,
+   "indices": 5,
+   "problemes": [
+    {
+     "tour": 1,
+     "commande": "Je m’approche de Smith et lui vole sa pipe pour en renifler le contenu.",
+     "reponse": "« Mon cher ami ! Vous êtes venu ! Asseyez-vous près de moi… »",
+     "probleme": "L’action de voler la pipe et d’en examiner le contenu n’est pas comprise ni mentionnée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 4,
+     "commande": "Et si l’un de ces retours réussissait, professeur ?",
+     "reponse": "« Professeur, chasseur de médiums, et depuis ce soir, prophète malgré moi. »",
+     "probleme": "La réponse est hors sujet et ne répond pas à la question sur les conséquences d’un retour réussi.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 5,
+     "commande": "Je lui demande ce qui pourrait réussir à traverser le rideau.",
+     "reponse": "« La fenêtre ? Le nom ne m’évoque rien… Houdini me l’a dit cent fois : regardez toujours les mains. »",
+     "probleme": "La réponse introduit brusquement une fenêtre et Houdini sans répondre à la question.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 7,
+     "commande": "Je lui demande pourquoi il parle soudain d’une fenêtre et de Houdini.",
+     "reponse": "« Doyle est un ami… »",
+     "probleme": "La réponse parle de Doyle et ne répond ni à la question sur la fenêtre ni à celle sur Houdini.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 8,
+     "commande": "Pas le moins du monde, mais vous venez de parler d’une fenêtre comme si quelqu’un vous soufflait vos mots.",
+     "reponse": "« Né à Whitby, au bord de la mer du Nord… »",
+     "probleme": "La réponse est sans rapport avec la remarque du joueur et change brusquement de sujet.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 12,
+     "commande": "Je resterai, mais je vous raccompagnerai d’abord chez vous pour vérifier que vous n’êtes pas hanté.",
+     "reponse": "« À St John’s Wood, toujours. Vous y avez dîné vingt fois. »",
+     "probleme": "La réponse ne prend pas en compte la proposition de raccompagner Smith.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 24,
+     "commande": "Avez-vous remarqué quelqu’un rôder devant l’hôtel ce matin ?",
+     "reponse": "« Le Grand Hôtel de Russell Square, monsieur. Soixante chambres… »",
+     "probleme": "La réponse est une publicité sans rapport avec la question.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 26,
+     "commande": "Le professeur Smith a-t-il séjourné ici récemment ?",
+     "reponse": "« Pas de courrier, monsieur. Le brouillard ralentit tout, même la poste. »",
+     "probleme": "La réponse ne concerne pas un éventuel séjour de Smith à l’hôtel.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 30,
+     "commande": "J’examine les échafaudages et les fenêtres du bureau.",
+     "reponse": "Vous faites les cent pas devant la grille. […] Au bout d’une heure, vous renoncez.",
+     "probleme": "L’action d’examiner les échafaudages et les fenêtres est remplacée par une attente d’une heure suivie d’un abandon.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 33,
+     "commande": "Je frappe trois coups à la porte et chante une comptine pour enfants.",
+     "reponse": "Vous y revenez. Un peintre en salopette vous répond… Puis Beddows paraît… « Comme je vous le disais, monsieur… »",
+     "probleme": "La réponse répète presque entièrement celle du tour précédent et ne décrit pas réellement l’action de frapper et de chanter.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 36,
+     "commande": "Je ramasse une bouteille de lait et frappe à la porte avec.",
+     "reponse": "Vous revenez vers la porte. Rien n’a changé depuis tout à l’heure.",
+     "probleme": "L’action de prendre la bouteille et de frapper avec est ignorée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 39,
+     "commande": "Parler à Mrs Pike des articles concernant le professeur Smith",
+     "reponse": "Vous ne voyez pas le professeur Smith ici. Ici, vous remarquez : Mrs Pike, l’archiviste et les volumes reliés.",
+     "probleme": "Le jeu interprète à tort la demande comme une recherche visuelle de Smith au lieu de faire parler Mrs Pike.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 43,
+     "commande": "Je lui demande de rechercher les articles concernant le professeur Smith.",
+     "reponse": "Vous posez une demi-couronne sur le comptoir. Elle disparaît.",
+     "probleme": "Le paiement est répété alors qu’une demi-couronne a déjà été remise au tour 42.",
+     "gravite": "faible"
+    },
+    {
+     "tour": 47,
+     "commande": "Mrs Pike, avez-vous remarqué des menaces récentes contre le professeur Smith ?",
+     "reponse": "Vos poings se serrent, mais il n’y a personne à menacer.",
+     "probleme": "La réponse ne répond pas à la question et décrit une action ou une émotion non demandée.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 49,
+     "commande": "Mrs Pike, qui était le médium démasqué dans son dernier article ?",
+     "reponse": "Vous notez « les hantises » dans votre carnet…",
+     "probleme": "La réponse ne donne pas le nom du médium et transforme la question en indice sans rapport précis.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 61,
+     "commande": "Je quitte les archives pour chercher ailleurs l’annonce de la dernière conférence de Smith.",
+     "reponse": "Même résultat qu’à l’instant.",
+     "probleme": "Le départ des archives est ignoré et le personnage reste dans le même lieu.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 64,
+     "commande": "Je quitte les archives et monte voir le rédacteur en chef.",
+     "reponse": "Mrs Pike, l’archiviste : « Oui ? »",
+     "probleme": "L’action de quitter les archives et de monter voir le rédacteur est ignorée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 71,
+     "commande": "Je prends la valise et demande à Beddows comment retrouver les Turcs.",
+     "reponse": "« Le Simplon-Orient-Express, monsieur… »",
+     "probleme": "La réponse parle du train et ne répond pas à la question sur les Turcs. La prise de la valise n’est pas clairement traitée.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 76,
+     "commande": "Réservez dès l’aube trois places dans le Simplon-Orient-Express, pour Paris.",
+     "reponse": "Beddows : Il ne répond plus. Il regarde le lit, et vous, et la porte.",
+     "probleme": "La demande concrète de réservation n’est pas prise en compte.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 78,
+     "commande": "Je m’excuse auprès de Beddows et lui demande où nous pouvons dormir en sécurité jusqu’à l’aube.",
+     "reponse": "Beddows : « Monsieur ? »",
+     "probleme": "La réponse ne répond pas à la question sur un endroit sûr où dormir.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 81,
+     "commande": "Je prends la valise et quitte la chambre en silence.",
+     "reponse": "Vous n’allez pas emporter ça.",
+     "probleme": "Le jeu refuse l’action, alors que la valise est ensuite retrouvée à l’hôtel au tour 82 et confiée au concierge au tour 83.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 87,
+     "commande": "Puis-je consulter aujourd’hui les catalogues ou les ouvrages accessibles au public sur Sedefkar ?",
+     "reponse": "Vous voulez dire : [suggestions] Chercher le simulacre de Sedefkar | Repenser aux pistes de Smith",
+     "probleme": "La réponse ne dit pas si les catalogues ou ouvrages accessibles peuvent être consultés aujourd’hui.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 93,
+     "commande": "Je quitte la salle de lecture et me rends chez Cook pour vérifier la réservation du train.",
+     "reponse": "Vous ne voyez pas les billets ici. Ici, vous remarquez : le comptoir du conservateur et les catalogues.",
+     "probleme": "Le départ de la salle de lecture et le trajet chez Cook sont ignorés.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 96,
+     "commande": "Je quitte la salle de lecture et me rends chez Cook vérifier la réservation du train.",
+     "reponse": "Plus précisément ? [suggestions] Aller : la gare Victoria | Se documenter sur l’Orient-Express",
+     "probleme": "L’action est raisonnable, mais le lieu « chez Cook » n’est pas reconnu alors que la réservation y est explicitement mentionnée précédemment.",
+     "gravite": "faible"
+    },
+    {
+     "tour": 104,
+     "commande": "Je consulte le tableau des départs pour connaître l’heure du train du ferry pour Douvres.",
+     "reponse": "Une horloge géante, des pigeons, des marchands de journaux…",
+     "probleme": "L’heure du départ, recherchée explicitement, n’est pas fournie.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 105,
+     "commande": "Je consulte le tableau des départs pour noter l’heure exacte du ferry.",
+     "reponse": "Un porteur vous propose ses services. Plus loin, un homme brun à moustache lit le journal.",
+     "probleme": "La réponse ne décrit pas la consultation du tableau et ne donne toujours pas l’heure du départ.",
+     "gravite": "moyenne"
+    }
+   ]
+  },
+  {
+   "nom": "partie_04_prologue_menteur",
+   "perso": "prologue",
+   "profil": "menteur",
+   "tours": 11,
+   "fin": true,
+   "indices": 3,
+   "problemes": [
+    {
+     "tour": 0,
+     "commande": "",
+     "reponse": "[système] Écrivez ce que fait Lucien, comme à une table de jeu… Touchez « Idées » si vous séchez.",
+     "probleme": "La réponse s’adresse directement au joueur et révèle explicitement qu’il s’agit d’un jeu ou d’un programme, au lieu de rester dans la fiction.",
+     "gravite": "forte"
+    }
+   ]
+  },
+  {
+   "nom": "partie_05_pemberton_presse",
+   "perso": "pemberton",
+   "profil": "presse",
+   "tours": 120,
+   "fin": false,
+   "indices": 11,
+   "problemes": [
+    {
+     "tour": 6,
+     "commande": "aller au Chelsea Arms",
+     "reponse": "Pour aller où ? Vous connaissez : votre hôtel, à Bloomsbury, l’hôtel Chelsea Arms…",
+     "probleme": "Le lieu « Chelsea Arms » vient d’être découvert et la commande est parfaitement claire, mais le jeu ne reconnaît pas la destination.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 13,
+     "commande": "Je demande à l’agent qui occupe la chambre 14.",
+     "reponse": "Nouveau lieu : Scotland Yard. Écrivez « aller à… » ou touchez « Où aller ? ».",
+     "probleme": "La réponse ne traite pas la question et fait changer de lieu sans justification.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 22,
+     "commande": "Avez-vous trouvé des traces ou des objets dans la bibliothèque ?",
+     "reponse": "Le British Museum ? Tout le monde connaît. Des momies, des statues, et une bibliothèque où il faut chuchoter.",
+     "probleme": "Réponse hors sujet : Rigby répond au sujet du British Museum au lieu de parler des traces trouvées dans la bibliothèque incendiée.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 23,
+     "commande": "Prendre congé et aller au British Museum.",
+     "reponse": "Le sergent Rigby : « Si vous voyez Beddows, vous me prévenez. Pour son bien aussi. » Depuis le banquet, pas un mot de Smith.",
+     "probleme": "L’action « aller au British Museum » n’est pas exécutée ; le jeu renvoie à la maison de Smith sans raison.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 27,
+     "commande": "Je force la porte arrière.",
+     "reponse": "Il n’y a rien ici qui vaille une effraction.",
+     "probleme": "L’action est raisonnable dans le contexte d’une maison supposée abandonnée, mais elle est refusée sans tentative ni explication, alors que l’enquête progresse ensuite autour de cette maison.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 32,
+     "commande": "Je lis les journaux.",
+     "reponse": "Trois hommes ont été découverts hier, poignardés en plein cœur, dans une chambre de l’hôtel Chelsea Arms.",
+     "probleme": "Contradiction de chronologie : les meurtres ont déjà été évoqués au petit matin du samedi 6, alors que nous sommes lundi 8 ; ils ne peuvent pas avoir été découverts « hier ».",
+     "gravite": "forte"
+    },
+    {
+     "tour": 35,
+     "commande": "Où se trouve le véritable Mehmet Makryat ?",
+     "reponse": "Mehmet Makryat, né à Constantinople… il y a trente-neuf ans.",
+     "probleme": "L’indice ajouté au carnet affirme ensuite qu’« à Islington, tout le monde connaissait un vieil homme », ce qui contredit l’âge établi de trente-neuf ans.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 42,
+     "commande": "Je fouille la vieille sacoche.",
+     "reponse": "Vous avez déjà examiné les marchandises tout à l’heure. Des cuivres égyptiens, des tapis persans, des céramiques arabes. Certaines pièces sont visiblement des copies. Rien d’extraordinaire. Rien n’a changé.",
+     "probleme": "La réponse répète la description des marchandises et ne traite pas de la sacoche.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 57,
+     "commande": "J’interroge l’antiquaire voisin sur les visiteurs de Makryat.",
+     "reponse": "Le buraliste : Un soupir, à peine poli.",
+     "probleme": "Le joueur cible clairement l’antiquaire voisin, mais le jeu continue de répondre comme si le personnage interrogé était le buraliste.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 65,
+     "commande": "Je sors et entre chez l’antiquaire voisin.",
+     "reponse": "Le buraliste ? Pas ici. Ici, vous remarquez : les marchandises, le comptoir et ses registres et l’escalier vers l’étage.",
+     "probleme": "L’action de sortir de la boutique et d’entrer chez le voisin est ignorée ; le personnage reste dans la boutique de Makryat.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 68,
+     "commande": "Je fouille la sacoche.",
+     "reponse": "Les marchandises, encore. Vous en connaissez chaque détail, maintenant.",
+     "probleme": "La réponse répète les marchandises et ne traite pas de la sacoche.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 73,
+     "commande": "Makryat connaissait-il les victimes du Chelsea Arms ?",
+     "reponse": "L’inspecteur Fleming : « Je vous l’ai déjà dit, docteur. »",
+     "probleme": "Fleming ne répond pas à cette question précise et affirme l’avoir déjà dit alors qu’il ne l’a pas établi dans l’échange précédent.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 79,
+     "commande": "Je demande au laitier où le fiacre a conduit Beddows.",
+     "reponse": "Le laitier : « Et cinq minutes après, boum. Les fenêtres. Le feu partout. Lui, il ne s’est même pas retourné. »",
+     "probleme": "La réponse ne donne pas la destination du fiacre, pourtant demandée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 82,
+     "commande": "aller à la chambre de Cheapside",
+     "reponse": "« Samedi soir, des Turcs ont attaqué ma maison. »",
+     "probleme": "Le récit présente l’attaque comme ayant eu lieu samedi soir, alors que l’incendie et la fuite de Smith ont été situés dans la nuit de vendredi à samedi.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 83,
+     "commande": "Je prends la valise et pars pour Paris.",
+     "reponse": "Vous n’allez pas emporter ça.",
+     "probleme": "Le personnage refuse de prendre la valise qui lui a été remise pour financer le voyage, alors qu’il pourra ensuite la déposer à l’hôtel ; l’action raisonnable est mal comprise.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 89,
+     "commande": "Je demande les références sur Fenalik et Sedefkar.",
+     "reponse": "Les pistes de Smith ? Pas ici. Ici, vous remarquez : le comptoir du conservateur et les catalogues.",
+     "probleme": "La demande de références est ignorée et la réponse renvoie à une description générique des lieux.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 97,
+     "commande": "Rechercher les articles sur le comte Fenalik.",
+     "reponse": "Mrs Pike, l’archiviste : « Je vous l’ai déjà dit, docteur. »",
+     "probleme": "La recherche demandée n’est pas effectuée, alors que l’archiviste a accepté contre paiement de chercher un nom ou un fait divers.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 98,
+     "commande": "Rechercher les articles mentionnant Sedefkar.",
+     "reponse": "Mrs Pike, l’archiviste : « Comme je vous le disais… »",
+     "probleme": "La recherche demandée n’est pas effectuée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 100,
+     "commande": "Je cherche dans les journaux reliés les articles sur Fenalik.",
+     "reponse": "Mrs Pike, l’archiviste : « Quoi encore ? »",
+     "probleme": "Le joueur tente une recherche directe dans les volumes, mais la réponse l’ignore et ne décrit aucune action ni résultat.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 101,
+     "commande": "Je cherche les articles sur la Mosquée Maudite dans les journaux reliés.",
+     "reponse": "Mrs Pike, l’archiviste : « Je vous écoute. Vite. »",
+     "probleme": "La recherche demandée n’est pas effectuée et la réponse ne fait pas progresser l’action.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 102,
+     "commande": "Je cherche les articles sur Sedefkar dans les journaux reliés.",
+     "reponse": "Mrs Pike, l’archiviste : « Oui ? »",
+     "probleme": "La recherche demandée n’est pas effectuée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 103,
+     "commande": "Je consulte les volumes reliés consacrés à Sedefkar.",
+     "reponse": "Mrs Pike, l’archiviste : « Docteur ? »",
+     "probleme": "L’action de consultation est ignorée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 104,
+     "commande": "Je consulte les journaux reliés de 1875 à la recherche de Sedefkar.",
+     "reponse": "Mrs Pike, l’archiviste : « Oui ? »",
+     "probleme": "L’action de consultation est ignorée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 105,
+     "commande": "Demander à Mrs Pike les articles sur le simulacre de Sedefkar.",
+     "reponse": "Mrs Pike, l’archiviste : « Le simulacre de Sedefkar ? Connais pas. »",
+     "probleme": "La réponse contredit la mission de recherche acceptée par l’archiviste et ne propose aucune recherche malgré le paiement.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 107,
+     "commande": "Je cherche les articles sur le meurtre de Fenalik dans les journaux parisiens.",
+     "reponse": "Mrs Pike, l’archiviste : « Docteur ? »",
+     "probleme": "La recherche demandée est ignorée une nouvelle fois.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 113,
+     "commande": "Retourner à l’hôtel et fouiller la valise de Beddows.",
+     "reponse": "Vous voulez dire : [suggestions] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Rester ici",
+     "probleme": "La commande combine un déplacement et une action claire, mais le jeu n’exécute ni la fouille ni directement le déplacement.",
+     "gravite": "faible"
+    },
+    {
+     "tour": 117,
+     "commande": "Je téléphone à la réception pour réserver des billets chez Cook.",
+     "reponse": "Le téléphone de la réception… vous vous apercevez que vous ne savez pas qui appeler.",
+     "probleme": "Le jeu avait explicitement proposé de réserver les billets chez Cook et interprète pourtant cette action comme un appel indéterminé.",
+     "gravite": "moyenne"
+    }
+   ]
+  },
+  {
+   "nom": "partie_06_doyle_fautes",
+   "perso": "doyle",
+   "profil": "fautes",
+   "tours": 120,
+   "fin": false,
+   "indices": 6,
+   "problemes": [
+    {
+     "tour": 1,
+     "commande": "je m’approche de Smith et regarde ses notes par-dessus son épaule",
+     "reponse": "« Mon cher amie ! Vous êtes venue ! Asseyez-vous près de moi… »",
+     "probleme": "L’action de regarder les notes n’est pas prise en compte. De plus, « mon cher amie » contient une faute d’accord ; il faudrait « ma chère amie ».",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 5,
+     "commande": "Et ces photos, professeur, qui vous les a fournies exactement ?",
+     "reponse": "« Si nous étions moins sots, nous pourrions un jour passer de l’autre côté. »",
+     "probleme": "Réponse à côté de la question : Smith ne répond pas à la provenance des photographies.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 8,
+     "commande": "Je me tourne vers Beddows et lui demande qui a fourni les photographies.",
+     "reponse": "« Les plaques de Monsieur ? Je les ai portées moi-même… »",
+     "probleme": "Beddows répond à une autre question : il parle du transport des plaques, pas de la personne qui a fourni les photographies.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 9,
+     "commande": "Et vous savez ou ces photos ont ete prises, Beddows ?",
+     "reponse": "« Je vous l’ai dit, mademoiselle : les plaques de Monsieur ? Je les ai portées moi-même… »",
+     "probleme": "La question porte sur le lieu des prises de vue, mais la réponse répète hors sujet l’information sur le transport des plaques.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 23,
+     "commande": "Je rentre a l’hotel et note tout ce que Smith a dit.",
+     "reponse": "Vous voulez dire :",
+     "probleme": "Une action claire et raisonnable est rejetée comme si elle nécessitait une reformulation, alors que le départ vers l’hôtel était précisément l’action proposée.",
+     "gravite": "faible"
+    },
+    {
+     "tour": 25,
+     "commande": "je relis mes notes puis je dors avec la lumiere allumee",
+     "reponse": "Vous restez un moment sans bouger… Vous rouvrez votre carnet… Pas ici. Rentrez d’abord à votre hôtel.",
+     "probleme": "La réponse se contredit : Margaret est déjà à l’hôtel et l’action de relire ses notes est décrite, puis le texte lui ordonne de rentrer à l’hôtel.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 34,
+     "commande": "je descends par l’escalier pour suivre le groom et la valise",
+     "reponse": "Vous ne voyez pas l’étage ici. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt…",
+     "probleme": "L’action de suivre le groom est mal comprise et remplacée par une description de la réception.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 35,
+     "commande": "Je demande a Pratt qui vient de quitter l’hotel avec la valise.",
+     "reponse": "« Si je puis me permettre, le Grand Hôtel de Russell Square… »",
+     "probleme": "Réponse sans rapport avec l’identité du client qui vient de partir.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 36,
+     "commande": "Le client qui vient de partir avec la valise, c’etait qui ?",
+     "reponse": "« Un taxi en dix minutes… le British Museum… ou la morgue du Daily Courier… »",
+     "probleme": "La question est répétée, mais la réponse reste entièrement hors sujet.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 42,
+     "commande": "Je consulte le registre pour relever le lieu et les noms des participants.",
+     "reponse": "Vous cherchez les registres des yeux, en vain.",
+     "probleme": "Contradiction avec le tour précédent, où Mrs Pike tend déjà « le registre des fiches » à Margaret.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 45,
+     "commande": "Je cherche les articles mentionnant le professeur Smith et sa conference de vendredi dernier.",
+     "reponse": "Le professeur Smith ? Pas ici.",
+     "probleme": "Contradiction avec le succès du tour 39, où un article sur la conférence de Smith a été retrouvé.",
+     "gravite": "forte"
+    },
+    {
+     "tour": 65,
+     "commande": "lancer",
+     "reponse": "Aucun jet n’attend les dés. Pour en proposer un au Gardien, dites la compétence…",
+     "probleme": "La réponse trahit explicitement le fonctionnement de programme et de jeu, en s’adressant au joueur comme à un utilisateur de l’interface.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 85,
+     "commande": "je m approche du lit pour examiner l homme et son étatTHOOK",
+     "reponse": "Les favoris et la moustache de Smith ont disparu. Brûlés, évidemment… C’est pour ça qu’il paraît si différent. … Sans doute.",
+     "probleme": "Le texte répète inutilement « Sans doute » et présente une explication incohérente avec l’état décrit juste avant, où le visage semble déformé de manière surnaturelle.",
+     "gravite": "faible"
+    },
+    {
+     "tour": 98,
+     "commande": "je demande au concierge de reserver aussi une place pour le professeur et de preparer mes bagages",
+     "reponse": "Mr Pratt : « Comme je vous le disais… »",
+     "probleme": "La réponse n’accomplit ni la réservation de la place du professeur ni la préparation des bagages.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 99,
+     "commande": "Preparez aussi mes bagages et envoyez un telegramme au professeur pour qu’il nous rejoigne.",
+     "reponse": "« Un télégramme, mademoiselle ? … Pour où ? »",
+     "probleme": "Le destinataire est explicitement indiqué (« au professeur »), mais la réponse demande une destination comme si la demande n’avait pas été comprise.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 100,
+     "commande": "Au professeur, dites-lui de me rejoindre demain matin a Victoria avec ses bagages.",
+     "reponse": "« Vous m’avez déjà posé la question, mademoiselle. »",
+     "probleme": "La demande précise le contenu du télégramme, mais le concierge refuse de l’exécuter et répond comme si elle était simplement répétée.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 103,
+     "commande": "Je prends une chambre au nom du professeur et lui laisse un message de me rejoindre demain matin a Victoria.",
+     "reponse": "Vous n’allez pas emporter ça.",
+     "probleme": "La réponse ne correspond pas à l’action demandée et semble interpréter à tort la prise d’une chambre comme le fait d’emporter un objet.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 110,
+     "commande": "Je decoupe l’article et demande a Mr Pratt l’adresse de Scotland Yard.",
+     "reponse": "« Une annonce dans le Times ? Rien de plus simple… »",
+     "probleme": "Réponse à côté de la question : Pratt ne donne pas l’adresse de Scotland Yard et parle sans raison d’une petite annonce.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 119,
+     "commande": "Je vous laisse mon nom et mon adresse, au cas ou Beddows ou le professeur reapparaissent.",
+     "reponse": "« Vous êtes mademoiselle. C’est tout ce que je sais de vous. »",
+     "probleme": "Le sergent ne prend pas les coordonnées proposées et répond de façon incohérente, alors que Margaret vient précisément de les lui donner.",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 120,
+     "commande": "Je lui donne mon nom et l’adresse de l’hotel.",
+     "reponse": "« Ah, vous êtes mademoiselle. C’est tout ce que je sais de vous. »",
+     "probleme": "L’action de donner son nom et son adresse n’est pas prise en compte ; la réponse répète la confusion du tour précédent.",
+     "gravite": "moyenne"
+    }
+   ]
+  }
+ ]
+}
