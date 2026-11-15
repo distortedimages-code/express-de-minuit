@@ -462,6 +462,9 @@
   Art.PHOTO_LIST = PHOTO_LIST;
   P.photoKey = function (scene, st) {
     var f = st.flags || {};
+    // un chapitre peut désigner lui-même l'image d'un décor (G.PHOTO_SCENES[décor] = clé, ou fonction de l'état)
+    var ps = G.PHOTO_SCENES && G.PHOTO_SCENES[scene];
+    if (ps) return typeof ps === 'function' ? ps(st) : ps;
     switch (scene) {
       case 'title': return 'ecran-titre/titre';
       case 'restaurant': return 'prologue/01_wagon-restaurant';

@@ -450,7 +450,9 @@
     function tokens(x) {
       if (typeof x !== 'string' || x.indexOf('{') < 0) return x;
       var f = s.pc && s.pc.sex === 'f';
-      return x.replace(/\{(M|m|Mr|e|nom|prenom|Nom|il|Il|le|ami|Ami|eux|x|cher|Cher)\}/g, function (all, k) {
+      return x.replace(/\{(M|m|Mr|e|nom|prenom|Nom|il|Il|le|ami|Ami|eux|x|cher|Cher)\}/g, function (all, k, pos) {
+        // à la troisième personne (« Monsieur désire ? », « Madame est bien bonne »), on ne dit pas « Docteur désire »
+        if ((k === 'M' || k === 'm') && s.pc.title === 'Dr' && /^ [a-zéèêàâîôûç]/.test(x.slice(pos + all.length, pos + all.length + 2))) return k === 'M' ? (f ? 'Madame' : 'Monsieur') : (f ? 'madame' : 'monsieur');
         switch (k) {
           case 'M': return s.pc.title === 'Dr' ? 'Docteur' : s.pc.title === 'Miss' ? 'Mademoiselle' : f ? 'Madame' : 'Monsieur';
           case 'm': return s.pc.title === 'Dr' ? 'docteur' : s.pc.title === 'Miss' ? 'mademoiselle' : f ? 'madame' : 'monsieur';
@@ -513,7 +515,7 @@
       s.counters['fresh:' + key] = i;
       return pool[i];
     }
-    var talkMode = null, inExec = false;
+    var talkMode = null, inExec = false, filEnCours = null, sujetEnCours = null;
     function patienceTier(npc, st) { var max = npc.patience || 6; return st.patience > max * 0.5 ? 0 : st.patience > 1 ? 1 : 2; }
     function closeTalk(npc) {
       var st = npcState(npc.id);
@@ -560,6 +562,12 @@
         return;
       }
       noterReplique(who, x);
+      // la question en suspens : ce personnage vient-il de demander quelque chose ? (voir reponseBreve)
+      if (npc && s.talk === who) {
+        var sq = npcState(who);
+        sq.question = /\?\s*»?\s*$/.test(String(x)) ? { turn: s.turn, fil: filEnCours, sujet: talkMode === 'topic' ? sujetEnCours : null, ouverte: questionOuverte(String(x)) } : null;
+        sq.parle = s.turn;
+      }
       // les répliques sans guillemets sont des gestes : narration
       log({ t: 'npc', who: who, name: name, x: x });
     }
@@ -1109,13 +1117,84 @@
       var n = st.asked[topicId] || 0;
       st.asked[topicId] = n + 1;
       if (!t.noFollow) { st.last = topicId; st.more = 0; }
+      st.dernierSujet = { id: topicId, turn: s.turn };
       if (!/^(poli|aurevoir|toimeme|etat|insulte|embrasser|danser|chanter|manger|meta|heure)$/.test(topicId)) st.ecart = 0;
       s.tick = scene.talkTick || 1;
-      talkMode = 'topic';
+      talkMode = 'topic'; sujetEnCours = topicId;
       try {
         if (t.run) t.run(api, n, p);
         else api.npc(npc.id, t.lines[Math.min(n, t.lines.length - 1)]);
-      } finally { talkMode = null; }
+      } finally { talkMode = null; sujetEnCours = null; }
+    }
+    // ----- la question en suspens -----
+    // Un personnage qui vient de poser une question doit pouvoir entendre « oui », « non » ou « je ne sais pas ».
+    // Une amorce du fil (« Vous avez vu, n'est-ce pas ? ») : la réponse ouvre le sujet qu'il voulait aborder.
+    // Une réplique écrite : « oui » fait venir la suite du même sujet. Sinon, il prend acte, dans son ton.
+    // Et sans question posée, un « oui » tout seul l'étonne (« À quoi répondez-vous ? ») : jamais « je n'ai pas saisi ».
+    var BREF_OUI = /^(oui|ouais|ouaip|si|bien sur|bien entendu|evidemment|naturellement|certes|absolument|exactement|tout a fait|en effet|affirmatif|d accord|ok|entendu|volontiers|avec plaisir|ca marche|marche conclu|pourquoi pas|allons y|c est vrai|c est exact|c est ca|c est cela|je crois|je pense|je le crois|je le pense|helas oui|un peu|plutot|en quelque sorte|il me semble|j ai vu|je les ai vues?|je l ai vue?)\b/;
+    var BREF_NON = /^(non|nan|nenni|jamais|pas du tout|nullement|aucunement|pas vraiment|pas encore|pas que je sache|helas non|je ne crois pas|je ne pense pas|je crains que non|surement pas|certainement pas|personne|rien|aucun|aucune)\b/;
+    var BREF_VAGUE = /^(peut etre|sans doute|probablement|je ne sais pas|je sais pas|je l ignore|aucune idee|difficile a dire|ca depend|cela depend|qui sait|bof|mouais|hum|euh)\b/;
+    var BREF_RESTE = /\b(monsieur|madame|mademoiselle|professeur|docteur|inspecteur|sergent|mon ami|mon cher|ma chere|merci|vraiment|bien sur|helas|je crois|je pense|en effet|tout a fait|pas du tout|du tout|absolument|certainement|malheureusement|oui|non|si|je|j|l|les|le|la|ai|vu|vue|vues|vus|que|ne|pas|sais|c|est|ca|cela|vrai|exact|et|mais|ma foi|eh bien|ah|oh|bah|ben|n|m|en|y|rien|suis|sur|sure|certain|certaine|crois|pense|tout|bien|avec|plaisir|marche|conclu|pourquoi|allons|d|accord|entendu|volontiers|ok)\b/g;
+    // « Que puis-je pour vous ? », « de sa part, ou contre lui ? » : on n'y répond pas par oui ou par non
+    function questionOuverte(x) {
+      var ph = ((x.replace(/[»«]/g, ' ').match(/[^.!?…]+[.!?…]+/g) || []).filter(function (y) { return /\?\s*$/.test(y); }).pop() || '').trim();
+      return /^(Que|Qu’|Qu'|Qui|Où|Quand|Comment|Pourquoi|Quels?|Quelles?|Combien|À quoi|De quoi|De qui|À qui|Pour qui|Lequel|Laquelle|L’objet|Et (vous|alors))\b/.test(ph)
+        || /\bou (bien |plutôt |contre |pour )|, ou /.test(ph)
+        || /^(Oui|Alors|Pardon|Hm|Hein|Plaît-il|Vous disiez|C’est-à-dire|Mais encore|Encore|Eh bien|Monsieur|Madame|Mademoiselle|Docteur|Professeur|Miss|Sir|Inspecteur|Mon ami|Mon cher|Ma chère)\s*\?$/.test(ph);
+    }
+    function reponseBreve(p, npc) {
+      var t = normalize(p.raw || '').trim();
+      if (!t || /\?/.test(p.raw || '') || t.split(/\s+/).length > 6) return null;
+      var k = BREF_VAGUE.test(t) ? 'vague' : BREF_OUI.test(t) ? 'oui' : BREF_NON.test(t) ? 'non' : null;
+      if (!k) return null;
+      // rien d'autre dans la phrase : « oui, professeur » est une réponse ; « oui, les photographies » parle d'un sujet
+      if (t.replace(k === 'vague' ? BREF_VAGUE : k === 'oui' ? BREF_OUI : BREF_NON, ' ').replace(BREF_RESTE, ' ').replace(/\s+/g, '')) return null;
+      return k;
+    }
+    // cas : 'q' il avait posé une question fermée ; 'o' une question ouverte (« oui » n'y répond pas) ;
+    //       'd' il venait de dire quelque chose (on acquiesce, on doute) ; 's' personne n'avait rien demandé
+    function prendreActe(npc, st, k, cas) {
+      var dit = false, libre = cas === 'q' || cas === 'd';
+      talkMode = 'raw';
+      try { dit = !!(scene.converse && scene.converse.bref && scene.converse.bref(api, npc, k, cas)); } catch (err) { dit = false; }
+      if (!dit) {
+        var G0 = cas === 'q' ? { oui: ['« Bien. »', '« Je m’en doutais. »', '« Bon. »'], non: ['« Non ? Ah. »', '« Tant pis. »', '« Soit. »'], vague: ['« Vous n’en êtes pas sûr. »', '« Ni oui ni non, donc. »'] }[k]
+          : cas === 'd' ? (k === 'oui' ? ['« Voilà. »', '« Comme je vous le dis. »', '« Eh oui. »'] : ['« C’est pourtant ainsi. »', '« Croyez ce que vous voulez. »'])
+          : cas === 'o' ? ['« Mais encore ? »', '« Ce n’est pas une réponse. »', '« C’est-à-dire ? »']
+          : ['« Pardon ? À quoi répondez-vous ? »', '« Vous disiez ? »', '« Je ne vous avais rien demandé, je crois. »'];
+        api.npc(npc.id, fresh('bref:' + k + ':' + cas + ':' + npc.id, G0));
+      }
+      talkMode = null;
+      st.question = null;
+      s.tick = scene.talkTick || 1;
+      if (!libre) { st.ecart = (st.ecart || 0) + 1; st.brefs = (st.brefs || 0) + 1; if (st.brefs % 3 === 0) st.patience -= 1; if (st.patience <= 0) { closeTalk(npc); return; } }
+      if (s.talk === npc.id && filIntrigue(npc, st)) return;
+      if (!libre && s.talk === npc.id) { var chips = topicChips(npc); if (chips.length) api.chips(chips.map(function (c) { return { label: c.label, topic: c.topic }; })); }
+    }
+    function repondreBref(npc, st, k, p) {
+      var q = st.question && s.turn - st.question.turn <= 1 ? st.question : null;
+      st.question = null;
+      if (G.RPG_BREFS) G.RPG_BREFS.push({ who: npc.id, k: k, q: q });
+      var dispo = function (id) { var t = id && (npc.topics || []).filter(function (x) { return x.id === id; })[0]; return t && (!t.cond || t.cond(api)) ? t : null; };
+      // une offre écrite (« cinquante francs la journée ») à laquelle on répond « d'accord » : le sujet dit quoi faire (t.oui, t.non)
+      var d = st.dernierSujet && s.turn - st.dernierSujet.turn <= 1 ? dispo(st.dernierSujet.id) : null, suite = d && k !== 'vague' && d[k];
+      if (suite) {
+        if (typeof suite === 'function') { talkMode = 'topic'; try { suite(api, p); } finally { talkMode = null; } s.tick = scene.talkTick || 1; return; }
+        if (dispo(suite)) { runTopic(npc, suite, p); return; }
+      }
+      // il voulait en venir là : on y vient
+      if (q && q.fil && dispo(q.fil)) { runTopic(npc, q.fil, p); return; }
+      var vientDeParler = st.parle !== undefined && s.turn - st.parle <= 1;
+      if (q && q.ouverte) { prendreActe(npc, st, k, 'o'); return; }
+      // « oui » à une réplique écrite (question ou non) : la suite du même sujet, s'il en reste
+      var sj = (q && q.sujet) || (!q && vientDeParler && st.dernierSujet && s.turn - st.dernierSujet.turn <= 1 && st.dernierSujet.id);
+      if (sj && k === 'oui') {
+        var t = dispo(sj), n = st.asked[sj] || 0;
+        if (t && !t.run && t.lines && n < t.lines.length) { runTopic(npc, sj, p); return; }
+        var more = t && (typeof t.more === 'function' ? t.more(api) : t.more);
+        if (t && more && more.length && (st.more || 0) < more.length && st.last === sj) { followUp(npc); return; }
+      }
+      prendreActe(npc, st, k, q ? 'q' : vientDeParler ? 'd' : 's');
     }
     function followUp(npc) {
       var st = npcState(npc.id);
@@ -1235,7 +1314,9 @@
         }
         st.fil[i] = 1; st.filTour = s.turn; st.ecart = 0;
         var x = Array.isArray(f.x) ? fresh('fil:' + npc.id + ':' + i, f.x) : f.x;
-        talkMode = 'raw'; logNpc(npc.id, x); talkMode = null;
+        talkMode = 'raw'; filEnCours = f.t || null; logNpc(npc.id, x); filEnCours = null; talkMode = null;
+        // une amorce attend toujours qu'on la suive, même quand elle ne finit pas sur un point d'interrogation
+        if (f.t && s.talk === npc.id) st.question = { turn: s.turn, fil: f.t, sujet: null, ouverte: false };
         if (G.RPG_FILS) G.RPG_FILS.push({ who: npc.id, t: f.t, x: x });
         return true;
       }
@@ -1318,6 +1399,8 @@
       if (!p.nouns.length && st.last && /\b(cet homme|ce monsieur|ce type|ce gars|cet individu|cette femme|cette dame|celui la|celle la|ce personnage|de lui|d elle|sur lui|sur elle)\b/.test(p.text) && npc.topics.some(function (x) { return x.id === st.last && (!x.cond || x.cond(api)); })) { runTopic(npc, st.last, p); return; }
       // une réponse à la question que le PNJ vient de poser
       if (A && A.answer && talkBack()) return;
+      var bref = reponseBreve(p, npc);
+      if (bref) { repondreBref(npc, st, bref, p); return; }
       if (A && A.mine && talkBack()) return;
       if (A && A.a && A.a.ents.length && scene.converse.note) scene.converse.note(api, npc, A.a.ents[0]);
       var addressed = A && A.addressed;

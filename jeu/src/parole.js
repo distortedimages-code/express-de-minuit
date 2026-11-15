@@ -288,6 +288,85 @@
     mondain: ['« Vous parlez trop vite, mon ami. « {1} », « {2} »… et alors ? »'],
     fievreux: ['« « {1} »… « {2} »… Les mots se mélangent, ici. Redites. Plus lentement. »']
   };
+  // la réponse brève : il a demandé, on a dit oui ou non, il prend acte ; il n'a rien demandé, il s'étonne
+  var BREF = {
+    oui: {
+      formel: ['« Bien. Je m’en doutais un peu. »', '« À la bonne heure. »', '« C’est ce qu’il me semblait. »', '« Fort bien, {m}. »'],
+      sec: ['« Bien. »', '« Soit. »', '« C’est noté. »'],
+      populaire: ['« Ah, vous voyez. »', '« Je me disais, aussi. »', '« Bon. »'],
+      savant: ['« C’est bien ce que je pensais. »', '« Voilà qui est clair. »', '« Bien, bien. »'],
+      domestique: ['« Bien, {m}. »', '« Très bien, {m}. »'],
+      mondain: ['« Je l’aurais parié. »', '« Naturellement. »', '« Voyez-vous cela. »'],
+      fievreux: ['« Oui. Oui, c’est ça. »', '« Vous aussi, alors. »']
+    },
+    non: {
+      formel: ['« Non ? Tiens. J’aurais cru. »', '« Ah. Je me suis donc trompé. »', '« Vraiment ? Soit. »'],
+      sec: ['« Non. Bien. »', '« Tant pis. »', '« Passons. »'],
+      populaire: ['« Ah bon ? »', '« Non ? Bon, bon. »', '« Tant pis, alors. »'],
+      savant: ['« Non ? Curieux. »', '« Tiens. J’aurais juré le contraire. »', '« Dommage. »'],
+      domestique: ['« Comme {m} voudra. »', '« Bien, {m}. »'],
+      mondain: ['« Non ? Quel dommage. »', '« Vous m’étonnez. »'],
+      fievreux: ['« Non… Non, bien sûr. Personne. »', '« Alors il n’y a que moi. »']
+    },
+    vague: {
+      formel: ['« Vous n’en êtes pas certain. Cela arrive. »', '« Prenez le temps d’y penser, {m}. »'],
+      sec: ['« Ce n’est pas une réponse. »', '« Décidez-vous. »'],
+      populaire: ['« Ni oui ni non, quoi. »', '« Faudrait savoir. »'],
+      savant: ['« Le doute est une position honorable. »', '« Vous hésitez. C’est déjà une indication. »'],
+      domestique: ['« Bien, {m}. »'],
+      mondain: ['« Que de mystère. »', '« Vous ne vous mouillez pas. »'],
+      fievreux: ['« On ne sait jamais, ici. »']
+    },
+    // il venait d'affirmer quelque chose : on acquiesce…
+    suite: {
+      formel: ['« Voilà. »', '« C’est ainsi, {m}. »', '« Comme je vous le dis. »'],
+      sec: ['« Voilà. »', '« C’est tout. »', '« Donc. »'],
+      populaire: ['« Eh oui. »', '« Comme je vous le dis. »', '« Voilà. »'],
+      savant: ['« Précisément. »', '« Voilà. »', '« Vous me suivez. »'],
+      domestique: ['« Oui, {m}. »', '« C’est cela, {m}. »'],
+      mondain: ['« N’est-ce pas ? »', '« Vous voyez. »'],
+      fievreux: ['« Oui. Vous voyez. »', '« Vous aussi, vous le savez. »']
+    },
+    // … ou l'on en doute
+    contre: {
+      formel: ['« Non ? Comme il vous plaira. »', '« Vous n’êtes pas tenu de me croire, {m}. »', '« C’est pourtant ainsi. »'],
+      sec: ['« C’est pourtant ainsi. »', '« Croyez ce que vous voulez. »'],
+      populaire: ['« Ben si. »', '« Croyez-moi ou pas, c’est pareil. »', '« C’est comme ça, pourtant. »'],
+      savant: ['« Vous en doutez ? C’est votre droit. »', '« Les faits sont têtus. »'],
+      domestique: ['« Si {m} le dit. »', '« Je ne fais que répéter, {m}. »'],
+      mondain: ['« Vous me contredisez ? Charmant. »', '« Croyez ce qu’il vous plaira. »'],
+      fievreux: ['« Si. Si, je vous dis. »']
+    },
+    // … ou l'on ne se prononce pas
+    doute: {
+      formel: ['« Peut-être, {m}. Je vous donne ce que j’ai. »', '« À vous d’en juger. »'],
+      sec: ['« Pas peut-être. »', '« Je ne suppose pas. Je constate. »'],
+      populaire: ['« Pas peut-être. Sûr. »', '« Moi, je vous dis ce que je sais. »'],
+      savant: ['« Le doute vous honore. »', '« Peut-être. C’est le mot le plus honnête de la langue. »'],
+      domestique: ['« Peut-être, {m}. »'],
+      mondain: ['« Peut-être ! Que vous êtes prudent. »', '« Vous ne vous mouillez pas. »'],
+      fievreux: ['« Pas peut-être. Je le sais. »']
+    },
+    // une question ouverte (« Que puis-je pour vous ? ») : oui ou non n'y répond pas
+    ouvert: {
+      formel: ['« Mais encore, {m} ? »', '« C’est-à-dire ? »', '« Je vous écoute. »'],
+      sec: ['« Ce n’est pas une réponse. »', '« Mais encore ? »', '« Précisez. »'],
+      populaire: ['« Oui, mais quoi ? »', '« C’est-à-dire ? »', '« Dites toujours. »'],
+      savant: ['« Mais encore ? »', '« Développez, je vous prie. »'],
+      domestique: ['« {M} désire ? »', '« Je vous écoute, {m}. »'],
+      mondain: ['« Mais encore ? »', '« Vous êtes d’un laconisme ! »'],
+      fievreux: ['« Dites. Dites vite. »']
+    },
+    seul: {
+      formel: ['« Pardon ? À quoi répondez-vous, {m} ? »', '« Je ne vous avais rien demandé, je crois. »', '« Vous disiez ? »'],
+      sec: ['« Je n’ai rien demandé. »', '« Plaît-il ? »', '« À quel sujet ? »'],
+      populaire: ['« Hein ? À quoi vous répondez, là ? »', '« J’ai rien demandé, moi. »', '« Comment ça ? »'],
+      savant: ['« Vous répondez à une question que je n’ai pas posée. »', '« Pardon ? De quoi parlons-nous ? »'],
+      domestique: ['« {M} disait ? »', '« Je vous demande pardon, {m} ? »'],
+      mondain: ['« Vous parlez tout seul, maintenant ? »', '« À qui dites-vous cela ? »'],
+      fievreux: ['« Vous répondez à quelqu’un ? Il y a quelqu’un ? »']
+    }
+  };
   var SUITE = {
     formel: ['« Je n’en sais pas davantage, {m}. »', '« Je vous ai dit ce que je savais. »'], sec: ['« C’est tout. »', '« Rien à ajouter. »'],
     populaire: ['« Ben… c’est tout, {m}. J’en sais pas plus. »', '« Que voulez-vous que je vous dise de plus ? »'], savant: ['« Je n’ai pas d’autre élément, hélas. La science s’arrête où s’arrêtent les faits. »'],
@@ -321,6 +400,41 @@
 
   // ---------------------------------------------------------------- la culture de janvier 1923, selon le milieu
   // h : savants, mondains, diplomates ; p : peuple, commerçants, domestiques ; o : police ; fr : les Français du prologue
+  // la même conversation, à Paris en janvier 1923 (fiches marquées pa: true)
+  var CULT_PA = {
+    brouillard: ['« De la pluie depuis Noël. La Seine monte ; à Bercy, on surveille les caves. »', '« Un temps de janvier, {m}. Gris le matin, gris le soir, et mouillé entre les deux. »'],
+    roi: ['« Des rois ? Nous avons réglé la question il y a un moment. » Un demi-sourire. « Cela dit, les vôtres ont de la tenue. »', '« Ici, on a un président. Personne ne se retourne sur son passage, et c’est très bien ainsi. »'],
+    gouvernement: ['« Poincaré gouverne comme un notaire : tout est en règle, et rien n’est gai. »', '« La politique ? On change de ministère comme de chemise, et la chemise reste sale. »'],
+    ruhr: ['« Nos soldats sont entrés dans la Ruhr cette semaine. On dit que l’Allemagne paiera. On le dit depuis quatre ans. »', '« La Ruhr ! Les journaux ne parlent que de ça. Du charbon pris à la baïonnette : je ne sais pas si ça chauffe mieux. »'],
+    egypte: ['« Ce pharaon qu’un Anglais a déterré ? Les illustrés en sont pleins. De l’or jusqu’au plafond, paraît-il. On ferait mieux de laisser dormir les morts. »', '« Toutankhamon. Tout Paris sait le dire, maintenant. Personne ne sait l’écrire. »'],
+    mussolini: ['« Les Italiens ont trouvé leur homme, à ce qu’on dit. Un ancien journaliste. Ça finit rarement bien, les journalistes au pouvoir. »', '« Des chemises noires qui marchent sur Rome… On a vu des carnavals plus drôles. »'],
+    russie: ['« Paris est plein de Russes, {m}. Des princes qui conduisent des taxis, des colonels portiers. Ils attendent que ça passe. Ça ne passe pas. »', '« Les Soviets ? Demandez aux petits épargnants ce qu’ils pensent de l’emprunt russe. Mais pas à table. »'],
+    turquie: ['« On négocie à Lausanne, il paraît. Les Turcs ont un général qui ne plie pas. Constantinople ne sera plus jamais ce qu’elle était. »', '« L’Orient ? C’est loin, et ça nous coûte toujours quelque chose. »'],
+    irlande: ['« Les Irlandais ont leur État, et les voilà qui se battent entre eux. On connaît ça : nous avons eu la Commune. »', '« L’Irlande ? Une triste affaire, à ce qu’en disent les journaux. »'],
+    guerre: ['« La guerre… » Un silence. « Chaque village a son monument, maintenant. On n’a pas fini de graver les noms. »', '« J’aime mieux ne pas en parler, {m}. On en a tous rapporté quelque chose, ou laissé quelqu’un. »'],
+    tsf: ['« La T.S.F. ? La tour Eiffel envoie des concerts, le soir. Mon voisin a un poste à galène : il écoute avec un casque, l’air d’un scaphandrier. »', '« De la musique qui passe par l’air, sans fil. On s’y fera. On s’est bien fait au téléphone. »'],
+    spiritisme: ['« Les tables tournantes ? Depuis la guerre, tant de mères voudraient entendre une voix… Les charlatans ont de beaux jours. »', '« Il y a un institut pour ça, avenue Niel, avec des savants très sérieux. Je ne sais pas ce qu’ils y pèsent. »'],
+    einstein: ['« Einstein est venu parler au Collège de France, au printemps dernier. Tout Paris y était. Personne n’a compris, et tout le monde en parle encore. »', '« La science va plus vite que nous, {m}. Je me contente de l’électricité, quand elle marche. »'],
+    cinema: ['« Le cinéma ? Le samedi, au Gaumont-Palace. Six mille places, un orgue, et Charlot. »', '« Abel Gance vient de sortir un film de locomotives qui dure une journée entière. Il paraît qu’on en sort changé, ou endormi. »'],
+    musique: ['« Le jazz ! Il y en a partout, depuis les Américains. Au Bœuf sur le Toit, on ne s’entend plus penser, et c’est le but. »', '« On danse beaucoup, depuis l’armistice. Comme des gens qui ont eu peur. »'],
+    femmes: ['« Le vote des femmes ? Les députés ont dit oui, les sénateurs ont dit non. En attendant, tout Paris lit « La Garçonne » en cachette. »', '« Ma foi… Pendant quatre ans, elles ont fait tourner les usines. Maintenant, on voudrait qu’elles l’oublient. »'],
+    argent: ['« La vie chère, {m} ! Le pain, le charbon, les loyers. Le franc fond comme du beurre. »', '« Tout augmente, sauf les traitements. »'],
+    amerique: ['« Les Américains ? Ils ont interdit le vin chez eux, alors ils viennent boire le nôtre. Montparnasse en est plein. »', '« Un pays où l’on ne peut pas boire un verre… Je ne comprendrai jamais. »'],
+    sport: ['« Vous avez su, pour Carpentier ? Battu par Siki, en septembre. Paris ne s’en est pas remis. »', '« Le sport ? Le vélo, {m}. Le Tour de France, en juillet : c’est notre vraie fête nationale. »'],
+    londres: ['« Londres ? Je n’y suis jamais allé. On dit que le brouillard s’y coupe au couteau, et qu’on y mange du mouton bouilli. »', '« Vous en arrivez ? Vous verrez : ici, il pleut autant, mais on se plaint mieux. »'],
+    paris: ['« Paris ? C’est une ville où l’on travaille trop et où l’on prétend le contraire. »', '« Vous verrez, {m}. On peste contre Paris toute l’année, et on ne peut pas vivre ailleurs. »'],
+    dieu: ['« La religion ? Chacun la sienne, {m}, et la République pour tout le monde. »', '« Je vais à la messe à Noël et aux enterrements. Ces dernières années, ça a fait beaucoup de messes. »'],
+    mort: ['« On en a trop vu, de morts, pour en parler légèrement. »', '« La mort ? Elle a pris de l’avance sur nous tous, ces dernières années. »'],
+    train: ['« L’Orient-Express ! Trois jours jusqu’à Constantinople, dans des draps brodés. Je n’ai jamais dépassé Fontainebleau. »', '« Les trains de luxe partent de la gare de Lyon, le soir. On va les regarder, comme on regardait les paquebots. »'],
+    boisson: ['« Un verre ? Ici, {m}, on dit un ballon de rouge, et on le boit debout, au zinc. »', '« Le vin a encore augmenté. C’est là qu’on voit qu’un pays va mal. »'],
+    soiree: ['« La soirée ? Paris ne se couche plus, depuis la guerre. Moi, si. »', '« Une soirée comme les autres, {m}. Longue. »'],
+    sommeil: ['« Vous avez mauvaise mine, sans vous offenser. Paris ne laisse pas dormir les étrangers, les premières nuits. »', '« Le sommeil ? Avec les tramways dès cinq heures, c’est un luxe. »'],
+    lecture: ['« Je lis le feuilleton du journal. Et Proust, quand je veux m’endormir. Il est mort en novembre, le pauvre homme, sans avoir fini. »', '« Lire ? Tout le monde lit, ici. C’est comprendre, qui est plus rare. »'],
+    table: ['« Si vous avez faim, il y a un bouillon à deux pas. On y mange pour trois francs, coude à coude avec tout Paris. »', '« La cuisine ? Depuis la guerre, le beurre est hors de prix. On fait des miracles avec du saindoux. »'],
+    voyages: ['« Voyager ? Je connais Paris, et un peu la Marne. Ça m’a suffi. »', '« Vous autres, Anglais, vous êtes toujours en route. Nous, on attend que le monde vienne. Il vient. »'],
+    sante: ['« On fait aller, {m}. La grippe de 1918 a emporté les autres. »', '« La santé ? Tant qu’on est debout… »'],
+    tabac: ['« Une Gauloise, si vous en avez. Le tabac de la Régie, c’est tout ce que l’État réussit. »', '« Je fume du gris, que je roule. Ça occupe les mains. »']
+  };
   var CULT = [
     { k: 'brouillard', re: /\b(brouillard|temps qu il fait|quel temps|le temps est|il fait (beau|froid|chaud|mauvais|humide|doux)|fait il (beau|froid)|meteo|pluie|il pleut|froid|neige|fog|smog)\b/,
       h: ['« Ce brouillard est un scandale sanitaire. Le charbon, voilà le coupable. »', '« Londres en janvier. On s’y habitue, on ne s’y résigne pas. »'],
@@ -528,7 +642,7 @@
     var free = f.relances.filter(function (r, i) { return !m.n['rel' + i]; });
     if (!free.length) return;
     var r = free[Math.floor(api.rand() * free.length)], i = f.relances.indexOf(r);
-    m.n['rel' + i] = 1; m.pending = i;
+    m.n['rel' + i] = 1; m.pending = i; m.pendingTour = api.s.turn;
     api.npc(id, r.q);
   }
   // cherche dans la fiche une réplique où revient un mot de la question
@@ -900,7 +1014,7 @@
       // 8. la culture du temps
       if (cult) {
         var ov = f.avis && f.avis[cult.k];
-        var pool = ov || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
+        var pool = ov || (f.pa && CULT_PA[cult.k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
         count('cult:' + cult.k);
         say(val(api, pool, 'cult:' + id + ':' + cult.k), true);
         relance(api, f, id, m); saveMem(api, id, m); return true;
@@ -937,11 +1051,22 @@
       return false;
     }
     // le moteur signale le sujet d'une réplique écrite, pour que « et lui ? » s'y rapporte
+    // « oui », « non », « je ne sais pas » : on prend acte dans son ton (question posée) ou l'on s'étonne (aucune question)
+    converse.bref = function (api, npc, kind, cas) {
+      var f = (scene.fiches || {})[npc.id]; if (!f) return false;
+      var T = cas === 'q' ? BREF[kind] : cas === 'd' ? (kind === 'oui' ? BREF.suite : kind === 'non' ? BREF.contre : BREF.doute) : cas === 'o' ? BREF.ouvert : BREF.seul;
+      var pool = T[f.reg] || T[registre(f)] || T.populaire;
+      npcLine(api, npc.id, val(api, pool, 'bref:' + kind + ':' + cas + ':' + npc.id));
+      return true;
+    };
     converse.note = function (api, npc, id) { if (!(scene.fiches || {})[npc.id]) return; var m = mem(api, npc.id); m.last = id; saveMem(api, npc.id, m); };
     // ce que le moteur doit savoir avant de choisir qui répond
     converse.peek = function (api, npc, p) {
       var f = (scene.fiches || {})[npc.id]; if (!f) return null;
-      var m = mem(api, npc.id), a = analyse(api, npc, p, m, f, scene), tt = a.t.trim();
+      var m = mem(api, npc.id);
+      // sa question est restée sans réponse : on a parlé d'autre chose, elle ne tient plus
+      if (m.pending !== undefined && m.pending !== null && m.pendingTour !== undefined && api.s.turn - m.pendingTour > 1) { m.pending = null; saveMem(api, npc.id, m); }
+      var a = analyse(api, npc, p, m, f, scene), tt = a.t.trim();
       var cult = CULT.some(function (c) { return c.re.test(a.t); });
       return {
         answer: m.pending !== undefined && m.pending !== null && a.words <= 8 && (a.oui || a.non),

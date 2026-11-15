@@ -159,6 +159,17 @@
     }
     return d;
   }
+  // le chapitre suivant, avec le même investigateur : sa santé, ses compétences, ses poches
+  function boutonSuite() {
+    var s = game.state, suite = SC.suite && CH[SC.suite], fin = s.flags && s.flags.fin;
+    if (!suite || !s.ended || (fin && fin !== 'fugitif')) return null;
+    return btn('Continuer : ' + (suite.short || 'la suite'), 'act', function () {
+      var pc = JSON.parse(JSON.stringify(s.pc));
+      pc.inv = s.inv.slice(); pc.money = s.money; pc.passe = { chapitre: s.chapter, fin: fin || 'ok', indices: s.clues.slice() };
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      closePanels(); mount(null, SC.suite, pc);
+    });
+  }
   function endCard() {
     var s = game.state, wrap = document.createElement('div');
     var myth = s.pc.skills['Mythe de Cthulhu'] || 0;
@@ -170,7 +181,9 @@
       '<dt>Heure</dt><dd>' + esc(game.clock()) + '</dd>' +
       '<dt>Tours</dt><dd>' + s.turn + '</dd></dl>' +
       '<div>' + esc(E.text) + '</div>';
-    var b = btn('Rejouer le chapitre', 'act', function () { newGame(); });
+    var bs = boutonSuite();
+    if (bs) { bs.style.marginTop = '10px'; wrap.appendChild(bs); }
+    var b = btn('Rejouer le chapitre', bs ? 'ghost' : 'act', function () { newGame(); });
     b.style.marginTop = '10px';
     wrap.appendChild(b);
     return wrap;
@@ -341,7 +354,7 @@
   function actions() {
     var s = game.state, bar = $('actions');
     bar.innerHTML = '';
-    if (s.ended) { bar.appendChild(btn('Rejouer le chapitre', 'hot', newGame)); return; }
+    if (s.ended) { var bsu = boutonSuite(); if (bsu) bar.appendChild(bsu); bar.appendChild(btn('Rejouer le chapitre', bsu ? 'ghost' : 'hot', newGame)); return; }
     if (s.pending) {
       var c = lastCheck, need = c ? needFor(c.target, c.diff) : '';
       bar.appendChild(btn('Lancer les dés' + (c ? ' · <b>' + esc(c.skill) + ' ' + need + '</b>' : ''), 'hot', doRoll));
@@ -614,6 +627,7 @@
     var saved = hotState || loadSave();
     showTitle();
     $('btnLondres').addEventListener('click', function () { if (CH.londres) showPick('londres'); });
+    if ($('btnParis')) { $('btnParis').hidden = !CH.paris; $('btnParis').addEventListener('click', function () { if (CH.paris) showPick('paris'); }); }
     $('btnProlo').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'prologue'); });
     $('btnBack').addEventListener('click', function () { $('tpick').hidden = true; $('tmain').hidden = false; });
     $('fichierSauvegarde').addEventListener('change', function () {
