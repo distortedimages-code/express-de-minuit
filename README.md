@@ -238,7 +238,7 @@ La pluie n'est plus un bruit blanc filtré : c'est un enregistrement, `audio/plu
 
 ## La musique
 
-Quatre morceaux, en fondu enchaîné selon le lieu et la santé mentale (`TRACKS` et `MUSIC`, dans `jeu/src/audio.js`) : « Midnight Train Whispers » dans les trains et les gares de Londres, « Mechanical Dissolve » dans les lieux les plus étranges et dès que la raison vacille, « Rumble in the Haze » partout ailleurs, et « The House That Breathes », de Yoann, à la maison de santé de Charenton (il servira aussi à la maison du comte, à Poissy). Les fichiers sont dans `audio/` sur la branche `gh-pages`, en MP3 (lu partout, iPhone compris).
+Cinq morceaux, en fondu enchaîné (`TRACKS`, `MUSIC` et `musicFor`, dans `jeu/src/audio.js`). Un lieu qui a sa musique la garde : « Midnight Train Whispers » dans les trains et les gares de Londres, « Mechanical Dissolve » dans les lieux les plus étranges (le train fantôme, la cave de Butter), « The House That Breathes », de Yoann, à la maison de santé de Charenton (il servira aussi à la maison du comte, à Poissy), « The Deep Ones Sing », de Yoann, sur les quais de la Tamise. Ailleurs, la musique suit la raison de l'investigateur : « Rumble in the Haze » tant qu'il est lucide ou troublé, « The Deep Ones Sing » quand il devient fragile, « Mechanical Dissolve » au bord du gouffre (partout, sauf l'écran-titre). Les fichiers sont dans `audio/` sur la branche `gh-pages`, en MP3 (lu partout, iPhone compris ; les originaux, en Opus, ne passent pas sur tous les iPhone).
 
 ## Les bruitages
 
