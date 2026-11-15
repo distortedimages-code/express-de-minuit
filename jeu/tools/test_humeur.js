@@ -29,7 +29,7 @@ function play(ch, id, lines, check) {
       const paroles = (e.x.match(/«[^»]*»/g) || []).map(x => x.replace(/“[^”]*”/g, '“…”'));
       const geste = e.x.replace(/«[^»]*»/g, '').trim();
       paroles.concat(geste ? [geste] : []).forEach(k => {
-        if (said.has(k)) { rep++; console.log('REDIT', id, '→', k.slice(0, 140)); }
+        if (said.has(k)) { rep++; console.log('REDIT', id, q, '→', k.slice(0, 140)); }
         said.set(k, 1);
       });
     });

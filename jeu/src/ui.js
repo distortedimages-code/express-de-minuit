@@ -63,7 +63,7 @@
     switch (e.t) {
       case 'title': d.innerHTML = '<div class="t">' + esc(e.x) + '</div><div class="s">' + esc(e.sub) + '</div>'; break;
       case 'narr': case 'event': case 'intrusion': d.innerHTML = rich(e.x); break;
-      case 'player': d.textContent = e.x; if (e.said) d.classList.add('said'); break;
+      case 'player': d.textContent = e.x; if (e.said) d.classList.add('said'); if (e.mj) { d.classList.add('mj'); d.title = e.chip || ''; } break;
       case 'npc': d.dataset.who = e.who; d.innerHTML = '<span class="who">' + esc(e.name) + '</span>' + rich(e.x); break;
       case 'sys': case 'push': case 'item': d.textContent = e.x; break;
       case 'ask': d.textContent = (e.san >= 3 && Math.random() < 0.25) ? 'Qu’avez-vous fait ?' : e.x; break;
@@ -244,8 +244,12 @@
       return;
     }
     if (s.talk) {
-      var lab = document.createElement('span'); lab.className = 'label'; lab.textContent = 'Sujets'; bar.appendChild(lab);
-      game.topicChips().forEach(function (t) { bar.appendChild(btn(esc(t.label), '', function () { act(function () { game.choose({ label: t.label, topic: t.topic }); }); })); });
+      // les sujets restent repliés : on parle librement, et on ne les déplie que si l'on sèche
+      var tb = btn(ideasOpen ? 'Sujets ▾' : 'Sujets ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
+      tb.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
+      bar.appendChild(tb);
+      if (ideasOpen) game.topicChips().forEach(function (t) { bar.appendChild(btn(esc(t.label), '', function () { act(function () { game.choose({ label: t.label, topic: t.topic }); }); })); });
+      else { var h2 = document.createElement('span'); h2.className = 'label'; h2.textContent = 'Parlez librement, comme à quelqu’un en face de vous'; bar.appendChild(h2); }
       return;
     }
     var ib = btn(ideasOpen ? 'Idées ▾' : 'Idées ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
@@ -258,6 +262,7 @@
   function act(fn) {
     if (busy) return;
     skip();
+    ideasOpen = false;
     fn();
     render();
     if (window.matchMedia && !window.matchMedia('(pointer: coarse)').matches) $('cmd').focus();

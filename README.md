@@ -149,6 +149,14 @@ pip install -r requirements.txt
 python generer.py --simulation --lot tout
 ```
 
+## Les mots que le jeu comprend
+
+Le jeu tolère les fautes de frappe : « tabel » devient « table ». Mais un vrai mot français ne doit jamais être pris pour un autre (« je me rends » n’est pas « je prends », « hommes » n’est pas « comment »). La liste `jeu/src/mots.js` contient environ 24 000 vrais mots français qui ressemblent à un mot du jeu sans en être : pour eux, aucun rapprochement. Après avoir ajouté beaucoup de vocabulaire au jeu, on la régénère avec les scripts de `jeu/tools/garde_mots/` (`liste_fr.py`, puis `audit.js`).
+
+## Les idées et les sujets
+
+Les idées (hors conversation) et les sujets (en conversation) sont repliés par défaut, et se replient après chaque geste. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.
+
 ## L'humeur des personnages
 
 Quand on dit n'importe quoi à un personnage, qu'on l'insulte ou qu'on lui parle d'objets qui n'existent pas encore (un iPhone, Google, des euros…), il réagit selon son caractère (`jeu/src/humeur.js`) :
@@ -158,7 +166,7 @@ Quand on dit n'importe quoi à un personnage, qu'on l'insulte ou qu'on lui parle
 - **Les personnages faibles** (serveur, réceptionniste, laitier…) cessent de répondre tant que vous ne redevenez pas raisonnable. Ils menacent ensuite de prévenir un supérieur ou la police, puis le font : une plainte arrive à la police, et un agent finit par vous trouver.
 - **Les mots d'un autre siècle** : le personnage répète le mot tel que vous l'avez écrit, s'en étonne, s'en méfie, puis vous croit dérangé.
 
-Des excuses font retomber la tension. Un même personnage ne dit jamais deux fois la même phrase. La vérification se lance avec `node jeu/tools/test_humeur.js`.
+Plusieurs phrases d’un coup reçoivent plusieurs réponses, dans l’ordre (« T’es con ou quoi ? Où est passé le barman ? »). Un personnage insulté répond du bout des lèvres, puis ne répond plus sans excuses. Un compliment déclenche un jet de Charme : réussi, le personnage vous a à la bonne pour la journée (dé bonus à vos jets sociaux avec lui) ; s’il vous en veut, c’est un dé de malus. Des excuses font retomber la tension. Un même personnage ne dit jamais deux fois la même phrase. La vérification se lance avec `node jeu/tools/test_humeur.js`.
 
 ## Le testeur IA
 

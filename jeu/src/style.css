@@ -121,6 +121,8 @@ body[data-san="2"] .sanstate, body[data-san="3"] .sanstate { background: var(--r
 .e-player::before { content: '› '; }
 .e-player.said::before { content: '« '; }
 .e-player.said::after { content: ' »'; }
+.e-player.mj { font-family: var(--body); font-style: italic; font-weight: 500; font-size: 16px; }
+.e-player.mj::before { content: '› '; font-family: var(--mono); font-style: normal; }
 .e-npc { position: relative; isolation: isolate; color: var(--ink); padding: 16px 16px 12px; margin-top: 8px; }
 .e-npc::before { content: ''; position: absolute; inset: 0; background: var(--text); transform: skewX(-4deg); z-index: -1; }
 .e-npc .who {

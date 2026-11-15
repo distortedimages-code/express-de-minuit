@@ -52,7 +52,7 @@
   // les questions personnelles : à qui parle-t-on ?
   var PERSO = [
     ['nom', /\b(comment vous appelez|votre nom|qui etes vous|vous etes qui|vous vous appelez|comment tu t appelles|tu t appelles|ton nom|qui es tu|t es qui|tu es qui)\b/],
-    ['age', /\b(quel age|votre age|ton age|vous avez quel age|t as quel age|vieux|vieille|jeune|ne en|nee en)\b/],
+    ['age', /\b(quel age|votre age|ton age|vous avez quel age|t as quel age|(vous etes|t es|tu es) (bien |tres |trop |si )?(vieux|vieille|jeune)|vous etes ne en|vous etes nee en|ne en|nee en)\b/],
     ['origine', /\b(vous etes de [a-z]+|vous venez de [a-z]+|vous etes ne a|vous etes nee a|vous etes anglaise|vous etes francaise|d ou venez|d ou viens|tu viens d ou|t es d ou|tu es d ou|d ou etes|ou etes vous ne|vous etes d ou|ton pays|ton accent|votre pays|vous etes anglais|vous etes francais|vous etes italien|vous etes turc|votre accent|ou avez vous grandi)\b/],
     ['domicile', /\b(ou habitez|ou vivez|ou logez|votre maison|chez vous|ou dormez|ou habites|tu habites|ou vis tu|tu vis ou|ta maison|chez toi)\b/],
     ['famille', /\b(marie|mariee|epouse|votre femme|votre mari|enfants?|famille|fiance|fiancee|veuf|veuve|celibataire|parents|freres?|soeurs?|amoureux|amoureuse)\b/],
@@ -100,7 +100,8 @@
     if (!a.ents.length && !a.perso && !cultHit && mem.last && (/\b(il|elle|lui|ils|elles|eux)\b/.test(tp) || /\b(vous|tu|je|j|on|nous) (le|la|les|l) /.test(tp) || /^et (lui|elle|eux|elles)\b/.test(tt))) { a.ents = [mem.last]; a.pron = true; }
     // mots inconnus, à faire répéter
     var orig = raw.split(/[\s’'?!.,;:«»"()]+/).filter(Boolean);
-    a.unk = (p.unknown || []).filter(function (w) { return w.length >= 4 && !STOP[w] && !/^\d+$/.test(w); }).map(function (w) { var o = orig.filter(function (x) { return N(x) === w; })[0]; return o || w; });
+    var MOTS = G.RPG_MOTS || {};
+    a.unk = (p.unknown || []).filter(function (w) { return w.length >= 4 && !STOP[w] && !/^\d+$/.test(w) && !MOTS[w]; }).map(function (w) { var o = orig.filter(function (x) { return N(x) === w; })[0]; return o || w; });
     var types = ['pourquoi', 'quand', 'combien', 'comment', 'ou', 'qui', 'avis', 'quoi', 'demande'];
     a.type = null; for (var i = 0; i < types.length; i++) if (RX[types[i]].test(t)) { a.type = types[i]; break; }
     if (!a.type && a.q) a.type = 'ouinon';
@@ -635,7 +636,7 @@
       if (c.kind === 'faible' && n >= 3) return silence(api, id, m, st, c, true);
       if (n >= 4) { fin(api, id, m, st, c, 'bz'); return true; }
       var parole;
-      if (kind === 'mot' && n === 0 && a.unk[0]) parole = fill(uniq(api, m, [Vx.mot]), a, null, a.unk[0]);
+      if (kind === 'mot' && n === 0 && a.unk[0] && restant(m, [Vx.mot])) parole = fill(uniq(api, m, [Vx.mot]), a, null, a.unk[0]);
       else if (kind === 'flou' && n <= 1 && flou) parole = flou;
       else parole = uniq(api, m, [c.T.bz && c.T.bz[n], Hm.L.bz[R][n]]);
       var g = null;
@@ -688,6 +689,32 @@
       var g0 = n <= 1 && api.rand() < 0.4 ? uniq(api, m, [Hm.L.geste[0]], true) : null, g = g0 ? g0 + ' ' : '';
       npcLine(api, id, pron(c, g + line).replace(/\{A\}/g, a.anaW));
       saveMem(api, id, m); return true;
+    }
+    // un compliment sincère peut gagner quelqu'un : jet de Charme ; réussi, il vous a à la bonne pour la journée (dé bonus aux jets sociaux)
+    scene.checks.parole_charme = { skill: 'Charme', why: 'qu’on vous prenne en sympathie', resolve: function (api, r) {
+      var id = api.s.talk; if (!id || !HUM()) return;
+      var f = (scene.fiches || {})[id] || {}, m = mem(api, id), st = api.npcs(id), c = caractere(id, f), Hm = HUM(), R = registre(f);
+      if (r.success) {
+        m.charme = H.day(api); m.ins = 0; m.insN = undefined; m.jur = 0; m.bz = 0;
+        st.patience = Math.min((scene.npcs[id] || {}).patience || 6, st.patience + 2);
+        npcLine(api, id, pron(c, uniq(api, m, [f.charmeOk, Hm.L.charmeOk[R]])));
+      } else npcLine(api, id, pron(c, uniq(api, m, [f.charmeKo, Hm.L.charmeKo[R]])));
+      humeurDrapeau(api, id, m);
+      saveMem(api, id, m);
+    } };
+    // l'humeur que le moteur lit pour les jets sociaux : +1 on vous a à la bonne, -1 on vous en veut
+    function humeurDrapeau(api, id, m) { api.flag('humeur:' + id, (m.ins || 0) > 0 ? -1 : m.charme === H.day(api) ? 1 : 0); }
+    function compliment(api, id, f, a, m, st, c) {
+      var Hm = HUM(), R = registre(f), d = H.day(api);
+      if ((m.ins || 0) > 0) { npcLine(api, id, uniq(api, m, [Hm.L.flatRancune[R]])); saveMem(api, id, m); return true; }
+      if (m.charme === d) { npcLine(api, id, uniq(api, m, [Hm.L.charmeDeja[R]])); saveMem(api, id, m); return true; }
+      if (m.flatJour === d) { m.bz = (m.bz || 0) + 1; npcLine(api, id, uniq(api, m, [Hm.L.flatTrop[R]])); saveMem(api, id, m); return true; }
+      var ck = scene.checks.parole_charme;
+      if (!ck || !api.check) return false;
+      m.flatJour = d; saveMem(api, id, m);
+      ck.why = 'qu’' + (c.f ? 'elle' : 'il') + ' vous prenne en sympathie';
+      api.check('parole_charme', { diff: (f.mefiant || 0) >= 0.6 || /police/.test(f.groupe || '') ? 'difficile' : 'normal' });
+      return true;
     }
     function converse(api, npc, p) {
       var f = (scene.fiches || {})[npc.id]; if (!f) return false;
@@ -823,8 +850,10 @@
         saveMem(api, id, m); return true;
       }
       // 9. un mot qu'il ne connaît pas : il le répète, intrigué
-      if (a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75 && HUM()) return bizarre(api, id, f, a, m, st, caractere(id, f), 'mot');
-      if (a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75) { st.patience -= 1; say(fill(val(api, Vx.mot, 'mot:' + id), a, null, a.unk[0]), true); saveMem(api, id, m); return true; }
+      // un mot inconnu dans une affirmation : on s'agace ; dans une question, c'est peut-être nous qui ne connaissons pas le mot
+      var motInconnu = a.unk.length && a.unk[0].length >= 5 && api.rand() < 0.75;
+      if (motInconnu && !a.q && HUM()) return bizarre(api, id, f, a, m, st, caractere(id, f), 'mot');
+      if (motInconnu) { st.patience -= 1; say(fill(val(api, Vx.mot, 'mot:' + id), a, null, a.unk[0]), true); saveMem(api, id, m); return true; }
       // 10. le type de question, à défaut de mieux : la voix du personnage fait le reste
       var tp = a.type, pool2 = (f.types && f.types[tp]) || Vx[tp];
       if (pool2) {
@@ -882,12 +911,27 @@
         m.ins = Math.max(0, (m.ins || 0) - 1); m.jur = 0; m.bz = Math.max(0, (m.bz || 0) - 2); if (m.insN !== undefined) m.insN = m.ins ? Math.max(-1, m.insN - 1) : undefined;
         st.patience = Math.min(npc.patience || 6, st.patience + 1); garder(st);
         npcLine(api, id, uniq(api, m, [Hm.L.excuse[registre(f)], Hm.L.excuseUsee]));
-        saveMem(api, id, m); return true;
+        humeurDrapeau(api, id, m); saveMem(api, id, m); return true;
       }
-      if (grossier) return insulte(api, id, f, a, m, st, c);
+      if (grossier) { var r1 = insulte(api, id, f, a, m, st, c); humeurDrapeau(api, id, m); return r1; }
       if (a.anaW) return anachro(api, id, f, a, m, st, c);
       if (a.absurde) return bizarre(api, id, f, a, m, st, c, 'absurde');
+      if (a.compliment && !/\?/.test(a.raw) && !a.ents.length && a.words <= 14 && compliment(api, id, f, a, m, st, c)) { humeurDrapeau(api, id, m); return true; }
       if (ok) { m.okN = (m.okN || 0) + 1; if (m.okN >= 2 && m.bz) { m.bz--; m.okN = 0; } } else if (bad) m.okN = 0;
+      // la rancune : insulté, on répond du bout des lèvres ; trop insulté, on ne répond plus sans excuses
+      if (ok && (m.ins || 0) > 0) {
+        var ni = m.insN === undefined ? 0 : m.insN;
+        if (ni >= 2 && c.kind !== 'faible') { npcLine(api, id, uniq(api, m, [Hm.L.refus[registre(f)]])); humeurDrapeau(api, id, m); saveMem(api, id, m); return true; }
+        var pre = uniq(api, m, [Hm.L.rancune[registre(f)][Math.min(ni, 1)]], true);
+        if (pre && api.prefix) api.prefix(id, pre);
+        // trois échanges sensés de suite, et la colère retombe d'un cran
+        m.okIns = (m.okIns || 0) + 1;
+        if (m.okIns >= 3) { m.okIns = 0; m.ins = Math.max(0, m.ins - 1); m.insN = m.ins ? Math.max(-1, ni - 1) : undefined; }
+      } else if (ok && m.charme === H.day(api) && api.rand() < 0.35) {
+        var cpl = uniq(api, m, [Hm.L.complice[registre(f)]], true);
+        if (cpl && api.prefix) api.prefix(id, cpl);
+      }
+      humeurDrapeau(api, id, m);
       saveMem(api, id, m); return false;
     };
     return converse;

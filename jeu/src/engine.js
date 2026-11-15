@@ -7,7 +7,7 @@
   // ---------------------------------------------------------------------------
   var BASE_PHRASES = [
     // « je me rends à… », « je me dirige vers… » : on y va (et pas « prendre »)
-    [/\b(je|nous|on) (me |nous |se )?(rends|rend|rendons|rendrai|rendrons|dirige|dirigeons|dirigerai)\b/g, ' $1 vais'],
+    [/\b(je me|nous nous|on se|je m) (rends|rend|rendons|rendrai|rendrons|dirige|dirigeons|dirigerai)\b/g, ' je vais'],
     [/\b(me|nous|se) (rendre|diriger)\b/g, ' aller '],
     // « les gens dont la vieille dame m'a parlé » : celle qui en a parlé n'est pas celle qu'on cherche
     [/\b(dont|que|qu)\s+((?:[a-z]+\s+){0,3})(m\s+a|m\s+avait|nous\s+a|nous\s+avait|vient\s+de|venait\s+de)\s+(parle|parlee|decrit|decrite|decrits|decrites|mentionne|mentionnee|mentionnes|cite|cites|evoque|evoques|dit|montre|montres|signale|signales)\b/g, ' '],
@@ -175,8 +175,18 @@
     });
     return this.add(id, type, words, info);
   };
+  // les vrais mots français qui ne sont pas ceux du jeu (mots.js) : jamais de rapprochement approximatif
+  var GARDE = null;
+  function garde() {
+    if (GARDE === null) {
+      if (!G.RPG_MOTS && typeof require === 'function') { try { require('./mots.js'); } catch (e) {} }
+      GARDE = G.RPG_MOTS || {};
+    }
+    return GARDE;
+  }
   Lexicon.prototype.best = function (tok) {
     if (this.exact[tok]) return { id: this.exact[tok], score: 1 };
+    if (garde()[tok]) return null;
     var best = null;
     for (var i = 0; i < this.entries.length; i++) {
       var sc = tokenScore(tok, this.entries[i]);
@@ -460,6 +470,13 @@
       return line;
     }
     function logNpc(who, x) {
+      // une humeur à faire entendre avant la réponse (« Bon. Je vous réponds, mais changez de ton. »)
+      if (s.prefix && s.prefix.who === who && typeof x === 'string') {
+        var pre = s.prefix.x, suite = x.slice(2); s.prefix = null;
+        // après deux points, la phrase continue en minuscule (« Alors : les femmes de chambre… »), sauf un nom propre
+        if (/:$/.test(pre) && /^(Le|La|Les|L’|Un|Une|Il|Elle|Ils|Elles|Je|J’|On|Nous|Vous|Ce|C’|Ça|Cela|Mon|Ma|Mes|Son|Sa|Ses|Oui|Non|Si|Quand|Depuis|Personne|Rien|Pas|Ah|Oh|Bon|Ben|Des|Du|De|Dans|Au|Aux|Tout|Tous|Trois|Deux)\b/.test(suite)) suite = suite.charAt(0).toLowerCase() + suite.slice(1);
+        x = /^« /.test(x) ? '« ' + pre + ' ' + suite : '« ' + pre + ' » ' + x;
+      }
       var npc = scene.npcs[who];
       var name = npc ? npc.name : who;
       // les répliques sans guillemets sont des gestes : narration
@@ -513,6 +530,7 @@
       ask: function () { log({ t: 'ask', x: s.talk ? 'Que dites-vous ?' : 'Que faites-vous ?' }); },
       chips: function (list) { log({ t: 'chips', list: list }); },
       fx: function (name) { log({ t: 'fx', fx: name }); },
+      prefix: function (who, x) { s.prefix = x ? { who: who, x: x } : null; },
       ui: function (open) { log({ t: 'ui', open: open }); },
       clue: function (id) {
         if (s.clues.indexOf(id) >= 0) return false;
@@ -543,8 +561,10 @@
       check: function (id, o) {
         var chk = scene.checks[id];
         s.pending = { id: id, diff: (o && o.diff) || 'normal', pushed: !!(o && o.pushed) };
+        var hum = s.talk && SOCIAL[chk.skill] ? s.flags['humeur:' + s.talk] : 0;
+        if (hum > 0) s.pending.bonus = true; else if (hum < 0) s.pending.malus = true;
         var CL = { INT: 'Idée (INT)', POU: 'Volonté (POU)', DEX: 'Dextérité', FOR: 'Force', CON: 'Constitution', EDU: 'Connaissance (ÉDU)', CHANCE: 'Chance', APP: 'Apparence' };
-        log({ t: 'check', id: id, skill: chk.label || CL[chk.skill] || chk.skill, target: skillValue(chk.skill), diff: s.pending.diff, pushed: s.pending.pushed, why: chk.why || '' });
+        log({ t: 'check', id: id, skill: chk.label || CL[chk.skill] || chk.skill, target: skillValue(chk.skill), diff: s.pending.diff, pushed: s.pending.pushed, why: (chk.why || '') + (s.pending.bonus ? ' (dé bonus : on vous a à la bonne)' : s.pending.malus ? ' (dé de malus : on vous en veut)' : '') });
       },
       talk: function (npcId, p) { startTalk(npcId, p); },
       topic: function (npcId, topicId, p) { runTopic(scene.npcs[npcId], topicId, p || parse(lex, '', scene.phrases)); },
@@ -1190,6 +1210,7 @@
       }
     }
     function finish() {
+      s.prefix = null;
       noDoubles();
       if (s.ended || s.pending) return;
       var last = s.log[s.log.length - 1];
@@ -1228,12 +1249,34 @@
       }
       // le chapitre peut reprendre la main sur une improvisation (violence, pot-de-vin, effraction…)
       if (scene.intercept && scene.intercept(api, p, raw) === true) { afterTurn(); finish(); return; }
-      if (s.talk) handleDialogue(p); else handleWorld(p);
+      if (s.talk) {
+        var segs = phrasesDe(raw);
+        if (segs.length < 2) handleDialogue(p);
+        else for (var si = 0; si < segs.length; si++) {
+          if (!s.talk || s.pending || s.ended) break;
+          handleDialogue(rewrite(lex, parse(lex, segs[si], scene.phrases)));
+          s.prefix = null;
+        }
+      } else handleWorld(p);
       afterTurn();
       finish();
     }
+    // « T’es con ou quoi ? Où est passé le barman ? » : deux phrases, deux réponses, dans l'ordre
+    function phrasesDe(raw) {
+      var parts = (String(raw).match(/[^?!.;…]+[?!.;…]*/g) || [raw]).map(function (x) { return x.trim(); }).filter(Boolean);
+      // un mot seul (« Euh… », « Bon. ») s'accroche à la phrase suivante ; « Connard ! » ou « Pardon ? » se suffisent
+      var out = [], buf = '';
+      var FILLER = /^(euh|heu|hum|hm|bon|bien|alors|ah|oh|eh|ben|bref|enfin|voila|voilà|ok|tiens|dites|écoutez|ecoutez|attendez|voyons|allons|bref|donc|et)[.…,;!]*$/i;
+      parts.forEach(function (x) { buf = buf ? buf + ' ' + x : x; if (buf.split(/\s+/).length >= 2 || !FILLER.test(buf)) { out.push(buf); buf = ''; } });
+      if (buf) { if (out.length) out[out.length - 1] += ' ' + buf; else out.push(buf); }
+      return out.length > 4 ? [raw] : out;
+    }
+    // le Gardien reformule le choix du joueur (mj.js), plutôt que d'afficher le mot-clé
+    function mjModule() { if (!(G.RPG && G.RPG.MJ) && typeof require === 'function') { try { require('./mj.js'); } catch (e) {} } return G.RPG && G.RPG.MJ; }
+    function mjPick(k, arr) { return fresh(k, arr); }
     function choose(chip) {
       if (s.ended) return;
+      var MJ = mjModule();
       if (chip.act && scene.chipAct) {
         if (s.pending) return;
         log({ t: 'player', x: chip.label }); s.turn++; s.tick = 1;
@@ -1243,14 +1286,18 @@
       if (chip.action) {
         var a = findAction(chip.action);
         if (!a || (a.cond && !a.cond(api))) return;
-        log({ t: 'player', x: chip.label });
+        var refo = null; try { refo = MJ && MJ.action(chip.label, mjPick); } catch (e) { refo = null; }
+        log({ t: 'player', x: refo || chip.label, mj: !!refo, chip: chip.label });
         s.turn++;
         if (s.talk) api.endTalk(false);
         exec(a, parse(lex, chip.label, scene.phrases));
         afterTurn();
         finish();
       } else if (chip.topic && s.talk) {
-        log({ t: 'player', x: chip.label, said: true });
+        var who = scene.npcs[s.talk] || {}, rt = null;
+        try { rt = MJ && MJ.topic(chip.label, mjPick, who.short || who.name); } catch (e) { rt = null; }
+        if (rt) log({ t: 'player', x: rt.x, said: !!rt.said, mj: !rt.said, chip: chip.label });
+        else log({ t: 'player', x: chip.label, said: true });
         s.turn++;
         runTopic(scene.npcs[s.talk], chip.topic, parse(lex, chip.label, scene.phrases));
         afterTurn();
@@ -1262,6 +1309,12 @@
       var chk = scene.checks[pd.id];
       var target = skillValue(chk.skill);
       var r = 1 + Math.floor(rng() * 100);
+      // dé bonus ou de malus : on lance une seconde dizaine et l'on garde la meilleure (ou la pire)
+      if (pd.bonus || pd.malus) {
+        var u = r % 10, t1 = Math.floor(r / 10) % 10, t2 = Math.floor(rng() * 10);
+        var v1 = t1 * 10 + u || 100, v2 = t2 * 10 + u || 100;
+        r = pd.bonus ? Math.min(v1, v2) : Math.max(v1, v2);
+      }
       var level = levelOf(r, target);
       var success = level >= NEED[pd.diff || 'normal'];
       s.pending = null;

@@ -228,6 +228,83 @@
     p: ['« “{A}” ? Connais pas. C’est un boxeur ? »', '« “{A}” ? Jamais entendu parler. »', '« Qui ça, “{A}” ? Il habite dans le quartier ? »', '« “{A}”… Non. C’était dans les journaux ? Moi, je l’ai pas vu. »', '« Je sais pas de qui vous parlez, {m}. “{A}”, vous dites ? »'],
     f: ['« “{A}”… Ce nom-là n’est pas encore arrivé. Il arrivera. »', '« Ne prononcez pas ce nom. Je ne sais pas pourquoi, mais ne le prononcez pas. »', '« “{A}” ? Les morts ne le connaissent pas. Les vivants non plus. »', '« Je ne connais pas. Je ne connais plus personne. »']
   };
+  // la rancune : un personnage insulté répond du bout des lèvres (avant sa réponse : 0 à peine fâché, 1 vraiment fâché)
+  L.rancune = {
+    formel: [['Je passe sur votre ton.', 'Passons sur vos manières.', 'Je vous réponds, puisque vous y tenez.'], ['Je vous réponds, mais c’est bien la dernière fois que je supporte ce ton.', 'Vous ne méritez pas de réponse. En voici une quand même.', 'Du bout des lèvres, alors :']],
+    sec: [['Bon.', 'Passons.', 'Je fais comme si je n’avais rien entendu.'], ['Je réponds, mais je n’oublie pas.', 'Vous avez de la chance que je sois de bonne humeur. Enfin, que je l’aie été.', 'Dernière réponse avant que je perde patience.']],
+    populaire: [['Bon, je passe pour cette fois.', 'Ouais, bon.', 'Je vais vous répondre, mais faut pas pousser.'], ['Je vous réponds, mais c’est bien parce que je suis poli, moi.', 'Vous méritez pas que je vous réponde. Enfin…', 'Je vous le dis, et après vous me fichez la paix.']],
+    savant: [['Laissons cela.', 'Passons, voulez-vous.', 'Je mets votre ton sur le compte de la fatigue.'], ['Je vous réponds, mais je n’apprécie guère vos manières.', 'Par principe, je réponds toujours aux questions. Même mal posées.', 'Ma réponse, et ensuite nous verrons si vous savez vous tenir.']],
+    domestique: [['…', 'Bien, {m}.', 'Si {m} le dit.'], ['Je réponds à {m}, mais je n’en pense pas moins.', 'Puisque {m} me le demande.', '{M} a été dur{e}. Enfin.']],
+    mondain: [['Passons.', 'Je fais semblant de n’avoir rien entendu.', 'Bon.'], ['Je vous réponds, mais vous me décevez.', 'Vous ne méritez pas que je vous parle. Enfin.', 'Par charité :']],
+    fievreux: [['…', 'Ne criez pas…', 'Doucement…'], ['Vous avez été méchant. Mais je vais vous le dire.', 'Ils sont méchants aussi. Écoutez :', 'Je ne veux pas que vous criiez encore. Alors :']]
+  };
+  // trop fâché pour répondre : des excuses d'abord
+  L.refus = {
+    formel: ['« Je ne réponds pas aux gens qui m’insultent. Des excuses, d’abord. »', '« Vous espérez une réponse, après ce que vous m’avez dit ? »', '« Je vous écouterai quand vous aurez présenté des excuses. »'],
+    sec: ['« Non. Vous m’avez insulté. Excusez-vous, ensuite on verra. »', '« Je ne travaille pas pour les gens qui m’insultent. »', '« Rien. Pas tant que vous ne vous serez pas excusé{e}. »'],
+    populaire: ['« Je vous dis plus rien, moi. Pas après ce que vous m’avez sorti. »', '« Des excuses, d’abord. Après, on verra. »', '« Vous croyez que je vais vous répondre ? Après ça ? »'],
+    savant: ['« Je ne discute pas avec quelqu’un qui m’insulte. Excusez-vous, et nous reprendrons. »', '« J’attends des excuses avant toute autre chose. »', '« Non. Vos manières d’abord. »'],
+    domestique: ['« Je préfère ne pas répondre, {m}. »', '« Sauf votre respect, {m}, je ne répondrai pas. »', 'On baisse les yeux, sans répondre.'],
+    mondain: ['« Je ne parle pas aux malappris. Excusez-vous, et nous verrons. »', '« Une réponse ? Après ces grossièretés ? Vous rêvez. »', '« Des excuses, mon {cher}. Ensuite, peut-être. »'],
+    fievreux: ['« Non. Vous êtes comme eux. »', '« Je ne dirai rien. Rien. »', 'On se détourne, sans répondre.']
+  };
+  // un personnage qui vous a pris en sympathie (avant sa réponse, parfois)
+  L.complice = {
+    formel: ['Pour vous, volontiers.', 'Avec plaisir, {m}.', 'Je vous dirai tout ce que je sais.'],
+    sec: ['Pour vous, je fais une exception.', 'Bon. Entre nous :', 'Je ne le dirais pas à tout le monde, mais :'],
+    populaire: ['Pour vous, je veux bien.', 'Entre nous, hein :', 'Vous, vous m’êtes sympathique. Alors :'],
+    savant: ['Ah, avec plaisir !', 'Entre gens de bonne compagnie :', 'Je vous dirai tout ce que je sais, et même un peu plus.'],
+    domestique: ['Pour {m}, bien volontiers.', 'Si {m} me permet une confidence :', 'Avec plaisir, {m}.'],
+    mondain: ['Pour vous, mon {cher}, je veux bien.', 'Entre nous, et que cela reste entre nous :', 'Vous m’êtes sympathique, alors écoutez :'],
+    fievreux: ['Vous avez l’air honnête. Écoutez :', 'Vous, je vous crois. Alors :', 'Je vais vous le dire, à vous :']
+  };
+  // les compliments : après une insulte, quand on vous a déjà à la bonne, quand vous en faites trop
+  L.flatRancune = {
+    formel: ['« Vous m’insultez, puis vous me flattez ? Je ne suis pas dupe, {m}. »', '« Les compliments ne remplacent pas les excuses. »'],
+    sec: ['« D’abord des insultes, maintenant des fleurs. Ça ne prend pas. »', '« Gardez vos compliments. Je préférerais des excuses. »'],
+    populaire: ['« Ah, maintenant c’est des compliments ? Faudrait savoir. »', '« Vous me traitez de tous les noms, et après vous me passez de la pommade ? »'],
+    savant: ['« L’insulte, puis la flatterie : je connais la méthode. Elle ne marche pas. »', '« Je préférerais des excuses à des compliments. »'],
+    domestique: ['« {M} est bien changeant. »', '« Merci, {m}. Enfin… si {m} le pense. »'],
+    mondain: ['« Une insulte, un compliment. Vous soufflez le chaud et le froid ? »', '« Trop tard pour les compliments, mon {cher}. »'],
+    fievreux: ['« Vous changez de visage. Comme eux. »', '« Avant, vous criiez. Maintenant vous souriez. Je n’aime pas ça. »']
+  };
+  L.charmeDeja = {
+    formel: ['« Vous allez me faire rougir, {m}. Que puis-je pour vous ? »', '« Vous êtes trop aimable. Vraiment. »'],
+    sec: ['« Ça va, ça va. Je vous ai déjà à la bonne. Qu’est-ce que vous voulez ? »', '« Vous en faites trop. Mais je ne déteste pas. »'],
+    populaire: ['« Arrêtez, vous allez me faire rougir ! »', '« Vous, alors. Qu’est-ce que je peux faire pour vous ? »'],
+    savant: ['« Vous êtes d’une amabilité rare. Que puis-je pour vous ? »', '« Flatteur. Mais vous l’êtes avec goût. »'],
+    domestique: ['« {M} me fait trop d’honneur. »', '« Merci, {m}. Que puis-je pour {m} ? »'],
+    mondain: ['« Encore ? Vous allez me tourner la tête. »', '« Continuez, mon {cher}, je ne m’en lasse pas. »'],
+    fievreux: ['« Personne ne m’avait parlé comme ça depuis longtemps. »', '« Merci. Merci. »']
+  };
+  L.flatTrop = {
+    formel: ['« Vous l’avez déjà dit, {m}. Ça ne prend pas mieux la deuxième fois. »', '« La flatterie a ses limites. Vous les avez atteintes. »'],
+    sec: ['« Encore ? Vous perdez votre temps. »', '« Les compliments, ça ne marche pas avec moi. Vous auriez dû le comprendre. »'],
+    populaire: ['« Ça va, la pommade. J’ai compris. »', '« Vous en remettez une couche ? Ça marche pas, je vous dis. »'],
+    savant: ['« Vous insistez. C’est presque touchant. Presque. »', '« La répétition ne rend pas un compliment plus sincère. »'],
+    domestique: ['« {M} est bien aimable. {M} l’a déjà dit. »', '« Merci, {m}. Encore. »'],
+    mondain: ['« Vous radotez, mon {cher}. Et vos compliments aussi. »', '« Une fois, c’était charmant. Deux fois, c’est suspect. »'],
+    fievreux: ['« Pourquoi vous répétez ? Ils répètent aussi. »', '« Arrêtez de sourire comme ça. »']
+  };
+  // le jet de Charme : réussi, on vous prend en sympathie ; raté, on vous voit venir
+  L.charmeOk = {
+    formel: ['« Vous avez du goût, {m}. Je vous écoute, et de bon cœur. »', '« Voilà qui fait plaisir à entendre. Que puis-je faire pour vous ? »', 'Le visage se détend. « Vous êtes fort aimable. Je suis à votre disposition. »'],
+    sec: ['Un coin de bouche se relève, malgré tout. « Bon. Vous n’êtes pas comme les autres. Allez-y, posez vos questions. »', '« Ça me change des imbéciles. Qu’est-ce que vous voulez savoir ? »', 'Un temps. Puis, presque un sourire. « D’accord. Vous avez gagné. »'],
+    populaire: ['On rougit un peu. « Oh, ben, ça fait plaisir. Allez, demandez-moi ce que vous voulez. »', '« Vous, vous êtes quelqu’un de bien. Qu’est-ce que je peux faire pour vous ? »', '« Ça, on me le dit pas souvent. Merci. Pour vous, je ferai ce que je peux. »'],
+    savant: ['« Ah ! Enfin quelqu’un qui sait reconnaître le travail bien fait. Je suis tout à vous. »', '« Vous êtes d’une rare délicatesse. Demandez, je répondrai. »', 'Un sourire ravi. « Voilà une conversation qui commence bien. »'],
+    domestique: ['On se redresse, flatté. « Merci, {m}. C’est rare qu’on le remarque. Que puis-je pour {m} ? »', '« {M} est trop aimable. Je ferai tout mon possible. »', 'Un sourire timide. « Personne ne me dit jamais cela, {m}. »'],
+    mondain: ['« Ah, enfin un peu de galanterie. Vous me plaisez. Que voulez-vous savoir ? »', 'Un rire charmé. « Vous savez parler aux dames, vous. Je vous écoute. »', '« Flatteur. Mais je vous pardonne : vous le faites bien. »'],
+    fievreux: ['« Merci… Personne ne m’avait parlé doucement depuis si longtemps. »', 'Quelque chose s’apaise dans le regard. « Vous, je vous fais confiance. »', '« Merci. Je vous dirai. Je vous dirai tout. »']
+  };
+  L.charmeKo = {
+    formel: ['« Vous êtes bien aimable, {m}. » Le ton reste parfaitement neutre.', '« Merci. » Rien de plus.', 'Un sourire poli, qui ne monte pas jusqu’aux yeux.'],
+    sec: ['« Ça ne marche pas avec moi. »', '« Gardez ça pour quelqu’un que ça impressionne. »', 'Pas un muscle ne bouge sur le visage.'],
+    populaire: ['« Ouais, ouais. On me la fait pas, à moi. »', '« C’est gentil. Mais je vous vois venir. »', '« Merci. » Un regard méfiant.'],
+    savant: ['« Vous êtes aimable. Mais je ne suis pas sensible à la flatterie. »', '« Hum. Venons-en au fait, voulez-vous ? »', 'Un petit sourire sceptique.'],
+    domestique: ['« Merci, {m}. » Le ton ne change pas d’un iota.', '« Trop aimable, {m}. » Pas un mot de plus.', 'Une courbette polie, et rien d’autre.'],
+    mondain: ['« Vous êtes un flatteur, et un mauvais. »', '« Joli compliment. Je l’ai entendu cent fois. »', 'Un bâillement, à peine dissimulé.'],
+    fievreux: ['« Vous dites ça pour que je parle. Ils faisaient pareil. »', '« Non. Non. Ne souriez pas. »', 'Un regard vide. Le compliment ne l’a pas atteint.']
+  };
   // la police a entendu parler de vous
   L.plaintePolice = ['« Avant toute chose : on a reçu une plainte contre vous. Insultes, esclandre. Je vous conseille de vous tenir tranquille dans mon secteur. »', '« On m’a parlé de vous. Un témoin dit que vous avez perdu votre sang-froid. Je n’aime pas les gens qui perdent leur sang-froid. »', '« Votre nom est arrivé sur mon bureau. Une plainte. Je l’ai mise sous la pile. Elle peut remonter. »'];
 
