@@ -207,4 +207,45 @@
       return r0.call(this, api, p);
     };
   });
+
+  // ================================================================ attendre une heure, payer la guinée
+  var MOTSH = { une: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, huit: 8, neuf: 9, dix: 10, onze: 11, douze: 12, midi: 12, minuit: 24 };
+  // « jusqu'à 21 h », « neuf heures du soir », « vingt et une heures », « ce soir » → une heure de la journée (ou null)
+  function heureVoulue(t) {
+    var m = t.match(/\b(\d{1,2})\s*(?:h|heures?)\b/), h = null;
+    if (m) h = +m[1];
+    else if ((m = t.match(/\bvingt (?:et )?(une|deux|trois)\b/))) h = 20 + MOTSH[m[1]];
+    else if ((m = t.match(/\b(une|deux|trois|quatre|cinq|six|sept|huit|neuf|dix|onze|douze)\s+heures?\b|\b(midi|minuit)\b/))) h = MOTSH[m[1] || m[2]];
+    if (h !== null && h <= 12 && /\b(soir|soiree|nuit)\b/.test(t) && h !== 12) h += 12;
+    if (h === null && /\b(ce soir|le soir|la soiree|jusqu au soir|tombee de la nuit|la nuit)\b/.test(t)) h = 19;
+    return h;
+  }
+  var ATTENTE = /^(?:je |j |nous |on )?(?:attends|attend|attendre|attendons|patiente|patienter|patientons|laisse passer le temps|laisser passer le temps|tue le temps|tuer le temps|reste|rester)\b/;
+  var PAIE = /\b(paie|paye|payer|payons|regle|regler|verse|verser|depose|deposer|pose|poser|glisse|glisser|donne|donner|tends|tendre|mets|mettre)\b/;
+  var ic1 = L.intercept;
+  L.intercept = function (api, p, raw) {
+    var t = ' ' + G.RPG.normalize(raw) + ' ';
+    // ---- chez Mrs Vane : la guinée dans la soucoupe, c'est la séance
+    if (loc(api) === 'vane' && !api.flag('seanceFaite') && PAIE.test(t) && /\b(guinees?|soucoupe|obole|ecot|livres?|shillings?|argent|piece|pieces)\b/.test(t)) {
+      api.endTalk(false);
+      if (!seanceOuverte(api)) { api.npc('vane', dimanche(api) ? '« Pas le dimanche, très {cher}. Gardez votre guinée pour demain soir. »' : '« Rangez cela, très {cher}. La soucoupe ne sort qu’à neuf heures. »'); return true; }
+      seance(api); return true;
+    }
+    // ---- attendre une heure précise
+    if (ATTENTE.test(t.trim()) && raw.indexOf('?') < 0) {
+      var cible = heureVoulue(t);
+      if (loc(api) === 'vane' && !api.flag('seanceFaite') && (cible === null ? /\bseance\b/.test(t) : cible >= 20 && cible <= 22) && seanceOuverte(api)) { api.endTalk(false); seance(api); return true; }
+      if (cible !== null && !/^(wagon|retour|campagne|cave)/.test(loc(api))) {
+        var h = hour(api.s.min), mm = api.s.min % 60;
+        if (cible >= 24) cible = 23;
+        if (cible <= h) { api.say(cible === h ? 'C’est maintenant, ou presque : il est ' + h + ' h ' + (mm < 10 ? '0' : '') + mm + '.' : 'Il est déjà ' + h + ' h passées.'); return true; }
+        api.endTalk(false);
+        var lignes = cible - h >= 3 ? ['Vous laissez filer les heures : un repas, les journaux du soir, le brouillard derrière la vitre. Londres s’allume, réverbère après réverbère.', 'Le temps passe lentement, comme toujours quand on l’attend. Vous comptez les coups des horloges de Londres.'] : ['Vous patientez. Une heure, puis une autre, à tourner les mêmes questions.', 'Vous attendez en regardant passer les gens dans le brouillard.'];
+        api.say(api.fresh('attendreH', lignes) + ' Il est ' + cible + ' h.');
+        api.s.min = day(api.s.min) * D + cible * 60; api.s.tick = 0;
+        return true;
+      }
+    }
+    return ic1 ? ic1.apply(this, arguments) : false;
+  };
 })(typeof window !== 'undefined' ? window : globalThis);

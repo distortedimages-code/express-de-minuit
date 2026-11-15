@@ -152,6 +152,7 @@
       [/\b(la |une )?valise (dans|du|qui roule dans) (le )?couloir\b|\bla valise qui roule\b/g, ' couloir '],
       [/\b(la |une )?(dame|voisine|cliente|vieille dame) du (deuxieme|2e|second)( etage)?\b|\bpas au plafond\b|\bdeuxieme etage\b/g, ' damedeuxieme '],
       [/\bscotland yard\b|\bnew scotland yard\b/g, ' yard '],
+      [/\b(l |un |cet |ce |le )?(homme|monsieur|type|inconnu|individu) (brun|aux cheveux noirs|aux cheveux bruns|qui (m |nous )?(observait|regardait|epiait|fixait|surveillait))\b|\b(le |un )?grand brun\b/g, ' moustachu '],
       [/\bchelsea arms\b/g, ' chelsea '],
       [/\bbritish museum\b|\bsalle de lecture\b|\breading room\b/g, ' musee '],
       [/\bstoke newington\b/g, ' stoke '],
@@ -220,7 +221,7 @@
       Lx.add('INSTITUT', 'n', 'institut, kensington, challenger, fondation, banquet', { label: 'l’Institut impérial' });
       Lx.add('CONFERENCE', 'x', 'conference, expose, discours, sujet, theme, causerie, intervention', { label: 'la conférence' });
       Lx.add('HANTISE', 'x', 'hantise, hantises, hante, hantee, apparition, apparitions, phenomene, phenomenes, paranormal, surnaturel, spiritisme, medium, mediums, voyante, voyantes, tricheur, tricheurs', { label: 'les hantises' });
-      Lx.add('CHEAPSIDE', 'n', 'cheapside, garni, meuble', { label: 'Cheapside' });
+      Lx.add('CHEAPSIDE', 'n', 'cheapside, garni, meuble, city', { label: 'Cheapside' });
       Lx.add('CHELSEA', 'n', 'chelsea', { label: 'le Chelsea Arms' });
       Lx.add('YARD', 'n', 'yard, commissariat, poste', { label: 'Scotland Yard' });
       Lx.add('AMBASSADE', 'n', 'ambassade, consulat, turquie, belgravia, diplomate, diplomates', { label: 'l’ambassade de Turquie' });
@@ -275,7 +276,7 @@
       Lx.add('SYMBOLES', 'n', 'symboles, signes, gravures, essieux, chassis', { label: 'les dessous des wagons' });
       Lx.add('FANTOME', 'n', 'fantome', { label: 'le train fantôme' });
       Lx.add('SUIE', 'n', 'suie, fumee, papierpeint, plafond, marques, trainees, trainee, cloques, cloque, salissures', { label: 'les traces de suie' });
-      Lx.add('TRACES', 'n', 'traces, trace, empreintes, tapis, sol, plancher, moquette, parquet, taches, tache, ecartement', { label: 'le tapis' });
+      Lx.add('TRACES', 'n', 'traces, trace, empreintes, tapis, sol, plancher, moquette, parquet, taches, tache, ecartement', { label: 'les traces' });
       Lx.add('COEUR', 'n', 'coeur, motif, figure, huit, dessin, entrailles, abats, rampes, rampe, relief, hauteur, cales, pentes, pente, niveaux, boyaux', { label: 'le motif au sol' });
       Lx.add('LEVIER', 'n', 'levier, leviers, machiniste, mecanicien, manettes, foyer, chaudiere', { label: 'la cabine de la locomotive' });
       Lx.add('OS', 'n', 'os, ossements, squelette, restes, lambeaux, breloque', { label: 'les ossements' });
@@ -475,6 +476,7 @@
         resolve: function (api, r) {
           api.say(r.success ? 'Vous restez là. Vous ne savez pas pourquoi vos jambes vous obéissent encore.' : 'Votre esprit refuse ce qu’il voit et le voit quand même, en entier, sans pouvoir détourner les yeux.');
           api.say('Les passagers descendent. Des hommes en redingote, des femmes en tournure, des enfants en col marin, tous vêtus comme en 1897. Ils glissent sur le sol comme sur un quai et vous posent des questions dont ils n’écoutent pas la réponse.');
+          api.arrive('morts'); // les passagers de 1897 descendent du train
           api.npc('morts', api.fresh('mortsQ', ['« À quelle heure arrivons-nous à Liverpool ? »', '« Où est le contrôleur ? »']));
           api.npc('morts', '« Pourquoi ce retard ? Pourquoi fait-il si sombre ? Un autre train nous suit-il ? Mon mari devait le prendre. »');
           api.say('Puis ils se resserrent autour de vous, comme l’eau autour d’une bonde, et parlent d’une seule voix : « Venez avec nous. Venez avec nous. »');
@@ -538,6 +540,7 @@
     if (api.flag('porteFranchie')) return;
     api.flag('porteFranchie', true);
     api.say('La porte claque derrière vous. Dehors, les morts gémissent, mais ils ne franchissent pas les signes tracés sur le battant, dont un ankh renversé.');
+    api.arrive('alexis'); // il vous attend derrière la porte
     api.npc('alexis', 'Un petit homme chauve en costume élimé reprend son souffle, les yeux brillants de fièvre. « Bienvenue à bord de l’express de 9 h 15 pour Liverpool. Nous avons, hum, un léger retard. Randolph Alexis, pour vous servir. »');
     api.go('wagon2');
   }
@@ -571,7 +574,7 @@
   // ---------------------------------------------------------------- personnages
   L.npcs = {
     morts: { id: 'morts', name: 'Les passagers', topics: [], deflect: ['…'] },
-    planton: { id: 'planton', name: 'Le planton', topics: [], deflect: ['…'] },
+    planton: { id: 'planton', name: 'Le planton', topics: [], deflect: ['…'], lieux: ['stoke', 'yard'] },
     brule: { id: 'brule', name: 'L’homme sur le lit', topics: [], deflect: ['…'] },
     smith: npc({ id: 'smith', name: 'Le professeur Smith', patience: 9, cooldown: 20, selfKeys: ['SMITH'],
       greet: function (api, first) {
@@ -594,6 +597,7 @@
         T('hantises', ['PASSAGERSMORTS', 'HANTISE'], function (api, n) {
           api.npc('smith', n === 0 ? '« Un bateau de pêche breton, une Norvégienne dans son escalier, un fiacre de Londres. Photographiés chacun depuis trois angles. Tous à moitié transparents, tous légèrement lumineux, tous au ralenti. »' : '« Je n’en ai jamais vu de solide, hélas. On pourrait attendre plusieurs vies pour cela. »');
         }, { chip: 'Les hantises' }),
+        T('visite', [['STJOHN', 0.9], ['ACCOMPAGNER', 0.6]], ['« Chez moi ? Venez quand vous voudrez, {ami}… » Il s’interrompt, le regard ailleurs. « Pas ce week-end, peut-être. J’ai du travail. Beaucoup de travail. Je vous écrirai. »', '« Je vous écrirai, je vous dis. » Il sourit, mais ses doigts tremblent un peu sur sa coupe.'], { cond: function (api) { return api.s.loc === 'institut'; } }),
         T('beddows', ['BEDDOWS'], ['« Beddows ? Mon ombre, mon cuisinier, ma conscience. Il cire mes chaussures et censure mes lettres. Je ne sais pas ce que je ferais sans lui. »', '« Il désapprouve mon tabac depuis vingt ans. Une constance admirable. »'], { chip: 'Beddows' }),
         T('maison', ['HOTEL', ['TOIMEME', 0.7]], ['« Ma maison de St John’s Wood ? Éventrée ! Les ouvriers agrandissent ma bibliothèque. D’où votre hôtel, et toutes mes excuses. Dès que ce sera fini, je vous invite à dîner. Beddows fera son pâté en croûte. »'], { more: ['« Ma femme aurait détesté ces travaux. Margaret est morte en 1919. La grippe. » Il tire sur sa pipe et change de sujet.'] }),
         T('moustachu', ['MOUSTACHU', ['QUELQUUN', 0.8]], function (api) {
@@ -725,7 +729,7 @@
         }, { chip: 'Payer six pence pour voir la chambre', chipCond: function (api) { return !api.flag('chambrePayee'); } })
       ] }),
 
-    sergent: npc({ id: 'sergent', name: 'Le sergent de Stoke Newington', patience: 4, cooldown: 60, selfKeys: ['SERGENT'],
+    sergent: npc({ id: 'sergent', name: 'Le sergent de Stoke Newington', lieux: ['stoke'], patience: 4, cooldown: 60, selfKeys: ['SERGENT'],
       greet: function (api, first) { api.npc('sergent', first ? '« Sergent Hobbs. On me dit que vous vous intéressez à M. Stanley. Entre nous, {m}, il n’y a pas de mystère. Ce monsieur a organisé sa disparition. On saura bientôt pourquoi. »' : '« {M} ? »'); },
       bye: '« Bonne journée, {m}. Ce genre d’affaire finit toujours par s’arranger. »',
       topics: [
@@ -861,13 +865,20 @@
     var p = PLACES[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return zone(api.s.loc) !== id && !/^wagon|^retour|^campagne|^institut/.test(api.s.loc); },
-      run: function (api) {
+      run: function (api, pa) {
+        if (id === 'institut') { api.say(api.fresh('instFini', ['L’Institut impérial ? Le banquet est terminé depuis longtemps. Les salons sont fermés, les chaises empilées ; il n’y a plus rien à y apprendre.', 'Vous pensez à l’Institut impérial, à ses lustres et à son champagne tiède. Le banquet est fini : ce qui compte, maintenant, se passe ailleurs dans Londres.'])); return; }
         if (!known(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.'); return; }
-        if (id === 'institut') { api.say('Le banquet est terminé depuis longtemps.'); return; }
         var h = hour(api.s.min);
         if (p.hours && h >= p.hours[1]) { api.say(p.closed + ' Il faudra y retourner demain.'); return; }
-        if (p.hours && h < p.hours[0] - 1) { api.say(p.closed + ' Mieux vaut attendre le matin.'); return; }
-        if (p.hours && h < p.hours[0]) { api.say('Vous prenez votre temps : un thé, un œuf à la coque, les nouvelles. On n’ouvre qu’à ' + p.hours[0] + ' h.'); api.s.min = day(api.s.min) * D + p.hours[0] * 60 - 40; }
+        if (p.hours && h < p.hours[0] - 1) {
+          // un lieu qui n'ouvre que le soir : on attend le soir, si c'est ce qu'on a dit
+          if (p.hours[0] >= 17 && h >= 6) {
+            var soir = pa && /\b(soir|soiree|attend\w*|tard|nuit|\d+ ?h|heures?)\b/.test(G.RPG.normalize(pa.raw || ''));
+            if (!soir) { api.say(p.closed + ' Il est ' + h + ' h : revenez ce soir, ou écrivez « attendre le soir ».'); return; }
+            api.say(api.fresh('tuerTemps', ['Vous tuez le temps jusqu’au soir : un thé, les journaux, une promenade dans le brouillard qui s’épaissit avec la nuit.', 'L’après-midi s’étire. Vous dînez tôt, seul{e} à une table, en regardant les réverbères s’allumer un à un.']));
+            api.s.min = day(api.s.min) * D + p.hours[0] * 60 - 40;
+          } else { api.say(p.closed + ' Mieux vaut attendre le matin.'); return; }
+        } else if (p.hours && h < p.hours[0]) { api.say('Vous prenez votre temps : un thé, un œuf à la coque, les nouvelles. On n’ouvre qu’à ' + p.hours[0] + ' h.'); api.s.min = day(api.s.min) * D + p.hours[0] * 60 - 40; }
         if (id === 'cheapside' && api.flag('cheapsideFini')) { api.say('Vous retournez à Cheapside.'); }
         taxi(api, id);
       } };
@@ -878,7 +889,8 @@
       name: 'L’Institut impérial', art: 'institut',
       enter: function () {},
       things: [
-        { label: 'le professeur Smith', ids: ['SMITH'] }, { label: 'Beddows', ids: ['BEDDOWS'] },
+        { label: 'le professeur Smith', ids: ['SMITH'], cond: function (api) { return !api.flag('smithParti'); } }, { label: 'Beddows', ids: ['BEDDOWS'], cond: function (api) { return !api.flag('smithParti'); } },
+        { label: null, ids: ['SMITH', 'BEDDOWS'], cond: function (api) { return !!api.flag('smithParti'); } },
         { label: 'les invités', ids: ['QUELQUUN', 'PASSAGERS'] }, { label: 'l’écran de projection', ids: ['PROJECTEUR'] },
         { label: null, ids: ['SALLE', 'INSTITUT', 'TABLE', 'BOISSON', 'LAMPE', 'MOUSTACHU', 'CONFERENCE'] }
       ],
@@ -890,9 +902,9 @@
       actions: [
         { id: 'i_look', label: 'Regarder la salle', idea: 'Regarder autour de vous', verbs: ['EXAMINER', 'FOUILLER'], nouns: ['SALLE', 'INSTITUT', 'QUELQUUN', 'PASSAGERS'], bare: true,
           run: function (api) { api.say('La grande galerie de l’Institut impérial a été vidée de ses vitrines d’échantillons commerciaux. À la place : des smokings, des robes du soir, des uniformes chamarrés, des sabres qui brillent et des moustaches cirées. Au fond, un écran blanc et un projecteur, sous une housse. À la table d’honneur, Smith relit ses notes en tirant sur une pipe qui empeste. Derrière lui, impassible, Beddows.'); } },
-        { id: 'i_smith', label: 'Parler au professeur Smith', idea: true, talkTo: 'smith', verbs: ['PARLER', 'ALLER', 'VISITER', 'FLATTER', 'POLI', 'PSY', 'INSISTER'], nouns: ['SMITH'], extra: ['CONFERENCE', 'PROJECTEUR', 'BEDDOWS', 'HOTEL', 'MOUSTACHU', 'VOYAGE', 'TRAIN', 'PISTE', 'SIMULACRE', 'ETAT', 'TOIMEME', 'QUELQUUN', 'PASSAGERSMORTS', 'INSTITUT', 'MAGIE'],
+        { id: 'i_smith', label: 'Parler au professeur Smith', idea: true, talkTo: 'smith', cond: function (api) { return !api.flag('smithParti'); }, verbs: ['PARLER', 'ALLER', 'VISITER', 'FLATTER', 'POLI', 'PSY', 'INSISTER'], nouns: ['SMITH'], extra: ['CONFERENCE', 'PROJECTEUR', 'BEDDOWS', 'HOTEL', 'MOUSTACHU', 'VOYAGE', 'TRAIN', 'PISTE', 'SIMULACRE', 'ETAT', 'TOIMEME', 'QUELQUUN', 'PASSAGERSMORTS', 'INSTITUT', 'MAGIE'],
           run: function (api, p) { api.talk('smith', p); } },
-        { id: 'i_beddows', label: 'Parler à Beddows', talkTo: 'beddows', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['BEDDOWS'], extra: ['SMITH', 'TOIMEME'],
+        { id: 'i_beddows', label: 'Parler à Beddows', talkTo: 'beddows', cond: function (api) { return !api.flag('smithParti'); }, verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['BEDDOWS'], extra: ['SMITH', 'TOIMEME'],
           run: function (api, p) { api.talk('beddows', p); } },
         { id: 'i_conf', label: 'Écouter la conférence', idea: true, ideaCond: function (api) { return !api.flag('conference'); }, verbs: ['ECOUTER', 'ATTENDRE', 'ASSEOIR', 'EXAMINER'], nouns: ['CONFERENCE', 'PROJECTEUR', 'SMITH'], bare: true, extraVerbs: ['EXAMINER'],
           run: function (api, p) { if (api.flag('conference')) { if (p && p.c.SMITH !== undefined && p.c.ECOUTER === undefined) { api.exec('i_smith'); return; } api.say(api.fresh('apres', ['La conférence est terminée. On se presse autour de Smith pour le féliciter.', 'L’écran est éteint. Les discussions vont bon train.'])); return; } conference(api); } },
@@ -900,6 +912,18 @@
           run: function (api) { api.say(api.fresh('champ', ['Le champagne est tiède et un peu trop sucré. Un serveur en gants blancs remplit déjà votre coupe.', 'Une deuxième coupe. Les lustres se mettent à briller un peu plus fort.', 'Vous déclinez la troisième. Il faut garder les idées claires, sans savoir encore pourquoi.'])); } },
         { id: 'i_moustachu', label: 'Chercher l’homme à la moustache', verbs: ['FOUILLER', 'EXAMINER', 'ALLER', 'PARLER'], nouns: ['MOUSTACHU'], cond: function (api) { return api.has('OBSERVATEUR'); },
           run: function (api) { api.say(api.fresh('moust', ['Vous fendez la foule jusqu’à l’endroit où il se tenait. Personne. Un serveur jure qu’il n’a vu aucun monsieur de ce genre.', 'Vous faites le tour de la galerie. Des moustaches, il y en a cent. Pas la sienne.'])); } },
+        { id: 'i_suivre', label: 'Raccompagner Smith et Beddows', verbs: ['SUIVRE', 'ALLER', 'ACCOMPAGNER'], nouns: ['BEDDOWS', 'SMITH', 'STJOHN'], repeatable: true,
+          run: function (api) {
+            if (!api.flag('conference')) { api.say('Smith n’a pas encore parlé. Il ne partira pas avant d’avoir eu sa salle, et vous non plus.'); return; }
+            if (api.flag('smithParti')) { api.say('Leur fiacre a disparu depuis longtemps dans le brouillard de Kensington.'); api.chips([{ label: 'Rentrer à l’hôtel', action: 'i_rentrer' }]); return; }
+            api.say('Vous rattrapez Beddows au vestiaire. Il aide le professeur à enfiler son pardessus, et vous arrête d’un regard très poli.');
+            api.npc('beddows', '« Monsieur rentre se reposer, {m}. Il a beaucoup parlé ce soir. Il vous écrira. »');
+            api.say('Smith vous fait un petit signe de la main, sans vraiment vous voir. Leur fiacre s’éloigne vers le nord, vers St John’s Wood, et le brouillard le reprend au bout de vingt mètres.');
+            api.flag('smithParti', true);
+            api.chips([{ label: 'Rentrer à l’hôtel', action: 'i_rentrer' }]);
+          } },
+        { id: 'i_partis', label: 'Chercher Smith', verbs: ['PARLER', 'VISITER', 'EXAMINER', 'FOUILLER'], nouns: ['SMITH', 'BEDDOWS'], repeatable: true, cond: function (api) { return !!api.flag('smithParti'); },
+          run: function (api) { api.say(api.fresh('smithParti', ['Smith et Beddows sont partis. Il ne reste d’eux qu’une coupe à moitié pleine sur le bord de l’estrade.', 'Leur fiacre est loin, maintenant. Le professeur vous écrira, a dit Beddows.'])); api.chips([{ label: 'Rentrer à l’hôtel', action: 'i_rentrer' }]); } },
         { id: 'i_rentrer', label: 'Rentrer à l’hôtel', idea: true, ideaCond: function (api) { return api.flag('conference'); }, repeatable: true, verbs: ['ALLER', 'DORMIR'], nouns: ['HOTEL'], bare: true,
           run: function (api) {
             if (!api.flag('conference')) { api.say('Partir avant la conférence de votre ami ? Smith ne vous le pardonnerait jamais.'); return; }
@@ -1040,8 +1064,6 @@
             if (api.once('corpsBed')) { api.say('Beddows est mort. Une seule entaille, nette, au cou, faite par quelqu’un qui savait. Dans la fumée, personne n’a rien vu. Ses yeux ouverts fixent encore le lit.'); api.lose(1); return; }
             api.say('Vous ne pouvez plus rien pour lui. Les pas se rapprochent dans l’escalier.');
           } },
-        { id: 'c_valise', label: 'Examiner la valise', verbs: ['EXAMINER', 'FOUILLER'], nouns: ['VALISE', 'ARGENT'], cond: function (api) { return api.item(VALISE); },
-          run: function (api) { api.say('Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Une fortune, donnée sans un reçu. Vous refermez la valise sans trop savoir quoi penser.'); } },
         { id: 'c_partir', label: 'Partir', idea: true, ideaCond: function (api) { return api.flag('discours'); }, repeatable: true, verbs: ['ALLER', 'AUREVOIR'], nouns: ['HOTEL', 'PORTE'], bare: true,
           run: function (api) {
             if (!api.flag('discours') && !api.flag('demasque')) { api.say('Vous ne pouvez pas partir sans avoir entendu ce que Smith a à dire.'); return; }
@@ -1426,7 +1448,7 @@
   }
 
   L.globalActions = [
-    goAct('hotel'), goAct('cheapside'), goAct('chelsea'), goAct('yard'), goAct('ambassade'), goAct('islington'), goAct('musee'), goAct('stoke'), goAct('camberwell'), goAct('victoria'),
+    goAct('hotel'), goAct('institut'), goAct('cheapside'), goAct('chelsea'), goAct('yard'), goAct('ambassade'), goAct('islington'), goAct('musee'), goAct('stoke'), goAct('camberwell'), goAct('victoria'),
     { id: 'g_ici', label: 'Rester ici', verbs: ['ALLER', 'VISITER'], nouns: Object.keys(PLACES).map(function (k) { return PLACES[k].concept; }), boost: -0.2, repeatable: true,
       run: function (api, p) {
         var here = PLACES[zone(api.s.loc)];

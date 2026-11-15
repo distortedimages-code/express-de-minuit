@@ -161,6 +161,16 @@ Le jeu se souvient des quatre dernières personnes ou choses dont il a été que
 
 Les idées (hors conversation) et les sujets (en conversation) sont repliés par défaut, et se replient après chaque geste. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.
 
+Une suggestion de sujet n’apparaît que si ce sujet a déjà été abordé avec ce personnage : vous l’avez nommé devant lui, ou lui-même en a parlé. Les choses qu’on a sous les yeux comptent aussi (la table de Ravel, le serveur), et les gestes restent toujours proposés (prendre congé, glisser un pourboire, l’interroger sur lui-même). Ainsi, la vieille dame ne propose « l’homme qui est venu le chercher » qu’après avoir dit qu’un autre homme était venu. Vérification : `node jeu/tools/test_suggestions.js`.
+
+## Les personnages absents ne parlent pas
+
+Un verrou dans le moteur empêche toute réplique d’un personnage qui n’est pas là. Un personnage est là si on lui parle, si on peut lui parler à cet endroit, s’il fait partie du décor, ou si sa fiche déclare ses lieux (`lieux: ['stoke']`). Quand un personnage entre en scène le temps d’un événement (Beddows qui ouvre la porte, les passagers du train fantôme), le scénario l’annonce avec `api.arrive('beddows')`. Quand on change de lieu, la conversation en cours s’arrête. Si une réplique est bloquée, elle n’est pas affichée ; les tests automatiques comptent ces blocages pour qu’on corrige le scénario.
+
+## Les déplacements et les suites de gestes
+
+En pleine conversation, « je me rends au 31, Gordon Square », « aller chez le professeur Smith » ou « je franchis le soufflet » font quitter la conversation et partir. « Je m’approche de l’agent et lui demande… » ou « j’interroge l’agent » s’adressent à la personne nommée, si elle est là. « Je dors jusqu’à l’aube, puis je prends un taxi pour St John’s Wood » fait les deux gestes, l’un après l’autre. « J’attends jusqu’à 21 h » fait passer le temps. Ce qu’on porte sur soi (la valise de Beddows) est toujours à portée de main.
+
 ## L'humeur des personnages
 
 Quand on dit n'importe quoi à un personnage, qu'on l'insulte ou qu'on lui parle d'objets qui n'existent pas encore (un iPhone, Google, des euros…), il réagit selon son caractère (`jeu/src/humeur.js`) :

@@ -12,8 +12,18 @@
     // « les gens dont la vieille dame m'a parlé » : celle qui en a parlé n'est pas celle qu'on cherche
     [/\b(dont|que|qu)\s+((?:[a-z]+\s+){0,3})(m\s+a|m\s+avait|nous\s+a|nous\s+avait|vient\s+de|venait\s+de)\s+(parle|parlee|decrit|decrite|decrits|decrites|mentionne|mentionnee|mentionnes|cite|cites|evoque|evoques|dit|montre|montres|signale|signales)\b/g, ' '],
     [/\bdont\s+(parlait|parlaient|a\s+parle|ont\s+parle)\s+((mme|madame|monsieur|mr|mrs|le|la|l)\s+)?[a-z]+\b/g, ' '],
+    // « je prends mon chapeau et suis Beddows » : le geste accessoire ne compte pas
+    [/\b(?:je )?(?:prends|prend|reprends|recupere|enfile|remets|mets|attrape|saisis|ramasse) (?:mon|ma|mes|son|sa|ses|le|la|les) (?:chapeau|manteau|pardessus|impermeable|canne|parapluie|gants|echarpe|veste|cape|pelerine|melon|feutre|bonnet|casquette|cache nez)\s+(?:et|puis)\s+(?:je )?/g, ' je '],
+    // « je quitte la maison et cherche le professeur » : on y va
+    [/\b(je )?(quitte|quittons|sors de|sors du|sors des|sortir de|sortir du)\s+(?:[a-z]+\s+){1,5}?(et|puis)\s+(je )?(cherche|chercher|retrouve|retrouver|rejoins|rejoindre|vais voir|va voir)\b/g, ' aller chez '],
     // « je quitte les archives et retourne chez Smith » : on garde la destination
     [/\b(je )?(quitte|quittons|quitter|sors de|sors du|sors des|sortir de|sortir du)\s+(?:[a-z]+\s+){1,5}?(et|puis|pour)\s+/g, ' '],
+    [/\b(me|nous) (rends|rend|rendons|rendrai|rendrons|dirige|dirigeons|dirigerai)\b/g, ' aller '],
+    // « je descends l'escalier jusqu'à la rue » : on sort
+    [/\b(?:descend\w*|redescend\w*|devale\w*|sors|ressors|gagne|rejoins)\s+(?:[a-z]+\s+){0,4}?(?:dans la|vers la|a la|jusqu a la|jusque dans la|sur la)\s+rue\b/g, ' sortir '],
+    // « je prends un taxi pour St John's Wood » : on y va ; « en taxi » ne change rien
+    [/\b(?:je |nous )?(?:prends|prendre|prenons|hele|heler|appelle|appeler|siffle|siffler|attrape|attraper|saute dans|monte dans) (?:un |le |mon |dans un )?(?:taxi|fiacre|omnibus|metro|bus|tramway|tram|cab)\s+(?:pour|jusqu a|jusqu au|jusqu aux|vers|direction|en direction de|en direction du|et (?:je )?(?:vais|file|fonce|rentre|retourne))\s+/g, ' aller a '],
+    [/\ben (taxi|fiacre|omnibus|metro|bus|tram|tramway)\b/g, ' '],
     // « je vais au British Museum pour chercher les rouleaux » : le but ne change pas le geste
     [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)[a-z]+(er|ir|re|oir)\b.*$/g, ' '],
     // « je m'approche d'elle » : on y va
@@ -33,6 +43,8 @@
     [/\btendre l oreille\b|\btends l oreille\b|\btend l oreille\b/g, ' ecouter '],
     [/\bpasser au peigne fin\b/g, ' fouiller '],
     [/\b(aller|vais|va|allons|allez|vas) (voir|trouver|rejoindre)\b/g, ' visiter '],
+    // « voir le sergent Rigby », « demander à voir l'inspecteur » : on va lui parler, pas regarder
+    [/\b(?:demander a |demande a |veux |voudrais |dois |souhaite |aimerais )?voir (?=(?:le |la |l |les |mon |ma )?(?:inspecteur|sergent|professeur|docteur|mr|mrs|miss|madame|monsieur|mme|mlle|lady|lord|agent|concierge|commissaire|capitaine|directeur|patron|chef)\b)/g, ' visiter '],
     [/\b(m |s |me |se |vous )?approcher\b|\bm approche\b|\bs approche\b/g, ' visiter '],
     [/\b(je vais|on va|vais|allons|allez|va|vas) (dans|au|aux|a|vers|chez|jusqu|en|par|de l autre)\b/g, ' aller $2 '],
     [/\bje (le |la |les )?suis (les |la |le |l |ces |cette )?(traces?|empreintes?|piste|pas)\b/g, ' suivre traces '],
@@ -213,7 +225,7 @@
     L.add('ECOUTER', 'v', 'ecouter, entendre, espionner, epier, ouie, bruit, bruits, son, sons');
     L.add('PARLER', 'v', 'parler, discuter, interroger, questionner, demander, aborder, saluer, causer, adresser, interpeller, appeler, bonjour, bonsoir, salut, hello, excuser, converser, dire, raconter, repondre, apostropher, hey, he, ho, hep, psst');
     L.add('VISITER', 'v', 'visiter, rendre visite');
-    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons');
+    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons, franchir, franchis, franchit, franchissons, franchissez, enjamber, enjambe');
     L.add('OUVRIR', 'v', 'ouvrir, ouvre, pousser, tirer, forcer, actionner, entrouvrir, crocheter, defoncer, enfoncer, deverrouiller, tourner, poignee');
     L.add('FRAPPER', 'v', 'frapper, toquer, cogner, tambouriner');
     L.add('ASSEOIR', 'v', 'asseoir, assoir, assieds, assied, installer, assis, attabler, siege');
@@ -337,6 +349,8 @@
     // on garde la trace du déplacement : « aller voir Butter » peut aussi vouloir dire s'y rendre
     if (p.c.VISITER !== undefined) { if (npcNoun) p.moved = p.c.VISITER; swap('VISITER', npcNoun ? 'PARLER' : 'EXAMINER'); }
     if (npcNoun && p.c.ALLER !== undefined && p.nouns.length === 1) { p.moved = p.c.ALLER; swap('ALLER', 'PARLER'); }
+    // « voir le sergent Rigby » : on veut lui parler
+    if (npcNoun && p.c.EXAMINER !== undefined && /^(?:(?:je|j)\s+)?(?:veux\s+|voudrais\s+|dois\s+|demande a\s+|demander a\s+|souhaite\s+|aimerais\s+)?voir\b/.test(p.text)) swap('EXAMINER', 'PARLER');
     if (npcNoun && p.c.FRAPPER !== undefined) swap('FRAPPER', 'MENACER');
     if (npcNoun && p.c.REVEILLER !== undefined && !lex.concepts[firstNoun.id].sleeper) swap('REVEILLER', 'MENACER');
     if (p.c.BOISSON !== undefined && (p.c.PRENDRE !== undefined || p.c.BOIRE !== undefined)) { swap('PRENDRE', 'COMMANDER'); swap('BOIRE', 'COMMANDER'); }
@@ -487,10 +501,27 @@
       }
       var npc = scene.npcs[who];
       var name = npc ? npc.name : who;
+      // verrou : un personnage qui n'est pas là ne parle jamais (ni à sa place, ni dans le dos d'un autre)
+      if (npc && !pnjIci(who)) {
+        if (G.RPG_ABSENTS) G.RPG_ABSENTS.push({ who: who, loc: s.loc, talk: s.talk, x: String(x).slice(0, 90) });
+        return;
+      }
+      noterReplique(who, x);
       // les répliques sans guillemets sont des gestes : narration
       log({ t: 'npc', who: who, name: name, x: x });
     }
     function loc() { return scene.locations[s.loc]; }
+    // un personnage est là si on lui parle, si on peut lui parler ici, s'il fait partie du décor, ou si le chapitre le dit
+    var pnjVenus = {};
+    function pnjIci(id) {
+      if (s.talk === id || pnjVenus[id] === s.turn) return true;
+      var lx = scene.npcs[id] && scene.npcs[id].lieux; // les lieux où il se tient, déclarés avec le personnage
+      if (lx && lx.indexOf(s.loc) >= 0) return true;
+      if (availableActions().some(function (a) { return a.talkTo === id; })) return true;
+      var c = conceptDuPnj(id);
+      if (c && thingsHere().some(function (t) { return (t.ids || []).indexOf(c) >= 0; })) return true;
+      return !!(scene.pnjIci && scene.pnjIci(api, id));
+    }
     function skillValue(name) {
       if (name === 'SAN') return s.pc.san;
       if (name === 'CHANCE') return s.pc.chance;
@@ -563,6 +594,8 @@
         var first = !s.visited[id];
         s.loc = id; s.visited[id] = (s.visited[id] || 0) + 1;
         if (first) s.idle = 0;
+        // on change de lieu : l'interlocuteur resté derrière ne répond plus
+        if (s.talk && !pnjIci(s.talk)) s.talk = null;
         log({ t: 'loc', loc: id, name: scene.locations[id].name });
         if (!quiet) scene.locations[id].enter(api, first);
       },
@@ -576,8 +609,10 @@
       },
       talk: function (npcId, p) { startTalk(npcId, p); },
       topic: function (npcId, topicId, p) { runTopic(scene.npcs[npcId], topicId, p || parse(lex, '', scene.phrases)); },
+      // un personnage entre en scène le temps d'une réplique (un événement, une intrusion)
+      arrive: function (who) { pnjVenus[who] = s.turn; },
       endTalk: function (line) {
-        if (!s.talk) return; var id = s.talk; s.talk = null;
+        if (!s.talk) return; var id = s.talk; s.talk = null; pnjVenus[id] = s.turn; // il est encore là pour saluer
         if (line !== false) { var npc = scene.npcs[id]; talkMode = 'bye'; api.npc(id, typeof npc.bye === 'function' ? npc.bye(api) : npc.bye); talkMode = null; }
       },
       npcs: npcState,
@@ -713,17 +748,21 @@
       p.all.push(item); p.nouns.push(item); p.c[r.id] = 0.95; p.pronom = r.id;
     }
     // ----- à qui parle-t-on ? « Beddows, … », « je demande à Pratt si… », « j'interroge le laitier sur… » -----
-    var ADRESSE = /\b(?:demande\w*|redemande\w*|interroge\w*|questionne\w*|dis|dit|parle|adresse|m adresse|appelle|interpelle)\s+(?:a\s+|au\s+|aux\s+)?((?:[a-z]+\s*){1,4})/;
+    var ADRESSE = /\b(?:demande\w*|redemande\w*|interroge\w*|questionne\w*|dis|dit|parle|adresse|m adresse|appelle|interpelle)\s+(?:a\s+|au\s+|aux\s+)?(?!(?:de|du|des|d)\s)((?:[a-z]+\s*){1,4})/;
+    // « je vais voir l'agent et lui demande… », « je m'approche du laitier », « je me tourne vers Beddows »
+    var APPROCHE = /\b(?:visiter|aborder|aborde|rejoins|rejoindre|aller (?:vers|de|aupres d|aupres de|aupres du)|(?:me |m )?tourne\w* vers|retourne\w* (?:vers|aupres d\w*))\s+((?:[a-z]+\s*){1,4})/;
+    // ce qui précède le verbe : le joueur parle de lui (« je lui demande »), pas d'un autre (« avez-vous parlé au sergent »)
+    var AVANT_ADRESSE = /^(?:\s*\b(?:je|j|nous|on|puis|alors|bon|bien|et|maintenant|ensuite|donc|lui|leur|me|m|vais|veux|voudrais|dois|tente|essaie|ose|aller|enfin)\b)*\s*$/;
     function premierPnj(texte) {
       var toks = texte.trim().split(/\s+/);
       for (var i = 0; i < toks.length; i++) {
         if (STOP.has(toks[i])) continue;
         var m = lex.best(toks[i]);
-        if (m && m.score >= 0.9 && lex.concepts[m.id].npc) {
-          // le personnage présent que ce mot désigne (« la réception » : le concierge ici, le réceptionniste à Chelsea)
+        if (m && m.score >= 0.9) {
+          // le personnage présent que ce mot désigne (« la réception » : le concierge ici, le réceptionniste à Chelsea ; « l'agent » : l'agent de faction)
           var ici = availableActions().filter(function (a) { return a.talkTo && (a.nouns || []).indexOf(m.id) >= 0; })[0];
           if (ici) return ici.talkTo;
-          if (pnjDuConcept(m.id)) return pnjDuConcept(m.id);
+          if (lex.concepts[m.id].npc && pnjDuConcept(m.id)) return pnjDuConcept(m.id);
         }
         if (i >= 1) break; // le nom doit venir tout de suite
       }
@@ -732,15 +771,26 @@
     function destinataire(p) {
       var raw = String(p.raw || ''), voc = raw.match(/^\s*([^,:;?!.]{2,40})\s*[,:]/), id = null, reste = raw;
       if (voc) { id = premierPnj(normalize(voc[1])); if (id) reste = raw.slice(voc[0].length); }
+      var t = ' ' + p.text + ' ';
       if (!id) {
-        var m = (' ' + p.text + ' ').match(ADRESSE);
-        if (m) { id = premierPnj(m[1]); if (id) reste = raw.replace(/^.*?\b(demand|redemand|interrog|questionn|dis|dit|parl|adress|appell|interpell)\S*\s+(?:(?:à|a|au|aux)\s+)?/i, '').replace(/^\S+(\s+(de|d’|d')\s*\S+)?\s*/, ''); }
+        var m = t.match(ADRESSE);
+        if (m && AVANT_ADRESSE.test(t.slice(0, m.index))) { id = premierPnj(m[1]); if (id) reste = raw.replace(/^.*?\b(demand|redemand|interrog|questionn|dis|dit|parl|adress|appell|interpell)\S*\s+(?:(?:à|a|au|aux)\s+)?/i, '').replace(/^\S+(\s+(de|d’|d')\s*\S+)?\s*/, ''); }
       }
-      return id ? { id: id, reste: reste.trim() } : null;
+      if (!id) {
+        var m2 = t.match(APPROCHE);
+        if (m2 && AVANT_ADRESSE.test(t.slice(0, m2.index))) {
+          id = premierPnj(m2[1]);
+          if (id) { var k = raw.search(/\s(et|puis)\s/i); reste = k >= 0 ? raw.slice(k).replace(/^\s*(et|puis)\s+(je\s+|j[’'])?\s*(lui\s+|leur\s+)?(demande\w*|redemande\w*|dis\b|dit\b|pose\w*(\s+la question)?|interroge\w*|questionne\w*)?\s*/i, '') : ''; }
+        }
+      }
+      reste = reste.trim();
+      // « je demande à l'agent s'il a fouillé » : ce qui suit est une question
+      if (id && /^(si|s[’']ils?|s[’']elle|où|ou|ce qu|ce que|quand|comment|pourquoi|qui|quel|quelle|quels|quelles|combien|de quoi|à quoi|a quoi|depuis quand)\b/i.test(reste) && !/\?\s*$/.test(reste)) reste = reste.replace(/[.!…]*$/, '') + ' ?';
+      return id ? { id: id, reste: reste } : null;
     }
     function pnjPresent(id) { return availableActions().some(function (a) { return a.talkTo === id; }); }
     // un geste à la première personne, en pleine conversation : on la quitte pour agir
-    var GESTE = /^(?:je|j)\s+(?:vais\s+|me\s+|m\s+)?(examine|fouille|ouvre|prends|monte|descends|retourne|sors|pars|quitte|lis|relis|consulte|cherche|frappe|sonne|ecoute|attends|entre|rentre|file|inspecte|scrute|observe|regarde|fais le tour|m eloigne|eloigne|approche|suis la|suis le|suis les|vais)\b/;
+    var GESTE = /^(?:(?:je|j)\s+(?:vais\s+|me\s+|m\s+)?(?:examine|fouille|ouvre|prends|monte|descends|retourne|sors|pars|quitte|lis|relis|consulte|cherche|frappe|sonne|ecoute|attends|entre|rentre|file|inspecte|scrute|observe|regarde|fais le tour|m eloigne|eloigne|approche|suis la|suis le|suis les|vais|franchis|traverse|pousse|rejoins|gagne|enjambe)|(?:(?:je|j|nous|on|alors|bon|bien|maintenant|ensuite|enfin)\s+)*(?:aller|visiter|sortir|partir|suivre|franchir|traverser|pousser))\b/;
     function rankActions(p) {
       return availableActions().map(function (a) { return { a: a, score: scoreAction(a, p) }; })
         .filter(function (x) { return x.score > 0; })
@@ -801,8 +851,21 @@
       if (!t.length) return '';
       return t.length === 1 ? t[0] : t.slice(0, -1).join(', ') + ' et ' + t[t.length - 1];
     }
+    // ce qu'on porte sur soi est toujours « ici » : « la valise » désigne la valise qu'on tient
+    function porte(id) {
+      return (s.inv || []).some(function (nom) {
+        if (scene.porte && !scene.porte(api, nom)) return false;
+        var toks = normalize(nom).split(' ');
+        for (var i = 0; i < toks.length && i < 4; i++) {
+          if (STOP.has(toks[i])) continue;
+          var m = lex.best(toks[i]);
+          return !!(m && m.score >= 0.9 && m.id === id);
+        }
+        return false;
+      });
+    }
     function nounHere(id) {
-      return thingsHere().some(function (t) { return t.ids.indexOf(id) >= 0; });
+      return thingsHere().some(function (t) { return t.ids.indexOf(id) >= 0; }) || porte(id);
     }
 
     function ideas(n) {
@@ -889,11 +952,43 @@
       return (npc.topics || []).filter(function (t) { return !t.cond || t.cond(api); })
         .map(function (t, i) { return { t: t, i: i, score: topicScore(t, p) }; })
         .filter(function (x) { return x.score > 0; })
-        .sort(function (a, b) { return (b.score - a.score) || (nounScore(b.t, p) - nounScore(a.t, p)) || (a.i - b.i); });
+        .sort(function (a, b) { return (b.score - a.score) || (nounScore(b.t, p) - nounScore(a.t, p)) || (premierMot(a.t, p) - premierMot(b.t, p)) || (a.i - b.i); });
+    }
+    // ----- ce qui a été abordé avec chaque personnage -----
+    // Une suggestion de sujet ne sort que si on en a déjà parlé avec lui (le joueur ou lui-même l'a nommé),
+    // ou si la chose est là, sous les yeux. Sinon la suggestion trahirait ce que le personnage ne sait pas encore.
+    var SUJETS_LIBRES = { TOIMEME: 1, AUREVOIR: 1, ARGENT: 1, HEURE: 1, POLI: 1, PSY: 1, FLATTER: 1, PERSUADER: 1, BARATIN: 1, MENACER: 1, INSISTER: 1, COMMANDER: 1, BOISSON: 1, DONNER: 1, SUITE: 1 };
+    var GENERIQUES = { QUELQUUN: 1, AUTREX: 1, SALLE: 1, PORTE: 1, LAMPE: 1, TABLE: 1, ICI: 1 };
+    function abordes(id) { s.abordes = s.abordes || {}; return s.abordes[id] || (s.abordes[id] = {}); }
+    function noterAborde(id, p) {
+      if (!id || !p) return;
+      var a = abordes(id);
+      (p.all || []).forEach(function (x) { var c = lex.concepts[x.id]; if (c && c.type !== 'v' && x.score >= 0.9) a[x.id] = 1; });
+      if (p.pronom) a[p.pronom] = 1;
+    }
+    function noterReplique(id, x) {
+      if (!id || typeof x !== 'string' || !scene.npcs || !scene.npcs[id]) return;
+      var a = abordes(id);
+      normalize(x, scene.phrases).split(' ').forEach(function (w) {
+        if (w.length < 3 || STOP.has(w)) return;
+        var c = lex.exact[w]; if (c && lex.concepts[c] && lex.concepts[c].type !== 'v') a[c] = 1;
+      });
+    }
+    function sujetOuvert(npc, t, st) {
+      if (st.asked[t.id] || t.chipAlways) return true;
+      var a = abordes(npc.id), self = npc.selfKeys || [], sujets = 0, ouvert = false;
+      (t.keys || []).forEach(function (k) {
+        var id = typeof k === 'string' ? k : k[0], w = typeof k === 'string' ? 1 : k[1], c = lex.concepts[id];
+        if (!c || c.type === 'v' || SUJETS_LIBRES[id] || self.indexOf(id) >= 0) return; // un geste, ou lui-même : toujours proposable
+        sujets++;
+        if (w < 0.9) return;
+        if (a[id] || (w >= 1 && !GENERIQUES[id] && nounHere(id))) ouvert = true;
+      });
+      return ouvert || sujets === 0;
     }
     function topicChips(npc) {
       var st = npcState(npc.id);
-      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)); })
+      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st); })
         .map(function (t) { return { label: t.chip, topic: t.id, asked: !!st.asked[t.id] }; });
       list.sort(function (a, b) { return (a.asked ? 1 : 0) - (b.asked ? 1 : 0); });
       return list.slice(0, 6);
@@ -960,6 +1055,7 @@
         talkMode = null;
       }
       if (p && s.talk === npcId) {
+        noterAborde(npcId, p);
         var q = cloneParse(p);
         (npc.selfKeys || []).forEach(function (k) { delete q.c[k]; });
         delete q.c.PARLER; delete q.c.ALLER;
@@ -968,6 +1064,15 @@
       }
     }
     // la part d'un sujet qui tient à un nom (une personne, un lieu, une chose), et non à un mot vague
+    // à égalité, le sujet nommé le premier (« depuis quand Beddows servait-il Smith ? » : Beddows)
+    function premierMot(t, p) {
+      var best = 999;
+      (t.keys || []).forEach(function (k) {
+        var id = typeof k === 'string' ? k : k[0];
+        (p.all || []).forEach(function (x) { if (x.id === id && x.pos >= 0 && x.pos < best) best = x.pos; });
+      });
+      return best;
+    }
     function nounScore(t, p) {
       var best = 0;
       (t.keys || []).forEach(function (k) {
@@ -998,6 +1103,7 @@
     }
     function handleDialogue(p) {
       var npc = scene.npcs[s.talk];
+      noterAborde(s.talk, p);
       var st = npcState(npc.id);
       var tops = rankTopics(npc, p);
       var tb = tops[0];
@@ -1015,15 +1121,11 @@
       }
       // on s'adresse à quelqu'un d'autre que son interlocuteur
       var dest = destinataire(p);
-      if (dest && dest.id !== npc.id) {
-        if (pnjPresent(dest.id)) {
-          api.endTalk(false);
-          startTalk(dest.id);
-          if (s.talk === dest.id && dest.reste.split(/\s+/).length >= 2) handleDialogue(rewrite(lex, parse(lex, dest.reste, scene.phrases)));
-        } else {
-          var dn = scene.npcs[dest.id] || {};
-          api.say(fresh('pasLa', ['Vous cherchez ' + low1(dn.short || dn.name || 'cette personne') + ' des yeux : pas ici.', cap1(dn.short || dn.name || 'Cette personne') + ' n’est pas là.']));
-        }
+      // (quelqu'un qui n'est pas là : c'est de lui qu'on parle, l'interlocuteur répond)
+      if (dest && dest.id !== npc.id && pnjPresent(dest.id)) {
+        api.endTalk(false);
+        startTalk(dest.id);
+        if (s.talk === dest.id && dest.reste.split(/\s+/).length >= 2) handleDialogue(rewrite(lex, parse(lex, dest.reste, scene.phrases)));
         return;
       }
       // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
@@ -1039,12 +1141,14 @@
         if (pris) { s.tick = scene.talkTick || 1; return; }
         if (s.talk !== npc.id) return;
       }
+      // « parlez-moi de cet homme », « et lui ? » : on revient sur le dernier sujet, pas sur sa dernière question
+      if (!p.nouns.length && st.last && /\b(cet homme|ce monsieur|ce type|ce gars|cet individu|cette femme|cette dame|celui la|celle la|ce personnage|de lui|d elle|sur lui|sur elle)\b/.test(p.text) && npc.topics.some(function (x) { return x.id === st.last && (!x.cond || x.cond(api)); })) { runTopic(npc, st.last, p); return; }
       // une réponse à la question que le PNJ vient de poser
       if (A && A.answer && talkBack()) return;
       if (A && A.mine && talkBack()) return;
       if (A && A.a && A.a.ents.length && scene.converse.note) scene.converse.note(api, npc, A.a.ents[0]);
       var addressed = A && A.addressed;
-      if (!selfOnly && worldVerb && !addressed && best && best.score >= THRESHOLD && (!tb || tb.score < 0.9 || best.score - tb.score > 0.9)) {
+      if (!selfOnly && worldVerb && !addressed && !/\?\s*$/.test(p.raw) && best && best.score >= THRESHOLD && (!tb || tb.score < 0.9 || best.score - tb.score > 0.9)) {
         api.endTalk(false);
         exec(best.a, p); return;
       }
@@ -1337,7 +1441,7 @@
       for (var i = 0; i < s.log.length; i++) {
         var e = s.log[i];
         if (e.t !== 'narr' && e.t !== 'npc' && e.t !== 'event' && e.t !== 'intrusion') continue;
-        if (prev && prev.x === e.x && !e.dd) {
+        if (prev && prev.x === e.x && !e.dd && (e.t !== 'npc' || prev.t !== 'npc' || prev.who === e.who)) {
           if (e.t === 'npc' && scene.npcs[e.who] && scene.npcs[e.who].repeat) e.x = tokens(fresh('dd:' + e.who, scene.npcs[e.who].repeat[0]));
           else if (scene.generic && scene.generic.dup) e.x = tokens(fresh('dup', scene.generic.dup));
           e.dd = true;
@@ -1373,35 +1477,60 @@
       s.turn++;
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
+      // « je dors jusqu'à l'aube, puis je prends un taxi » : deux gestes, l'un après l'autre
+      var sq = suites(raw), apres = false;
+      if (sq.length < 2) apres = unGeste(raw, p);
+      else for (var qi = 0; qi < sq.length; qi++) {
+        if (s.pending || s.ended) break;
+        // la conversation s'est arrêtée en route : une question qui suit reste sans réponse
+        if (qi > 0 && !s.talk && /\?\s*$/.test(sq[qi])) break;
+        if (unGeste(sq[qi], rewrite(lex, parse(lex, sq[qi], scene.phrases)))) apres = true;
+        s.prefix = null;
+      }
+      if (apres) afterTurn();
+      finish();
+    }
+    // un geste ou une réplique ; renvoie vrai si le temps du monde doit passer ensuite
+    function unGeste(raw, p) {
       if (!s.talk) resoudre(p);
       // « je demande à Pratt si… » : la question va à Pratt, avant toute autre interprétation (le téléphone, un jet…)
       if (!s.talk && !s.pending) {
         var dst = destinataire(p);
-        if (dst && pnjPresent(dst.id)) { handleWorld(p); afterTurn(); finish(); return; }
+        if (dst && pnjPresent(dst.id)) { handleWorld(p); return true; }
       }
       // l'improvisation passe avant les jets demandés (« je me cache » avec une caisse dans les bras…)
-      if (!s.talk && !s.pending && scene.improvise && scene.improvise(api, p)) { finish(); return; }
+      if (!s.talk && !s.pending && scene.improvise && scene.improvise(api, p)) return false;
       var jr = jetRequest(raw);
       if (jr) {
         // « jet de psychologie sur Fleming » : on s'adresse d'abord à lui s'il est là
         var who = p.nouns.filter(function (n) { var c = lex.concepts[n.id]; return c && c.npc && n.score >= 0.9; })[0];
         if (who && !s.talk && (SOCIAL[jr.skill] || jr.skill === 'Psychologie')) { var ta = availableActions().filter(function (a) { return a.talkTo && (a.nouns || []).indexOf(who.id) >= 0; })[0]; if (ta) exec(ta, p); }
         if (!s.ended && !s.pending) doJet(jr, p);
-        afterTurn(); finish(); return;
+        return true;
       }
       // le chapitre peut reprendre la main sur une improvisation (violence, pot-de-vin, effraction…)
-      if (scene.intercept && scene.intercept(api, p, raw) === true) { afterTurn(); finish(); return; }
+      if (scene.intercept && scene.intercept(api, p, raw) === true) return true;
       if (s.talk) {
         var segs = phrasesDe(raw);
         if (segs.length < 2) handleDialogue(p);
         else for (var si = 0; si < segs.length; si++) {
-          if (!s.talk || s.pending || s.ended) break;
-          handleDialogue(rewrite(lex, parse(lex, segs[si], scene.phrases)));
+          if (s.pending || s.ended) break;
+          var psg = rewrite(lex, parse(lex, segs[si], scene.phrases));
+          if (s.talk) handleDialogue(psg);
+          // la conversation est finie : un geste qui suit se fait encore, une question reste sans réponse
+          else if (!/\?\s*$/.test(segs[si]) && GESTE.test(psg.text)) { resoudre(psg); handleWorld(psg); }
+          else break;
           s.prefix = null;
         }
       } else handleWorld(p);
-      afterTurn();
-      finish();
+      return true;
+    }
+    // « …, puis je… », « … et ensuite … » : une suite de gestes
+    function suites(raw) {
+      var parts = String(raw).split(/\s*[,;]\s*(?:et\s+)?(?:puis|ensuite|apr[eè]s quoi)\s+|\s+et\s+(?:puis|ensuite)\s+|\s+puis\s+(?=(?:je|j[’']|nous|on|vais|me|m[’']|retourne|rentre|prends|pars|sors|file|monte|descends|reviens|repars|aller|retourner|rentrer)\b)/i)
+        .map(function (x) { return x.trim(); }).filter(Boolean);
+      if (parts.length < 2 || parts.length > 4 || parts.some(function (x) { return x.split(/\s+/).length < 2; })) return [raw];
+      return parts;
     }
     // « T’es con ou quoi ? Où est passé le barman ? » : deux phrases, deux réponses, dans l'ordre
     function phrasesDe(raw) {
@@ -1413,7 +1542,10 @@
       var FILLER = /^(euh|heu|hum|hm|bon|bien|alors|ah|oh|eh|ben|bref|enfin|voila|voilà|ok|tiens|dites|écoutez|ecoutez|attendez|voyons|allons|bref|donc|et)[.…,;!]*$/i;
       parts.forEach(function (x) { buf = buf ? buf + ' ' + x : x; if (buf.split(/\s+/).length >= 2 || !FILLER.test(buf)) { out.push(buf); buf = ''; } });
       if (buf) { if (out.length) out[out.length - 1] += ' ' + buf; else out.push(buf); }
-      return out.length > 4 ? [raw] : out;
+      if (out.length > 4) return [raw];
+      var out2 = [];
+      out.forEach(function (x) { suites(x).forEach(function (y) { out2.push(y); }); });
+      return out2.length > 4 ? out : out2;
     }
     // le Gardien reformule le choix du joueur (mj.js), plutôt que d'afficher le mot-clé
     function mjModule() { if (!(G.RPG && G.RPG.MJ) && typeof require === 'function') { try { require('./mj.js'); } catch (e) {} } return G.RPG && G.RPG.MJ; }

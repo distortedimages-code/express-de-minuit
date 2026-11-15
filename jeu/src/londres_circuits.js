@@ -25,10 +25,11 @@
     Lx.take('SUIVRE', 'v', 'suivre, suivez, suivons, filer, filez, filons, pister, talonner, epier, filature, surveiller, guetter, poursuivre, poursuis, rattraper, rattrape');
     Lx.add('WEEKEND', 'x', 'weekend, lundi', { label: 'le week-end' });
     Lx.add('TEMOIN', 'n', 'temoin, temoins, laitier, badaud, badauds, cocher, livreur', { label: 'le témoin' });
-    Lx.add('FUYARD', 'n', 'fuyard, fardeau, ballot, colis', { label: 'la silhouette' });
+    Lx.add('FUYARD', 'n', 'fuyard, fardeau, ballot, colis, signalement, description, fui, enfui, enfuit, enfuir', { label: 'la silhouette' });
+    Lx.add('STATION', 'n', 'station, stations', { label: 'la station de fiacres' });
   };
   L.phrases.unshift(
-    [/\bst john s wood\b|\bsaint john s wood\b|\bst johns wood\b|\bchez (smith|le professeur|lui)\b|\b(la )?maison (de smith|du professeur)\b|\bdomicile (de smith|du professeur)\b/g, ' stjohn '],
+    [/\bst john s wood\b|\bsaint john s wood\b|\bst johns wood\b|\b(?<=chez )(smith|le professeur|lui)\b|\b(la )?maison (de smith|du professeur)\b|\bdomicile (de smith|du professeur)\b/g, ' stjohn '],
     [/\bfleet street\b|\barchives? (du|des|d un) (journa\w*|times|courier)\b|\bmorgue (du|des) journa\w*\b|\bvieux journaux\b|\banciens? (numeros|journaux)\b/g, ' archives '],
     [/\bpetites? annonces?\b|\bpasser une annonce\b|\bmettre une annonce\b/g, ' annonce '],
     [/\b(suivre|suis|suivez|filer|file|poursui\w*|rattrape\w*|cours apres|courir apres) (la |cette |l |le |ce )?(silhouette|ombre|fuyard)\b/g, ' suivre fuyard '],
@@ -37,7 +38,9 @@
     [/\bsonne[rz]?\b|\bsonnette\b|\bcoup de sonnette\b|\btire[rz]? la sonnette\b/g, ' frapper '],
     [/\bweek end\b|\bjusqu (a|au) lundi\b/g, ' weekend '],
     [/\bprendre en filature\b|\bne pas (le |la )?lacher\b|\bsur ses talons\b|\ble prendre en chasse\b/g, ' filer '],
-    [/\bpot de vin\b|\bgraisser la patte\b|\bdessous de table\b/g, ' potdevin ']
+    [/\bpot de vin\b|\bgraisser la patte\b|\bdessous de table\b/g, ' potdevin '],
+    [/\bstations? (de |des )?(fiacres?|taxis?|voitures?|cochers?)( de lord s| de lords| pres de lord s)?\b|\b(chez |a |au )?lord s\b|\blords\b/g, ' station '],
+    [/\b(je )?suis beddows\b/g, ' suivre beddows ']
   );
 
   // ================================================================ indices nouveaux
@@ -83,18 +86,20 @@
     },
     things: [
       { label: 'la villa', ids: ['STJOHN', 'SALLE', 'FENETRE', 'PORTE'], cond: function (api) { return !brule(api); } },
-      { label: 'les ruines', ids: ['STJOHN', 'SALLE', 'INCENDIE'], cond: brule },
+      { label: 'les ruines', ids: ['STJOHN', 'SALLE', 'INCENDIE', 'PORTE'], cond: brule },
       { label: 'l’agent de faction', ids: ['POLICE'], cond: brule },
-      { label: 'le laitier', ids: ['TEMOIN'], cond: brule },
+      { label: 'le laitier', ids: ['TEMOIN', 'VOISIN'], cond: brule },
+      { label: null, ids: ['STATION', 'TAXI'], cond: brule },
       { label: null, ids: ['LAMPE', 'NOTE', 'LIVRE'] }
     ],
     ambient: ['Une corne de brume, quelque part vers la Tamise.', 'Un merle se pose sur la grille, puis repart.', 'Une voiture passe au pas, ses phares noyés dans le gris.'],
     actions: [
       { id: 'sj_look', label: 'Observer la maison', idea: 'Regarder autour de vous', verbs: ['EXAMINER', 'FOUILLER'], nouns: ['STJOHN', 'SALLE'], bare: true, cond: function (api) { return !brule(api); },
         run: function (api) { api.say(api.fresh('sjlook', ['Une maison de savant : des rayonnages jusqu’au plafond, que l’on devine derrière les vitres du bas. Sur le perron, deux bouteilles de lait que personne n’a rentrées.', 'Le jardin est mal tenu, la grille grince. Au premier, la fenêtre du bureau. Personne n’y passe plus, maintenant.'])); } },
-      { id: 'sj_sonner', label: 'Sonner à la porte', idea: true, verbs: ['FRAPPER', 'OUVRIR', 'PARLER', 'VISITER'], nouns: ['PORTE', 'STJOHN', 'SMITH', 'BEDDOWS'], bare: true, cond: function (api) { return !brule(api); },
+      { id: 'sj_sonner', label: 'Sonner à la porte', idea: true, verbs: ['FRAPPER', 'OUVRIR', 'PARLER', 'VISITER', 'ALLER'], nouns: ['PORTE', 'STJOHN', 'SMITH', 'BEDDOWS'], bare: true, cond: function (api) { return !brule(api); },
         run: function (api) {
           var d = day(api.s.min), h = hour(api.s.min);
+          api.arrive('beddows'); // Beddows paraît à la porte
           if (d === 0) { api.say('Longtemps après votre coup de sonnette, la porte s’entrouvre sur Beddows, en bras de chemise, livide.'); api.npc('beddows', '« Le professeur est épuisé, {m}. Il s’est enfermé dans son bureau. Il… il n’est pas lui-même, ce soir. Revenez demain, je vous en prie. » La porte se referme. Vous entendez la chaîne, puis un second verrou.'); return; }
           if (h < 17) { api.say('Un peintre en salopette vous répond du haut de son échelle : le professeur ne reçoit personne. Puis Beddows paraît à la porte, et vous fait signe de vous approcher.'); api.npc('beddows', '« Pardon, {m}. Monsieur travaille. Il n’a pas dormi. Il a fait condamner les volets du bureau et il… » Il s’arrête, regarde derrière lui. « Il a peur, {m}. Je ne l’avais jamais vu avoir peur. Revenez lundi. » Il vous ferme la porte au nez, très doucement.'); api.flag('beddowsPeur', true); return; }
           api.say(api.fresh('sjson', ['Personne ne répond. Pourtant, au premier, derrière les volets, il vous semble entendre marcher.', 'Vous sonnez encore. Rien. La maison retient son souffle.']));
@@ -106,7 +111,7 @@
           if (d === 0) { api.say('Vous restez un moment dans le froid, face à la fenêtre éclairée. L’ombre passe et repasse. À minuit, la lampe s’éteint, et vous rentrez, gelé{e}, sans savoir ce que vous espériez voir.'); api.s.min += 60; return; }
           api.say(api.fresh('sjg', ['Vous faites les cent pas devant la grille. Les ouvriers vous regardent de travers. Au bout d’une heure, vous renoncez.', 'Une heure à guetter les volets clos. Personne n’entre, personne ne sort.'])); api.s.min += 60;
         } },
-      { id: 'sj_fouiller', label: 'Fouiller les ruines', idea: true, ideaCond: function (api) { return !api.flag('ruinesFouillees'); }, verbs: ['FOUILLER', 'EXAMINER', 'PRENDRE', 'ALLER'], nouns: ['STJOHN', 'SALLE', 'INCENDIE', 'NOTE', 'LIVRE'], bare: true, cond: brule,
+      { id: 'sj_fouiller', label: 'Fouiller les ruines', idea: true, ideaCond: function (api) { return !api.flag('ruinesFouillees'); }, verbs: ['FOUILLER', 'EXAMINER', 'PRENDRE', 'ALLER', 'OUVRIR'], nouns: ['STJOHN', 'SALLE', 'INCENDIE', 'NOTE', 'LIVRE', 'PORTE'], bare: true, cond: brule,
         run: function (api) {
           if (api.flag('ruinesFouillees')) { api.say(api.fresh('sjfx', ['Vous fouillez encore les décombres. Des cendres, des clous, la reliure d’un livre fondue sur elle-même.', 'Rien de plus dans les ruines, sinon cette odeur d’essence qui ne part pas.'])); return; }
           if (hour(api.s.min) >= 7 && hour(api.s.min) < 22 && !api.flag('agentLaisse')) { api.say('L’agent s’interpose. « On ne fouille pas, {m}. Ordre du sergent Rigby. » Il a l’air de quelqu’un qui s’ennuie, et qui aimerait bien qu’on le distraie.'); return; }
@@ -116,8 +121,18 @@
         } },
       { id: 'sj_agent', label: 'Parler à l’agent', talkTo: 'agentsj', verbs: ['PARLER', 'PERSUADER', 'BARATIN', 'INSISTER', 'POLI', 'DONNER'], nouns: ['POLICE'], cond: brule,
         extra: ['INCENDIE', 'SMITH', 'BEDDOWS', 'RIGBY', 'YARD', 'ARGENT'], run: function (api, p) { api.talk('agentsj', p); } },
-      { id: 'sj_temoin', label: 'Écouter le laitier', idea: true, talkTo: 'laitier', verbs: ['PARLER', 'ECOUTER', 'PERSUADER', 'INSISTER', 'POLI', 'DONNER'], nouns: ['TEMOIN'], cond: brule,
+      { id: 'sj_temoin', label: 'Écouter le laitier', idea: true, talkTo: 'laitier', verbs: ['PARLER', 'ECOUTER', 'PERSUADER', 'INSISTER', 'POLI', 'DONNER'], nouns: ['TEMOIN', 'VOISIN'], cond: brule,
         extra: ['INCENDIE', 'SMITH', 'BEDDOWS', 'FUYARD', 'TAXI', 'ARGENT'], run: function (api, p) { api.talk('laitier', p); } },
+      { id: 'sj_lords', label: 'Aller à la station de fiacres de Lord’s', verbs: ['ALLER', 'VISITER', 'PARLER', 'EXAMINER', 'PRENDRE'], nouns: ['STATION'], extra: ['TAXI', 'TEMOIN', 'FUYARD'], repeatable: true, time: 20,
+        cond: function (api) { return brule(api) && !(api.flag('fuyardVu') && !api.flag('fuyardSuivi') && api.s.min < FEU + 60); },
+        run: function (api) {
+          if (api.flag('lordsVu')) { api.say(api.fresh('lordsR', ['Les cochers de Lord’s vous saluent du fouet. Le vieux Gaskell n’est toujours pas revenu.', 'Toujours les mêmes fiacres, les mêmes chevaux sous leurs couvertures. Rien de neuf à la station.'])); return; }
+          api.flag('lordsVu', true);
+          api.say('La station de Lord’s est à deux rues, contre le mur du terrain de cricket : trois fiacres, des chevaux sous leurs couvertures, des cochers qui battent la semelle autour d’un brasero. Le vieux au cheval borgne n’est pas là.');
+          api.say('« Le père Gaskell ? » Un cocher crache dans le brasero. « Pas revenu depuis sa course de cette nuit. Il est repassé à l’aube faire boire sa bête, pâle comme un linge. Il a chargé un gars qui portait un paquet long comme ça, et il l’a déposé à Cheapside. Il disait que le paquet gémissait. Après, il n’a plus voulu en parler. »');
+          if (!api.has('FUYARD')) api.clue('FUYARD');
+          learn(api, 'cheapside');
+        } },
       { id: 'sj_suivre', label: 'Suivre la silhouette', idea: true, ideaCond: function (api) { return api.flag('fuyardVu') && !api.flag('fuyardSuivi'); }, verbs: ['SUIVRE', 'ALLER', 'CRIER'], nouns: ['FUYARD', 'BEDDOWS', 'QUELQUUN', 'TAXI'], bare: true,
         cond: function (api) { return api.flag('fuyardVu') && !api.flag('fuyardSuivi') && api.s.min < FEU + 60; },
         run: function (api) {
@@ -213,7 +228,8 @@
       T('fouiller', ['FOUILLER', 'STJOHN', 'PERSUADER', 'BARATIN'], function (api, n) {
         if (api.flag('agentLaisse')) { api.npc('agentsj', '« Faites vite, {m}. Je n’ai rien vu. »'); return; }
         api.npc('agentsj', n ? '« Je ne peux pas, {m}. Le sergent me tuerait. »' : '« Fouiller ? Pas question, {m}. Le sergent Rigby veut que rien ne bouge. » Il se frotte les mains, transi. « Bon sang, ce qu’on donnerait pour un thé. »');
-      }, { chip: 'Jeter un œil aux ruines' })
+      }, { chip: 'Jeter un œil aux ruines' }),
+      T('beddows', ['BEDDOWS', 'FUYARD', 'TRACES'], ['« Le domestique ? Envolé, {m}. Le sergent a donné son signalement à tous les postes. Des traces, moi, je n’ai vu que celles des pompiers : des bottes partout, dans la boue. »', '« Si je le vois, je siffle. C’est tout ce qu’on m’a dit de faire. Le laitier en sait plus que moi : il était là avant tout le monde. »'], { chip: 'Le domestique' })
     ] });
 
   L.npcs.laitier = H.npc({ id: 'laitier', name: 'Le laitier', short: 'Le laitier', patience: 6, cooldown: 30, selfKeys: ['TEMOIN'],
@@ -334,6 +350,7 @@
     run: function (api) {
       if (special(api)) { api.flag('billetAttend', true); return; }
       api.event('Quelqu’un vous touche le coude. Beddows, en manteau gris, mal rasé, les yeux rouges. Il a dû vous suivre depuis l’hôtel.');
+      api.arrive('beddows');
       api.npc('beddows', '« Pardon, {m}. Mon maître vous a écrit, la lettre est restée sous votre porte. Il ne peut plus attendre. Je vous en prie. » Il vous glisse une enveloppe dans la main, et le brouillard le reprend avant que vous ayez pu répondre.');
       api.say('Dans l’enveloppe, une carte de visite du professeur Smith, scellée de sa chevalière. Au dos : « Venez sans tarder. Il me reste peu de temps. Que personne ne vous suive. » Et une adresse à Cheapside.');
       api.flag('billetAttend', false); api.take(H.CARTE); api.clue('BILLET'); learn(api, 'cheapside');
@@ -366,6 +383,7 @@
   L.checks.toc_journal.resolve = function (api, r) { tj0(api, r); if (api.flag('aReconnaitre')) { api.flag('aReconnaitre', false); api.check('san_reconnu'); } };
   L.checks.persuasion_beddows_rue = { skill: 'Persuasion', why: 'faire parler Beddows, loin du lit',
     resolve: function (api, r) {
+      api.arrive('beddows'); // dans la rue, devant vous
       if (r.success) {
         api.npc('beddows', '« Je ne sais plus, {m}. Je ne sais plus. » Il ramasse ses flacons à genoux. « Il ne mange plus. Il ne dort plus. Il me parle de choses que Monsieur ne savait pas, en des langues que Monsieur ne parlait pas. Il connaît mon nom comme on connaît un nom qu’on a appris. » Il se relève. « Il a fait retirer mille livres à la banque. Mille livres, {m}. Pour vous. Pourquoi tient-il tant à ce que vous partiez ? »');
         api.say('Puis la peur revient sur son visage comme une marée. « S’il savait que je vous ai parlé… » Il s’enfuit vers la maison sans finir sa phrase.');
@@ -451,7 +469,7 @@
       return;
     }
     if (what === 'stanley') { api.npc('pike', '« L’homme parti en fumée ? C’est dans le Scoop de mardi, {m}. Nous ne le gardons que par charité. »'); var keep = api.flag('stanleyDispo'); api.flag('stanleyDispo', true); if (!api.has('STANLEY') && api.has('BILLET')) H.lirePresse(api); else if (!api.has('STANLEY')) { api.say('Un entrefilet : Henry Stanley, 41 ans, de Stoke Newington, passionné de chemins de fer, a disparu lundi soir dans une chambre pleine de fumée.'); api.clue('STANLEY'); learn(api, 'stoke'); } if (!keep) api.flag('stanleyDispo', keep); return; }
-    api.npc('pike', api.fresh('pikeSmith', ['« Le professeur Smith ? Nous avons un dossier gros comme ça. » Des médiums démasqués, des procès gagnés, un portrait avec Houdini. Rien qui explique un incendie.', '« Toujours rien de neuf sur votre professeur, {m}. Sauf ce que vous savez déjà. »']));
+    api.npc('pike', api.fresh('pikeSmith', ['« Le professeur Smith ? Nous avons un dossier gros comme ça. » Des médiums démasqués, des procès gagnés, un portrait avec Houdini. ' + (brule(api) ? 'Rien qui explique un incendie.' : 'Rien qui explique pourquoi il s’est enfermé chez lui.'), '« Toujours rien de neuf sur votre professeur, {m}. Sauf ce que vous savez déjà. »']));
   }
 
   // ================================================================ improvisations : violence, pots-de-vin, effractions

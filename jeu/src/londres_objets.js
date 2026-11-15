@@ -67,8 +67,17 @@
     };
   });
 
+  // ce qu'on a laissé à l'hôtel n'est pas « ici »
+  L.porte = function (api, nom) { return ou(api, nom) === 'sur vous'; };
+
   // ---------------------------------------------------------------- déposer, reprendre
   L.globalActions.push(
+    { id: 'obj_valise', label: 'Ouvrir la valise de Beddows', repeatable: true, verbs: ['EXAMINER', 'FOUILLER', 'OUVRIR'], nouns: ['VALISE', 'ARGENT'],
+      cond: function (api) { return api.s.inv.some(function (n) { return /valise de Beddows/i.test(n) && ou(api, n) === 'sur vous'; }); },
+      run: function (api) {
+        if (api.s.loc === 'yard') { api.say('Vous entrouvrez la valise sur vos genoux, à l’abri d’un pilier. Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Un agent passe ; vous refermez d’un coup sec. Mieux vaut ne pas expliquer ça ici.'); return; }
+        api.say(api.fresh('valiseVue', ['Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Une fortune, donnée sans un reçu. Vous refermez la valise sans trop savoir quoi penser.', 'Les liasses sont toujours là, serrées par des bandes de papier de la Banque d’Angleterre. Elles sentent l’encre neuve. Vous refermez.']));
+      } },
     { id: 'obj_deposer', label: 'Déposer ce qui vous encombre', repeatable: true, verbs: ['DONNER', 'DEPOSER'], nouns: ['VALISE', 'MAQUETTE'],
       cond: function (api) { return charge(api).length > 0; },
       run: function (api) {

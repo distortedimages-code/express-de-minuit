@@ -117,6 +117,9 @@
       [/\bravel et (l )?hommegris\b|\bhommegris et ravel\b/g, ' ravel hommegris '],
       [/\btraces? de pas\b|\bempreintes? de pas\b/g, ' traces '],
       [/\bgrand mere\b|\bvieille dame\b|\bdame en noir\b|\bvieille femme\b/g, ' veuve '],
+      [/\b(le |du |au |un )?(monsieur|homme|type|voyageur|client) (de|a) la table du fond\b/g, ' ravel '],
+      [/\b(la )?table du fond\b/g, ' table ravel '],
+      [/\bau fond (du|de la|de l) (wagon|couloir|voiture|salle|train|restaurant)\b/g, ' '],
       [/\bporte a soufflet\b|\bporte du fond\b|\bporte du bout\b|\bporte vitree\b/g, ' soufflet '],
       [/\bporte de (l )?office\b|\bporte de (la )?cuisine\b|\bporte battante\b/g, ' cuisine '],
       [/\bpapiers? brules?\b|\bbout de papier\b|\bmorceau de papier\b/g, ' fragment '],
@@ -358,7 +361,7 @@
     // Personnages
     // -------------------------------------------------------------------------
     npcs: {
-      ravel: { id: 'ravel', name: 'Anselme Ravel', topics: [], deflect: ['…'] },
+      ravel: { id: 'ravel', name: 'Anselme Ravel', topics: [], deflect: ['…'], lieux: ['compartiment'] },
 
       serveur: {
         id: 'serveur', name: 'Bastien, le serveur', short: 'Bastien',

@@ -44,7 +44,7 @@ function ligne(e) {
     case 'doc': return '[document] ' + e.x;
     case 'clue': return '[indice noté dans le carnet] ' + (e.x || e.title || '');
     case 'item': return '[objet] ' + e.x;
-    case 'loc': return '[lieu] ' + e.x;
+    case 'loc': return '[lieu] ' + (e.name || e.loc || '');
     case 'check': return '[jet demandé] ' + e.skill + ' ' + e.target + ' %';
     case 'roll': return '[dés] ' + e.skill + ' : ' + e.r + '/' + e.target + ' — ' + e.levelName;
     case 'chips': return '[suggestions] ' + (e.list || []).map(x => x.label).join(' | ');
