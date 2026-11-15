@@ -1,6 +1,6 @@
 # L'Express de Minuit — génération des illustrations
 
-Ce dépôt génère les 56 illustrations du jeu avec l'API Images d'OpenAI, directement sur les serveurs de GitHub.
+Ce dépôt génère les illustrations du jeu (les 56 d'origine, puis les nouvelles : Mrs Vane, la séance, les supports des documents) avec l'API Images d'OpenAI, directement sur les serveurs de GitHub.
 Rien ne passe par le navigateur : la clé reste un secret GitHub, lu uniquement par l'étape de génération.
 
 Aucune image n'est jamais affichée. Les rapports ne contiennent que du texte : des noms de fichiers, des contrôles et des coûts.
@@ -11,8 +11,8 @@ Aucune image n'est jamais affichée. Les rapports ne contiennent que du texte : 
 |---|---|
 | `.github/workflows/illustrations.yml` | le workflow « Illustrations », à lancer à la main |
 | `illustrations/generer.py` | le générateur : lots, reprise, budget, recadrage, contrôles |
-| `illustrations/plan.json` | les 56 images dans l'ordre, avec leurs portraits de référence |
-| `illustrations/prompts/…` | les 56 prompts existants, inchangés, style commun inclus |
+| `illustrations/plan.json` | toutes les images dans l'ordre, avec leurs portraits de référence |
+| `illustrations/prompts/…` | un prompt par image, style commun inclus |
 | `illustrations/prompt_negatif.txt` | ce qu'il faut éviter, ajouté à chaque prompt |
 | `illustrations/personnages.txt`, `style_commun.txt` | les fiches des personnages et le style, pour mémoire |
 
@@ -41,7 +41,7 @@ Dans Safari, c'est la même chose : onglet **Actions** → **Illustrations** →
 | Option | Effet |
 |---|---|
 | **simulation** | cochée par défaut : **gratuite**, aucun appel à OpenAI. Elle produit des images abstraites factices, sert à tout vérifier et garde son propre état. **Décochez-la pour la vraie génération payante.** |
-| **lot** | `5` génère les 5 images suivantes ; `56` génère tout ce qui reste |
+| **lot** | `5` génère les 5 images suivantes ; `tout` génère tout ce qui reste |
 | **plafond** | budget total en dollars, tous lancements confondus (20 par défaut) |
 | **qualite** | `high` par défaut ; `medium` est nettement moins cher (environ 0,09 $ estimés par image) |
 | **modele** | `gpt-image-2.5-sunburst` par défaut |
@@ -51,15 +51,15 @@ Un seul lancement tourne à la fois. Un second attend la fin du premier.
 
 ## Ordre conseillé
 
-1. **Simulation, lot 56.** C'est gratuit et vérifie tout le circuit, jusqu'au ZIP final factice nommé `SIMULATION_…`.
+1. **Simulation, lot tout.** C'est gratuit et vérifie tout le circuit, jusqu'au ZIP final factice nommé `SIMULATION_…`.
 2. **Réel, lot 5.** Coût estimé : environ 1,25 $. Le résumé donne ensuite le vrai coût par image, et les estimations suivantes s'y ajustent.
-3. **Réel, lot 56.** Il génère tout le reste, dans la limite du plafond.
+3. **Réel, lot tout.** Il génère tout le reste, dans la limite du plafond.
 
 ## Suivre un lancement
 
 Touchez le lancement dans la liste, puis la page **Summary**. Elle indique :
 
-- l'avancement, sur 56 ;
+- l'avancement, sur le nombre total d'images ;
 - le coût de chaque image et le total dépensé, comparé au plafond ;
 - les échecs et les avertissements des contrôles.
 
@@ -87,7 +87,7 @@ Une image refusée par OpenAI ou ratée est simplement retentée au lancement su
 
 ## Le ZIP final
 
-Quand les 56 images sont prêtes, le lancement joint un artifact **`L_Express_de_Minuit_56_illustrations`**. Pour le télécharger :
+Quand toutes les images sont prêtes, le lancement joint un artifact **`L_Express_de_Minuit_illustrations`**. Pour le télécharger :
 
 1. Ouvrez le lancement dans Safari, au besoin en version ordinateur.
 2. Descendez jusqu'à **Artifacts**.
@@ -95,7 +95,7 @@ Quand les 56 images sont prêtes, le lancement joint un artifact **`L_Express_de
 
 Si l'app GitHub n'affiche pas cette section, passez par Safari. Le ZIP reste disponible 30 jours.
 
-Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londres/`, `portraits/` et `prologue/`. Ce sont les 56 PNG en 1600 × 1200, sous les noms exacts que le jeu attend.
+Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londres/`, `portraits/` et `prologue/`, plus `documents/` pour les supports des documents. Ce sont tous les PNG en 1600 × 1200, sous les noms exacts que le jeu attend.
 
 ## Comment les images sont faites
 
@@ -115,6 +115,10 @@ Contenu du ZIP : `illustrations-express-de-minuit/` avec `ecran-titre/`, `londre
   - bandes du haut et du bas assez calmes pour l'interface du jeu.
 
   Seuls les vrais défauts (image vide, doublon) rejettent une image. Les autres points sont signalés « à vérifier ».
+
+## Les supports des documents
+
+Les images de `documents/` (coupure de journal, télégramme, lettre, carte de visite…) sont générées **sans aucun texte**. Le jeu compose le texte par-dessus, dans des polices d'époque : il est donc toujours exact, et corrigeable sans rien regénérer.
 
 ## Refaire une image
 
@@ -136,5 +140,5 @@ Un dépôt privé gratuit dispose de 500 Mo pour les artifacts. L'état complet 
 ```
 cd illustrations
 pip install -r requirements.txt
-python generer.py --simulation --lot 56
+python generer.py --simulation --lot tout
 ```

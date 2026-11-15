@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Génère les 56 illustrations de L'Express de Minuit avec l'API Images d'OpenAI.
+"""Génère les illustrations de L'Express de Minuit avec l'API Images d'OpenAI.
 
 Aucune image n'est jamais affichée : le script n'écrit que des fichiers PNG et des lignes de texte
 (noms de fichiers, contrôles, coûts). Il travaille par lots et reprend là où il s'était arrêté.
@@ -7,7 +7,7 @@ Aucune image n'est jamais affichée : le script n'écrit que des fichiers PNG et
 Exemples :
   python generer.py --simulation --lot 5          # gratuit : aucun appel à l'API
   python generer.py --lot 5 --plafond 15          # 5 images payantes au plus, budget total 15 $
-  python generer.py --lot 56 --plafond 15         # tout ce qui reste, dans la limite du budget
+  python generer.py --lot tout --plafond 15       # tout ce qui reste, dans la limite du budget
   python generer.py --refaire 01_smith --lot 1    # régénère une image précise
 """
 import argparse, base64, datetime, hashlib, io, json, os, random, shutil, sys, time
@@ -55,13 +55,13 @@ def maintenant():
     return datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
 
 
-# ---------------------------------------------------------------- le plan des 56 images
+# ---------------------------------------------------------------- le plan des images
 def charger_plan():
     plan = json.loads((ICI / 'plan.json').read_text(encoding='utf-8'))
     images = plan['images']
     noms = [i['image'] for i in images]
     erreurs = []
-    if len(images) != 56: erreurs.append(f'{len(images)} images dans plan.json au lieu de 56')
+    if len(images) < 56: erreurs.append(f'seulement {len(images)} images dans plan.json')
     if len(set(noms)) != len(noms): erreurs.append('des noms d’images sont en double dans plan.json')
     for i in images:
         f = ICI / i['prompt']
@@ -241,14 +241,14 @@ class Generateur:
 # ---------------------------------------------------------------- le lot
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--lot', type=int, default=5, help='nombre maximal d’images à générer dans ce lancement (56 = tout ce qui reste)')
+    ap.add_argument('--lot', type=lambda v: 10 ** 6 if v in ('tout', 'all') else int(v), default=5, help='nombre maximal d’images à générer dans ce lancement (« tout » = tout ce qui reste)')
     ap.add_argument('--plafond', type=float, default=15.0, help='budget total en dollars, toutes séances confondues')
     ap.add_argument('--qualite', default='high', choices=sorted(ESTIMATION))
     ap.add_argument('--modele', default='gpt-image-2.5-sunburst')
     ap.add_argument('--simulation', action='store_true', help='aucun appel à l’API : images factices, coûts estimés')
     ap.add_argument('--refaire', default='', help='régénérer les images dont le nom contient ce texte (plusieurs : séparez par des virgules)')
     ap.add_argument('--etat', default='', help='dossier de l’état (par défaut etat/ ou etat-simulation/)')
-    ap.add_argument('--final', default='', help='dossier où assembler les 56 PNG une fois tout terminé')
+    ap.add_argument('--final', default='', help='dossier où assembler tous les PNG une fois tout terminé')
     ap.add_argument('--minutes', type=float, default=0, help='durée maximale du lancement ; on s’arrête proprement avant (0 = sans limite)')
     args = ap.parse_args()
 
@@ -278,8 +278,9 @@ def main():
         if len(lot) >= args.lot: break
         if all(etat.faite(r) or r in [x['image'] for x in lot] for r in e.get('references', [])): lot.append(e)
 
-    faites = 56 - len(a_faire)
-    dire(f'Avancement : **{faites} / 56** images prêtes avant ce lancement.')
+    total = len(images)
+    faites = total - len(a_faire)
+    dire(f'Avancement : **{faites} / {total}** images prêtes avant ce lancement.')
 
     # le budget : on refuse le lot entier si l'estimation le fait dépasser
     depense = etat.couts['total']
@@ -359,10 +360,10 @@ def main():
         else:
             dire(f'- `{n}.png` — **échec** : {st["erreur"]}')
     dire()
-    dire(f'Total : **{len(pretes)} / 56** images prêtes ; **{etat.couts["total"]:.2f} $** dépensés'
+    dire(f'Total : **{len(pretes)} / {total}** images prêtes ; **{etat.couts["total"]:.2f} $** dépensés'
          + (' (estimation de simulation)' if args.simulation else '') + f' sur {args.plafond:.2f} $.')
 
-    complet = len(pretes) == 56
+    complet = len(pretes) == total
     if complet:
         if final.exists(): shutil.rmtree(final)
         racine = final / plan['archive']
@@ -370,13 +371,13 @@ def main():
             dst = racine / (e['image'] + '.png'); dst.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(etat.chemin(e['image']), dst)
         hashes = {hashlib.sha256((racine / (e['image'] + '.png')).read_bytes()).hexdigest() for e in images}
-        assert len(hashes) == 56, 'doublon dans le dossier final'
+        assert len(hashes) == total, 'doublon dans le dossier final'
         (final / 'LISEZMOI.txt').write_text(
-            'Les 56 illustrations de L’Express de Minuit, en PNG 1600 × 1200, rangées comme le jeu les attend.\n'
+            f'Les {total} illustrations de L’Express de Minuit, en PNG 1600 × 1200, rangées comme le jeu les attend.\n'
             + ('ATTENTION : ce sont des images FACTICES de simulation.\n' if args.simulation else ''), encoding='utf-8')
-        dire('**Les 56 images sont prêtes** : le ZIP final est joint à ce lancement (section « Artifacts »).')
+        dire(f'**Les {total} images sont prêtes** : le ZIP final est joint à ce lancement (section « Artifacts »).')
     else:
-        dire(f'Il en reste {56 - len(pretes)}. Relancez le workflow pour continuer : la génération reprend là où elle s’est arrêtée.')
+        dire(f'Il en reste {total - len(pretes)}. Relancez le workflow pour continuer : la génération reprend là où elle s’est arrêtée.')
 
     if os.environ.get('GITHUB_STEP_SUMMARY'):
         with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f: f.write('\n'.join(resume) + '\n')

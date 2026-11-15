@@ -1,4 +1,4 @@
-# Génère les 56 illustrations de L'Express de Minuit avec l'API Images d'OpenAI.
+# Génère les illustrations de L'Express de Minuit avec l'API Images d'OpenAI.
 # Se lance à la main (onglet Actions → Illustrations → Run workflow), y compris depuis l'app GitHub sur iPhone.
 # Par défaut, c'est une SIMULATION gratuite : aucun appel à OpenAI.
 name: Illustrations
@@ -12,9 +12,9 @@ on:
         type: boolean
         default: true
       lot:
-        description: "Nombre d'images à générer : 5, ou 56 pour tout ce qui reste"
+        description: "Nombre d'images à générer : 5, ou tout ce qui reste"
         type: choice
-        options: ["5", "56"]
+        options: ["5", "tout"]
         default: "5"
       plafond:
         description: "Plafond de dépense estimée, en dollars, toutes séances confondues"
@@ -49,7 +49,7 @@ jobs:
     timeout-minutes: 330
     env:
       ETAT: ${{ inputs.simulation && 'etat-simulation' || 'etat-illustrations' }}
-      ZIP: ${{ inputs.simulation && 'SIMULATION_L_Express_de_Minuit_56_illustrations' || 'L_Express_de_Minuit_56_illustrations' }}
+      ZIP: ${{ inputs.simulation && 'SIMULATION_L_Express_de_Minuit_illustrations' || 'L_Express_de_Minuit_illustrations' }}
     steps:
       - uses: actions/checkout@v7
 
@@ -132,7 +132,7 @@ jobs:
             if [ "$id" != "$GARDER" ]; then gh api -X DELETE "repos/$GITHUB_REPOSITORY/actions/artifacts/$id" >/dev/null && echo "ancienne copie $id effacée"; fi
           done
 
-      - name: Joindre le ZIP final des 56 illustrations
+      - name: Joindre le ZIP final des illustrations
         id: zip
         if: ${{ steps.gen.outputs.complet == 'true' }}
         uses: actions/upload-artifact@v7

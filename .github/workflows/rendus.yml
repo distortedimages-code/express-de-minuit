@@ -51,11 +51,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           n=$(find images -name '*.png' | wc -l)
-          printf 'Images générées par le workflow Illustrations (%s / 56). Branche réécrite à chaque publication.\n' "$n" > LISEZMOI.txt
+          printf 'Images générées par le workflow Illustrations (%s images). Branche réécrite à chaque publication.\n' "$n" > LISEZMOI.txt
           git init -q -b rendus
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Rendus : $n / 56 illustrations"
+          git commit -qm "Rendus : $n illustrations"
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" rendus
-          echo "Branche rendus publiée : $n / 56 images." | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "Branche rendus publiée : $n images." | tee -a "$GITHUB_STEP_SUMMARY"

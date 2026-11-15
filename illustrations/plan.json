@@ -318,6 +318,53 @@
       "image": "prologue/04_compartiment-7",
       "prompt": "prompts/prologue/04_compartiment-7.txt",
       "references": []
+    },
+    {
+      "image": "portraits/26_vane",
+      "prompt": "prompts/portraits/26_vane.txt",
+      "references": []
+    },
+    {
+      "image": "londres/27_gordon-square_seance",
+      "prompt": "prompts/londres/27_gordon-square_seance.txt",
+      "references": [
+        "portraits/26_vane"
+      ]
+    },
+    {
+      "image": "documents/01_coupure-journal",
+      "prompt": "prompts/documents/01_coupure-journal.txt",
+      "references": []
+    },
+    {
+      "image": "documents/02_page-reliee",
+      "prompt": "prompts/documents/02_page-reliee.txt",
+      "references": []
+    },
+    {
+      "image": "documents/03_telegramme",
+      "prompt": "prompts/documents/03_telegramme.txt",
+      "references": []
+    },
+    {
+      "image": "documents/04_lettre",
+      "prompt": "prompts/documents/04_lettre.txt",
+      "references": []
+    },
+    {
+      "image": "documents/05_lettre-roussie",
+      "prompt": "prompts/documents/05_lettre-roussie.txt",
+      "references": []
+    },
+    {
+      "image": "documents/06_carte-de-visite",
+      "prompt": "prompts/documents/06_carte-de-visite.txt",
+      "references": []
+    },
+    {
+      "image": "documents/07_billet",
+      "prompt": "prompts/documents/07_billet.txt",
+      "references": []
     }
   ]
 }
