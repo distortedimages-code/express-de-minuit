@@ -799,7 +799,23 @@
   $('btnMusic').textContent = 'Musique : ' + (musicOn ? 'oui' : 'non');
   $('btnMusic').setAttribute('aria-pressed', musicOn ? 'true' : 'false');
   // le premier geste sur l'écran-titre lance la musique (les navigateurs l'exigent)
-  $('title').addEventListener('pointerdown', function () { if (soundOn && !sound.on && !$('title').hidden) { sound.start(); sound.set('title', 0); } });
+  // Sur iPad et iPhone, seul un toucher relâché (touchend, click) compte comme un geste : pointerdown ne suffit pas.
+  // On écoute donc tout le document, et l'on réessaie tant que la musique n'a pas réellement démarré.
+  function deverrouillerSon() {
+    if (!soundOn) return;
+    var surTitre = !$('title').hidden;
+    if (!sound.on || (sound.ctx && sound.ctx.state !== 'running')) { sound.start(); if (surTitre) sound.set('title', 0); }
+    if (sound.relancer) sound.relancer();
+    majIndiceSon();
+  }
+  function majIndiceSon() {
+    var el = $('tson'); if (!el) return;
+    var joue = sound.on && sound.ctx && sound.ctx.state === 'running' && (!musicOn || (sound.joue && sound.joue()));
+    el.hidden = !soundOn || !!joue;
+    var txt = '♪ Touchez l’écran pour ' + (musicOn ? 'la musique' : 'le son'); if (el.textContent !== txt) el.textContent = txt;
+  }
+  ['pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, deverrouillerSon, true); });
+  setInterval(majIndiceSon, 1000);
 
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
@@ -808,6 +824,10 @@
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;
+    // l'image d'accueil prend toute la largeur : format cinéma à l'horizontale, 4:3 à la verticale
+    var titreLarge = null;
+    function cadrerTitre() { var l = window.innerWidth > window.innerHeight; if (l === titreLarge) return; titreLarge = l; $('title').classList.toggle('large', l); if (titleArt.setWide) titleArt.setWide(l); }
+    cadrerTitre(); window.addEventListener('resize', cadrerTitre);
     var hotState = data && data.state;
     var saved = hotState || loadSave();
     showTitle();

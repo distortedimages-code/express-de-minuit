@@ -283,7 +283,13 @@ form.line:focus-within { border-color: var(--red); box-shadow: 5px 5px 0 var(--r
 .title-screen { position: fixed; inset: 0; z-index: 30; background: var(--ink); overflow: hidden; }
 .title-screen[hidden] { display: none; }
 .title-screen .tart { position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 4 / 3; max-height: 62vh; margin: 0 auto; width: min(100%, calc(62vh * 4 / 3)); }
-.title-screen .tart canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.title-screen .tart canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* à l'horizontale, l'image d'accueil occupe toute la largeur, en format cinéma */
+.title-screen.large .tart { width: 100%; aspect-ratio: 12 / 5; max-height: 66vh; }
+.tson { position: absolute; top: max(14px, env(safe-area-inset-top)); right: 16px; z-index: 2; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text); background: rgba(10, 10, 11, .62); padding: 6px 10px; pointer-events: none; animation: tson 2.6s ease-in-out infinite; }
+.tson[hidden] { display: none; }
+@keyframes tson { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .tson { animation: none; } }
 @media (max-aspect-ratio: 1/1) { .title-screen .tart { top: 0; width: 100%; } }
 .tveil { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(10, 10, 11, .9) 58%, var(--ink) 72%); }
 .tcontent::before {

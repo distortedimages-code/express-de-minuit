@@ -159,7 +159,7 @@
   Sound.prototype.pickMusic = function () { this.memo = this.memo || {}; this.music(this.on && this.musicOn ? Sound.musicFor(this.loc, this.san, this.memo) : null); };
   Sound.prototype.music = function (id) {
     if (!this.ctx) return;
-    if (id === this.track) return;
+    if (id === this.track) { this.relancer(); return; }
     this.track = id;
     var ctx = this.ctx, t = ctx.currentTime, self = this;
     Object.keys(this.decks).forEach(function (k) {
@@ -187,6 +187,12 @@
     var pr = d.el.play(); if (pr && pr.catch) pr.catch(function () {});
     this.fade(d, TVOL[id], 2.4);
   };
+  // un morceau dont la lecture a été refusée (pas encore de geste) repart au premier toucher
+  Sound.prototype.relancer = function () {
+    var d = this.track && this.decks[this.track]; if (!d || !d.playing || d.broken || !d.el.paused) return;
+    var pr = d.el.play(); if (pr && pr.catch) pr.catch(function () {});
+  };
+  Sound.prototype.joue = function () { var d = this.track && this.decks[this.track]; return !!(d && d.playing && !d.el.paused); };
   Sound.prototype.fade = function (d, target, secs) {
     if (d.g) { var t = this.ctx.currentTime; d.g.gain.cancelScheduledValues(t); d.g.gain.setValueAtTime(d.g.gain.value, t); d.g.gain.linearRampToValueAtTime(target, t + secs); return; }
     clearInterval(d.iv); var from = d.el.volume, n = 0, steps = Math.max(1, Math.round(secs * 20));

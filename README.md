@@ -306,6 +306,8 @@ Vingt morceaux de Yoann, en fondu enchaîné (`TRACKS`, `MUSIC` et `musicFor`, d
 
 Ailleurs, la musique suit la santé mentale : « Rumble in the Haze » tant que l’investigateur est lucide ou troublé, « The Deep Ones Sing » ou « The Call from the Deep » quand il devient fragile, « Abyssal Static » partout quand il est au bord du gouffre. Les fichiers sont réencodés à 96 kb/s, à un niveau sonore commun, sans pochette.
 
+Sur l’écran d’accueil joue « Midnight Train Whispers », sous une image en format cinéma qui prend toute la largeur quand l’écran est à l’horizontale (en 4:3 à la verticale). Les navigateurs interdisent tout son avant un premier geste, et sur iPad ou iPhone seul un toucher relâché compte : le jeu écoute donc `pointerup`, `touchend`, `click` et `keydown` sur toute la page, relance le morceau si sa lecture a été refusée, et affiche « Touchez l’écran pour la musique » tant qu’elle ne joue pas.
+
 ## Les bruitages
 
 Les bruitages passent peu à peu du son synthétisé à l'enregistrement libre de droits. Sont faits : la porte qui se referme quand on change de lieu, et la page qu'on tourne quand un indice entre au carnet (trois variantes chacune, tirées au hasard, jamais deux fois la même de suite, à une hauteur légèrement différente). Ils viennent du lot « RPG Audio » de Kenney (kenney.nl), sous licence CC0. `jeu/tools/bruitages.sh` refait les fichiers `audio/sfx/*.wav` (branche `gh-pages`) à partir des `.ogg` d'origine. Dans `jeu/src/audio.js`, la table `BRUITS` associe un geste à ses fichiers ; un geste sans fichier garde son son synthétisé. Restent synthétisés pour l'instant : les dés, la perte de santé mentale, le grondement et le claquement du train.
