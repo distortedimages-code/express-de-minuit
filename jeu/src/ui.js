@@ -628,13 +628,6 @@
     list.appendChild(ib2);
     // les visions éclair : une image du Mythe, une fraction de seconde, quand la raison lâche
     { var vb = btn('Visions : ' + (visionsVoulues() ? 'oui' : 'non'), 'ghost', function () { var v = !visionsVoulues(); try { localStorage.setItem(VKEY, v ? 'oui' : 'non'); } catch (e) {} art.visions = v; vb.innerHTML = 'Visions : ' + (v ? 'oui' : 'non'); }); list.appendChild(vb); }
-    // essayer : la rafale d'une grosse perte de raison (cinq images), pour voir le rendu
-    list.appendChild(btn('Essayer une vision', 'ghost', function () {
-      closePanels();
-      if (window.PixelArt.VISIONS) window.PixelArt.VISIONS.forEach(function (k) { art.photo(k); });
-      var k = 0; (function essai() { var prets = (window.PixelArt.VISIONS || []).filter(function (x) { return art.imgs && art.imgs[x] && art.imgs[x]._ok; }).length;
-        if (prets >= 5 || k++ > 40) vision(5, true); else setTimeout(essai, 150); })();
-    }));
     if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
@@ -702,8 +695,8 @@
   // une vision du Mythe en plein écran, d'un coup, en rafale, après un éclair blanc (le menu « Visions » peut les couper)
   var chargement = false;
   // n = nombre d'images de la rafale : 1 au hasard quand la raison vacille, 2 à 5 selon la perte de Santé mentale
-  function vision(n, essai) {
-    if (!art || document.hidden || (!essai && (!visionsVoulues() || !$('title').hidden))) return;
+  function vision(n) {
+    if (!art || document.hidden || !visionsVoulues() || !$('title').hidden) return;
     n = Math.max(1, Math.min(5, n | 0)); if (reduce) n = 1;
     var srcs = []; for (var i = 0; i < n; i++) { var s1 = art.visionPrete && art.visionPrete(); if (s1 && srcs.indexOf(s1) < 0) srcs.push(s1); }
     if (!srcs.length) return;
