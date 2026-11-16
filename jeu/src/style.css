@@ -386,3 +386,31 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 /* plein écran : le conseil d'installation, sur iPhone et iPad (Safari n'accorde pas le vrai plein écran à une page) */
 .title-screen .tinstall { margin: 4px 0 0; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; color: var(--muted); }
 .title-screen .tinstall b { color: var(--text); font-weight: 500; }
+
+/* ================================================================ iPad en paysage, grands écrans : l'image en fond
+   L'image remplit l'écran ; le récit, les suggestions et la saisie flottent dans un panneau sombre à droite.
+   Le cadrage place le sujet de l'image (--fx, d'après son prompt) au milieu de la partie libre, sans jamais
+   laisser de bord vide : l'image (2,4:1) couvre toute la hauteur, et donc plus que la largeur de l'écran. */
+@media (orientation: landscape) and (min-width: 960px) and (min-height: 600px) {
+  :root { --panneau: clamp(420px, 41vw, 600px); --hauteur: 100vh; }
+  @supports (height: 100dvh) { :root { --hauteur: 100dvh; } }
+  .app { max-width: none; margin: 0; padding: 0; display: grid; gap: 0;
+    grid-template-columns: minmax(0, 1fr) var(--panneau); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .top { display: contents; }
+  .stage { position: fixed; inset: 0; width: auto; height: auto; aspect-ratio: auto; margin: 0; z-index: 0; align-self: stretch; justify-self: stretch; }
+  .stage canvas { object-fit: cover; object-position: clamp(calc(100vw - 2.4 * var(--hauteur)), calc((100vw - var(--panneau)) / 2 - var(--fx, .5) * 2.4 * var(--hauteur)), 0px) 50%; }
+  .veil { background: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, transparent 22%, transparent 68%, rgba(10, 10, 11, .88) 100%); }
+  .app::before { content: ''; position: fixed; top: 14px; right: 14px; bottom: 14px; width: calc(var(--panneau) - 14px); z-index: 1;
+    background: rgba(10, 10, 11, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(243, 239, 230, .08); }
+  .brand { grid-column: 1; grid-row: 1; align-self: start; position: relative; z-index: 2; padding: 16px 20px 0; text-shadow: 0 1px 8px rgba(0, 0, 0, .8); }
+  .nav { grid-column: 2; grid-row: 1; position: relative; z-index: 2; justify-content: flex-end; padding: 28px 30px 6px 22px; }
+  .hud { top: 52px; left: 8px; right: calc(var(--panneau) + 22px); }
+  .where { left: 20px; right: calc(var(--panneau) + 150px); bottom: 86px; }
+  .sanstate { right: calc(var(--panneau) + 26px); bottom: 84px; }
+  .stats { grid-column: 1; grid-row: 3; align-self: end; position: relative; z-index: 2; padding: 0 28px 22px 20px; }
+  .story { grid-column: 2; grid-row: 2; position: relative; z-index: 2; padding: 0 30px 0 22px; }
+  .story::before { display: none; }
+  .log { -webkit-mask-image: linear-gradient(transparent 0, #000 22px); mask-image: linear-gradient(transparent 0, #000 22px); }
+  .cmd { grid-column: 2; grid-row: 3; position: relative; z-index: 2; padding: 6px 30px 30px 22px; }
+  .turn { right: 30px; }
+}

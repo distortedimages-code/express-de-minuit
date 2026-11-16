@@ -252,7 +252,8 @@
   // L'image d'en-tête est-elle à l'écran ? (sur iPhone, le clavier ouvert la fait sortir de la partie visible)
   // Si oui, c'est elle qui change : pas de seconde image dans le fil.
   function enteteVisible() {
-    var st = document.querySelector('.stage'); if (!st || !st.offsetParent) return false;
+    // (offsetParent ne convient pas : il est nul pour l'image en fond, fixée à l'écran, sur l'iPad en paysage)
+    var st = document.querySelector('.stage'); if (!st || !st.getClientRects().length || getComputedStyle(st).visibility === 'hidden') return false;
     var r = st.getBoundingClientRect(); if (r.height < 40) return false;
     var vv = window.visualViewport, haut = vv ? vv.offsetTop : 0, h = vv ? vv.height : window.innerHeight;
     return Math.min(r.bottom, haut + h) - Math.max(r.top, haut) >= r.height * 0.6;

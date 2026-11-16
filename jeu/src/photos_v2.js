@@ -11,6 +11,9 @@
   G.PixelArt.PHOTO_FOCUS = {};
   // recadrage horizontal d'une image cinéma dans un cadre 4:3 (en %, 50 = centre) : le sujet reste dans le cadre
   G.PixelArt.PHOTO_FOCUSX = { 'ecran-titre/titre': 74, 'londres/26_brouillard_trajet': 50 };
+  // où se trouve le sujet de chaque image (en % de sa largeur), d'après son prompt (jeu/tools/cadrage.py) :
+  // dans la disposition « image en fond » de l'iPad en paysage, le sujet est centré dans la partie libre de l'écran
+  G.PixelArt.PHOTO_CADRAGE = {"paris/06_bibliotheque-de-l-arsenal": 76, "paris/08_charenton_secretariat": 24, "paris/10_cafe-de-charenton": 24, "portraits/01_smith_institut": 24, "portraits/02_smith_cheapside": 24, "portraits/03_beddows_institut": 76, "portraits/04_beddows_cheapside": 76, "portraits/05_brule": 24, "portraits/06_fleming": 24, "portraits/07_rigby": 76, "portraits/08_chelseaclerk": 24, "portraits/09_mustapha": 24, "portraits/10_voisin": 24, "portraits/11_atkins": 24, "portraits/12_sergent": 24, "portraits/13_butter": 24, "portraits/14_alexis": 24, "portraits/15_stanley": 24, "portraits/16_bibliothecaire": 24, "portraits/17_planton": 24, "portraits/18_concierge": 24, "portraits/19_agentsj": 76, "portraits/20_laitier": 24, "portraits/21_pike": 24, "portraits/22_serveur": 24, "portraits/23_veuve": 24, "portraits/24_conducteur": 24, "portraits/25_mort": 24, "portraits/26_vane": 76, "portraits/27_blain": 24, "portraits/28_gaudry": 76, "portraits/29_remi": 24, "portraits/30_brevin": 76, "portraits/31_rogniat": 24, "portraits/32_leroux": 76, "portraits/33_mandrin": 24, "portraits/34_guetteur": 24, "portraits/pj_arnaud": 24, "portraits/pj_ashby": 76, "portraits/pj_doyle": 24, "portraits/pj_pemberton": 76};
 
   // ---------------------------------------------------------------- écran-titre et prologue
   V['ecran-titre/titre'] = { rain: [dehors(90)] };
