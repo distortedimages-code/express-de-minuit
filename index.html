@@ -1301,6 +1301,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       event: function (x) { log({ t: 'event', x: x }); },
       doc: function (x, title) { log({ t: 'doc', x: x, title: title || '' }); var D = s.docs || (s.docs = []); if (!D.some(function (d) { return d.x === x; })) D.push({ x: x, title: title || '' }); },
       title: function (x, sub) { log({ t: 'title', x: x, sub: sub || '' }); },
+      // une image posée dans le fil, pour un moment qui n'est pas un lieu (la cellule, une vision)
+      vue: function (key, nom) { log({ t: 'vue', img: key, nom: nom || '' }); },
       things: function () { return listThings(); },
       where: function () { return scene.where ? scene.where(s.min) : ''; },
       clock: function () { return fmtTime(s.min); },
@@ -2596,6 +2598,14 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         if (s.pending) return;
         log({ t: 'player', x: chip.label || 'Réfléchir' }); s.turn++; s.tick = 1;
         jetIdee(); afterTurn(); finish(); return;
+      }
+      // une banalité : la phrase du joueur, puis la réponse de la culture du temps, sans détour par les sujets
+      if (chip.cult && s.talk) {
+        var cn = scene.npcs[s.talk];
+        log({ t: 'player', x: chip.say || chip.label, said: true }); s.turn++; s.tick = scene.talkTick || 1;
+        var fait = false; try { fait = !!(scene.converse && scene.converse.causer && scene.converse.causer(api, cn, chip.cult)); } catch (err) { fait = false; }
+        if (!fait) { s.turn--; s.log.pop(); step(chip.say || chip.label, 'dire'); return; }
+        afterTurn(); finish(); return;
       }
       if (chip.mal && s.talk) {
         var mn = scene.npcs[s.talk], ml = scene.paroles && scene.paroles(api, mn), mx = ml && (ml.maladresse || []).concat(ml.banal || []).filter(function (m) { return m.mal === chip.mal; })[0];
@@ -7212,7 +7222,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   // quand le joueur menace : la réaction dépend de ce qu'on est
   L.contre = {
     police: ['« Vous menacez un officier de police ? Réfléchissez bien à ce que vous allez dire ensuite. »', '« Des menaces. Devant témoins. » On sort un carnet. « Continuez, je prends des notes. »'],
-    fort: ['« Me tuer ? Vous ? » Un rire mauvais. « Essayez, pour voir. »', '« Ah oui ? » On se lève, lentement. « Allez-y. Je vous attends. »'],
+    fort: ['« Vous, me faire du mal ? » Un rire mauvais. « Essayez, pour voir. »', '« Ah oui ? » On se lève, lentement. « Allez-y. Je vous attends. »'],
     appel: ['« Vous me menacez ? Très bien. » Une main se pose sur la sonnette.', '« Je n’ai pas bien entendu, et je vous conseille de ne pas répéter. »'],
     faible: ['« Vous… vous me menacez ? » {PIl} recule, livide.', '{PIl} pâlit et recule jusqu’au mur. « Je n’ai rien fait. Je n’ai rien fait… »'],
     gifle: ['« Me menacer, moi ? Vous ne manquez pas d’aplomb. »', '« Des menaces, à une femme ? Vous me dégoûtez. »'],
@@ -7829,7 +7839,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       fr: ['« La Ruhr ? Nos soldats y sont depuis janvier. Les Allemands font la grève, et le mark ne vaut plus le papier. »', '« On dit qu’à Berlin, un pain coûte un milliard. Un milliard, monsieur ! »'] },
     { k: 'egypte', re: /\b(toutankhamon|tutankhamun|carnarvon|carter|egypte|pharaon|tombeau|momie|louxor|vallee des rois)\b/,
       h: ['« Le tombeau de Toutankhamon ! Lord Carnarvon et Carter ont trouvé l’antichambre intacte en novembre. Tout Londres ne parle que de ça. »', '« De l’or, des chars, des lits funéraires. Et la chambre scellée n’est même pas encore ouverte. »'],
-      p: ['« Le pharaon en or ? Ma femme a acheté un chapeau égyptien. Un chapeau ! »', '« Des trésors plein un trou dans le sable. Et nous, on gratte pour le charbon. »'],
+      p: ['« Le pharaon en or ? Ma belle-sœur s’est acheté un chapeau égyptien. Un chapeau ! »', '« Des trésors plein un trou dans le sable. Et nous, on gratte pour le charbon. »'],
       o: ['« Toutankhamon ? Si on m’apporte une momie volée, je saurai à qui la rendre. »'],
       fr: ['« L’Égypte ? Les Anglais y ont trouvé un roi en or. Toujours les Anglais. »'] },
     { k: 'mussolini', re: /\b(mussolini|fascistes?|chemises noires|marche sur rome|italie|rome)\b/,
@@ -7854,7 +7864,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       fr: ['« L’Irlande ? Ils ont eu leur indépendance, comme nous la Lorraine. Enfin, presque. »'] },
     { k: 'guerre', re: /\b(la guerre|grande guerre|front|tranchees|armistice|verdun|ypres|la somme|gallipoli|gaz|poilus?|tommies?)\b/,
       h: ['« La guerre ? Nous avons perdu une génération et gagné des monuments. »', '« On n’en parle pas, {m}. C’est la règle tacite des survivants. »'],
-      p: ['« La guerre ? J’y étais. J’en parle pas. »', '« Mon mari est revenu. Enfin, son corps est revenu. »'],
+      p: ['« La guerre ? J’y étais. J’en parle pas. »', '« Mon frère est revenu. Enfin, son corps est revenu. »'],
       o: ['« Quatre ans dans les tranchées. Ensuite on m’a donné un uniforme bleu à la place du kaki. »'],
       fr: ['« La guerre ? Vous avez vu les gueules cassées, dans le métro ? Voilà la guerre. »'] },
     { k: 'tsf', re: /\b(tsf|radio|bbc|wireless|poste a galene|emission|ondes)\b/,
@@ -8430,6 +8440,17 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       npcLine(api, npc.id, val(api, pool, 'bref:' + kind + ':' + cas + ':' + npc.id));
       return true;
     };
+    // une banalité proposée par le carnet (« Quel brouillard ! ») : la réponse vient toujours de la culture du temps,
+    // dans la voix du personnage, et jamais d'un sujet de l'enquête que les mots auraient frôlé (« nuit », « train »)
+    converse.causer = function (api, npc, k) {
+      var f = (scene.fiches || {})[npc.id]; if (!f) return false;
+      var cult = CULT.filter(function (c) { return c.k === k; })[0]; if (!cult) return false;
+      var pool = (f.avis && f.avis[k]) || (f.pa && CULT_PA[k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
+      if (!pool) return false;
+      npcLine(api, npc.id, val(api, pool, 'cult:' + npc.id + ':' + k));
+      var m = mem(api, npc.id); relance(api, f, npc.id, m); saveMem(api, npc.id, m);
+      return true;
+    };
     converse.note = function (api, npc, id) { if (!(scene.fiches || {})[npc.id]) return; var m = mem(api, npc.id); m.last = id; saveMem(api, npc.id, m); };
     // ce que le moteur doit savoir avant de choisir qui répond
     converse.peek = function (api, npc, p) {
@@ -8669,6 +8690,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         var n = (api.flag('arrestations') || 0) + 1, D = 1440;
         api.flag('arrestations', n);
         api.endTalk(false);
+        api.vue('situations/01_poste-de-bow-street', 'Une cellule du poste de Bow Street');
         if (n >= 3) { api.say('Le juge de Bow Street vous reconnaît. Il ne sourit pas.'); api.flag('fin', 'prison'); api.flag('combat', null); api.end(); return; }
         api.say(n === 1
           ? (o.motif || 'Outrage à agent.') + ' La nuit au poste de Bow Street, sur un banc de bois, entre un pickpocket et un marin qui chante. Au matin, on vous rend votre chapeau et vos lacets.'
@@ -9431,7 +9453,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       { id: 'qu_mudlark', label: 'Parler au ramasseur d’épaves', idea: true, verbs: ['PARLER', 'POLI', 'DONNER', 'EXAMINER'], nouns: ['MUDLARK', 'QUELQUUN'],
         run: function (api) {
           if (api.flag('mudlark')) { api.say('Le gamin a disparu sous l’arche du pont, avec son sac. Il ne reste que des empreintes dans la vase.'); return; }
-          api.flag('mudlark', true);
+          api.flag('mudlark', true); api.flag('mudlarkMin', api.s.min);
           api.say('Sur la grève, en contrebas, un gamin en haillons fouille la vase avec un crochet. Il vous montre ses trouvailles pour un penny : un clou de fer à cheval, une pipe en terre, une pièce romaine, peut-être.');
           api.say('« Et ça, m’sieur-dame. » Il sort de son sac un gant de cuir fin, intact, d’homme. Sauf qu’à l’intérieur, il y a encore la peau d’une main, retournée comme une chaussette. Le gamin rit. « Ça arrive, ici. La Tamise rend tout. »');
           api.check('san_quais');
@@ -10480,6 +10502,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     arreter: function (api, id) {
       var n = (api.flag('arrestations') || 0) + 1; api.flag('arrestations', n);
       api.endTalk(false);
+      api.vue('situations/02_poste-de-la-rue-de-la-banque', 'Le poste de la rue de la Banque');
       if (api.flag('fugitif')) { api.say('Au poste de la rue de la Banque, on relève votre nom. Une heure plus tard, un inspecteur de la Sûreté pose devant vous un télégramme de Scotland Yard, avec votre signalement. « Londres vous réclame, ' + (api.pc.sex === 'f' ? 'madame' : 'monsieur') + '. »'); api.flag('fin', 'extrade'); api.end(); return; }
       if (n >= 3) { api.say('Le commissaire ne lève même plus les yeux. « Encore lui. Le dépôt, puis le juge. »'); api.flag('fin', 'prison'); api.end(); return; }
       api.say(n === 1 ? 'Deux agents à pèlerine vous prennent chacun par un coude. La nuit au poste de la rue de la Banque, sur un bat-flanc, entre un camelot et un ivrogne qui récite du Racine. Au matin, un commissaire fatigué vous rend vos papiers. « Vous êtes étranger. Je veux bien croire à un malentendu. Une fois. »' : 'Le même poste, le même bat-flanc. Cette fois, on relève votre identité, et l’amende est de cent francs. « La prochaine fois, c’est le dépôt. »');
@@ -11054,7 +11077,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     Pa.idee('arsenal', { id: 'ip_sully', kind: 'fausse', idea: 'Visiter les salons de Sully', time: 30,
       txt: 'Mlle Brévin vous ouvre, avec une fierté discrète, le cabinet doré du duc de Sully : des boiseries peintes, des plafonds à caissons, un silence de trois siècles. C’est très beau. Cela ne vous apprend rien sur personne, et la lumière baisse déjà.' });
     Pa.idee('arsenal', { id: 'ip_emporter', kind: 'risque', idea: 'Demander à emporter un dossier à l’hôtel', time: 5,
-      txt: 'Mlle Brévin vous regarde comme si vous aviez proposé d’emporter une colonne du bâtiment. « Rien ne sort d’ici, monsieur. Rien. Jamais. » Elle ne vous a plus tout à fait à la bonne.', vexe: 'brevin' });
+      txt: 'Mlle Brévin vous regarde comme si vous aviez proposé d’emporter une colonne du bâtiment. « Rien ne sort d’ici, {m}. Rien. Jamais. » Elle ne vous a plus tout à fait à la bonne.', vexe: 'brevin' });
 
     // ----- Charenton
     Pa.idee('charenton', { id: 'ip_parc', kind: 'fausse', idea: 'Faire le tour du parc avec les pensionnaires', time: 30,
@@ -11087,26 +11110,26 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   var POLICE = /^(fleming|rigby|planton|sergent|agentsj)$/;
   var BANAL = {
     prologue: [
-      { label: 'Parler du temps qu’il fait', say: 'Quel temps de chien, cette nuit.' },
-      { label: 'Parler du train', say: 'C’est un beau train, l’Orient-Express.' },
-      { label: 'Parler de la guerre', say: 'Vous étiez où, pendant la guerre ?' },
-      { label: 'Demander s’il a bien dormi', say: 'Vous avez pu dormir un peu ?' }
+      { label: 'Parler du temps qu’il fait', say: 'Quel temps de chien, cette nuit.', cult: 'brouillard' },
+      { label: 'Parler du train', say: 'C’est un beau train, l’Orient-Express.', cult: 'train' },
+      { label: 'Parler de la guerre', say: 'Vous étiez où, pendant la guerre ?', cult: 'guerre' },
+      { label: 'Demander s’il a pu dormir', say: 'Vous avez pu dormir un peu ?', cult: 'sommeil' }
     ],
     londres: [
-      { label: 'Parler du brouillard', say: 'Quel brouillard, on n’y voit pas à dix pas.' },
-      { label: 'Parler du tombeau de Toutankhamon', say: 'Vous avez lu ce qu’on a trouvé dans le tombeau de Toutankhamon ?' },
-      { label: 'Parler du cricket', say: 'Vous suivez le cricket ?' },
-      { label: 'Parler de la TSF', say: 'Vous avez déjà écouté la TSF, la BBC ?' },
-      { label: 'Parler de la vie chère', say: 'Tout est si cher, en ce moment.' },
-      { label: 'Parler du spiritisme', say: 'Vous croyez au spiritisme, vous ?' }
+      { label: 'Parler du brouillard', say: 'Quel brouillard, on n’y voit pas à dix pas.', cult: 'brouillard' },
+      { label: 'Parler du tombeau de Toutankhamon', say: 'Vous avez lu ce qu’on a trouvé dans le tombeau de Toutankhamon ?', cult: 'egypte' },
+      { label: 'Parler de sport', say: 'Vous suivez le sport ?', cult: 'sport' },
+      { label: 'Parler de la TSF', say: 'Vous avez déjà écouté la TSF, la BBC ?', cult: 'tsf' },
+      { label: 'Parler de la vie chère', say: 'Tout est si cher, en ce moment.', cult: 'argent' },
+      { label: 'Parler du spiritisme', say: 'Vous croyez au spiritisme, vous ?', cult: 'spiritisme' }
     ],
     paris: [
-      { label: 'Parler de la pluie', say: 'Quel temps, il pleut depuis des jours.' },
-      { label: 'Parler de la Ruhr', say: 'Et la Ruhr, qu’est-ce que vous en pensez ?' },
-      { label: 'Parler de Paris', say: 'Paris est une ville magnifique.' },
-      { label: 'Parler du cinéma', say: 'Vous allez au cinéma, de temps en temps ?' },
-      { label: 'Parler des Russes de Paris', say: 'On dit qu’il y a beaucoup de Russes à Paris.' },
-      { label: 'Parler de la vie chère', say: 'Tout est hors de prix, en ce moment.' }
+      { label: 'Parler de la pluie', say: 'Quel temps, il pleut depuis des jours.', cult: 'brouillard' },
+      { label: 'Parler de la Ruhr', say: 'Et la Ruhr, qu’est-ce que vous en pensez ?', cult: 'ruhr' },
+      { label: 'Parler de Paris', say: 'Paris est une ville magnifique.', cult: 'paris' },
+      { label: 'Parler du cinéma', say: 'Vous allez au cinéma, de temps en temps ?', cult: 'cinema' },
+      { label: 'Parler des Russes de Paris', say: 'On dit qu’il y a beaucoup de Russes à Paris.', cult: 'russie' },
+      { label: 'Parler de la vie chère', say: 'Tout est hors de prix, en ce moment.', cult: 'argent' }
     ]
   };
   function generiques(ch, npc) {
@@ -11126,9 +11149,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   var PROPRES = {
     prologue: {
       serveur: [{ label: 'Lui reprocher la lenteur du service', mal: 'service', dit: 'Le service est d’une lenteur, dans ce train.',
-        run: function (api, n) { froisse(api, n, 'Bastien se raidit. « Je suis seul pour tout le wagon, monsieur. » Il s’éloigne vers l’office, très droit, et ne revient pas tout de suite.', 15, true); } }],
+        run: function (api, n) { froisse(api, n, 'Bastien se raidit. « Je suis seul pour tout le wagon, {m}. » Il s’éloigne vers l’office, très droit, et ne revient pas tout de suite.', 15, true); } }],
       veuve: [{ label: 'Lui dire que le tarot est une superstition', mal: 'tarot', dit: 'Vous croyez vraiment à ces cartes ? C’est de la superstition.',
-        run: function (api, n) { froisse(api, n, 'Mme Vasseur retourne une carte, sans vous regarder. « La Tour. » Elle range son jeu. « Bonsoir, monsieur. »', 20, true); } }],
+        run: function (api, n) { froisse(api, n, 'Mme Vasseur retourne une carte, sans vous regarder. « La Tour. » Elle range son jeu. « Bonsoir, {m}. »', 20, true); } }],
       conducteur: [{ label: 'Le menacer de le signaler à la Compagnie', mal: 'compagnie', dit: 'Je vais signaler à la Compagnie que vous dormez pendant votre service.',
         run: function (api, n) { froisse(api, n, 'Paolo se lève d’un bond, la casquette de travers. « Signalez, signalez. » Il ne vous dira plus rien de lui-même.', 15, false); } }]
     },
@@ -11138,7 +11161,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       beddows: [{ label: 'Lui demander combien le professeur le paie', mal: 'gages', dit: 'Il vous paie bien, le professeur, pour une telle dévotion ?',
         run: function (api, n) { froisse(api, n, 'Beddows blêmit. « Je sers le professeur depuis vingt-deux ans, {m}. » Il ne vous adressera plus la parole de la journée.', 600, true); } }],
       fleming: [{ label: 'Lui dire que Scotland Yard est dépassé', mal: 'yard', dit: 'Franchement, inspecteur, Scotland Yard est dépassé par cette affaire.',
-        run: function (api, n) { froisse(api, n, 'Fleming referme son carnet, sans hâte. « Merci de votre avis. Sergent, raccompagnez ce visiteur. Et ne le laissez pas remonter avant demain. »', J, true); } }],
+        run: function (api, n) { froisse(api, n, 'Fleming referme son carnet, sans hâte. « Merci de votre avis. Sergent, raccompagnez-{le} jusqu’à la porte. Et ne {le} laissez pas remonter avant demain. »', J, true); } }],
       rigby: [{ label: 'Lui demander s’il a déjà vu un vrai incendie', mal: 'incendie', dit: 'Vous avez déjà vu un vrai incendie, sergent, ou seulement des rapports ?',
         run: function (api, n) { froisse(api, n, 'Rigby pose sa pipe. « Silvertown, 1917. Soixante-treize morts. J’ai sorti les enfants. » Il ne dit plus rien, et vous comprenez qu’il ne dira plus rien.', 240, true); } }],
       mustapha: [{ label: 'Lui parler de Gallipoli', mal: 'gallipoli', dit: 'Vous étiez à Gallipoli, vous aussi ? Quelle boucherie, de votre côté.',
@@ -11160,15 +11183,15 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     },
     paris: {
       gerant: [{ label: 'Lui demander une chambre moins chère', mal: 'prix', dit: 'Vous n’auriez pas une chambre moins chère ?',
-        run: function (api, n) { froisse(api, n, 'M. Blain consulte son registre avec une lenteur ostentatoire. « Sous les toits, il y a la chambre de la bonne, monsieur. Mais la bonne y est. »', 0, false); } }],
+        run: function (api, n) { froisse(api, n, 'M. Blain consulte son registre avec une lenteur ostentatoire. « Sous les toits, il y a la chambre de la bonne, {m}. Mais la bonne y est. »', 0, false); } }],
       gaudry: [{ label: 'Lui rappeler qui vous êtes', mal: 'rang', dit: 'Savez-vous à qui vous parlez ? Je ne suis pas n’importe qui.',
-        run: function (api, n) { froisse(api, n, 'M. Gaudry lève les yeux, enfin. « Un lecteur, monsieur. Comme les trois cent quarante autres. Asseyez-vous, je vous appellerai. » Il vous appelle une heure plus tard.', 0, false); api.time(60); } }],
+        run: function (api, n) { froisse(api, n, 'M. Gaudry lève les yeux, enfin. « Un lecteur, {m}. Comme les trois cent quarante autres. Asseyez-vous, je vous appellerai. » Il vous appelle une heure plus tard.', 0, false); api.time(60); } }],
       remi: [{ label: 'Se moquer de ses recherches', mal: 'moquer', dit: 'Vous passez vos journées sur des grimoires, à votre âge ?',
-        run: function (api, n) { froisse(api, n, 'L’étudiant roux rougit jusqu’aux oreilles. « C’est ma thèse, monsieur. » Il replonge dans son livre et ne relève plus la tête.', 240, true); } }],
+        run: function (api, n) { froisse(api, n, 'L’étudiant roux rougit jusqu’aux oreilles. « C’est ma thèse, {m}. » Il replonge dans son livre et ne relève plus la tête.', 240, true); } }],
       brevin: [{ label: 'Lui demander si elle est mariée', mal: 'mariee', dit: 'Une femme comme vous, mademoiselle, vous n’êtes pas mariée ?',
-        run: function (api, n) { froisse(api, n, 'Mlle Brévin vous regarde comme une reliure mangée aux vers. « Je suis archiviste, monsieur. » Elle tourne les talons.', 180, true); } }],
+        run: function (api, n) { froisse(api, n, 'Mlle Brévin vous regarde comme une reliure mangée aux vers. « Je suis archiviste, {m}. » Elle tourne les talons.', 180, true); } }],
       rogniat: [{ label: 'Lui demander si elle couvre le directeur', mal: 'couvre', dit: 'Vous couvrez le docteur Leroux, n’est-ce pas ?',
-        run: function (api, n) { froisse(api, n, 'Mme Rogniat pose les deux mains à plat sur son bureau. « Je couvre ce bureau, monsieur. Personne n’y touche. » Elle ne vous quittera plus des yeux, ni les caisses.', 240, true); } }],
+        run: function (api, n) { froisse(api, n, 'Mme Rogniat pose les deux mains à plat sur son bureau. « Je couvre ce bureau, {m}. Personne n’y touche. » Elle ne vous quittera plus des yeux, ni les caisses.', 240, true); } }],
       leroux: [{ label: 'L’accuser d’avoir tué Delplace', mal: 'accuser', dit: 'C’est vous qui avez tué le docteur Delplace, n’est-ce pas ?',
         run: function (api, n) {
           api.npc('leroux', 'Le pince-nez saute. « Sortez. Sortez, ou je vous fais sortir par les infirmiers, et la police avec ! »');
@@ -11179,11 +11202,19 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         run: function (api, n) { froisse(api, n, 'Mandrin blêmit, puis ricane. « Vous lui direz quoi ? Que j’ai bu un coup ? » Il se ressert, sans vous en proposer. « Ça va vous coûter une autre bouteille, de me reparler. »', 0, false); api.pay(Math.min(0.05, api.s.money)); } }]
     }
   };
+  // quelques avis propres, là où la culture du temps sonnerait faux dans leur bouche
+  function avis(ch, id, k, l) { var f = CH[ch] && CH[ch].fiches && CH[ch].fiches[id]; if (!f) return; f.avis = f.avis || {}; if (!f.avis[k]) f.avis[k] = l; }
+  avis('prologue', 'veuve', 'train', ['« Je le prends tous les mois, jeune homme, depuis vingt ans. Il a changé. Moi aussi. Tous les deux en mal. »']);
+  avis('londres', 'vane', 'spiritisme', ['« Si j’y crois ? » Elle rit, d’un rire de gorge. « Très {cher}, ils sont ici même. Ils vous écoutent. L’un d’eux trouve votre chapeau épouvantable. »']);
+  avis('londres', 'hollis', 'spiritisme', ['« Les tables tournantes ? » Il soupire. « Des veuves qui paient pour entendre leurs morts leur dire qu’ils vont bien. L’Église leur offre la même chose, gratuitement, et on la trouve ennuyeuse. »']);
+  avis('londres', 'mustapha', 'sport', ['« Le cricket ? Je l’ai vu jouer à Lord’s. Cinq jours pour un match nul. Les Anglais appellent cela du suspense. »']);
+  avis('londres', 'pike', 'sport', ['« Le sport ? Je classe les résultats depuis 1887, {m}. Je n’en ai jamais regardé un seul. »']);
+  avis('londres', 'hollis', 'sport', ['« Le cricket, voyez-vous, est la seule liturgie que mes paroissiens suivent sans s’endormir. »']);
   Object.keys(BANAL).forEach(function (ch) {
     var sc = CH[ch]; if (!sc) return;
     sc.paroles = function (api, npc) {
       if (!npc || MUETS.test(npc.id)) return { banal: [], maladresse: [] };
-      return { banal: BANAL[ch].slice(), maladresse: generiques(ch, npc).concat((PROPRES[ch] || {})[npc.id] || []) };
+      return { banal: sc.fiches && sc.fiches[npc.id] ? BANAL[ch].slice() : [], maladresse: generiques(ch, npc).concat((PROPRES[ch] || {})[npc.id] || []) };
     };
   });
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -11256,7 +11287,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         if (POLICE.test(n.id)) api.say('Un carnet s’ouvre. On note quelque chose, longuement, sans vous quitter des yeux.');
       } };
     });
-    var insultes = (f ? ['Pimbêche !', 'Vieille baderne !', 'Mégère !', 'Fripouille !'] : ['Malotru !', 'Faquin !', 'Pignouf !', 'Vieille baderne !', 'Bougre d’âne !', 'Gredin !'])
+    var insultes = (f ? ['Pimbêche !', 'Vous êtes une vieille baderne !', 'Mégère !', 'Fripouille !'] : ['Malotru !', 'Faquin !', 'Pignouf !', 'Vous êtes une vieille baderne !', 'Bougre d’âne !', 'Gredin !'])
       .map(function (m) { return { label: m, say: m.replace('Mégère', 'Espèce de mégère') }; });
     var visions = [
       ['Lui dire qu’il a des dents à la place des yeux', '« Vous avez des dents à la place des yeux. Vous le savez, au moins ? »'],
@@ -12568,12 +12599,21 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     'londres/06_ambassade-de-turquie', 'londres/08_camberwell_salon-butter', 'londres/09_fleet-street_archives', 'londres/10_st-johns-wood_villa_jour', 'londres/11_st-johns-wood_villa_nuit',
     'londres/12_st-johns-wood_ruines', 'londres/13_islington_brophy-lane_jour', 'londres/14_islington_brophy-lane_nuit', 'londres/15_stoke-newington_jour', 'londres/16_stoke-newington_nuit',
     'londres/17_boutique-makryat', 'londres/18_british-museum_salle-de-lecture', 'londres/19_chambre-henry-stanley', 'londres/20_cave-butter_maquette', 'londres/21_train-fantome_voiture-1',
-    'londres/22_train-fantome_voiture-2', 'londres/23_train-fantome_retour', 'londres/24_campagne_au-petit-matin', 'londres/25_gare-victoria', 'londres/26_brouillard_trajet', 'londres/27_gordon-square_seance'];
+    'londres/22_train-fantome_voiture-2', 'londres/23_train-fantome_retour', 'londres/24_campagne_au-petit-matin', 'londres/25_gare-victoria', 'londres/26_brouillard_trajet', 'londres/27_gordon-square_seance',
+    'londres/28_museum-tavern', 'londres/29_eglise-st-george', 'londres/30_quais-de-la-tamise'];
   // l'image de la réception du Chelsea Arms est arrivée abîmée : ce décor reste dessiné en attendant
   var BROKEN = {};
   PL.forEach(function (k) { if (A.PHOTO_LIST.indexOf(k) < 0) A.PHOTO_LIST.push(k); });
   P.photoKeyL = function (scene, st) {
     var loc = st.loc, nt = night(st), burnt = (st.min || 0) >= 2820, k = null;
+    // les lieux nés des improvisations ont maintenant leur image ; sur les quais, le ramasseur d'épaves le temps de la rencontre
+    var IMPRO = { pub: 'londres/28_museum-tavern', eglise: 'londres/29_eglise-st-george', quais: 'londres/30_quais-de-la-tamise' };
+    if (IMPRO[loc] && (scene === 'bureau' || scene === 'rue')) {
+      var fl = st.flags || {};
+      var kk = loc === 'quais' && fl.mudlarkMin !== undefined && (st.min || 0) - fl.mudlarkMin < 30 ? 'portraits/37_ramasseur' : IMPRO[loc];
+      // tant que l'image n'est pas générée, l'ancienne fait l'affaire
+      if (this.photo) { this.photo(kk); var im = this.imgs && this.imgs[kk]; if (!(im && im._bad)) return kk; }
+    }
     if (scene === 'rue' && loc === 'stjohn') scene = 'stjohn';
     switch (scene) {
       case 'institut': k = 'londres/01_institut-imperial'; break;
@@ -14114,6 +14154,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         d.className = 'e-chips';
         e.list.forEach(function (c) { d.appendChild(btn(esc(c.label), '', function () { act(function () { game.choose(c); }); })); });
         break;
+      case 'vue': return carteImage(e.img, e.nom || '', 'lieu');
       case 'end': d.appendChild(endCard()); break;
       default: return null;
     }
@@ -14438,7 +14479,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       bar.appendChild(tb);
       if (ideasOpen) game.suggestionsParole(5, mode).forEach(function (t) {
         bar.appendChild(btn(esc(t.label), '', function () { act(function () {
-          if (t.say) game.step(t.say, 'dire');
+          if (t.cult) game.choose({ label: t.label, say: t.say, cult: t.cult });
+          else if (t.say) game.step(t.say, 'dire');
           else if (t.mal) game.choose({ label: t.label, mal: t.mal });
           else game.choose({ label: t.label, topic: t.topic });
         }); }));
