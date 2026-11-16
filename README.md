@@ -306,7 +306,7 @@ Vingt morceaux de Yoann, en fondu enchaîné (`TRACKS`, `MUSIC` et `musicFor`, d
 
 Ailleurs, la musique suit la santé mentale : « Rumble in the Haze » tant que l’investigateur est lucide ou troublé, « The Deep Ones Sing » ou « The Call from the Deep » quand il devient fragile, « Abyssal Static » partout quand il est au bord du gouffre. Les fichiers sont réencodés à 96 kb/s, à un niveau sonore commun, sans pochette.
 
-Sur l’écran d’accueil joue « Midnight Train Whispers », sous une image en format cinéma qui prend toute la largeur quand l’écran est à l’horizontale (en 4:3 à la verticale). Les navigateurs interdisent tout son avant un premier geste, et sur iPad ou iPhone seul un toucher relâché compte : le jeu écoute donc `pointerup`, `touchend`, `click` et `keydown` sur toute la page, relance le morceau si sa lecture a été refusée, et affiche « Touchez l’écran pour la musique » tant qu’elle ne joue pas.
+L’écran d’accueil reste sans musique : son image, en format cinéma, prend toute la largeur quand l’écran est à l’horizontale (en 4:3 à la verticale). Le son démarre avec la partie. Sur iPad ou iPhone, seul un toucher relâché compte comme un geste : en jeu, le premier `pointerup`, `touchend`, `click` ou `keydown` relance le son ou le morceau si le navigateur l’avait refusé.
 
 ## Les bruitages
 

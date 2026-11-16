@@ -22,7 +22,8 @@
     bourdon: ['audio/gothic_drone.mp3', 'audio/gothic_drone_2.mp3'] };
   var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48, deep: 0.6, eau: 0.56, attente: 0.42, appel: 0.5, gothique: 0.44, statique: 0.5, abysse: 0.5, bourdon: 0.46 };
   // une liste de morceaux : on en tire un en arrivant, et l'on s'y tient tant qu'on reste
-  var MUSIC = { title: 'train', restaurant: 'train', couloir: 'eau', lits: 'eau', compartiment: 'dissolve', victoria: 'train', gare: 'train',
+  // (l'écran d'accueil reste sans musique : le morceau démarre avec la partie)
+  var MUSIC = { title: null, restaurant: 'train', couloir: 'eau', lits: 'eau', compartiment: 'dissolve', victoria: 'train', gare: 'train',
     hotel: 'attente', campagne: 'attente',
     cheapside: 'statique', boutique: 'statique', chambre_stanley: 'statique', chelsea: 'statique',
     musee: 'bourdon', archives: 'bourdon', bn: 'bourdon', arsenal: 'bourdon',

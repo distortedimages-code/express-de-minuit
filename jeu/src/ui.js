@@ -802,23 +802,15 @@
   $('btnMusic').textContent = 'Musique : ' + (musicOn ? 'oui' : 'non');
   $('btnMusic').setAttribute('aria-pressed', musicOn ? 'true' : 'false');
   // le premier geste sur l'écran-titre lance la musique (les navigateurs l'exigent)
-  // Sur iPad et iPhone, seul un toucher relâché (touchend, click) compte comme un geste : pointerdown ne suffit pas.
-  // On écoute donc tout le document, et l'on réessaie tant que la musique n'a pas réellement démarré.
+  // Pas de musique sur l'écran d'accueil : le son démarre avec la partie (hideTitle).
+  // Sur iPad et iPhone, seul un toucher relâché (touchend, click) compte comme un geste : si le son
+  // n'a pas réellement démarré, le premier toucher en jeu le relance.
   function deverrouillerSon() {
-    if (!soundOn) return;
-    var surTitre = !$('title').hidden;
-    if (!sound.on || (sound.ctx && sound.ctx.state !== 'running')) { sound.start(); if (surTitre) sound.set('title', 0); }
+    if (!soundOn || !$('title').hidden) return;
+    if (!sound.on || (sound.ctx && sound.ctx.state !== 'running')) sound.start();
     if (sound.relancer) sound.relancer();
-    majIndiceSon();
-  }
-  function majIndiceSon() {
-    var el = $('tson'); if (!el) return;
-    var joue = sound.on && sound.ctx && sound.ctx.state === 'running' && (!musicOn || (sound.joue && sound.joue()));
-    el.hidden = !soundOn || !!joue;
-    var txt = '♪ Touchez l’écran pour ' + (musicOn ? 'la musique' : 'le son'); if (el.textContent !== txt) el.textContent = txt;
   }
   ['pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, deverrouillerSon, true); });
-  setInterval(majIndiceSon, 1000);
 
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
