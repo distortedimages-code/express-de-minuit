@@ -29,7 +29,13 @@
     [/\b(?:je |nous )?(?:prends|prendre|prenons|hele|heler|appelle|appeler|siffle|siffler|attrape|attraper|saute dans|monte dans) (?:un |le |mon |dans un )?(?:taxi|fiacre|omnibus|metro|bus|tramway|tram|cab)\s+(?:pour|jusqu a|jusqu au|jusqu aux|vers|direction|en direction de|en direction du|et (?:je )?(?:vais|file|fonce|rentre|retourne))\s+/g, ' aller a '],
     [/\ben (taxi|fiacre|omnibus|metro|bus|tram|tramway)\b/g, ' '],
     // « je vais au British Museum pour chercher les rouleaux » : le but ne change pas le geste
-    [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)[a-z]+(er|ir|re|oir)\b.*$/g, ' '],
+    // … sauf quand le geste n'est qu'un déplacement sans destination (« je sors pour trouver l'homme ») : le but est le geste
+    [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)([a-z]+(?:er|ir|re|oir))\b(.*)$/g, function (m, pour, inf, reste, off, tout) {
+      var avant = tout.slice(0, off).replace(/\b(je|j|nous|on|me|m|vite|alors|donc|y|en|dehors|vais|va|allons|aller|sors|sort|sortons|sortir|ressors|ressortir|pars|part|partons|partir|file|filer|cours|courir|descends|descendre|monte|monter|retourne|retourner|reviens|revenir)\b/g, ' ').trim();
+      return avant ? ' ' : ' ' + inf + reste;
+    }],
+    // « je vais dehors », « je sors à l'extérieur » : on sort (et pas la fenêtre)
+    [/\b(vais|va|allons|aller|sors|sortir|sortons|ressors|passe|passer|file|filer)\s+(?:voir\s+)?(?:dehors|a l exterieur|au dehors)\b/g, ' sortir '],
     // « je m'approche d'elle » : on y va
     [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
     // « je vais le voir », « je vais la trouver » : on va lui parler
@@ -222,7 +228,7 @@
   function coreLexicon(L) {
     // Verbes d'action
     L.add('EXAMINER', 'v', 'examiner, examine, regarder, regarde, observer, inspecter, voir, vois, scruter, etudier, analyser, detailler, lorgner, mater, zieuter, guetter, lire, decrire, admirer, verifier, consulter, montrer moi');
-    L.add('FOUILLER', 'v', 'fouiller, chercher, explorer, farfouiller, tater, palper, trier, fureter, debusquer, rechercher, inventorier');
+    L.add('FOUILLER', 'v', 'fouiller, chercher, trouver, retrouver, explorer, farfouiller, tater, palper, trier, fureter, debusquer, rechercher, inventorier');
     L.add('PRENDRE', 'v', 'prendre, prends, ramasser, saisir, recuperer, empocher, garder, emporter, voler, piquer, chiper, attraper, subtiliser, choper, emparer, embarquer, chourer');
     L.add('SENTIR', 'v', 'sentir, renifler, humer, flairer, odeur, odeurs, parfum');
     L.add('BOIRE', 'v', 'boire, bois, gouter, avaler, siroter, lecher, deguster, trinquer');
@@ -346,7 +352,9 @@
       var m = lex.best(t);
       // « un chapeau », « des moustaches » : un vêtement ou un trait quelconque. Seule une référence définie
       // (« l'homme au chapeau », « le chapeau », « son visage ») désigne le personnage qu'on reconnaît à ce détail.
-      if (m && ATTRIBUTS.has(t) && lex.concepts[m.id].type === 'n' && !DEFINI.test(toks[i - 1] || '') && !DEFINI.test(toks[i - 2] || '')) return;
+      // … mais « un homme à moustache », « une dame au chapeau » désignent bien quelqu'un par ce détail
+      var porteur = /^(a|aux|avec)$/.test(toks[i - 1] || '') && /^(homme|monsieur|type|individu|inconnu|gars|bonhomme|dame|femme|vieux|vieille|jeune)$/.test(toks[i - 2] || '');
+      if (m && ATTRIBUTS.has(t) && lex.concepts[m.id].type === 'n' && !porteur && !DEFINI.test(toks[i - 1] || '') && !DEFINI.test(toks[i - 2] || '')) return;
       // « ne porte-t-il pas plainte », « je note », « il garde » : un verbe conjugué, pas la porte, la note ou le garde
       if (m && /^[nx]$/.test(lex.concepts[m.id].type) && m.score >= 1 && VERBE_NOM.has(t) && (SUJET.test(toks[i - 1] || '') || (toks[i + 1] === 't' && /^(il|elle|on|ils|elles)$/.test(toks[i + 2] || '')) || /^(je|tu|il|elle|on|nous|vous|ils|elles)$/.test(toks[i + 1] || '') && !DEFINI.test(toks[i - 1] || ''))) return;
       if (m) push(m.id, m.score, i); else if (t.length > 1) p.unknown.push(t);
@@ -1139,7 +1147,11 @@
       var generic = scene.generic;
       if (noun && !nounHere(noun.id) && !(lex.concepts[noun.id].type === 'x')) {
         var lab = labelOf(noun.id);
-        api.say(fresh('absent', generic.absent).replace('{x}', lab).replace('{X}', lab.charAt(0).toUpperCase() + lab.slice(1)) + ' ' + (listThings() ? 'Ici, vous remarquez : ' + listThings() + '.' : ''));
+        // partir à la recherche de quelqu'un qui n'est pas là : il faut une piste, pas un « il n'est pas ici »
+        var enQuete = p.verbs.some(function (v) { return /^(ALLER|FOUILLER|SUIVRE)$/.test(v.id); }) && !lex.concepts[noun.id].lieu && !(scene.locations && Object.keys(scene.locations).some(function (k) { return k.toUpperCase() === noun.id; }));
+        var personne = lex.concepts[noun.id].npc || /^(l’homme|la femme|le monsieur|la dame|l’inconnu)/.test(lab);
+        if (enQuete && personne) api.say(fresh('sansPiste', generic.sansPiste || ['Vous ne savez pas où trouver {x}. Il vous faudrait une piste : un nom, une adresse, un lieu.', 'Chercher {x} au hasard, dans une ville de cette taille ? Il faudrait savoir par où commencer.']).replace('{x}', lab));
+        else api.say(fresh('absent', generic.absent).replace('{x}', lab).replace('{X}', lab.charAt(0).toUpperCase() + lab.slice(1)) + ' ' + (listThings() ? 'Ici, vous remarquez : ' + listThings() + '.' : ''));
       } else if (verb && generic.verbs[verb.id]) {
         var g = generic.verbs[verb.id];
         var txt = typeof g === 'function' ? g(api, p, noun) : Array.isArray(g) ? fresh('gen:' + verb.id, g) : g;
@@ -1178,7 +1190,10 @@
         return;
       }
       // « j'ai essayé de l'étrangler », dit à personne : c'est du passé, on ne le rejoue pas
-      if (R_PASSE.test(' ' + normalize(p.raw) + ' ') && !/\?\s*$/.test(p.raw) && !/\b(decide|choisi|fini|termine|compris|change d avis)\b/.test(normalize(p.raw))) {
+      var brut = ' ' + normalize(p.raw) + ' ', mp = brut.match(R_PASSE);
+      // « demander à l'accueil s'ils ont vu l'homme », « savoir si quelqu'un l'a vu » : une question indirecte, pas un récit
+      var indirecte = mp && /\b(demand\w*|interrog\w*|question\w*|renseign\w*|savoir|voir|verifi\w*|cherch\w*|enquet\w*|si|s|est ce qu|est ce que)\b/.test(brut.slice(0, mp.index + 1));
+      if (mp && !indirecte && !/\?\s*$/.test(p.raw) && !/\b(decide|choisi|fini|termine|compris|change d avis)\b/.test(normalize(p.raw))) {
         api.say(fresh('recitSeul', ['Ce qui est fait est fait. Reste à savoir ce que vous faites maintenant.', 'Vous y repensez un instant. Mais personne, ici, ne vous a rien demandé. Que faites-vous ?', 'Le passé ne se rejoue pas. Et maintenant ?']));
         s.tick = 0; return;
       }

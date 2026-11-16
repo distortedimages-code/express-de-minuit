@@ -933,7 +933,7 @@
           run: function (api, p) { if (api.flag('conference')) { if (p && p.c.SMITH !== undefined && p.c.ECOUTER === undefined) { api.exec('i_smith'); return; } api.say(api.fresh('apres', ['La conférence est terminée. On se presse autour de Smith pour le féliciter.', 'L’écran est éteint. Les discussions vont bon train.'])); return; } conference(api); } },
         { id: 'i_boire', label: 'Prendre une coupe de champagne', obj: 'le champagne', verbs: ['BOIRE', 'COMMANDER', 'PRENDRE'], nouns: ['BOISSON'], bare: true,
           run: function (api) { api.say(api.fresh('champ', ['Le champagne est tiède et un peu trop sucré. Un serveur en gants blancs remplit déjà votre coupe.', 'Une deuxième coupe. Les lustres se mettent à briller un peu plus fort.', 'Vous déclinez la troisième. Il faut garder les idées claires, sans savoir encore pourquoi.'])); } },
-        { id: 'i_moustachu', label: 'Chercher l’homme à la moustache', verbs: ['FOUILLER', 'EXAMINER', 'ALLER', 'PARLER'], nouns: ['MOUSTACHU'], cond: function (api) { return api.has('OBSERVATEUR'); },
+        { id: 'i_moustachu', label: 'Chercher l’homme à la moustache', verbs: ['FOUILLER', 'EXAMINER', 'PARLER'], nouns: ['MOUSTACHU'], cond: function (api) { return api.has('OBSERVATEUR'); },
           run: function (api) { api.say(api.fresh('moust', ['Vous fendez la foule jusqu’à l’endroit où il se tenait. Personne. Un serveur jure qu’il n’a vu aucun monsieur de ce genre.', 'Vous faites le tour de la galerie. Des moustaches, il y en a cent. Pas la sienne.'])); } },
         { id: 'i_suivre', label: 'Raccompagner Smith et Beddows', verbs: ['SUIVRE', 'ALLER', 'ACCOMPAGNER'], nouns: ['BEDDOWS', 'SMITH', 'STJOHN'], repeatable: true,
           run: function (api) {

@@ -366,7 +366,7 @@
 
   // ================================================================ filatures
   L.locations.institut.actions.push(
-    { id: 'f_moustachu', label: 'Suivre l’homme à la moustache', verbs: ['SUIVRE', 'ALLER', 'VISITER'], nouns: ['MOUSTACHU'], needVerb: true,
+    { id: 'f_moustachu', label: 'Suivre l’homme à la moustache', verbs: ['SUIVRE', 'ALLER', 'VISITER', 'FOUILLER'], nouns: ['MOUSTACHU'], needVerb: true,
       cond: function (api) { return api.has('OBSERVATEUR') && !api.flag('moustachuSuivi'); },
       run: function (api) {
         api.flag('moustachuSuivi', true); api.endTalk(false);
@@ -377,6 +377,22 @@
     { id: 'f_smith', label: 'Suivre Smith et Beddows', verbs: ['SUIVRE'], nouns: ['SMITH', 'BEDDOWS'], needVerb: true, cond: function (api) { return api.flag('conference'); },
       run: function (api) { api.say('Vous les regardez partir. Beddows aide Smith à monter dans un taxi, lui pose une couverture sur les genoux comme à un vieillard. Le taxi prend la direction de St John’s Wood. Vous connaissez l’adresse : vous y avez dîné vingt fois.'); } }
   );
+  // chercher l'homme, ou demander au vestiaire s'il est passé : tant qu'il est encore là, cela mène à la même filature
+  (function () {
+    var acts = L.locations.institut.actions, im = acts.filter(function (a) { return a.id === 'i_moustachu'; })[0], fm = acts.filter(function (a) { return a.id === 'f_moustachu'; })[0];
+    if (!im || !fm) return;
+    var r0 = im.run;
+    im.run = function (api, p) {
+      var raw = String((p && p.raw) || '').toLowerCase(), personnel = /accueil|vestiaire|portier|huissier|serveur|maitre d|maître d|domestique|chasseur|demand|employ/.test(raw);
+      if (!api.flag('moustachuSuivi')) {
+        if (personnel) api.say('La préposée du vestiaire tend le menton vers la porte. « Le monsieur brun, à moustache ? Il vient de reprendre son manteau, et sans ticket encore. Il sort, là. »');
+        return fm.run.apply(this, arguments);
+      }
+      if (/sort|dehors|rue|marches|perron|exterieur|extérieur/.test(raw)) { api.say(api.fresh('moustDehors', ['Sur les marches de l’Institut, le brouillard a tout pris. Des lanternes de fiacres, des voix sans visage. Il est loin, maintenant.', 'Vous faites quelques pas sur Exhibition Road. Rien que le brouillard et le pas d’un agent qui s’éloigne. Vous rentrez dans la chaleur de la galerie.'])); return; }
+      if (personnel) { api.say(api.fresh('moustVest', ['Au vestiaire, la préposée se souvient de lui : un monsieur brun, poli, pressé, qui a repris son pardessus sans ticket. Pas de nom. Il est parti à pied, dans le brouillard.', 'Le portier en livrée hausse les épaules. Des messieurs à moustache, il en a vu passer deux cents ce soir. Celui-là est parti seul, à pied, sans attendre de voiture.'])); return; }
+      return r0.apply(this, arguments);
+    };
+  })();;
   L.locations.cheapside.actions.push(
     { id: 'f_beddows', label: 'Guetter Beddows dans la rue', verbs: ['SUIVRE', 'ATTENDRE', 'CACHER'], nouns: ['BEDDOWS', 'PORTE', 'CHEAPSIDE'], bare: true, needVerb: true,
       cond: function (api) { return api.flag('discours') && !api.flag('demasque') && !api.flag('beddowsSeul') && !api.flag('cheapsideFini'); },

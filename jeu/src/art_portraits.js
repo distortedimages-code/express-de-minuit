@@ -367,7 +367,9 @@
     veuve: '23_veuve', conducteur: '24_conducteur', mort: '25_mort', vane: '26_vane',
     // Paris
     patron: '35_patron', hollis: '36_hollis',
-    gerant: '27_blain', gaudry: '28_gaudry', remi: '29_remi', brevin: '30_brevin', rogniat: '31_rogniat', leroux: '32_leroux', mandrin: '33_mandrin' };
+    gerant: '27_blain', gaudry: '28_gaudry', remi: '29_remi', brevin: '30_brevin', rogniat: '31_rogniat', leroux: '32_leroux', mandrin: '33_mandrin',
+    // Poissy et le Simplon-Orient (pas de portrait de l'enfant)
+    fauvel: '38_fauvel', thibierge: '39_thibierge', arnoult: '40_arnoult', lorien: '41_lorien', veronique: '42_veronique', caterina: '43_caterina', bertin: '44_bertin', pruvost: '45_pruvost' };
   Object.keys(PTF).forEach(function (id) { [].concat(PTF[id]).forEach(function (f) { A.PHOTO_LIST.push('portraits/' + f); }); });
   P.photoKeyP = function (id, st) {
     var f = PTF[id]; if (!f) return null;
