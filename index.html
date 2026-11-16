@@ -822,6 +822,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       w = normalize(w).replace(/\s+/g, '');
       if (!w) return;
       if (self.exact[w] && self.exact[w] !== id) {
+        // un verbe a déjà pris le mot : le nom reste lisible après un déterminant (« le dîner », « un dîner »)
+        var deja = self.concepts[self.exact[w]];
+        if (deja && deja.type === 'v' && type === 'n') { (self.alt || (self.alt = {}))[w] = id; c.words.push(w); return; }
         if (G.LEXICON_WARN) G.LEXICON_WARN(w, self.exact[w], id);
         return;
       }
@@ -854,6 +857,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   }
   Lexicon.prototype.best = function (tok) {
     if (this.exact[tok]) return { id: this.exact[tok], score: 1 };
+    if (/s$/.test(tok) && tok.length > 3 && this.exact[tok.slice(0, -1)]) return { id: this.exact[tok.slice(0, -1)], score: 0.95 };
+    if (/x$/.test(tok) && tok.length > 3 && this.exact[tok.slice(0, -1)]) return { id: this.exact[tok.slice(0, -1)], score: 0.95 };
     if (garde()[tok]) return null;
     var best = null;
     for (var i = 0; i < this.entries.length; i++) {
@@ -978,8 +983,20 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     var text = normalize(raw, phrases);
     var toks = text ? text.split(' ') : [];
     var p = { raw: raw, text: text, c: {}, verbs: [], nouns: [], metas: [], numbers: [], unknown: [], all: [] };
-    var seen = {};
+    var seen = {}, saute = {};
+    // une entrée de plusieurs mots (« gare de lyon ») : la plus longue suite de mots qui la forme gagne
+    for (var a = 0; a < toks.length; a++) {
+      for (var l = Math.min(5, toks.length - a); l >= 2; l--) {
+        var mw = toks.slice(a, a + l).join('');
+        if (lex.exact[mw] && toks.slice(a, a + l).every(function (x, j) { return !saute[a + j]; })) {
+          for (var j = 0; j < l; j++) saute[a + j] = mw;
+          break;
+        }
+      }
+    }
+    var faits = {};
     toks.forEach(function (t, i) {
+      if (saute[i]) { if (!faits[saute[i]]) { faits[saute[i]] = 1; push(lex.exact[saute[i]], 1, i); } return; }
       if (NUMWORDS[t]) t = NUMWORDS[t];
       if (/^\d+$/.test(t)) {
         p.numbers.push(parseInt(t, 10));
@@ -988,6 +1005,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       }
       if (STOP.has(t)) return;
       var m = lex.best(t);
+      if (m && lex.alt && lex.concepts[m.id].type === 'v' && /^(le|la|les|l|un|une|des|du|au|aux|ce|cet|cette|ces|mon|ma|mes|ton|ta|tes|son|sa|ses|notre|nos|votre|vos|leur|leurs)$/.test(toks[i - 1] || '')) {
+        var nn = lex.alt[t] || (/s$/.test(t) && lex.alt[t.slice(0, -1)]);
+        if (nn) m = { id: nn, score: 1 };
+      }
       // « un chapeau », « des moustaches » : un vêtement ou un trait quelconque. Seule une référence définie
       // (« l'homme au chapeau », « le chapeau », « son visage ») désigne le personnage qu'on reconnaît à ce détail.
       // … mais « un homme à moustache », « une dame au chapeau » désignent bien quelqu'un par ce détail
@@ -2797,6 +2818,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       lex: lex,
       parse: function (raw) { return rewrite(lex, parse(lex, raw, scene.phrases)); },
       rank: function (raw) { return rankActions(rewrite(lex, parse(lex, raw, scene.phrases))); },
+      // pour les tests : les gestes possibles ici, et le nom lisible d'un concept
+      actionsIci: function () { return availableActions(); },
+      libelle: function (id) { return lex.concepts[id] ? labelOf(id) : null; },
+      concept: function (id) { return lex.concepts[id] || null; },
       step: step, choose: choose, roll: roll, push: push, declinePush: declinePush,
       ideas: ideas,
       pistes: pistes,
@@ -4427,7 +4452,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       Lx.add('LAMPE', 'n', 'lampe, lampes, lumiere, lumieres, eclairage, bougie, bougies, ampoule, reverbere, reverberes, lustre, lustres, chandelle', { label: 'la lumière' });
       Lx.add('FENETRE', 'n', 'fenetre, fenetres, vitre, vitres, carreau, carreaux, dehors, exterieur, brouillard, rideau, rideaux, vitrine, volets, persiennes, guillotine', { label: 'la fenêtre' });
       Lx.add('PORTE', 'n', 'porte, portes, issue, sortie, serrure, verrou, palier, seuil, entree, portiere', { label: 'la porte' });
-      Lx.add('NOTE', 'n', 'note, mot, message, lettre, missive, pli', { label: 'les notes' });
+      Lx.add('NOTE', 'n', 'note, mot, message, lettre, missive, pli', { label: 'la note' });
       Lx.add('LIVRE', 'n', 'livre, livres, ouvrage, ouvrages, catalogue, catalogues, revue, revues, magazines, bouquin, bouquins, volumes, traite, horaires', { label: 'les livres' });
       Lx.add('TRAIN', 'n', 'train, trains, locomotive, locomotives, ferroviaire, wagon, wagons, voiture, voitures, rails, vapeur, express, convoi', { label: 'le train' });
       Lx.add('COMPARTIMENT', 'n', 'compartiment, compartiments, cabine, banquette, banquettes', { label: 'le compartiment' });
@@ -4498,7 +4523,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       Lx.add('SUIE', 'n', 'suie, fumee, papierpeint, plafond, marques, trainees, trainee, cloques, cloque, salissures', { label: 'les traces de suie' });
       Lx.add('TRACES', 'n', 'traces, trace, empreintes, tapis, sol, plancher, moquette, parquet, taches, tache, ecartement', { label: 'les traces' });
       Lx.add('COEUR', 'n', 'coeur, motif, figure, huit, dessin, entrailles, abats, rampes, rampe, relief, hauteur, cales, pentes, pente, niveaux, boyaux', { label: 'le motif au sol' });
-      Lx.add('LEVIER', 'n', 'levier, leviers, machiniste, mecanicien, manettes, foyer, chaudiere', { label: 'la cabine de la locomotive' });
+      Lx.add('LEVIER', 'n', 'levier, leviers, machiniste, mecanicien, manettes, foyer, chaudiere, cabine de la locomotive, cabine de conduite, poste de conduite', { label: 'la cabine de la locomotive' });
       Lx.add('OS', 'n', 'os, ossements, squelette, restes, lambeaux, breloque', { label: 'les ossements' });
       Lx.add('PROJECTEUR', 'n', 'projecteur, diapositives, plaques, ecran, projection, projections, photographies, photos, cliches', { label: 'les projections' });
       Lx.add('FILS', 'x', 'fils, heritier, rejeton', { label: 'son fils' });
@@ -5920,7 +5945,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     Lx.take('SUIVRE', 'v', 'suivre, suivez, suivons, filer, filez, filons, pister, talonner, epier, filature, surveiller, guetter, poursuivre, poursuis, rattraper, rattrape');
     Lx.add('WEEKEND', 'x', 'weekend, lundi', { label: 'le week-end' });
     Lx.add('TEMOIN', 'n', 'temoin, temoins, laitier, badaud, badauds, cocher, livreur', { label: 'le témoin' });
-    Lx.add('FUYARD', 'n', 'fuyard, fardeau, ballot, colis, signalement, description, fui, enfui, enfuit, enfuir', { label: 'la silhouette' });
+    Lx.add('FUYARD', 'n', 'fuyard, fardeau, ballot, colis, signalement, description, fui, enfui, enfuit, enfuir', { label: 'le fuyard' });
     Lx.add('STATION', 'n', 'station, stations', { label: 'la station de fiacres' });
   };
   L.phrases.unshift(
@@ -10062,7 +10087,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
       Lx.add('GUIMART', 'n', 'guimart', { label: 'Guimart' });
       Lx.add('CAISSES', 'n', 'caisses, caisse, cartons, carton', { label: 'les caisses' });
       Lx.add('CAHIER', 'n', 'cahier', { label: 'le cahier bleu' });
-      Lx.add('VILLA', 'n', 'villa, manoir, plans, gravure, gravures', { label: 'la maison du comte' });
+      Lx.add('VILLA', 'n', 'villa, manoir, plans, gravure, gravures, maison du comte, demeure du comte', { label: 'la maison du comte' });
       Lx.add('MALON', 'n', 'malon', { label: 'le capitaine Malon' });
       Lx.add('RIGAULT', 'n', 'rigault', { label: 'le médecin Rigault' });
       Lx.add('PATIENT', 'n', 'patient, patients, malade, malades, pensionnaire, pensionnaires', { label: 'le patient' });
@@ -10070,7 +10095,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
       Lx.add('ELECTROCHOC', 'x', 'electrochoc, electrochocs, electricite, appareil', { label: 'la machine' });
       Lx.add('TRADUIRE', 'x', 'traduire, traduction, traducteur, traduis, traduisez, interprete', { label: 'la traduction' });
       Lx.add('INTERNER', 'x', 'interner, internement', { label: 'l’internement' });
-      Lx.add('PERIODIQUES', 'n', 'periodiques, necrologie, necrologies, quotidiens', { label: 'les journaux récents' });
+      Lx.add('PERIODIQUES', 'n', 'periodiques, necrologie, necrologies, quotidiens, journaux recents, journaux du jour', { label: 'les journaux récents' });
       Lx.add('SCANDALE', 'n', 'scandale, scandales, reine, versailles', { label: 'le scandale' });
       Lx.add('DECES', 'x', 'mort, morte, morts, deces, decede, decedee, mourir, accident, tue', { label: 'la mort' });
       Lx.add('PAROLES', 'n', 'paroles', { label: 'ses paroles' });
@@ -11489,7 +11514,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
         api.clue('CELLULES');
         api.check('san_cellules');
       },
-      things: [{ label: 'les cellules', ids: ['CELLULES', 'OS', 'PORTE'] }, { label: 'les racines', ids: ['RACINES'] }, { label: null, ids: ['CAVE', 'SOUSSOL', 'SALLE', 'LAMPE'] }],
+      things: [{ label: 'les cellules', ids: ['CELLULES', 'OS', 'DECES', 'PORTE'] }, { label: 'les racines', ids: ['RACINES'] }, { label: null, ids: ['CAVE', 'SOUSSOL', 'SALLE', 'LAMPE'] }],
       ambient: ['Une goutte tombe de la voûte, régulière comme une horloge.', 'Une racine frôle votre épaule.', 'Tout au fond, une lueur, très faible, qui n’est pas celle de votre lanterne.'],
       actions: [
         { id: 'pc_look', label: 'Regarder le couloir', idea: 'Regarder autour de vous', verbs: ['EXAMINER'], nouns: ['CAVE', 'SOUSSOL', 'SALLE', 'CELLULES'], bare: true,
@@ -11511,7 +11536,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
         api.say('Les ronces ont poussé à travers les squelettes de ceux qui sont morts ici. Elles les tiennent debout, tordus, comme pour qu’ils souffrent encore. Et à leurs pieds, au cœur du roncier, il y a un bras de statue. Un bras gauche, couché sur le côté. Il luit, lui aussi.');
         api.check('san_bras');
       },
-      things: [{ label: 'le bras de statue', ids: ['BRAS', 'SIMULACRE'] }, { label: 'les roses', ids: ['ROSES'] }, { label: null, ids: ['OS', 'SALLE', 'CAVE', 'BRUME'] }],
+      things: [{ label: 'le bras de statue', ids: ['BRAS', 'SIMULACRE'] }, { label: 'les roses', ids: ['ROSES'] }, { label: null, ids: ['OS', 'DECES', 'SALLE', 'CAVE', 'BRUME'] }],
       ambient: ['Une goutte de sève noire tombe sur la pierre avec un bruit mat.', 'Les roses frémissent, sans un souffle d’air.', 'Le parfum est si épais qu’il colle aux dents.'],
       actions: [
         { id: 'ps_look', label: 'Regarder la salle', idea: 'Regarder autour de vous', verbs: ['EXAMINER'], nouns: ['SALLE', 'ROSES', 'OS'], bare: true,
@@ -11858,7 +11883,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     Lx.add('ESCALIER', 'n', 'escalier, escaliers, marches, marche, degres, entree des caves', { label: 'l’escalier' });
     Lx.add('OUTILS', 'n', 'outils, outil, pelle, pelles, pioche, pioches, pied de biche, lanterne, secateur, hachette, chaine, brouette', { label: 'les outils' });
     Lx.add('TERRASSIERS', 'n', 'terrassiers, terrassier, ouvriers, pruvost, des bras', { label: 'les terrassiers' });
-    Lx.add('CELLULES', 'n', 'cellules, cellule, cachots, cachot, squelettes, squelette, ossements, judas, prisonniers, morts', { label: 'les cellules' });
+    Lx.add('CELLULES', 'n', 'cellules, cellule, cachots, cachot, judas, prisonniers', { label: 'les cellules' }); // les squelettes et les ossements restent à OS
     Lx.add('RACINES', 'n', 'racines, racine, radicelles', { label: 'les racines' });
     Lx.add('BRAS', 'n', 'bras, membre, bras de statue, bras gauche', { label: 'le bras de statue' });
     Lx.add('LETTRE', 'n', 'lettre, enveloppe, courrier, wellington, edgar, lausanne', { label: 'la lettre de Lausanne' });
