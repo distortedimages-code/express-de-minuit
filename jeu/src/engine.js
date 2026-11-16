@@ -698,7 +698,8 @@
         if (!quiet) scene.locations[id].enter(api, first);
       },
       check: function (id, o) {
-        var chk = scene.checks[id];
+        var chk = scene.checks[id] || defJet(id);
+        if (!chk) { log({ t: 'sys', x: 'Ce jet n’existe plus dans cette version du jeu : on passe.' }); return; }
         s.pending = { id: id, diff: (o && o.diff) || 'normal', pushed: !!(o && o.pushed) };
         var hum = s.talk && SOCIAL[chk.skill] ? s.flags['humeur:' + s.talk] : 0;
         if (hum > 0) s.pending.bonus = true; else if (hum < 0) s.pending.malus = true;
@@ -1635,9 +1636,17 @@
       var lbl = { INT: 'Idée', EDU: 'Connaissance', POU: 'Volonté', FOR: 'Force', DEX: 'Dextérité', CON: 'Constitution', APP: 'Apparence' }[sk] || sk;
       api.say(fresh('jetRien', jetText('rien', ['Le Gardien ne fait pas lancer les dés pour rien : ici, rien ne demande votre {s}. Pas encore.', '{S} ? Rien ici ne s’y prête pour l’instant. Quand quelque chose vous intriguera, redemandez.'])).replace(/\{s\}/g, lbl).replace(/\{S\}/g, lbl));
     }
+    // les jets improvisés (« jet:lieu:Écouter », « jet:idee:INT »…) n'existent pas dans le scénario : on les fabrique
+    // à la demande, et on sait les refaire d'après leur nom, après un rechargement de partie
+    function defJet(id, why) {
+      var m = /^jet:([a-z]+):(.+)$/.exec(id || ''); if (!m) return null;
+      var kind = m[1], sk = m[2];
+      if (!scene.checks[id]) scene.checks[id] = { skill: sk, why: why || '', push: kind === 'lieu' ? 'Fouiller encore, plus à fond (jet forcé)' : kind === 'social' ? 'Insister (jet forcé)' : kind === 'idee' ? 'Se concentrer encore (jet forcé)' : null, resolve: function (api2, r) { jetResolve(kind, sk, r); } };
+      return scene.checks[id];
+    }
     function jetCheck(sk, why, kind, extra) {
       var id = 'jet:' + kind + ':' + sk;
-      if (!scene.checks[id]) scene.checks[id] = { skill: sk, why: why, push: kind === 'lieu' ? 'Fouiller encore, plus à fond (jet forcé)' : kind === 'social' ? 'Insister (jet forcé)' : kind === 'idee' ? 'Se concentrer encore (jet forcé)' : null, resolve: function (api2, r) { jetResolve(kind, sk, r); } };
+      defJet(id, why);
       scene.checks[id].why = why;
       s.jetCtx = Object.assign({ kind: kind, sk: sk, loc: s.loc, npc: s.talk }, extra || {});
       api.check(id);
@@ -2001,7 +2010,9 @@
     }
     function roll() {
       var pd = s.pending; if (!pd) return null;
-      var chk = scene.checks[pd.id];
+      var chk = scene.checks[pd.id] || defJet(pd.id);
+      // une partie rechargée dont le jet n'existe plus : on le retire, plutôt que de laisser le bouton sans effet
+      if (!chk) { s.pending = null; log({ t: 'sys', x: 'Ce jet n’existe plus dans cette version du jeu : on passe.' }); finish(); return null; }
       var target = skillValue(chk.skill);
       var r = 1 + Math.floor(rng() * 100);
       // dé bonus ou de malus : on lance une seconde dizaine et l'on garde la meilleure (ou la pire)

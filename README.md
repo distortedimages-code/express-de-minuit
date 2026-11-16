@@ -183,6 +183,8 @@ La santé mentale a quatre états (Lucide, Troublé, Fragile, Au bord du gouffre
 
 Vérification : `node jeu/tools/test_folie.js`.
 
+Les jets improvisés (« j’écoute », « Réfléchir », une fouille) n’existent pas dans le scénario : le moteur les fabrique à la demande, d’après leur nom (`jet:idee:INT`). Une partie rechargée avec un jet en attente, ou un jet forcé, les refait donc à l’identique ; un jet qui aurait disparu d’une version du jeu est retiré au lieu de bloquer le bouton. Vérification : `node jeu/tools/test_recharge.js`.
+
 ## L’image en fond, sur iPad en paysage
 
 L’image est cadrée sur son point d’intérêt (`PHOTO_CADRAGE`), placé au milieu de la partie libre de l’écran. Garde-fou : quand ce point est à droite de l’image, celle-ci peut glisser vers la gauche jusqu’à ce que son bord droit touche le panneau de texte ; ce qui serait caché derrière le panneau vient ainsi à gauche, et c’est du noir qui passe sous le panneau. On peut toujours faire glisser l’image au doigt, et un double-clic la recentre.
