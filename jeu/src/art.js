@@ -692,13 +692,26 @@
         var fim = this.photo(this.flashK);
         if (fim) { o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.drawImage(fim, 0, 0, pw, ph); o.restore(); }
         this.flashN--; this.flashTail = true;
-      } else if ((this.flashTail = false) || san >= 2 && this.trans >= 1 && this.rnd() < dt / (san >= 3 ? 12 : 40)) {
-        var prets = VIS.filter(function (k) { return self.imgs && self.imgs[k] && self.imgs[k]._ok; });
-        if (prets.length) { this.flashK = prets[Math.floor(this.rnd() * prets.length)]; this.flashN = this.rnd() < 0.5 ? 1 : 2; }
+      } else if ((this.flashTail = false) || san >= 2 && this.trans >= 1 && this.rnd() < dt / (this.onVision ? (san >= 3 ? 30 : 75) : (san >= 3 ? 12 : 40))) {
+        // l'interface les montre en plein écran ; sans elle (aperçus, tests), une ou deux images dans le décor
+        if (this.onVision) this.onVision(false);
+        else {
+          var prets = VIS.filter(function (k) { return self.imgs && self.imgs[k] && self.imgs[k]._ok; });
+          if (prets.length) { this.flashK = prets[Math.floor(this.rnd() * prets.length)]; this.flashN = this.rnd() < 0.5 ? 1 : 2; }
+        }
       }
     }
   };
 
+  // une vision déjà chargée, tirée au hasard (sans redonner la précédente) : son adresse, ou null
+  P.visionPrete = function () {
+    var self = this, VIS = Art.VISIONS || [];
+    VIS.forEach(function (k) { self.photo(k); });
+    var prets = VIS.filter(function (k) { return self.imgs && self.imgs[k] && self.imgs[k]._ok && k !== self._visDerniere; });
+    if (!prets.length) return null;
+    var k = prets[Math.floor(this.rnd() * prets.length)]; this._visDerniere = k;
+    return this.imgs[k].src;
+  };
   Art.INK = INK; Art.D = D;
   Art.util = { W: W, H: H, lerp: lerp, clamp: clamp, rng: rng, smooth: smooth, INK: INK, D: D, TAU: TAU };
   G.PixelArt = Art;

@@ -138,7 +138,8 @@
       case 'doc': var dh = docHTML(e); d.classList.add(dh.cls); d.innerHTML = dh.html; break;
       case 'clue': d.innerHTML = '<div class="h">Nouvel indice · noté dans le carnet</div><div class="t">' + esc(e.title) + '</div><div class="x">' + esc(e.x) + '</div>'; break;
       case 'stat': d.textContent = (e.stat === 'Mythe' ? 'Mythe de Cthulhu' : e.stat) + ' ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v; if (e.stat === 'Mythe') d.className = 'e-san'; break;
-      case 'san': d.textContent = e.d ? 'Santé mentale ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v : 'Santé mentale : aucune perte'; if (!e.d) d.classList.add('none'); if (e.d > 0) d.classList.add('gain'); break;
+      case 'san': if (e.d < 0 && !chargement) setTimeout(function () { vision(e.d <= -1 ? 1 + Math.min(4, -e.d) : 1); }, 150);
+        d.textContent = e.d ? 'Santé mentale ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v : 'Santé mentale : aucune perte'; if (!e.d) d.classList.add('none'); if (e.d > 0) d.classList.add('gain'); break;
       case 'check':
         lastCheck = e;
         var need = needFor(e.target, e.diff);
@@ -403,7 +404,7 @@
   function render(silent) {
     var s = game.state;
     s.log.forEach(function (e) { if (e.n > rendered) { queue.push(e); rendered = e.n; } });
-    if (silent) { instant = true; pump(); instant = false; } else pump();
+    if (silent) { instant = true; chargement = true; pump(); chargement = false; instant = false; } else pump();
     refresh();
   }
   function settle() { refresh(); scrollDown(); save(); }
@@ -691,6 +692,29 @@
   // les suggestions : « guide » (plus de pistes, pas de tentations), « normal », « aucune »
   var IKEY = 'express-minuit-idees';
   var VKEY = 'express-minuit-visions';
+  // une vision du Mythe en plein écran, d'un coup, qui flanche puis disparaît (le menu « Visions » peut les couper)
+  var chargement = false;
+  // n = nombre d'images de la rafale : 1 au hasard quand la raison vacille, 2 à 5 selon la perte de Santé mentale
+  function vision(n) {
+    if (!art || !visionsVoulues() || !$('title').hidden || document.hidden) return;
+    n = Math.max(1, Math.min(5, n | 0)); if (reduce) n = 1;
+    var srcs = []; for (var i = 0; i < n; i++) { var s1 = art.visionPrete && art.visionPrete(); if (s1 && srcs.indexOf(s1) < 0) srcs.push(s1); }
+    if (!srcs.length) return;
+    var v = $('vision'), im = v.querySelector('img');
+    clearTimeout(vision.t);
+    (function montre(i) {
+      if (i >= srcs.length) { v.className = ''; return; }
+      // chaque image : un à deux dixièmes de seconde, la dernière un peu plus longue ; un noir très bref entre deux
+      var dur = reduce ? 350 : (i === srcs.length - 1 ? 260 : 120 + Math.floor(Math.random() * 70));
+      im.src = srcs[i]; im.style.animationDuration = dur + 'ms';
+      v.className = ''; void v.offsetWidth; // relance l'animation
+      v.className = 'on' + (reduce ? '' : ' flanche');
+      vision.t = setTimeout(function () {
+        if (i + 1 >= srcs.length) { v.className = ''; return; }
+        v.className = 'on noir'; vision.t = setTimeout(function () { montre(i + 1); }, 45);
+      }, dur);
+    })(0);
+  }
   function visionsVoulues() { try { return localStorage.getItem(VKEY) !== 'non'; } catch (e) { return true; } }
   function modeIdees() { try { var m = localStorage.getItem(IKEY); return m === 'guide' || m === 'aucune' ? m : 'normal'; } catch (e) { return 'normal'; } }
   var NOMS_MODES = { guide: 'guidées', normal: 'normales', aucune: 'aucune' };
@@ -818,6 +842,9 @@
     art = new window.PixelArt($('art'), $('artBloom'));
     art.onCadre = nouvelleImage; brancherFond(); window.__art = art; // pour les tests automatiques
     art.visions = visionsVoulues();
+    art.onVision = function () { vision(1); };
+    // les visions se chargent dès le début de la partie, sans se presser : la première perte de raison doit les trouver prêtes
+    setTimeout(function () { if (art && window.PixelArt.VISIONS) window.PixelArt.VISIONS.forEach(function (k) { art.photo(k); }); }, 4000);
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;
