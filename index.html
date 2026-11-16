@@ -1122,6 +1122,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       }
       if (scene.perceive && (e.t === 'narr' || e.t === 'npc' || e.t === 'event') && typeof e.x === 'string') e.x = scene.perceive(api, e.x, e);
       e.n = ++s.seq; e.san = sanState(); s.log.push(e);
+      noterNoms(e);
       if (s.log.length > 400) s.log.splice(0, s.log.length - 400);
       return e;
     }
@@ -1626,10 +1627,66 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       var INT = (s.pc.carac && s.pc.carac.INT) || 60, attendu = 1 + Math.max(0, INT - 40) / 35;
       return Math.floor(attendu) + (r() < attendu % 1 ? 1 : 0) + (mode === 'guide' ? 1 : 0);
     }
-    function etiquette(a) { return a.idea === true ? a.label : a.idea; }
+    function brute(a) { return a.idea === true ? a.label : a.idea; }
+    // l'étiquette montrée : si elle nomme quelqu'un que le joueur ne connaît pas encore, sa version anonyme (ideaAnon)
+    function etiquette(a) { var l = brute(a); return a.ideaAnon && !nomsConnus(l) ? a.ideaAnon : l; }
+    // ---- garde-fou : le carnet ne souffle jamais un nom que le joueur n'a pas encore lu.
+    // Les noms guettés sont les mots à majuscule des idées du chapitre (sauf le premier mot, et les titres) ;
+    // chaque texte affiché marque ceux qu'il contient (s.noms, gardé dans la sauvegarde, car le journal est tronqué).
+    var TITRES = { M: 1, Mme: 1, Mlle: 1, Mrs: 1, Mr: 1, Miss: 1, Dr: 1, Sir: 1, Lady: 1, Monsieur: 1, Madame: 1, Mademoiselle: 1 };
+    var guettes = null;
+    // (une idée commence par un verbe, qu'on ignore ; un sujet de conversation peut commencer par un nom, sauf un petit mot)
+    var PETITS = /^(Le|La|Les|L|Un|Une|Des|Du|De|D|Sa|Son|Ses|Votre|Vos|Leur|Leurs|Ce|Cet|Cette|Ces|Mon|Ma|Mes|Qui|Que|Quoi|Où|Pourquoi|Comment|Combien|Quand|Quel|Quelle|Et|Ou|À|Au|Aux|En|Pour|Sur|Avec|Sans|Ici|Rien|Tout|Autre|Autres|Encore|Oui|Non)$/;
+    // des noms que tout voyageur de 1923 connaît : jamais cachés (un chapitre peut en ajouter, scene.nomsCommuns)
+    var COMMUNS = { Europe: 1, 'Orient-Express': 1, 'Simplon-Orient': 1, Constantinople: 1, Londres: 1, Paris: 1, Douvres: 1, Calais: 1, Seine: 1, Tamise: 1, France: 1, Angleterre: 1, Turquie: 1, Bottin: 1, Baedeker: 1 };
+    function motsPropres(label, sujet) {
+      // (une compétence entre parenthèses, « (Psychologie) », n'est pas un nom)
+      var m = String(label || '').replace(/\([^)]*\)/g, ' ').split(/[\s,’'()«»:;.!?…\u00a0]+/).filter(Boolean);
+      // le premier mot d'une idée est un verbe ; celui d'un sujet de conversation n'est guetté que s'il est déjà un nom guetté
+      var premier = m.shift();
+      if (sujet && premier && guettes && guettes[premier]) m.unshift(premier);
+      return m.filter(function (w) { return /^[A-ZÀ-Ý]/.test(w) && !TITRES[w] && !PETITS.test(w) && !COMMUNS[w] && !(scene.nomsCommuns && scene.nomsCommuns[w]); });
+    }
+    function nomsGuettes() {
+      if (guettes) return guettes;
+      guettes = {};
+      var acts = (scene.globalActions || []).slice();
+      Object.keys(scene.locations || {}).forEach(function (l) { acts = acts.concat(scene.locations[l].actions || []); });
+      var mots = [];
+      acts.forEach(function (a) { if (a.idea) mots = mots.concat(motsPropres(brute(a)), motsPropres(a.ideaAnon)); });
+      Object.keys(scene.npcs || {}).forEach(function (k) { (scene.npcs[k].topics || []).forEach(function (t) { if (t.chip) mots = mots.concat(motsPropres(t.chip)); }); });
+      // sans tenir compte de la casse : « un antiquaire turc » apprend « le vieux Turc »
+      mots.forEach(function (w) { guettes[w] = new RegExp('(^|[^0-9A-Za-zÀ-ÿ])' + w.replace(/[-.]/g, '\\$&') + '($|[^0-9A-Za-zÀ-ÿ])', 'i'); });
+      return guettes;
+    }
+    function noterNoms(e) {
+      var t = typeof e.x === 'string' ? e.x : '';
+      if (e.d && typeof e.d === 'string') t += ' ' + e.d;
+      if (!t) return;
+      var g = nomsGuettes(); s.noms = s.noms || {};
+      for (var w in g) if (!s.noms[w] && g[w].test(t)) s.noms[w] = 1;
+    }
+    function nomsInitiaux() {
+      // une ancienne sauvegarde : on relit ce qui reste du journal, les indices et la fiche du personnage
+      s.noms = {};
+      (s.log || []).forEach(noterNoms);
+      (s.clues || []).forEach(function (k) { var c = scene.clues && scene.clues[k]; if (c) noterNoms({ x: (c.title || '') + ' ' + (c.text || '') }); });
+      if (s.pc) noterNoms({ x: JSON.stringify(s.pc) });
+    }
+    function nomsConnus(label, sujet) {
+      if (G.RPG_SANS_NOMS) return true; // pour comparer, dans les tests
+      if (!s.noms) nomsInitiaux();
+      var g = nomsGuettes();
+      return motsPropres(label, sujet).every(function (w) { return !g[w] || s.noms[w]; });
+    }
+    function nomsLus(a) {
+      var ok = nomsConnus(etiquette(a));
+      if (!ok && G.RPG_NOMS) G.RPG_NOMS.push({ chapitre: s.chapter, lieu: s.loc, idee: brute(a), manque: motsPropres(brute(a)).filter(function (w) { return !s.noms[w]; }) });
+      return ok;
+    }
     function ideas(n, mode) {
       n = n || 4; mode = mode || 'normal';
-      var acts = availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)); });
+      var acts = availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)) && nomsLus(a); });
       var r = alea(signatureIdees()), F = { base: [], piste: [], fausse: [], risque: [], folie: [] };
       acts.forEach(function (a) { (F[natureIdee(a)] || F.piste).push(a); });
       var neuf = function (l) { return l.filter(function (a) { return !s.done[a.id]; }); };
@@ -1833,10 +1890,16 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     }
     function topicChips(npc) {
       var st = npcState(npc.id);
-      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st); })
+      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st) && chipLu(npc, t); })
         .map(function (t) { return { label: t.chip, topic: t.id, asked: !!st.asked[t.id] }; });
       list.sort(function (a, b) { return (a.asked ? 1 : 0) - (b.asked ? 1 : 0); });
       return list.slice(0, 6);
+    }
+    // même garde-fou pour les sujets proposés en conversation
+    function chipLu(npc, t) {
+      var ok = nomsConnus(t.chip, true);
+      if (!ok && G.RPG_NOMS) G.RPG_NOMS.push({ chapitre: s.chapter, lieu: s.loc, idee: npc.id + ' › ' + t.chip, manque: motsPropres(t.chip, true).filter(function (w) { return !s.noms[w]; }) });
+      return ok;
     }
     function runTopic(npc, topicId, p) {
       var t = npc.topics.find(function (x) { return x.id === topicId; });
@@ -5236,9 +5299,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       enter: function (api, first) { if (first) api.say('Les briques rouges et blanches de New Scotland Yard, au bord de la Tamise. Un hall bruyant, des agents qui courent, des bancs où attendent des gens qui ont perdu quelque chose : un chien, un mari, une montre.'); else api.say(api.fresh('yardR', ['Scotland Yard, de nouveau. Le planton vous reconnaît et soupire.', 'Le hall de Scotland Yard sent le tabac froid et le papier humide.'])); },
       things: [{ label: 'l’inspecteur Fleming', ids: ['FLEMING'] }, { label: 'le sergent Rigby, aux incendies', ids: ['RIGBY'], cond: function (api) { return api.s.min >= at(1, 23, 0); } }, { label: 'les agents du hall', ids: ['POLICE', 'QUELQUUN'] }, { label: null, ids: ['SALLE', 'YARD'] }],
       actions: [
-        { id: 'y_fleming', label: 'Demander à voir l’inspecteur Fleming', obj: 'l’inspecteur Fleming', idea: true, talkTo: 'fleming', verbs: ['PARLER', 'ALLER', 'VISITER', 'PERSUADER', 'BARATIN', 'POLI'], nouns: ['FLEMING', 'MAKRYAT'], extra: ['SMITH', 'INCENDIE', 'BEDDOWS', 'CHELSEA', 'ARGENT'],
+        { id: 'y_fleming', label: 'Demander à voir l’inspecteur Fleming', ideaAnon: 'Demander à parler à un inspecteur', obj: 'l’inspecteur Fleming', idea: true, talkTo: 'fleming', verbs: ['PARLER', 'ALLER', 'VISITER', 'PERSUADER', 'BARATIN', 'POLI'], nouns: ['FLEMING', 'MAKRYAT'], extra: ['SMITH', 'INCENDIE', 'BEDDOWS', 'CHELSEA', 'ARGENT'],
           run: function (api, p) { api.talk('fleming', p); } },
-        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, cond: function (api) { return api.s.min >= at(1, 23, 0); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
+        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', ideaAnon: 'Voir le sergent chargé des incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, cond: function (api) { return api.s.min >= at(1, 23, 0); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
           run: function (api, p) { api.talk('rigby', p); } },
         { id: 'y_glaner', label: 'Glaner des informations auprès des agents', obj: 'les agents du hall', idea: true, verbs: ['BARATIN', 'ECOUTER', 'PARLER', 'FOUILLER', 'PSY'], nouns: ['POLICE', 'QUELQUUN', 'MAKRYAT'], bare: true,
           run: function (api) {
@@ -5335,7 +5398,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       enter: function (api, first) { if (first) api.say('Une rue de petites maisons ouvrières, toutes pareilles. Devant l’une d’elles, à la craie sur le trottoir : « VOYEZ LA CHAMBRE DE LA MORT — 6 PENCE ». À la fenêtre, un carton écrit à la main : « Chambre à louer ».'); else api.say('Stoke Newington. L’inscription à la craie a été repassée pour mieux se voir.'); },
       things: [{ label: 'Mrs Atkins', ids: ['ATKINS'] }, { label: 'la chambre de Stanley', ids: ['CHAMBRE', 'ETAGE', 'STANLEY', 'SUIE'] }, { label: 'le poste de police du coin', ids: ['POLICE', 'YARD'] }, { label: null, ids: ['SALLE', 'STOKE'] }],
       actions: [
-        { id: 's_atkins', label: 'Parler à Mrs Atkins', idea: true, talkTo: 'atkins', verbs: ['PARLER', 'ALLER', 'VISITER', 'FRAPPER', 'DONNER', 'POLI'], nouns: ['ATKINS', 'STOKE'], extra: ['STANLEY', 'MAQUETTE', 'POLICE', 'ARGENT', 'CHAMBRE', 'TOIMEME', 'SUITE', 'FANTOME', 'QUELQUUN'],
+        { id: 's_atkins', label: 'Parler à Mrs Atkins', ideaAnon: 'Parler à la logeuse de Stanley', idea: true, talkTo: 'atkins', verbs: ['PARLER', 'ALLER', 'VISITER', 'FRAPPER', 'DONNER', 'POLI'], nouns: ['ATKINS', 'STOKE'], extra: ['STANLEY', 'MAQUETTE', 'POLICE', 'ARGENT', 'CHAMBRE', 'TOIMEME', 'SUITE', 'FANTOME', 'QUELQUUN'],
           run: function (api, p) { api.talk('atkins', p); } },
         { id: 's_chambre', label: 'Visiter la chambre de Stanley', idea: true, verbs: ['ALLER', 'VISITER', 'EXAMINER', 'FOUILLER', 'OUVRIR'], nouns: ['CHAMBRE', 'ETAGE', 'STANLEY', 'SUIE'],
           run: function (api) { if (!api.flag('chambrePayee')) { api.npc('atkins', 'Mrs Atkins vous barre l’escalier, la main tendue. « Six pence, mon chou. C’est le tarif. »'); return; } api.go('chambre_stanley'); } },
@@ -5792,7 +5855,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   };
   L.boutiquesOuvertes = function (api) { var h = hour(api.s.min); return h >= 8 && h < 20 && JOURS[(4 + day(api.s.min)) % 7] !== 'dimanche'; };
 
-  L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
+    // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)
+  L.nomsCommuns = { Enfer: 1, Harley: 1, Street: 1 };
+L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -10311,7 +10376,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
           run: function (api) { api.say(api.fresh('phlook', ['Un lit de cuivre, un édredon rouge, une table où tiennent vos notes et la liste de Smith. Paris, Venise, Trieste, Belgrade. Vous avez souligné le premier nom deux fois.', 'Le papier peint répète le même bouquet jusqu’au plafond. Sur la table, votre carnet, ouvert à la page « Fenalik ».'])); } },
         { id: 'ph_fenetre', label: 'Regarder par la fenêtre', verbs: ['EXAMINER', 'OUVRIR'], nouns: ['FENETRE'],
           run: function (api) { var h = hour(api.s.min); api.say(h >= 17 || h < 8 ? (api.flag('guetteur') ? 'La rue de Richelieu, luisante. Le réverbère d’en face, son rond de lumière. Personne dessous. Vous vérifiez deux fois.' : 'La rue de Richelieu, luisante. Un réverbère, son rond de lumière sur le trottoir d’en face.') : 'La rue de Richelieu, ses voitures de livraison, ses lecteurs pressés qui serrent une serviette sous le bras.'); } },
-        { id: 'ph_gerant', label: 'Parler à M. Blain', idea: true, talkTo: 'gerant', verbs: ['PARLER', 'VISITER', 'POLI', 'DONNER', 'FLATTER', 'PERSUADER'], nouns: ['GERANT', 'RECEPTION', 'QUELQUUN'],
+        { id: 'ph_gerant', label: 'Parler à M. Blain', ideaAnon: 'Parler au gérant', idea: true, talkTo: 'gerant', verbs: ['PARLER', 'VISITER', 'POLI', 'DONNER', 'FLATTER', 'PERSUADER'], nouns: ['GERANT', 'RECEPTION', 'QUELQUUN'],
           extra: ['BN', 'SMITH', 'CHARENTON', 'FENALIK', 'POISSY', 'DESTINATIONS', 'TAXI', 'VOYAGE', 'TRAIN'], run: function (api, p) { api.talk('gerant', p); } },
         { id: 'ph_journal', label: 'Lire les journaux', idea: true, verbs: ['EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['JOURNAL'], repeatable: true, time: 15,
           run: function (api) {
@@ -10388,7 +10453,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       actions: [
         { id: 'ar_look', label: 'Regarder la salle', idea: 'Regarder autour de vous', verbs: ['EXAMINER'], nouns: ['SALLE', 'ARSENAL'], bare: true,
           run: function (api) { api.say('Des boiseries dorées qui s’écaillent, des portraits de grands maîtres de l’artillerie, et partout des cartons étiquetés à la plume : « Bastille », « Lettres de cachet », « Prisonniers ». Trois lecteurs, emmitouflés.'); } },
-        { id: 'ar_brevin', label: 'Parler à Mlle Brévin', idea: true, talkTo: 'brevin', verbs: ['PARLER', 'VISITER', 'POLI', 'PERSUADER', 'COMMANDER', 'FLATTER'], nouns: ['BREVIN', 'BIBLIOTHECAIRE', 'QUELQUUN'],
+        { id: 'ar_brevin', label: 'Parler à Mlle Brévin', ideaAnon: 'Parler à la bibliothécaire', idea: true, talkTo: 'brevin', verbs: ['PARLER', 'VISITER', 'POLI', 'PERSUADER', 'COMMANDER', 'FLATTER'], nouns: ['BREVIN', 'BIBLIOTHECAIRE', 'QUELQUUN'],
           extra: ['MALON', 'FENALIK', 'POISSY', 'ARSENAL', 'ARCHIVES'], run: function (api, p) { api.talk('brevin', p); } },
         { id: 'ar_chercher', label: 'Chercher le journal du capitaine Malon', idea: true, verbs: ['FOUILLER', 'EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['MALON', 'ARCHIVES', 'LIVRE', 'FENALIK'], bare: true, repeatable: true,
           run: function (api) {
@@ -10672,6 +10737,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 
   L.suite = 'paris';
   P.precedent = 'londres';
+  // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)
+  P.nomsCommuns = { Sully: 1 };
   G.CHAPTERS.paris = P;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -10760,7 +10827,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       var lieu = loc === '*' ? null : sc.locations[loc];
       if (loc !== '*' && !lieu) return;
       var a = {
-        id: o.id, label: o.label || o.idea, idea: o.idea, ideaKind: o.kind, verbs: [], nouns: [], time: o.time || 10,
+        id: o.id, label: o.label || o.idea, idea: o.idea, ideaAnon: o.anon, ideaKind: o.kind, verbs: [], nouns: [], time: o.time || 10,
         cond: o.cond, obj: o.obj,
         ideaCond: o.kind === 'folie' ? function (api) { return api.sanState() >= (o.fragile || 2) && (!o.ideaCond || o.ideaCond(api)); } : o.ideaCond,
         run: function (api) {
@@ -10928,7 +10995,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         ko: 'Un traité allemand de 1702, dont une gravure vous retient trop longtemps : un homme qu’on retourne comme un gant, et qui sourit. Vous refermez. Rien sur Sedefkar. Seulement cette image, qui ne vous quitte plus.' } });
 
     // ----- Stoke Newington : Mrs Atkins et la chambre de la mort
-    L.idee('stoke', { id: 'il_voisins', kind: 'fausse', idea: 'Questionner les voisins de Mrs Atkins', time: 35,
+    L.idee('stoke', { id: 'il_voisins', kind: 'fausse', idea: 'Questionner les voisins de Mrs Atkins', anon: 'Questionner les voisins', time: 35,
       txt: 'Porte après porte, la même rue, les mêmes rideaux qui bougent. Tout le monde a une histoire sur Mr Stanley, et chacune contredit la précédente : il était communiste, il était prêtre, il était fou, il était charmant. Une dame vous offre du thé. Vous ressortez riche de rumeurs.' });
     L.idee('stoke', { id: 'il_louer', kind: 'risque', idea: 'Louer la chambre de Stanley pour la nuit', time: 10,
       cond: function (api) { var h = hour(api.s.min); return h >= 17 || h < 2; },
