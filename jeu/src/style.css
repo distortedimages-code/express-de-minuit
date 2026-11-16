@@ -398,7 +398,12 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     grid-template-columns: minmax(0, 1fr) var(--panneau); grid-template-rows: auto minmax(0, 1fr) auto; }
   .top { display: contents; }
   .stage { position: fixed; inset: 0; width: auto; height: auto; aspect-ratio: auto; margin: 0; z-index: 0; align-self: stretch; justify-self: stretch; }
-  .stage canvas { object-fit: cover; object-position: clamp(calc(100vw - 2.4 * var(--hauteur)), calc((100vw - var(--panneau)) / 2 - var(--fx, .5) * 2.4 * var(--hauteur)), 0px) 50%; }
+  /* le décalage (--decal) est calculé par l'interface : point d'intérêt au milieu de la partie libre, glissement au doigt */
+  .stage { touch-action: none; cursor: grab; }
+  .stage.glisse { cursor: grabbing; }
+  .stage canvas { object-fit: cover; object-position: var(--decal, 50%) 50%; transition: object-position .9s cubic-bezier(.25, .6, .3, 1); }
+  .stage.lent canvas { transition-duration: 2.6s; }
+  .stage.glisse canvas { transition: none; }
   .veil { background: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, transparent 22%, transparent 68%, rgba(10, 10, 11, .88) 100%); }
   .app::before { content: ''; position: fixed; top: 14px; right: 14px; bottom: 14px; width: calc(var(--panneau) - 14px); z-index: 1;
     background: rgba(10, 10, 11, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(243, 239, 230, .08); }

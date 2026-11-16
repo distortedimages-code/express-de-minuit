@@ -248,6 +248,61 @@
   // Le décor quand on arrive quelque part, le portrait quand quelqu'un prend la parole : même le clavier ouvert,
   // même loin du haut de la page, on voit où l'on est et à qui l'on parle. La clé de l'image est notée sur l'entrée
   // du journal (e.img, e.pt) pour qu'une partie rechargée retrouve les mêmes images.
+  // ---------------------------------------------------------------- l'image en fond (iPad en paysage, grands écrans)
+  // L'image (2,4:1) couvre toute la hauteur et déborde en largeur. On la décale pour que son point d'intérêt
+  // (PHOTO_CADRAGE : le personnage, ou ce qui compte dans la scène) tombe au milieu de la partie libre de l'écran.
+  // À chaque nouvelle image, un lent glissement montre qu'elle est plus large que l'écran ; le doigt (ou le pavé
+  // tactile) la fait glisser ; un double tap la recadre.
+  var MQ_FOND = '(orientation: landscape) and (min-width: 960px) and (min-height: 600px)';
+  var cadre = { fx: 0.5, glisse: 0, x: null }, tirer = null, lentTimer = null;
+  function enFond() { try { return matchMedia(MQ_FOND).matches; } catch (e) { return false; } }
+  function borne(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function mesuresFond() {
+    var st = document.querySelector('.stage'), nav = document.querySelector('.nav');
+    var W = st.clientWidth, H = st.clientHeight, P = nav ? nav.getBoundingClientRect().width : 0, Wi = Math.max(W, H * 2.4);
+    return { st: st, W: W, Wi: Wi, min: W - Wi, cible: (W - P) / 2 - cadre.fx * Wi };
+  }
+  function poserFond(m, x) { cadre.x = x; m.st.style.setProperty('--decal', Math.round(x) + 'px'); }
+  function cadrerFond() { if (!enFond()) return; var m = mesuresFond(); poserFond(m, borne(m.cible + cadre.glisse, m.min, 0)); }
+  function nouvelleImage(pk, fx) {
+    cadre.fx = fx; cadre.glisse = 0;
+    if (!enFond()) return;
+    var m = mesuresFond(), x = borne(m.cible, m.min, 0), cacheG = -x, cacheD = m.Wi + x - m.W;
+    var amp = Math.min(110, Math.max(cacheG, cacheD) * 0.4);
+    if (amp < 10) { poserFond(m, x); return; }
+    // on part un peu décalé vers le côté le plus caché, et l'image revient lentement à sa place
+    m.st.classList.add('glisse'); poserFond(m, cacheG > cacheD ? Math.min(0, x + amp) : Math.max(m.min, x - amp));
+    void m.st.offsetWidth;
+    m.st.classList.remove('glisse'); m.st.classList.add('lent'); poserFond(m, x);
+    clearTimeout(lentTimer); lentTimer = setTimeout(function () { m.st.classList.remove('lent'); }, 2700);
+  }
+  function brancherFond() {
+    var st = document.querySelector('.stage'); if (!st || st._fond) return; st._fond = true;
+    st.addEventListener('pointerdown', function (e) {
+      if (!enFond() || (e.button !== undefined && e.button > 0)) return;
+      tirer = { x0: e.clientX, g0: cadre.glisse, id: e.pointerId, bouge: false };
+      try { st.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    st.addEventListener('pointermove', function (e) {
+      if (!tirer || e.pointerId !== tirer.id) return;
+      var dx = e.clientX - tirer.x0; if (!tirer.bouge && Math.abs(dx) < 4) return;
+      tirer.bouge = true; st.classList.add('glisse'); st.classList.remove('lent');
+      var m = mesuresFond(), x = borne(m.cible + tirer.g0 + dx, m.min, 0);
+      cadre.glisse = x - m.cible; poserFond(m, x);
+    });
+    function lacher(e) { if (!tirer || (e && e.pointerId !== tirer.id)) return; tirer = null; st.classList.remove('glisse'); }
+    st.addEventListener('pointerup', lacher); st.addEventListener('pointercancel', lacher); st.addEventListener('lostpointercapture', lacher);
+    // pavé tactile ou souris à molette horizontale
+    st.addEventListener('wheel', function (e) {
+      if (!enFond() || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); st.classList.add('glisse'); st.classList.remove('lent');
+      var m = mesuresFond(), x = borne(m.cible + cadre.glisse - e.deltaX, m.min, 0);
+      cadre.glisse = x - m.cible; poserFond(m, x);
+      clearTimeout(st._roue); st._roue = setTimeout(function () { st.classList.remove('glisse'); }, 150);
+    }, { passive: false });
+    st.addEventListener('dblclick', function () { if (!enFond()) return; cadre.glisse = 0; cadrerFond(); });
+    window.addEventListener('resize', function () { cadrerFond(); });
+  }
   var dernierPortrait = null;
   // L'image d'en-tête est-elle à l'écran ? (sur iPhone, le clavier ouvert la fait sortir de la partie visible)
   // Si oui, c'est elle qui change : pas de seconde image dans le fil.
@@ -695,6 +750,7 @@
 
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
+    art.onCadre = nouvelleImage; brancherFond();
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;

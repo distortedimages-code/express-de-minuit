@@ -598,6 +598,7 @@
       // où est le sujet, de gauche à droite (0 à 1) : la disposition « image en fond » s'en sert pour cadrer
       var fxc = pk && Art.PHOTO_CADRAGE && Art.PHOTO_CADRAGE[pk] !== undefined ? Art.PHOTO_CADRAGE[pk] : 50;
       if (host && host.style) host.style.setProperty('--fx', String(fxc / 100));
+      if (this.onCadre) this.onCadre(pk, fxc / 100);
     }
     // en format cinéma, un dessin ou une image 4:3 est agrandi(e) à la largeur du cadre et recadré(e) en hauteur
     var kx = CWd / W, top = (H - H / kx) * ((this._fy === undefined ? 46 : this._fy) / 100);
