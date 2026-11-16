@@ -28,7 +28,10 @@
     cheapside: 'statique', boutique: 'statique', chambre_stanley: 'statique', chelsea: 'statique',
     musee: 'bourdon', archives: 'bourdon', bn: 'bourdon', arsenal: 'bourdon',
     eglise: 'gothique', vane: 'gothique', stjohn: 'gothique',
-    wagon1: 'abysse', wagon2: 'abysse', retour: 'appel', cave: 'dissolve', charenton: 'house', quais: ['eau', 'deep'] };
+    wagon1: 'abysse', wagon2: 'abysse', retour: 'appel', cave: 'dissolve', charenton: 'house', quais: ['eau', 'deep'],
+    // Poissy, en attendant ses propres sons : la campagne d'hiver, la maison qui respire, les caves, le train de nuit
+    po_gare: 'attente', po_ville: 'attente', po_auberge: 'attente', po_mairie: 'bourdon', po_eglise: 'gothique',
+    po_lorien: 'house', po_jardin: 'house', po_caves: 'dissolve', po_salle: 'abysse', p_lyon: 'train', oe_compartiment: 'dissolve', oe_salon: 'train' };
   function tirer(l) { return Array.isArray(l) ? l[Math.floor(Math.random() * l.length)] : l; }
   // un lieu qui a sa musique la garde ; ailleurs, la musique suit la raison : la brume, puis le chant des profondeurs
   // quand l'investigateur devient fragile, puis l'abîme quand il est au bord du gouffre
