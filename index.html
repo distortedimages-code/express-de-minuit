@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b0d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Express de minuit">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="img/icone-180.png">
 <link rel="preload" as="image" href="img/londres/26_brouillard_trajet.webp" fetchpriority="high">
 <title>L’Express de minuit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,8 +87,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
   /* toute la largeur, en format cinéma : l'image 4:3 est recadrée (le haut et le bas, zones calmes prévues pour ça) */
   position: relative; width: min(calc(100vw - 34px), calc(54vh * 2.4)); aspect-ratio: 2.4 / 1; align-self: center;
   overflow: hidden; background: #000; flex: none;
-  box-shadow: 6px 6px 0 var(--red);
-  margin-right: 6px;
 }
 .stage canvas, .title-screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stage canvas { object-fit: cover; object-position: 50% var(--focus, 46%); }
@@ -356,7 +361,7 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 .pcard { text-align: left; display: flex; flex-direction: column; gap: 8px; padding: 16px 16px 14px; border: 2px solid var(--text); background: var(--ink); transition: box-shadow .15s, transform .15s; }
 .pcard:hover { box-shadow: 8px 8px 0 var(--red); transform: translate(-2px, -2px); }
 .pcard .pimg { margin: -16px -16px 4px; aspect-ratio: 2.4 / 1; background: #000 center / cover no-repeat; border-bottom: 2px solid var(--text); }
-.sheet-img { aspect-ratio: 2.4 / 1; background: #000 center / cover no-repeat; border: 2px solid var(--text); box-shadow: 5px 5px 0 var(--red); margin-bottom: 12px; }
+.sheet-img { aspect-ratio: 2.4 / 1; background: #000 center / cover no-repeat; margin-bottom: 12px; }
 .pcard .pn { font-family: var(--display); font-size: 30px; line-height: 1; text-transform: uppercase; color: var(--text); }
 .pcard .po { align-self: flex-start; font-family: var(--display); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--text); background: var(--red); padding: 2px 9px 1px; transform: skewX(-12deg); }
 .pcard .pb { margin: 0; color: #d6d1c8; font-size: 15px; line-height: 1.5; flex: 1; }
@@ -373,10 +378,10 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 .menu-msg.ok { color: var(--text); }
 
 /* les illustrations dans le fil : le décor à l'arrivée, le portrait de celui qui prend la parole */
-.e-vue { position: relative; flex: none; align-self: flex-start; width: min(calc(100% - 8px), 520px); aspect-ratio: 2.4 / 1; background: #000; overflow: hidden; margin: 4px 0 2px 2px; box-shadow: 5px 5px 0 var(--red); }
+.e-vue { position: relative; flex: none; align-self: flex-start; width: min(calc(100% - 8px), 520px); aspect-ratio: 2.4 / 1; background: #000; overflow: hidden; margin: 4px 0 2px 2px; }
 .e-vue img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .e-vue::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 55%, rgba(10, 10, 11, .55) 100%); }
-.e-vue.portrait { width: min(calc(100% - 8px), 440px); margin-top: 8px; box-shadow: 4px 4px 0 rgba(243, 239, 230, .16); }
+.e-vue.portrait { width: min(calc(100% - 8px), 440px); margin-top: 8px; }
 .e-vue.portrait + .e-npc { margin-top: 14px; }
 body[data-san="2"] .e-vue img { filter: contrast(1.08) sepia(.15) hue-rotate(-20deg); }
 body[data-san="3"] .e-vue img { filter: contrast(1.2) sepia(.4) hue-rotate(-35deg) saturate(1.6); }
@@ -395,6 +400,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 @media (max-width: 430px) { form.line { padding-left: 8px; gap: 5px; } form.line .prompt { display: none; } form.line #go, form.line #goDire { padding-left: 9px; padding-right: 9px; font-size: 14px; } }
 
 .people .ancien { margin-top: 8px; opacity: .75; font-size: .92em; }
+
+/* plein écran : le conseil d'installation, sur iPhone et iPad (Safari n'accorde pas le vrai plein écran à une page) */
+.title-screen .tinstall { margin: 4px 0 0; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; color: var(--muted); }
+.title-screen .tinstall b { color: var(--text); font-weight: 500; }
 
 </style>
 </head>
@@ -485,6 +494,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       <button class="ghost" id="btnCharger" type="button">Charger une sauvegarde</button>
     </div>
     <p class="fine tmsg" id="tmsg" hidden></p>
+    <p class="tinstall" id="tinstall" hidden>Plein écran : touchez <b>Partager</b>, puis <b>Sur l’écran d’accueil</b>. Le jeu s’ouvrira toujours sans les barres de Safari.</p>
     <div class="row">
       <button class="ghost" id="btnProlo" type="button">Prologue : le wagon-restaurant</button>
       <button class="ghost" id="btnSound" type="button" aria-pressed="true">Son : oui</button>
@@ -12937,6 +12947,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     list.appendChild(sb);
     var mb = btn('Musique : ' + (musicOn ? 'oui' : 'non'), 'ghost', function () { toggleMusic(); mb.innerHTML = 'Musique : ' + (musicOn ? 'oui' : 'non'); });
     list.appendChild(mb);
+    if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
     help.innerHTML = '<h3>Comment jouer</h3><p>Écrivez ce que fait ' + esc(game.state.pc.name) + ', comme vous le diriez à un meneur de jeu : ' + esc(SC.examples || '« j’examine la table », « je parle au serveur »') + '. En conversation, parlez librement : « pourquoi ? », « et ensuite ? ». Les fautes de frappe sont tolérées.</p>' +
@@ -12993,9 +13004,34 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     try { localStorage.removeItem(KEY); } catch (e) {}
     closePanels(); mount(null, chap, dep ? JSON.parse(JSON.stringify(dep)) : pregen(chap, key));
   }
-  function hideTitle() { $('title').hidden = true; if (soundOn) sound.start(); }
+  // ---------------------------------------------------------------- plein écran
+  // Le navigateur n'accorde le plein écran qu'après un geste du joueur : on le demande chaque fois qu'on quitte
+  // l'écran-titre (préférence « Plein écran » du menu). Sur iPhone et iPad, Safari ne le permet pas pour une page
+  // où l'on tape du texte : on y conseille d'installer le jeu sur l'écran d'accueil, d'où il s'ouvre sans barres.
+  var FKEY = 'express-minuit-plein';
+  // (« display-mode: fullscreen » vaut aussi pour une page mise en plein écran : ce n'est l'application installée que sans élément plein écran)
+  function installe() { try { return !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches || (matchMedia('(display-mode: fullscreen)').matches && !(document.fullscreenElement || document.webkitFullscreenElement))); } catch (e) { return false; } }
+  function appareilApple() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+  function dansCadre() { try { return window.self !== window.top; } catch (e) { return true; } }
+  function enPleinEcran() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function pleinEcranPossible() { return !installe() && !appareilApple() && !!(document.fullscreenEnabled || document.webkitFullscreenEnabled); }
+  function pleinEcranVoulu() { try { return localStorage.getItem(FKEY) !== 'non'; } catch (e) { return true; } }
+  function pleinEcran() {
+    if (!pleinEcranPossible() || enPleinEcran() || !pleinEcranVoulu()) return;
+    var el = document.documentElement;
+    try { var r = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : el.webkitRequestFullscreen && el.webkitRequestFullscreen(); if (r && r.catch) r.catch(function () {}); } catch (e) {}
+  }
+  function basculerPleinEcran() {
+    var oui = !pleinEcranVoulu();
+    try { localStorage.setItem(FKEY, oui ? 'oui' : 'non'); } catch (e) {}
+    if (oui) pleinEcran();
+    else if (enPleinEcran()) { try { var r = document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen && document.webkitExitFullscreen(); if (r && r.catch) r.catch(function () {}); } catch (e) {} }
+    return oui;
+  }
+  function hideTitle() { $('title').hidden = true; pleinEcran(); if (soundOn) sound.start(); }
   function showTitle() {
     $('title').hidden = false; $('tpick').hidden = true; $('tmain').hidden = false;
+    if ($('tinstall')) $('tinstall').hidden = !(appareilApple() && !installe() && !dansCadre());
     if ($('btnParis')) $('btnParis').hidden = !(CH.paris && enAttente('paris').length);
     var saved = loadSave();
     $('btnCont').hidden = !(saved && saved.v === 1);
