@@ -142,7 +142,7 @@
       Lx.add('GUIMART', 'n', 'guimart', { label: 'Guimart' });
       Lx.add('CAISSES', 'n', 'caisses, caisse, cartons, carton', { label: 'les caisses' });
       Lx.add('CAHIER', 'n', 'cahier', { label: 'le cahier bleu' });
-      Lx.add('VILLA', 'n', 'villa, manoir, plans, gravure, gravures', { label: 'la maison du comte' });
+      Lx.add('VILLA', 'n', 'villa, manoir, plans, gravure, gravures, maison du comte, demeure du comte', { label: 'la maison du comte' });
       Lx.add('MALON', 'n', 'malon', { label: 'le capitaine Malon' });
       Lx.add('RIGAULT', 'n', 'rigault', { label: 'le médecin Rigault' });
       Lx.add('PATIENT', 'n', 'patient, patients, malade, malades, pensionnaire, pensionnaires', { label: 'le patient' });
@@ -150,7 +150,7 @@
       Lx.add('ELECTROCHOC', 'x', 'electrochoc, electrochocs, electricite, appareil', { label: 'la machine' });
       Lx.add('TRADUIRE', 'x', 'traduire, traduction, traducteur, traduis, traduisez, interprete', { label: 'la traduction' });
       Lx.add('INTERNER', 'x', 'interner, internement', { label: 'l’internement' });
-      Lx.add('PERIODIQUES', 'n', 'periodiques, necrologie, necrologies, quotidiens', { label: 'les journaux récents' });
+      Lx.add('PERIODIQUES', 'n', 'periodiques, necrologie, necrologies, quotidiens, journaux recents, journaux du jour', { label: 'les journaux récents' });
       Lx.add('SCANDALE', 'n', 'scandale, scandales, reine, versailles', { label: 'le scandale' });
       Lx.add('DECES', 'x', 'mort, morte, morts, deces, decede, decedee, mourir, accident, tue', { label: 'la mort' });
       Lx.add('PAROLES', 'n', 'paroles', { label: 'ses paroles' });

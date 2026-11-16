@@ -268,6 +268,17 @@ Trois protections générales, dans le moteur, évitent d'avoir à corriger les 
 - **Les images.** Huit portraits (`prompts/portraits/38` à `45`, sans portrait de l'enfant) et quatorze décors (`prompts/poissy/`), générés le 16 novembre (0,74 $) et intégrés (`photos_v2.js`, `art_portraits.js`, cadrage dans `cadrage.json`) ; la voiture-salon cite le portrait de la Cavollaro en référence. Si une illustration manquait, le décor emprunterait une image voisine (`REPLI`, à la fin de `poissy.js`).
 - **Vérifications.** `node jeu/tools/test_parcours_paris.js` (soixante parties de la gare du Nord à Lausanne), `node jeu/tools/test_fuzz_poissy.js` (phrases au hasard, à quatre étapes de Poissy), `node jeu/tools/test_reprise_poissy.js` (anciennes sauvegardes et rechargements à Poissy et dans le train), `node jeu/tools/test_revue.js paris` (tous les lieux, Poissy compris).
 
+## Quand le jeu ne comprend pas : la méthode
+
+Chaque incompréhension signalée en jeu se corrige en quatre temps, pour qu'elle ne revienne pas, ni ailleurs, ni dans les chapitres à venir :
+
+1. **Reproduire** la phrase exacte, au même endroit, dans le même état de la partie.
+2. **Trouver la règle générale** qui a manqué (une famille de phrases, pas cette phrase-là) et la corriger dans le moteur (`engine.js`), jamais par une exception dans un chapitre.
+3. **L'ajouter au corpus** (`CORPUS`, dans `jeu/tools/test_incomprehensions.js`) : la phrase, l'endroit, ce qu'on attend, la règle. Elle y est rejouée telle quelle et sous ses variantes (sans accents, en minuscules, « je demande » ou « demander »…).
+4. **Écrire une sonde** quand c'est possible : la même famille de phrases, fabriquée et jouée dans tous les lieux de tous les chapitres (questions indirectes, « dehors », but d'un déplacement…). Les sondes parcourent `CHAPTERS` : un chapitre nouveau est sondé sans rien ajouter.
+
+Le même test vérifie le lexique : chaque nom se relit par son propre libellé (« la gare de Lyon » doit donner la gare de Lyon), et il compte les mots que deux concepts se disputent. C'est ainsi qu'il a trouvé les squelettes de Poissy, que les cellules avaient pris aux ossements. Règles déjà acquises : une question indirecte n'est pas un récit ; le but d'un déplacement sans destination est le geste ; « dehors » veut dire sortir ; « trouver » veut dire chercher ; « un homme à moustache » désigne quelqu'un ; un pluriel se lit comme son singulier (« les plans ») ; une entrée de plusieurs mots se lit dans la phrase (« gare de Lyon ») ; un nom qu'un verbe occupe déjà se lit après un article (« le dîner »). Vérification : `node jeu/tools/test_incomprehensions.js` (avec la batterie habituelle).
+
 ## Les horaires
 
 Les lieux et les gens ont des heures (`PLACES` et `DISPO`, dans `jeu/src/londres.js`) : le British Museum ferme à 20 h et le dimanche, l'ambassade le week-end, la pension de Stoke Newington dort la nuit ; les inspecteurs rentrent chez eux à 20 h, le buraliste ferme à 20 h et le dimanche, le laitier ne passe qu'à l'aube. Les boutiques sont ouvertes de 8 h à 20 h, sauf le dimanche ; les crieurs de journaux se taisent la nuit ; les billets se réservent de 9 h à 19 h (si l'on insiste, on attend l'ouverture). Vérification : `node jeu/tools/test_horaires.js`.

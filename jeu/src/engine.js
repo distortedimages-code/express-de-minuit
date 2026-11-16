@@ -184,6 +184,9 @@
       w = normalize(w).replace(/\s+/g, '');
       if (!w) return;
       if (self.exact[w] && self.exact[w] !== id) {
+        // un verbe a déjà pris le mot : le nom reste lisible après un déterminant (« le dîner », « un dîner »)
+        var deja = self.concepts[self.exact[w]];
+        if (deja && deja.type === 'v' && type === 'n') { (self.alt || (self.alt = {}))[w] = id; c.words.push(w); return; }
         if (G.LEXICON_WARN) G.LEXICON_WARN(w, self.exact[w], id);
         return;
       }
@@ -216,6 +219,8 @@
   }
   Lexicon.prototype.best = function (tok) {
     if (this.exact[tok]) return { id: this.exact[tok], score: 1 };
+    if (/s$/.test(tok) && tok.length > 3 && this.exact[tok.slice(0, -1)]) return { id: this.exact[tok.slice(0, -1)], score: 0.95 };
+    if (/x$/.test(tok) && tok.length > 3 && this.exact[tok.slice(0, -1)]) return { id: this.exact[tok.slice(0, -1)], score: 0.95 };
     if (garde()[tok]) return null;
     var best = null;
     for (var i = 0; i < this.entries.length; i++) {
@@ -340,8 +345,20 @@
     var text = normalize(raw, phrases);
     var toks = text ? text.split(' ') : [];
     var p = { raw: raw, text: text, c: {}, verbs: [], nouns: [], metas: [], numbers: [], unknown: [], all: [] };
-    var seen = {};
+    var seen = {}, saute = {};
+    // une entrée de plusieurs mots (« gare de lyon ») : la plus longue suite de mots qui la forme gagne
+    for (var a = 0; a < toks.length; a++) {
+      for (var l = Math.min(5, toks.length - a); l >= 2; l--) {
+        var mw = toks.slice(a, a + l).join('');
+        if (lex.exact[mw] && toks.slice(a, a + l).every(function (x, j) { return !saute[a + j]; })) {
+          for (var j = 0; j < l; j++) saute[a + j] = mw;
+          break;
+        }
+      }
+    }
+    var faits = {};
     toks.forEach(function (t, i) {
+      if (saute[i]) { if (!faits[saute[i]]) { faits[saute[i]] = 1; push(lex.exact[saute[i]], 1, i); } return; }
       if (NUMWORDS[t]) t = NUMWORDS[t];
       if (/^\d+$/.test(t)) {
         p.numbers.push(parseInt(t, 10));
@@ -350,6 +367,10 @@
       }
       if (STOP.has(t)) return;
       var m = lex.best(t);
+      if (m && lex.alt && lex.concepts[m.id].type === 'v' && /^(le|la|les|l|un|une|des|du|au|aux|ce|cet|cette|ces|mon|ma|mes|ton|ta|tes|son|sa|ses|notre|nos|votre|vos|leur|leurs)$/.test(toks[i - 1] || '')) {
+        var nn = lex.alt[t] || (/s$/.test(t) && lex.alt[t.slice(0, -1)]);
+        if (nn) m = { id: nn, score: 1 };
+      }
       // « un chapeau », « des moustaches » : un vêtement ou un trait quelconque. Seule une référence définie
       // (« l'homme au chapeau », « le chapeau », « son visage ») désigne le personnage qu'on reconnaît à ce détail.
       // … mais « un homme à moustache », « une dame au chapeau » désignent bien quelqu'un par ce détail
@@ -2159,6 +2180,10 @@
       lex: lex,
       parse: function (raw) { return rewrite(lex, parse(lex, raw, scene.phrases)); },
       rank: function (raw) { return rankActions(rewrite(lex, parse(lex, raw, scene.phrases))); },
+      // pour les tests : les gestes possibles ici, et le nom lisible d'un concept
+      actionsIci: function () { return availableActions(); },
+      libelle: function (id) { return lex.concepts[id] ? labelOf(id) : null; },
+      concept: function (id) { return lex.concepts[id] || null; },
       step: step, choose: choose, roll: roll, push: push, declinePush: declinePush,
       ideas: ideas,
       pistes: pistes,

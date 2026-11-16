@@ -687,7 +687,7 @@
         api.clue('CELLULES');
         api.check('san_cellules');
       },
-      things: [{ label: 'les cellules', ids: ['CELLULES', 'OS', 'PORTE'] }, { label: 'les racines', ids: ['RACINES'] }, { label: null, ids: ['CAVE', 'SOUSSOL', 'SALLE', 'LAMPE'] }],
+      things: [{ label: 'les cellules', ids: ['CELLULES', 'OS', 'DECES', 'PORTE'] }, { label: 'les racines', ids: ['RACINES'] }, { label: null, ids: ['CAVE', 'SOUSSOL', 'SALLE', 'LAMPE'] }],
       ambient: ['Une goutte tombe de la voûte, régulière comme une horloge.', 'Une racine frôle votre épaule.', 'Tout au fond, une lueur, très faible, qui n’est pas celle de votre lanterne.'],
       actions: [
         { id: 'pc_look', label: 'Regarder le couloir', idea: 'Regarder autour de vous', verbs: ['EXAMINER'], nouns: ['CAVE', 'SOUSSOL', 'SALLE', 'CELLULES'], bare: true,
@@ -709,7 +709,7 @@
         api.say('Les ronces ont poussé à travers les squelettes de ceux qui sont morts ici. Elles les tiennent debout, tordus, comme pour qu’ils souffrent encore. Et à leurs pieds, au cœur du roncier, il y a un bras de statue. Un bras gauche, couché sur le côté. Il luit, lui aussi.');
         api.check('san_bras');
       },
-      things: [{ label: 'le bras de statue', ids: ['BRAS', 'SIMULACRE'] }, { label: 'les roses', ids: ['ROSES'] }, { label: null, ids: ['OS', 'SALLE', 'CAVE', 'BRUME'] }],
+      things: [{ label: 'le bras de statue', ids: ['BRAS', 'SIMULACRE'] }, { label: 'les roses', ids: ['ROSES'] }, { label: null, ids: ['OS', 'DECES', 'SALLE', 'CAVE', 'BRUME'] }],
       ambient: ['Une goutte de sève noire tombe sur la pierre avec un bruit mat.', 'Les roses frémissent, sans un souffle d’air.', 'Le parfum est si épais qu’il colle aux dents.'],
       actions: [
         { id: 'ps_look', label: 'Regarder la salle', idea: 'Regarder autour de vous', verbs: ['EXAMINER'], nouns: ['SALLE', 'ROSES', 'OS'], bare: true,
@@ -1056,7 +1056,7 @@
     Lx.add('ESCALIER', 'n', 'escalier, escaliers, marches, marche, degres, entree des caves', { label: 'l’escalier' });
     Lx.add('OUTILS', 'n', 'outils, outil, pelle, pelles, pioche, pioches, pied de biche, lanterne, secateur, hachette, chaine, brouette', { label: 'les outils' });
     Lx.add('TERRASSIERS', 'n', 'terrassiers, terrassier, ouvriers, pruvost, des bras', { label: 'les terrassiers' });
-    Lx.add('CELLULES', 'n', 'cellules, cellule, cachots, cachot, squelettes, squelette, ossements, judas, prisonniers, morts', { label: 'les cellules' });
+    Lx.add('CELLULES', 'n', 'cellules, cellule, cachots, cachot, judas, prisonniers', { label: 'les cellules' }); // les squelettes et les ossements restent à OS
     Lx.add('RACINES', 'n', 'racines, racine, radicelles', { label: 'les racines' });
     Lx.add('BRAS', 'n', 'bras, membre, bras de statue, bras gauche', { label: 'le bras de statue' });
     Lx.add('LETTRE', 'n', 'lettre, enveloppe, courrier, wellington, edgar, lausanne', { label: 'la lettre de Lausanne' });

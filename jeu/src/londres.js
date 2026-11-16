@@ -212,7 +212,7 @@
       Lx.add('LAMPE', 'n', 'lampe, lampes, lumiere, lumieres, eclairage, bougie, bougies, ampoule, reverbere, reverberes, lustre, lustres, chandelle', { label: 'la lumière' });
       Lx.add('FENETRE', 'n', 'fenetre, fenetres, vitre, vitres, carreau, carreaux, dehors, exterieur, brouillard, rideau, rideaux, vitrine, volets, persiennes, guillotine', { label: 'la fenêtre' });
       Lx.add('PORTE', 'n', 'porte, portes, issue, sortie, serrure, verrou, palier, seuil, entree, portiere', { label: 'la porte' });
-      Lx.add('NOTE', 'n', 'note, mot, message, lettre, missive, pli', { label: 'les notes' });
+      Lx.add('NOTE', 'n', 'note, mot, message, lettre, missive, pli', { label: 'la note' });
       Lx.add('LIVRE', 'n', 'livre, livres, ouvrage, ouvrages, catalogue, catalogues, revue, revues, magazines, bouquin, bouquins, volumes, traite, horaires', { label: 'les livres' });
       Lx.add('TRAIN', 'n', 'train, trains, locomotive, locomotives, ferroviaire, wagon, wagons, voiture, voitures, rails, vapeur, express, convoi', { label: 'le train' });
       Lx.add('COMPARTIMENT', 'n', 'compartiment, compartiments, cabine, banquette, banquettes', { label: 'le compartiment' });
@@ -283,7 +283,7 @@
       Lx.add('SUIE', 'n', 'suie, fumee, papierpeint, plafond, marques, trainees, trainee, cloques, cloque, salissures', { label: 'les traces de suie' });
       Lx.add('TRACES', 'n', 'traces, trace, empreintes, tapis, sol, plancher, moquette, parquet, taches, tache, ecartement', { label: 'les traces' });
       Lx.add('COEUR', 'n', 'coeur, motif, figure, huit, dessin, entrailles, abats, rampes, rampe, relief, hauteur, cales, pentes, pente, niveaux, boyaux', { label: 'le motif au sol' });
-      Lx.add('LEVIER', 'n', 'levier, leviers, machiniste, mecanicien, manettes, foyer, chaudiere', { label: 'la cabine de la locomotive' });
+      Lx.add('LEVIER', 'n', 'levier, leviers, machiniste, mecanicien, manettes, foyer, chaudiere, cabine de la locomotive, cabine de conduite, poste de conduite', { label: 'la cabine de la locomotive' });
       Lx.add('OS', 'n', 'os, ossements, squelette, restes, lambeaux, breloque', { label: 'les ossements' });
       Lx.add('PROJECTEUR', 'n', 'projecteur, diapositives, plaques, ecran, projection, projections, photographies, photos, cliches', { label: 'les projections' });
       Lx.add('FILS', 'x', 'fils, heritier, rejeton', { label: 'son fils' });

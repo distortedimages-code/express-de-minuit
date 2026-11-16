@@ -25,7 +25,7 @@
     Lx.take('SUIVRE', 'v', 'suivre, suivez, suivons, filer, filez, filons, pister, talonner, epier, filature, surveiller, guetter, poursuivre, poursuis, rattraper, rattrape');
     Lx.add('WEEKEND', 'x', 'weekend, lundi', { label: 'le week-end' });
     Lx.add('TEMOIN', 'n', 'temoin, temoins, laitier, badaud, badauds, cocher, livreur', { label: 'le témoin' });
-    Lx.add('FUYARD', 'n', 'fuyard, fardeau, ballot, colis, signalement, description, fui, enfui, enfuit, enfuir', { label: 'la silhouette' });
+    Lx.add('FUYARD', 'n', 'fuyard, fardeau, ballot, colis, signalement, description, fui, enfui, enfuit, enfuir', { label: 'le fuyard' });
     Lx.add('STATION', 'n', 'station, stations', { label: 'la station de fiacres' });
   };
   L.phrases.unshift(
