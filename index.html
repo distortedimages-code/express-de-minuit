@@ -301,7 +301,13 @@ form.line:focus-within { border-color: var(--red); box-shadow: 5px 5px 0 var(--r
 .title-screen { position: fixed; inset: 0; z-index: 30; background: var(--ink); overflow: hidden; }
 .title-screen[hidden] { display: none; }
 .title-screen .tart { position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 4 / 3; max-height: 62vh; margin: 0 auto; width: min(100%, calc(62vh * 4 / 3)); }
-.title-screen .tart canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.title-screen .tart canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* à l'horizontale, l'image d'accueil occupe toute la largeur, en format cinéma */
+.title-screen.large .tart { width: 100%; aspect-ratio: 12 / 5; max-height: 66vh; }
+.tson { position: absolute; top: max(14px, env(safe-area-inset-top)); right: 16px; z-index: 2; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--text); background: rgba(10, 10, 11, .62); padding: 6px 10px; pointer-events: none; animation: tson 2.6s ease-in-out infinite; }
+.tson[hidden] { display: none; }
+@keyframes tson { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .tson { animation: none; } }
 @media (max-aspect-ratio: 1/1) { .title-screen .tart { top: 0; width: 100%; } }
 .tveil { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(10, 10, 11, .9) 58%, var(--ink) 72%); }
 .tcontent::before {
@@ -609,6 +615,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 <div class="title-screen" id="title">
   <div class="tart"><canvas id="titleArt" width="400" height="300" aria-hidden="true"></canvas><canvas id="titleBloom" class="bloom" width="400" height="300" aria-hidden="true"></canvas></div>
   <div class="tveil" aria-hidden="true"></div>
+  <div class="tson" id="tson" aria-hidden="true">♪ Touchez l’écran pour la musique</div>
   <div class="tcontent" id="tmain">
     <div class="chap" id="tchap">Campagne de l’Orient-Express</div>
     <h2 class="name">L’Express<br><span>de minuit</span></h2>
@@ -13435,7 +13442,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   Sound.prototype.pickMusic = function () { this.memo = this.memo || {}; this.music(this.on && this.musicOn ? Sound.musicFor(this.loc, this.san, this.memo) : null); };
   Sound.prototype.music = function (id) {
     if (!this.ctx) return;
-    if (id === this.track) return;
+    if (id === this.track) { this.relancer(); return; }
     this.track = id;
     var ctx = this.ctx, t = ctx.currentTime, self = this;
     Object.keys(this.decks).forEach(function (k) {
@@ -13463,6 +13470,12 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     var pr = d.el.play(); if (pr && pr.catch) pr.catch(function () {});
     this.fade(d, TVOL[id], 2.4);
   };
+  // un morceau dont la lecture a été refusée (pas encore de geste) repart au premier toucher
+  Sound.prototype.relancer = function () {
+    var d = this.track && this.decks[this.track]; if (!d || !d.playing || d.broken || !d.el.paused) return;
+    var pr = d.el.play(); if (pr && pr.catch) pr.catch(function () {});
+  };
+  Sound.prototype.joue = function () { var d = this.track && this.decks[this.track]; return !!(d && d.playing && !d.el.paused); };
   Sound.prototype.fade = function (d, target, secs) {
     if (d.g) { var t = this.ctx.currentTime; d.g.gain.cancelScheduledValues(t); d.g.gain.setValueAtTime(d.g.gain.value, t); d.g.gain.linearRampToValueAtTime(target, t + secs); return; }
     clearInterval(d.iv); var from = d.el.volume, n = 0, steps = Math.max(1, Math.round(secs * 20));
@@ -14823,7 +14836,23 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   $('btnMusic').textContent = 'Musique : ' + (musicOn ? 'oui' : 'non');
   $('btnMusic').setAttribute('aria-pressed', musicOn ? 'true' : 'false');
   // le premier geste sur l'écran-titre lance la musique (les navigateurs l'exigent)
-  $('title').addEventListener('pointerdown', function () { if (soundOn && !sound.on && !$('title').hidden) { sound.start(); sound.set('title', 0); } });
+  // Sur iPad et iPhone, seul un toucher relâché (touchend, click) compte comme un geste : pointerdown ne suffit pas.
+  // On écoute donc tout le document, et l'on réessaie tant que la musique n'a pas réellement démarré.
+  function deverrouillerSon() {
+    if (!soundOn) return;
+    var surTitre = !$('title').hidden;
+    if (!sound.on || (sound.ctx && sound.ctx.state !== 'running')) { sound.start(); if (surTitre) sound.set('title', 0); }
+    if (sound.relancer) sound.relancer();
+    majIndiceSon();
+  }
+  function majIndiceSon() {
+    var el = $('tson'); if (!el) return;
+    var joue = sound.on && sound.ctx && sound.ctx.state === 'running' && (!musicOn || (sound.joue && sound.joue()));
+    el.hidden = !soundOn || !!joue;
+    var txt = '♪ Touchez l’écran pour ' + (musicOn ? 'la musique' : 'le son'); if (el.textContent !== txt) el.textContent = txt;
+  }
+  ['pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, deverrouillerSon, true); });
+  setInterval(majIndiceSon, 1000);
 
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
@@ -14832,6 +14861,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;
+    // l'image d'accueil prend toute la largeur : format cinéma à l'horizontale, 4:3 à la verticale
+    var titreLarge = null;
+    function cadrerTitre() { var l = window.innerWidth > window.innerHeight; if (l === titreLarge) return; titreLarge = l; $('title').classList.toggle('large', l); if (titleArt.setWide) titleArt.setWide(l); }
+    cadrerTitre(); window.addEventListener('resize', cadrerTitre);
     var hotState = data && data.state;
     var saved = hotState || loadSave();
     showTitle();
