@@ -730,8 +730,10 @@
     var c = CH[chap], box = $('cards');
     box.innerHTML = '';
     if ($('tcreate')) $('tcreate').hidden = true;
-    // au chapitre 1 : créer son investigateur, ou reprendre ceux qu'on a déjà créés
+    // au chapitre 1 : les trois investigateurs prêts à jouer d'abord, puis la tuile pour créer le sien,
+    // puis ceux qu'on a déjà créés
     var crees = !suite && chap === 'londres' && window.Creation ? window.Creation.persos() : [];
+    (suite || c.pregens).forEach(carte);
     if (!suite && chap === 'londres' && window.Creation) {
       var nc = document.createElement('div'); nc.className = 'pcard pcree';
       nc.innerHTML = '<div class="pimg vide"><span>?</span></div><div class="pn">Votre investigateur</div><div class="po">À créer</div>' +
@@ -739,7 +741,8 @@
       nc.appendChild(btn('Créer mon investigateur', 'act', function () { $('tpick').hidden = true; window.Creation.ouvrir(); }));
       box.appendChild(nc);
     }
-    (suite || crees.concat(c.pregens)).forEach(function (p) {
+    crees.forEach(carte);
+    function carte(p) {
       var card = document.createElement('div'); card.className = 'pcard';
       var top = Object.keys(p.skills).filter(function (k) { return p.skills[k] >= 45 && k !== 'Mythe de Cthulhu'; }).sort(function (a, b) { return p.skills[b] - p.skills[a]; }).slice(0, 5);
       var avant = suite && p.passe && p.passe[c.precedent];
@@ -752,7 +755,7 @@
       card.appendChild(btn((suite ? 'Reprendre ' : 'Incarner ') + esc(p.first), 'act', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, chap, JSON.parse(JSON.stringify(p))); }));
       if (p.cree && !suite) card.appendChild(btn('Oublier ' + esc(p.first), 'ghost oubli', function () { if (window.confirm('Oublier ' + p.name + ' ? La fiche sera effacée de ce navigateur.')) { window.Creation.oublier(p.key); showPick(chap); } }));
       box.appendChild(card);
-    });
+    }
     $('tmain').hidden = true; $('tpick').hidden = false;
     $('tpick').scrollTop = 0;
   }

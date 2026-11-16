@@ -292,15 +292,6 @@ form.line:focus-within { border-color: var(--red); box-shadow: 5px 5px 0 var(--r
 @media (prefers-reduced-motion: reduce) { .tson { animation: none; } }
 @media (max-aspect-ratio: 1/1) { .title-screen .tart { top: 0; width: 100%; } }
 .tveil { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(10, 10, 11, .9) 58%, var(--ink) 72%); }
-.tcontent::before {
-  /* la dalle rouge tramée derrière le titre */
-  content: ''; position: absolute; left: -40%; right: 10%; top: 6px; height: 200px; z-index: -1;
-  background: var(--red); transform: rotate(-7deg);
-  -webkit-mask-image: radial-gradient(circle, #000 1.7px, transparent 2.1px), linear-gradient(90deg, #000 40%, transparent 90%);
-  -webkit-mask-size: 8px 8px, 100% 100%; -webkit-mask-composite: source-in;
-  mask-image: radial-gradient(circle, #000 1.7px, transparent 2.1px), linear-gradient(90deg, #000 40%, transparent 90%);
-  mask-size: 8px 8px, 100% 100%; mask-composite: intersect;
-}
 .tcontent { isolation: isolate; position: absolute; left: 0; right: 0; bottom: 0; padding: 24px 22px 28px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; text-align: left; max-width: 640px; margin: 0 auto; }
 .title-screen .chap { font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); background: var(--text); padding: 3px 10px; transform: skewX(-12deg); }
 .title-screen .name { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(56px, 16vw, 104px); line-height: .9; letter-spacing: .01em; text-transform: uppercase; color: var(--text); text-shadow: 6px 6px 0 var(--ink); }

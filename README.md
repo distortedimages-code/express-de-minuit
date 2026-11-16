@@ -159,7 +159,7 @@ Le jeu se souvient des quatre dernières personnes ou choses dont il a été que
 
 ## Créer son investigateur
 
-Au chapitre 1, la première carte du choix des personnages ouvre la création (`jeu/src/creation.js`). Le Gardien pose ses questions une à une, sur des tuiles qui glissent de droite à gauche : genre, nom (Miss ou Mrs pour une femme), ville d’origine, profession, lien avec le professeur Smith, puis les dés.
+Au chapitre 1, le choix des personnages montre d'abord les trois investigateurs prêts à jouer ; la carte placée dessous ouvre la création (`jeu/src/creation.js`). Le Gardien pose ses questions une à une, sur des tuiles qui glissent de droite à gauche : genre, nom (Miss ou Mrs pour une femme), ville d’origine, profession, lien avec le professeur Smith, puis les dés.
 
 - Les caractéristiques suivent les règles de L’Appel de Cthulhu : 3D6 × 5 pour FOR, CON, DEX, APP et POU, (2D6 + 6) × 5 pour TAI, INT et ÉDU. On peut tout relancer une fois.
 - L’âge : de 20 à 39 ans, un jet d’amélioration d’Éducation ; de 40 à 49 ans, deux jets, 5 points à retirer entre FOR, CON et DEX (le joueur choisit, ou « Répartir pour moi »), 5 points d’APP en moins ; de 50 à 59 ans, trois jets, 10 et 10.
