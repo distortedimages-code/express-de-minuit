@@ -416,7 +416,12 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     grid-template-columns: minmax(0, 1fr) var(--panneau); grid-template-rows: auto minmax(0, 1fr) auto; }
   .top { display: contents; }
   .stage { position: fixed; inset: 0; width: auto; height: auto; aspect-ratio: auto; margin: 0; z-index: 0; align-self: stretch; justify-self: stretch; }
-  .stage canvas { object-fit: cover; object-position: clamp(calc(100vw - 2.4 * var(--hauteur)), calc((100vw - var(--panneau)) / 2 - var(--fx, .5) * 2.4 * var(--hauteur)), 0px) 50%; }
+  /* le décalage (--decal) est calculé par l'interface : point d'intérêt au milieu de la partie libre, glissement au doigt */
+  .stage { touch-action: none; cursor: grab; }
+  .stage.glisse { cursor: grabbing; }
+  .stage canvas { object-fit: cover; object-position: var(--decal, 50%) 50%; transition: object-position .9s cubic-bezier(.25, .6, .3, 1); }
+  .stage.lent canvas { transition-duration: 2.6s; }
+  .stage.glisse canvas { transition: none; }
   .veil { background: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, transparent 22%, transparent 68%, rgba(10, 10, 11, .88) 100%); }
   .app::before { content: ''; position: fixed; top: 14px; right: 14px; bottom: 14px; width: calc(var(--panneau) - 14px); z-index: 1;
     background: rgba(10, 10, 11, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(243, 239, 230, .08); }
@@ -11017,6 +11022,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       // où est le sujet, de gauche à droite (0 à 1) : la disposition « image en fond » s'en sert pour cadrer
       var fxc = pk && Art.PHOTO_CADRAGE && Art.PHOTO_CADRAGE[pk] !== undefined ? Art.PHOTO_CADRAGE[pk] : 50;
       if (host && host.style) host.style.setProperty('--fx', String(fxc / 100));
+      if (this.onCadre) this.onCadre(pk, fxc / 100);
     }
     // en format cinéma, un dessin ou une image 4:3 est agrandi(e) à la largeur du cadre et recadré(e) en hauteur
     var kx = CWd / W, top = (H - H / kx) * ((this._fy === undefined ? 46 : this._fy) / 100);
@@ -12148,9 +12154,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   G.PixelArt.PHOTO_FOCUS = {};
   // recadrage horizontal d'une image cinéma dans un cadre 4:3 (en %, 50 = centre) : le sujet reste dans le cadre
   G.PixelArt.PHOTO_FOCUSX = { 'ecran-titre/titre': 74, 'londres/26_brouillard_trajet': 50 };
-  // où se trouve le sujet de chaque image (en % de sa largeur), d'après son prompt (jeu/tools/cadrage.py) :
-  // dans la disposition « image en fond » de l'iPad en paysage, le sujet est centré dans la partie libre de l'écran
-  G.PixelArt.PHOTO_CADRAGE = {"paris/06_bibliotheque-de-l-arsenal": 76, "paris/08_charenton_secretariat": 24, "paris/10_cafe-de-charenton": 24, "portraits/01_smith_institut": 24, "portraits/02_smith_cheapside": 24, "portraits/03_beddows_institut": 76, "portraits/04_beddows_cheapside": 76, "portraits/05_brule": 24, "portraits/06_fleming": 24, "portraits/07_rigby": 76, "portraits/08_chelseaclerk": 24, "portraits/09_mustapha": 24, "portraits/10_voisin": 24, "portraits/11_atkins": 24, "portraits/12_sergent": 24, "portraits/13_butter": 24, "portraits/14_alexis": 24, "portraits/15_stanley": 24, "portraits/16_bibliothecaire": 24, "portraits/17_planton": 24, "portraits/18_concierge": 24, "portraits/19_agentsj": 76, "portraits/20_laitier": 24, "portraits/21_pike": 24, "portraits/22_serveur": 24, "portraits/23_veuve": 24, "portraits/24_conducteur": 24, "portraits/25_mort": 24, "portraits/26_vane": 76, "portraits/27_blain": 24, "portraits/28_gaudry": 76, "portraits/29_remi": 24, "portraits/30_brevin": 76, "portraits/31_rogniat": 24, "portraits/32_leroux": 76, "portraits/33_mandrin": 24, "portraits/34_guetteur": 24, "portraits/pj_arnaud": 24, "portraits/pj_ashby": 76, "portraits/pj_doyle": 24, "portraits/pj_pemberton": 76};
+  // où regarder dans chaque image (en % de sa largeur), relevé à la main ou lu dans son prompt (jeu/tools/cadrage.py) :
+  // dans la disposition « image en fond » de l'iPad en paysage, ce point tombe au milieu de la partie libre de l'écran
+  G.PixelArt.PHOTO_CADRAGE = {"ecran-titre/titre": 45, "londres/01_institut-imperial": 28, "londres/02_hotel-chambre_nuit": 50, "londres/03_hotel-chambre_jour": 55, "londres/04_cheapside-chambre-meublee": 36, "londres/05_scotland-yard_bureau-fleming": 42, "londres/06_ambassade-de-turquie": 58, "londres/07_chelsea-arms_reception": 62, "londres/08_camberwell_salon-butter": 55, "londres/09_fleet-street_archives": 30, "londres/10_st-johns-wood_villa_jour": 58, "londres/11_st-johns-wood_villa_nuit": 60, "londres/12_st-johns-wood_ruines": 70, "londres/13_islington_brophy-lane_jour": 55, "londres/14_islington_brophy-lane_nuit": 50, "londres/15_stoke-newington_jour": 30, "londres/16_stoke-newington_nuit": 32, "londres/17_boutique-makryat": 45, "londres/18_british-museum_salle-de-lecture": 35, "londres/19_chambre-henry-stanley": 50, "londres/20_cave-butter_maquette": 52, "londres/21_train-fantome_voiture-1": 45, "londres/22_train-fantome_voiture-2": 52, "londres/23_train-fantome_retour": 50, "londres/24_campagne_au-petit-matin": 30, "londres/25_gare-victoria": 55, "londres/26_brouillard_trajet": 45, "londres/27_gordon-square_seance": 52, "paris/06_bibliotheque-de-l-arsenal": 76, "paris/08_charenton_secretariat": 24, "paris/10_cafe-de-charenton": 24, "portraits/01_smith_institut": 30, "portraits/02_smith_cheapside": 37, "portraits/03_beddows_institut": 76, "portraits/04_beddows_cheapside": 77, "portraits/05_brule": 26, "portraits/06_fleming": 31, "portraits/07_rigby": 79, "portraits/08_chelseaclerk": 27, "portraits/09_mustapha": 28, "portraits/10_voisin": 25, "portraits/11_atkins": 26, "portraits/12_sergent": 33, "portraits/13_butter": 22, "portraits/14_alexis": 33, "portraits/15_stanley": 30, "portraits/16_bibliothecaire": 27, "portraits/17_planton": 27, "portraits/18_concierge": 27, "portraits/19_agentsj": 77, "portraits/20_laitier": 25, "portraits/21_pike": 25, "portraits/22_serveur": 23, "portraits/23_veuve": 33, "portraits/24_conducteur": 30, "portraits/25_mort": 25, "portraits/26_vane": 74, "portraits/27_blain": 24, "portraits/28_gaudry": 76, "portraits/29_remi": 24, "portraits/30_brevin": 76, "portraits/31_rogniat": 24, "portraits/32_leroux": 76, "portraits/33_mandrin": 24, "portraits/34_guetteur": 24, "portraits/pj_arnaud": 33, "portraits/pj_ashby": 78, "portraits/pj_doyle": 28, "portraits/pj_pemberton": 72, "prologue/01_wagon-restaurant": 35, "prologue/02_soufflet": 48, "prologue/03_voitures-lits": 40, "prologue/04_compartiment-7": 60};
 
   // ---------------------------------------------------------------- écran-titre et prologue
   V['ecran-titre/titre'] = { rain: [dehors(90)] };
@@ -12693,6 +12699,61 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   // Le décor quand on arrive quelque part, le portrait quand quelqu'un prend la parole : même le clavier ouvert,
   // même loin du haut de la page, on voit où l'on est et à qui l'on parle. La clé de l'image est notée sur l'entrée
   // du journal (e.img, e.pt) pour qu'une partie rechargée retrouve les mêmes images.
+  // ---------------------------------------------------------------- l'image en fond (iPad en paysage, grands écrans)
+  // L'image (2,4:1) couvre toute la hauteur et déborde en largeur. On la décale pour que son point d'intérêt
+  // (PHOTO_CADRAGE : le personnage, ou ce qui compte dans la scène) tombe au milieu de la partie libre de l'écran.
+  // À chaque nouvelle image, un lent glissement montre qu'elle est plus large que l'écran ; le doigt (ou le pavé
+  // tactile) la fait glisser ; un double tap la recadre.
+  var MQ_FOND = '(orientation: landscape) and (min-width: 960px) and (min-height: 600px)';
+  var cadre = { fx: 0.5, glisse: 0, x: null }, tirer = null, lentTimer = null;
+  function enFond() { try { return matchMedia(MQ_FOND).matches; } catch (e) { return false; } }
+  function borne(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function mesuresFond() {
+    var st = document.querySelector('.stage'), nav = document.querySelector('.nav');
+    var W = st.clientWidth, H = st.clientHeight, P = nav ? nav.getBoundingClientRect().width : 0, Wi = Math.max(W, H * 2.4);
+    return { st: st, W: W, Wi: Wi, min: W - Wi, cible: (W - P) / 2 - cadre.fx * Wi };
+  }
+  function poserFond(m, x) { cadre.x = x; m.st.style.setProperty('--decal', Math.round(x) + 'px'); }
+  function cadrerFond() { if (!enFond()) return; var m = mesuresFond(); poserFond(m, borne(m.cible + cadre.glisse, m.min, 0)); }
+  function nouvelleImage(pk, fx) {
+    cadre.fx = fx; cadre.glisse = 0;
+    if (!enFond()) return;
+    var m = mesuresFond(), x = borne(m.cible, m.min, 0), cacheG = -x, cacheD = m.Wi + x - m.W;
+    var amp = Math.min(110, Math.max(cacheG, cacheD) * 0.4);
+    if (amp < 10) { poserFond(m, x); return; }
+    // on part un peu décalé vers le côté le plus caché, et l'image revient lentement à sa place
+    m.st.classList.add('glisse'); poserFond(m, cacheG > cacheD ? Math.min(0, x + amp) : Math.max(m.min, x - amp));
+    void m.st.offsetWidth;
+    m.st.classList.remove('glisse'); m.st.classList.add('lent'); poserFond(m, x);
+    clearTimeout(lentTimer); lentTimer = setTimeout(function () { m.st.classList.remove('lent'); }, 2700);
+  }
+  function brancherFond() {
+    var st = document.querySelector('.stage'); if (!st || st._fond) return; st._fond = true;
+    st.addEventListener('pointerdown', function (e) {
+      if (!enFond() || (e.button !== undefined && e.button > 0)) return;
+      tirer = { x0: e.clientX, g0: cadre.glisse, id: e.pointerId, bouge: false };
+      try { st.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    st.addEventListener('pointermove', function (e) {
+      if (!tirer || e.pointerId !== tirer.id) return;
+      var dx = e.clientX - tirer.x0; if (!tirer.bouge && Math.abs(dx) < 4) return;
+      tirer.bouge = true; st.classList.add('glisse'); st.classList.remove('lent');
+      var m = mesuresFond(), x = borne(m.cible + tirer.g0 + dx, m.min, 0);
+      cadre.glisse = x - m.cible; poserFond(m, x);
+    });
+    function lacher(e) { if (!tirer || (e && e.pointerId !== tirer.id)) return; tirer = null; st.classList.remove('glisse'); }
+    st.addEventListener('pointerup', lacher); st.addEventListener('pointercancel', lacher); st.addEventListener('lostpointercapture', lacher);
+    // pavé tactile ou souris à molette horizontale
+    st.addEventListener('wheel', function (e) {
+      if (!enFond() || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault(); st.classList.add('glisse'); st.classList.remove('lent');
+      var m = mesuresFond(), x = borne(m.cible + cadre.glisse - e.deltaX, m.min, 0);
+      cadre.glisse = x - m.cible; poserFond(m, x);
+      clearTimeout(st._roue); st._roue = setTimeout(function () { st.classList.remove('glisse'); }, 150);
+    }, { passive: false });
+    st.addEventListener('dblclick', function () { if (!enFond()) return; cadre.glisse = 0; cadrerFond(); });
+    window.addEventListener('resize', function () { cadrerFond(); });
+  }
   var dernierPortrait = null;
   // L'image d'en-tête est-elle à l'écran ? (sur iPhone, le clavier ouvert la fait sortir de la partie visible)
   // Si oui, c'est elle qui change : pas de seconde image dans le fil.
@@ -13140,6 +13201,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
+    art.onCadre = nouvelleImage; brancherFond();
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;
