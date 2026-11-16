@@ -536,6 +536,7 @@
     list.appendChild(sb);
     var mb = btn('Musique : ' + (musicOn ? 'oui' : 'non'), 'ghost', function () { toggleMusic(); mb.innerHTML = 'Musique : ' + (musicOn ? 'oui' : 'non'); });
     list.appendChild(mb);
+    if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
     help.innerHTML = '<h3>Comment jouer</h3><p>Écrivez ce que fait ' + esc(game.state.pc.name) + ', comme vous le diriez à un meneur de jeu : ' + esc(SC.examples || '« j’examine la table », « je parle au serveur »') + '. En conversation, parlez librement : « pourquoi ? », « et ensuite ? ». Les fautes de frappe sont tolérées.</p>' +
@@ -592,9 +593,34 @@
     try { localStorage.removeItem(KEY); } catch (e) {}
     closePanels(); mount(null, chap, dep ? JSON.parse(JSON.stringify(dep)) : pregen(chap, key));
   }
-  function hideTitle() { $('title').hidden = true; if (soundOn) sound.start(); }
+  // ---------------------------------------------------------------- plein écran
+  // Le navigateur n'accorde le plein écran qu'après un geste du joueur : on le demande chaque fois qu'on quitte
+  // l'écran-titre (préférence « Plein écran » du menu). Sur iPhone et iPad, Safari ne le permet pas pour une page
+  // où l'on tape du texte : on y conseille d'installer le jeu sur l'écran d'accueil, d'où il s'ouvre sans barres.
+  var FKEY = 'express-minuit-plein';
+  // (« display-mode: fullscreen » vaut aussi pour une page mise en plein écran : ce n'est l'application installée que sans élément plein écran)
+  function installe() { try { return !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches || (matchMedia('(display-mode: fullscreen)').matches && !(document.fullscreenElement || document.webkitFullscreenElement))); } catch (e) { return false; } }
+  function appareilApple() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+  function dansCadre() { try { return window.self !== window.top; } catch (e) { return true; } }
+  function enPleinEcran() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function pleinEcranPossible() { return !installe() && !appareilApple() && !!(document.fullscreenEnabled || document.webkitFullscreenEnabled); }
+  function pleinEcranVoulu() { try { return localStorage.getItem(FKEY) !== 'non'; } catch (e) { return true; } }
+  function pleinEcran() {
+    if (!pleinEcranPossible() || enPleinEcran() || !pleinEcranVoulu()) return;
+    var el = document.documentElement;
+    try { var r = el.requestFullscreen ? el.requestFullscreen({ navigationUI: 'hide' }) : el.webkitRequestFullscreen && el.webkitRequestFullscreen(); if (r && r.catch) r.catch(function () {}); } catch (e) {}
+  }
+  function basculerPleinEcran() {
+    var oui = !pleinEcranVoulu();
+    try { localStorage.setItem(FKEY, oui ? 'oui' : 'non'); } catch (e) {}
+    if (oui) pleinEcran();
+    else if (enPleinEcran()) { try { var r = document.exitFullscreen ? document.exitFullscreen() : document.webkitExitFullscreen && document.webkitExitFullscreen(); if (r && r.catch) r.catch(function () {}); } catch (e) {} }
+    return oui;
+  }
+  function hideTitle() { $('title').hidden = true; pleinEcran(); if (soundOn) sound.start(); }
   function showTitle() {
     $('title').hidden = false; $('tpick').hidden = true; $('tmain').hidden = false;
+    if ($('tinstall')) $('tinstall').hidden = !(appareilApple() && !installe() && !dansCadre());
     if ($('btnParis')) $('btnParis').hidden = !(CH.paris && enAttente('paris').length);
     var saved = loadSave();
     $('btnCont').hidden = !(saved && saved.v === 1);
