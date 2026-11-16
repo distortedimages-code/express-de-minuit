@@ -12070,16 +12070,16 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       o.restore();
     } else this.phWait = 0;
     // les visions : une image du Mythe, le temps d'une ou deux images seulement, au hasard, quand la raison lâche.
-    // Préchargées dès que l'investigateur est troublé, pour qu'elles tombent sans délai ; coupées par le menu et
-    // quand l'appareil demande moins d'animations.
+    // Préchargées dès que l'investigateur est troublé, pour qu'elles tombent sans délai ; actives par défaut,
+    // le menu peut les couper.
     var VIS = Art.VISIONS, self = this;
     if (VIS && VIS.length && this.visions !== false && san >= 1) {
       if (!this._visPre) { this._visPre = true; VIS.forEach(function (k) { self.photo(k); }); }
       if (this.flashN > 0) {
         var fim = this.photo(this.flashK);
         if (fim) { o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.drawImage(fim, 0, 0, pw, ph); o.restore(); }
-        this.flashN--;
-      } else if (san >= 2 && this.trans >= 1 && this.rnd() < dt / (san >= 3 ? 12 : 40)) {
+        this.flashN--; this.flashTail = true;
+      } else if ((this.flashTail = false) || san >= 2 && this.trans >= 1 && this.rnd() < dt / (san >= 3 ? 12 : 40)) {
         var prets = VIS.filter(function (k) { return self.imgs && self.imgs[k] && self.imgs[k]._ok; });
         if (prets.length) { this.flashK = prets[Math.floor(this.rnd() * prets.length)]; this.flashN = this.rnd() < 0.5 ? 1 : 2; }
       }
@@ -14637,7 +14637,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     });
     list.appendChild(ib2);
     // les visions éclair : une image du Mythe, une fraction de seconde, quand la raison lâche
-    if (!reduce) { var vb = btn('Visions : ' + (visionsVoulues() ? 'oui' : 'non'), 'ghost', function () { var v = !visionsVoulues(); try { localStorage.setItem(VKEY, v ? 'oui' : 'non'); } catch (e) {} art.visions = v; vb.innerHTML = 'Visions : ' + (v ? 'oui' : 'non'); }); list.appendChild(vb); }
+    { var vb = btn('Visions : ' + (visionsVoulues() ? 'oui' : 'non'), 'ghost', function () { var v = !visionsVoulues(); try { localStorage.setItem(VKEY, v ? 'oui' : 'non'); } catch (e) {} art.visions = v; vb.innerHTML = 'Visions : ' + (v ? 'oui' : 'non'); }); list.appendChild(vb); }
     if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
@@ -14774,7 +14774,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   var lastT = 0, acc = 0;
   function loop(ts) {
     var dt = Math.min(0.1, (ts - lastT) / 1000 || 0); lastT = ts; acc += dt;
-    var step = reduce ? 1 : 1 / 24;
+    // animations réduites : une image par seconde, sauf le temps d'une vision éclair, qui garde sa vitesse
+    var step = reduce && !(art && $('title').hidden && (art.flashN > 0 || art.flashTail)) ? 1 : 1 / 24;
     if (acc >= step && !document.hidden) {
       if (!$('title').hidden && titleArt) titleArt.frame(acc);
       else if (art) art.frame(acc);
@@ -14816,7 +14817,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
     art.onCadre = nouvelleImage; brancherFond(); window.__art = art; // pour les tests automatiques
-    art.visions = visionsVoulues() && !reduce;
+    art.visions = visionsVoulues();
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;
