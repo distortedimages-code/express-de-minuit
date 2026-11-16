@@ -695,6 +695,454 @@
       "image": "creation/professeur_f_terne",
       "prompt": "prompts/creation/professeur_f_terne.txt",
       "references": []
+    },
+    {
+      "image": "paranoia/pj_pemberton",
+      "prompt": "prompts/paranoia/pj_pemberton.txt",
+      "references": [
+        "portraits/pj_pemberton"
+      ]
+    },
+    {
+      "image": "paranoia/pj_doyle",
+      "prompt": "prompts/paranoia/pj_doyle.txt",
+      "references": [
+        "portraits/pj_doyle"
+      ]
+    },
+    {
+      "image": "paranoia/pj_ashby",
+      "prompt": "prompts/paranoia/pj_ashby.txt",
+      "references": [
+        "portraits/pj_ashby"
+      ]
+    },
+    {
+      "image": "paranoia/pj_arnaud",
+      "prompt": "prompts/paranoia/pj_arnaud.txt",
+      "references": [
+        "portraits/pj_arnaud"
+      ]
+    },
+    {
+      "image": "paranoia/antiquaire_h_charme",
+      "prompt": "prompts/paranoia/antiquaire_h_charme.txt",
+      "references": [
+        "creation/antiquaire_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/antiquaire_h_terne",
+      "prompt": "prompts/paranoia/antiquaire_h_terne.txt",
+      "references": [
+        "creation/antiquaire_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/antiquaire_f_charme",
+      "prompt": "prompts/paranoia/antiquaire_f_charme.txt",
+      "references": [
+        "creation/antiquaire_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/antiquaire_f_terne",
+      "prompt": "prompts/paranoia/antiquaire_f_terne.txt",
+      "references": [
+        "creation/antiquaire_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/archeologue_h_charme",
+      "prompt": "prompts/paranoia/archeologue_h_charme.txt",
+      "references": [
+        "creation/archeologue_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/archeologue_h_terne",
+      "prompt": "prompts/paranoia/archeologue_h_terne.txt",
+      "references": [
+        "creation/archeologue_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/archeologue_f_charme",
+      "prompt": "prompts/paranoia/archeologue_f_charme.txt",
+      "references": [
+        "creation/archeologue_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/archeologue_f_terne",
+      "prompt": "prompts/paranoia/archeologue_f_terne.txt",
+      "references": [
+        "creation/archeologue_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/avocat_h_charme",
+      "prompt": "prompts/paranoia/avocat_h_charme.txt",
+      "references": [
+        "creation/avocat_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/avocat_h_terne",
+      "prompt": "prompts/paranoia/avocat_h_terne.txt",
+      "references": [
+        "creation/avocat_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/avocat_f_charme",
+      "prompt": "prompts/paranoia/avocat_f_charme.txt",
+      "references": [
+        "creation/avocat_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/avocat_f_terne",
+      "prompt": "prompts/paranoia/avocat_f_terne.txt",
+      "references": [
+        "creation/avocat_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/detective_h_charme",
+      "prompt": "prompts/paranoia/detective_h_charme.txt",
+      "references": [
+        "creation/detective_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/detective_h_terne",
+      "prompt": "prompts/paranoia/detective_h_terne.txt",
+      "references": [
+        "creation/detective_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/detective_f_charme",
+      "prompt": "prompts/paranoia/detective_f_charme.txt",
+      "references": [
+        "creation/detective_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/detective_f_terne",
+      "prompt": "prompts/paranoia/detective_f_terne.txt",
+      "references": [
+        "creation/detective_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/dilettante_h_charme",
+      "prompt": "prompts/paranoia/dilettante_h_charme.txt",
+      "references": [
+        "creation/dilettante_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/dilettante_h_terne",
+      "prompt": "prompts/paranoia/dilettante_h_terne.txt",
+      "references": [
+        "creation/dilettante_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/dilettante_f_charme",
+      "prompt": "prompts/paranoia/dilettante_f_charme.txt",
+      "references": [
+        "creation/dilettante_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/dilettante_f_terne",
+      "prompt": "prompts/paranoia/dilettante_f_terne.txt",
+      "references": [
+        "creation/dilettante_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/ecrivain_h_charme",
+      "prompt": "prompts/paranoia/ecrivain_h_charme.txt",
+      "references": [
+        "creation/ecrivain_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/ecrivain_h_terne",
+      "prompt": "prompts/paranoia/ecrivain_h_terne.txt",
+      "references": [
+        "creation/ecrivain_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/ecrivain_f_charme",
+      "prompt": "prompts/paranoia/ecrivain_f_charme.txt",
+      "references": [
+        "creation/ecrivain_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/ecrivain_f_terne",
+      "prompt": "prompts/paranoia/ecrivain_f_terne.txt",
+      "references": [
+        "creation/ecrivain_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/journaliste_h_charme",
+      "prompt": "prompts/paranoia/journaliste_h_charme.txt",
+      "references": [
+        "creation/journaliste_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/journaliste_h_terne",
+      "prompt": "prompts/paranoia/journaliste_h_terne.txt",
+      "references": [
+        "creation/journaliste_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/journaliste_f_charme",
+      "prompt": "prompts/paranoia/journaliste_f_charme.txt",
+      "references": [
+        "creation/journaliste_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/journaliste_f_terne",
+      "prompt": "prompts/paranoia/journaliste_f_terne.txt",
+      "references": [
+        "creation/journaliste_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/medecin_h_charme",
+      "prompt": "prompts/paranoia/medecin_h_charme.txt",
+      "references": [
+        "creation/medecin_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/medecin_h_terne",
+      "prompt": "prompts/paranoia/medecin_h_terne.txt",
+      "references": [
+        "creation/medecin_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/medecin_f_charme",
+      "prompt": "prompts/paranoia/medecin_f_charme.txt",
+      "references": [
+        "creation/medecin_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/medecin_f_terne",
+      "prompt": "prompts/paranoia/medecin_f_terne.txt",
+      "references": [
+        "creation/medecin_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/parapsychologue_h_charme",
+      "prompt": "prompts/paranoia/parapsychologue_h_charme.txt",
+      "references": [
+        "creation/parapsychologue_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/parapsychologue_h_terne",
+      "prompt": "prompts/paranoia/parapsychologue_h_terne.txt",
+      "references": [
+        "creation/parapsychologue_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/parapsychologue_f_charme",
+      "prompt": "prompts/paranoia/parapsychologue_f_charme.txt",
+      "references": [
+        "creation/parapsychologue_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/parapsychologue_f_terne",
+      "prompt": "prompts/paranoia/parapsychologue_f_terne.txt",
+      "references": [
+        "creation/parapsychologue_f_terne"
+      ]
+    },
+    {
+      "image": "paranoia/professeur_h_charme",
+      "prompt": "prompts/paranoia/professeur_h_charme.txt",
+      "references": [
+        "creation/professeur_h_charme"
+      ]
+    },
+    {
+      "image": "paranoia/professeur_h_terne",
+      "prompt": "prompts/paranoia/professeur_h_terne.txt",
+      "references": [
+        "creation/professeur_h_terne"
+      ]
+    },
+    {
+      "image": "paranoia/professeur_f_charme",
+      "prompt": "prompts/paranoia/professeur_f_charme.txt",
+      "references": [
+        "creation/professeur_f_charme"
+      ]
+    },
+    {
+      "image": "paranoia/professeur_f_terne",
+      "prompt": "prompts/paranoia/professeur_f_terne.txt",
+      "references": [
+        "creation/professeur_f_terne"
+      ]
+    },
+    {
+      "image": "londres/28_museum-tavern",
+      "prompt": "prompts/londres/28_museum-tavern.txt",
+      "references": []
+    },
+    {
+      "image": "londres/29_eglise-st-george",
+      "prompt": "prompts/londres/29_eglise-st-george.txt",
+      "references": []
+    },
+    {
+      "image": "londres/30_quais-de-la-tamise",
+      "prompt": "prompts/londres/30_quais-de-la-tamise.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/35_patron",
+      "prompt": "prompts/portraits/35_patron.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/36_hollis",
+      "prompt": "prompts/portraits/36_hollis.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/37_ramasseur",
+      "prompt": "prompts/portraits/37_ramasseur.txt",
+      "references": []
+    },
+    {
+      "image": "situations/01_poste-de-bow-street",
+      "prompt": "prompts/situations/01_poste-de-bow-street.txt",
+      "references": []
+    },
+    {
+      "image": "situations/02_poste-de-la-rue-de-la-banque",
+      "prompt": "prompts/situations/02_poste-de-la-rue-de-la-banque.txt",
+      "references": []
+    },
+    {
+      "image": "visions/01_dents-a-la-place-des-yeux",
+      "prompt": "prompts/visions/01_dents-a-la-place-des-yeux.txt",
+      "references": []
+    },
+    {
+      "image": "visions/02_dents-qui-transpirent",
+      "prompt": "prompts/visions/02_dents-qui-transpirent.txt",
+      "references": []
+    },
+    {
+      "image": "visions/03_spirale-dans-la-buee",
+      "prompt": "prompts/visions/03_spirale-dans-la-buee.txt",
+      "references": []
+    },
+    {
+      "image": "visions/04_fideles-noyes",
+      "prompt": "prompts/visions/04_fideles-noyes.txt",
+      "references": []
+    },
+    {
+      "image": "visions/05_cite-engloutie",
+      "prompt": "prompts/visions/05_cite-engloutie.txt",
+      "references": []
+    },
+    {
+      "image": "visions/06_forme-sur-la-mer",
+      "prompt": "prompts/visions/06_forme-sur-la-mer.txt",
+      "references": []
+    },
+    {
+      "image": "visions/07_yeux-dans-le-papier-peint",
+      "prompt": "prompts/visions/07_yeux-dans-le-papier-peint.txt",
+      "references": []
+    },
+    {
+      "image": "visions/08_main-trop-articulee",
+      "prompt": "prompts/visions/08_main-trop-articulee.txt",
+      "references": []
+    },
+    {
+      "image": "visions/09_visage-de-poisson",
+      "prompt": "prompts/visions/09_visage-de-poisson.txt",
+      "references": []
+    },
+    {
+      "image": "visions/10_bouche-dans-la-paume",
+      "prompt": "prompts/visions/10_bouche-dans-la-paume.txt",
+      "references": []
+    },
+    {
+      "image": "visions/11_peau-sur-un-cintre",
+      "prompt": "prompts/visions/11_peau-sur-un-cintre.txt",
+      "references": []
+    },
+    {
+      "image": "visions/12_voiture-des-morts",
+      "prompt": "prompts/visions/12_voiture-des-morts.txt",
+      "references": []
+    },
+    {
+      "image": "visions/13_statue-qui-ouvre-l-oeil",
+      "prompt": "prompts/visions/13_statue-qui-ouvre-l-oeil.txt",
+      "references": []
+    },
+    {
+      "image": "visions/14_foule-sans-visage",
+      "prompt": "prompts/visions/14_foule-sans-visage.txt",
+      "references": []
+    },
+    {
+      "image": "visions/15_visage-dans-l-eau-noire",
+      "prompt": "prompts/visions/15_visage-dans-l-eau-noire.txt",
+      "references": []
+    },
+    {
+      "image": "visions/16_sigle-grave",
+      "prompt": "prompts/visions/16_sigle-grave.txt",
+      "references": []
+    },
+    {
+      "image": "visions/17_etoile-et-oeil",
+      "prompt": "prompts/visions/17_etoile-et-oeil.txt",
+      "references": []
+    },
+    {
+      "image": "visions/18_sous-la-porte",
+      "prompt": "prompts/visions/18_sous-la-porte.txt",
+      "references": []
+    },
+    {
+      "image": "visions/19_reflet-qui-sourit",
+      "prompt": "prompts/visions/19_reflet-qui-sourit.txt",
+      "references": []
+    },
+    {
+      "image": "visions/20_etoiles-en-oeil",
+      "prompt": "prompts/visions/20_etoiles-en-oeil.txt",
+      "references": []
     }
   ],
   "version": 2

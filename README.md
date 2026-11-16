@@ -170,6 +170,23 @@ Au chapitre 1, la première carte du choix des personnages ouvre la création (`
 
 La photographie est choisie d’après trois critères : le genre, la profession et l’Apparence (50 ou plus : la version charismatique, sinon une version terne, ordinaire, jamais caricaturale). Soit 40 images, `creation/<profession>_<h|f>_<charme|terne>`, dont les prompts sont écrits par `python3 jeu/tools/prompts_creation.py` et déjà inscrits dans `illustrations/plan.json`. Tant qu’elles ne sont pas générées, la fiche affiche « La photographie est encore au développement ». Vérification : `node jeu/tools/test_creation.js`.
 
+## Quand la raison lâche
+
+La santé mentale a quatre états (Lucide, Troublé, Fragile, Au bord du gouffre), selon ce que l’investigateur a perdu depuis le début. `jeu/src/folie.js` et `jeu/src/art.js` en tirent :
+
+- **Le gros plan paranoïaque** : au bord du gouffre, l’image d’en-tête (et celles du fil) ne montre plus que le visage de l’investigateur, en gros plan, halluciné. Un par investigateur : les quatre prédéfinis (`paranoia/pj_*`) et les 40 photos de la création (`paranoia/<profession>_<h|f>_<charme|terne>`), chacun généré avec son portrait en référence d’identité. Tant que l’image manque, les décors restent.
+- **Les visions éclair** : 20 images du Mythe (`visions/*`) passent une ou deux images à l’écran, au hasard : rarement quand l’investigateur est fragile, souvent au bord du gouffre. Elles sont préchargées dès qu’il est troublé. Le menu a un réglage « Visions : oui/non » ; elles sont coupées d’office si l’appareil demande moins d’animations.
+- **Les répliques se dérèglent** : un mot vu de travers, barré puis corrigé (des dents à la place des yeux), une incise (« Ses dents transpirent. »), un mot de la langue des profondeurs glissé dans une phrase. L’information reste toujours lisible.
+- **Les suggestions de conversation déraillent** : des mots de R’lyeh, des insultes d’époque (malotru, faquin, pignouf, vieille baderne), des visions dites à voix haute. Les personnages reculent, s’inquiètent, conseillent un médecin ; la police prend des notes.
+- **Cesser de lutter** : au bord du gouffre, une idée propose d’abandonner. C’est une fin de partie par la folie, sans geste montré : on retrouve l’investigateur au matin, interné à Bethlem (Londres) ou à Charenton (Paris).
+- **Se soigner**, d’après les règles (la psychothérapie rend 1D3 par séance réussie ; les calmants stabilisent) : « Consulter un aliéniste » (Harley Street ou boulevard Saint-Germain, en semaine de 9 h à 18 h, une séance par jour, une guinée ou trente francs, 60 % de chances de regagner 1D3), et le bromure, à la pharmacie ou sur ordonnance : un cachet par jour au plus, un point de santé mentale, une heure de somnolence. Six cachets par flacon.
+
+Vérification : `node jeu/tools/test_folie.js`.
+
+## L’image en fond, sur iPad en paysage
+
+L’image est cadrée sur son point d’intérêt (`PHOTO_CADRAGE`), placé au milieu de la partie libre de l’écran. Garde-fou : quand ce point est à droite de l’image, celle-ci peut glisser vers la gauche jusqu’à ce que son bord droit touche le panneau de texte ; ce qui serait caché derrière le panneau vient ainsi à gauche, et c’est du noir qui passe sous le panneau. On peut toujours faire glisser l’image au doigt, et un double-clic la recentre.
+
 ## Les idées et les sujets
 
 Les idées (hors conversation) et les sujets (en conversation) sont visibles par défaut ; on peut les replier. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.

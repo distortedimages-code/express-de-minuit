@@ -460,8 +460,14 @@
   // Chaque décor peut avoir son image ; le code ne dessine plus alors que ce qui bouge par-dessus.
   var PHOTO_LIST = ['ecran-titre/titre', 'prologue/01_wagon-restaurant', 'prologue/02_soufflet', 'prologue/03_voitures-lits', 'prologue/04_compartiment-7'];
   Art.PHOTO_LIST = PHOTO_LIST;
+  // au bord du gouffre, l'investigateur ne voit plus que son propre visage (le gros plan paranoïaque de sa fiche),
+  // quand l'image existe et qu'elle est arrivée ; sinon, les décors comme avant
+  var VISAGE_FX = { prowl: { x: 110, y: 300, h: 210, lean: 0.45, san: 3, sway: 30 } };
   P.photoKey = function (scene, st) {
     var f = st.flags || {};
+    if (st.visage && (st.san | 0) >= 3 && scene !== 'title') {
+      if (this.photo(st.visage)) { if (!PHOTO_V2[st.visage]) PHOTO_V2[st.visage] = VISAGE_FX; return st.visage; }
+    }
     // un chapitre peut désigner lui-même l'image d'un décor (G.PHOTO_SCENES[décor] = clé, ou fonction de l'état)
     var ps = G.PHOTO_SCENES && G.PHOTO_SCENES[scene];
     if (ps) return typeof ps === 'function' ? ps(st) : ps;
@@ -676,6 +682,21 @@
       else this.iris(o, 1.3 * smooth((tr - 0.5) * 2));
       o.restore();
     } else this.phWait = 0;
+    // les visions : une image du Mythe, le temps d'une ou deux images seulement, au hasard, quand la raison lâche.
+    // Préchargées dès que l'investigateur est troublé, pour qu'elles tombent sans délai ; coupées par le menu et
+    // quand l'appareil demande moins d'animations.
+    var VIS = Art.VISIONS, self = this;
+    if (VIS && VIS.length && this.visions !== false && san >= 1) {
+      if (!this._visPre) { this._visPre = true; VIS.forEach(function (k) { self.photo(k); }); }
+      if (this.flashN > 0) {
+        var fim = this.photo(this.flashK);
+        if (fim) { o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.drawImage(fim, 0, 0, pw, ph); o.restore(); }
+        this.flashN--;
+      } else if (san >= 2 && this.trans >= 1 && this.rnd() < dt / (san >= 3 ? 12 : 40)) {
+        var prets = VIS.filter(function (k) { return self.imgs && self.imgs[k] && self.imgs[k]._ok; });
+        if (prets.length) { this.flashK = prets[Math.floor(this.rnd() * prets.length)]; this.flashN = this.rnd() < 0.5 ? 1 : 2; }
+      }
+    }
   };
 
   Art.INK = INK; Art.D = D;

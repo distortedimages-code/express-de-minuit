@@ -1956,7 +1956,7 @@
         jetIdee(); afterTurn(); finish(); return;
       }
       if (chip.mal && s.talk) {
-        var mn = scene.npcs[s.talk], ml = scene.paroles && scene.paroles(api, mn), mx = ml && (ml.maladresse || []).filter(function (m) { return m.mal === chip.mal; })[0];
+        var mn = scene.npcs[s.talk], ml = scene.paroles && scene.paroles(api, mn), mx = ml && (ml.maladresse || []).concat(ml.banal || []).filter(function (m) { return m.mal === chip.mal; })[0];
         if (!mx || !mx.run) return;
         log({ t: 'player', x: mx.dit || chip.label, said: !!mx.dit }); s.turn++; s.tick = scene.talkTick || 1;
         talkMode = 'raw'; try { mx.run(api, mn); } finally { talkMode = null; }

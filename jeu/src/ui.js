@@ -260,7 +260,10 @@
   function mesuresFond() {
     var st = document.querySelector('.stage'), nav = document.querySelector('.nav');
     var W = st.clientWidth, H = st.clientHeight, P = nav ? nav.getBoundingClientRect().width : 0, Wi = Math.max(W, H * 2.4);
-    return { st: st, W: W, Wi: Wi, min: W - Wi, cible: (W - P) / 2 - cadre.fx * Wi };
+    // garde-fou : l'image peut glisser vers la gauche jusqu'à ce que son bord droit touche le panneau de texte ;
+    // ce qui est à droite de l'image (un personnage, une porte) vient alors dans la partie libre de l'écran,
+    // et c'est du noir, sous le panneau, qui prend sa place
+    return { st: st, W: W, Wi: Wi, min: Math.min(W - Wi, W - P - Wi), cible: (W - P) / 2 - cadre.fx * Wi };
   }
   function poserFond(m, x) { cadre.x = x; m.st.style.setProperty('--decal', Math.round(x) + 'px'); }
   function cadrerFond() { if (!enFond()) return; var m = mesuresFond(); poserFond(m, borne(m.cible + cadre.glisse, m.min, 0)); }
@@ -315,7 +318,15 @@
   }
   function cleImage(scene, loc) {
     var s = game.state;
-    try { return art.photoKey(scene, { san: 0, min: s.min, loc: loc, flags: s.flags || {} }) || ''; } catch (err) { return ''; }
+    try { return art.photoKey(scene, { san: game.api.sanState(), visage: visageDe(s.pc), min: s.min, loc: loc, flags: s.flags || {} }) || ''; } catch (err) { return ''; }
+  }
+  // le gros plan paranoïaque de l'investigateur : celui de sa photographie de création, ou celui de son portrait
+  function visageDe(pc) {
+    if (!pc) return '';
+    if (pc.paranoia) return pc.paranoia;
+    var m = /img\/creation\/([a-z_]+)\.webp$/.exec(pc.portrait || ''); if (m) return 'paranoia/' + m[1];
+    var k = pc.key || (/Arnaud/.test(pc.name || '') ? 'arnaud' : '');
+    return k ? 'paranoia/pj_' + k : '';
   }
   function carteImage(key, nom, cls) {
     var d = document.createElement('div');
@@ -428,7 +439,7 @@
     $('sCH').textContent = pc.chance; meter('mCH', pc.chance, 99);
     $('turnInfo').textContent = 'Tour ' + s.turn;
     if (art) {
-      art.state = { san: st, min: s.min, loc: s.loc, flags: Object.assign({}, s.flags, { servietteTaken: s.inv.indexOf('La serviette de Ravel') >= 0 }) };
+      art.state = { san: st, visage: visageDe(s.pc), min: s.min, loc: s.loc, flags: Object.assign({}, s.flags, { servietteTaken: s.inv.indexOf('La serviette de Ravel') >= 0 }) };
       // en conversation, le portrait du personnage ; sinon, le décor
       var want = (s.talk && art['pt_' + s.talk]) ? 'pt_' + s.talk : (L.art || s.loc);
       if (!s.ended && art.scene !== want) art.set(want);
@@ -610,6 +621,8 @@
       ib2.innerHTML = 'Suggestions : ' + NOMS_MODES[m]; actions();
     });
     list.appendChild(ib2);
+    // les visions éclair : une image du Mythe, une fraction de seconde, quand la raison lâche
+    if (!reduce) { var vb = btn('Visions : ' + (visionsVoulues() ? 'oui' : 'non'), 'ghost', function () { var v = !visionsVoulues(); try { localStorage.setItem(VKEY, v ? 'oui' : 'non'); } catch (e) {} art.visions = v; vb.innerHTML = 'Visions : ' + (v ? 'oui' : 'non'); }); list.appendChild(vb); }
     if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
@@ -673,6 +686,8 @@
   // où l'on tape du texte : on y conseille d'installer le jeu sur l'écran d'accueil, d'où il s'ouvre sans barres.
   // les suggestions : « guide » (plus de pistes, pas de tentations), « normal », « aucune »
   var IKEY = 'express-minuit-idees';
+  var VKEY = 'express-minuit-visions';
+  function visionsVoulues() { try { return localStorage.getItem(VKEY) !== 'non'; } catch (e) { return true; } }
   function modeIdees() { try { var m = localStorage.getItem(IKEY); return m === 'guide' || m === 'aucune' ? m : 'normal'; } catch (e) { return 'normal'; } }
   var NOMS_MODES = { guide: 'guidées', normal: 'normales', aucune: 'aucune' };
   var FKEY = 'express-minuit-plein';
@@ -785,7 +800,8 @@
 
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
-    art.onCadre = nouvelleImage; brancherFond();
+    art.onCadre = nouvelleImage; brancherFond(); window.__art = art; // pour les tests automatiques
+    art.visions = visionsVoulues() && !reduce;
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;

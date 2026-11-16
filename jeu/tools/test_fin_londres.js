@@ -1,7 +1,7 @@
 // Joue Londres jusqu'au train de Douvres (test/full.txt) et écrit la partie finie au format des sauvegardes du jeu.
 // Usage : PC=0 node test/fin_londres.js sortie.json    — le fichier se recharge avec « Charger une sauvegarde ».
 global.window = global;
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
 const L = CHAPTERS.londres;
 let seed = +(process.env.SEED || 1); const rng = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
 const g = RPG.createGame(L, null, { rng, pc: L.pregens[+(process.env.PC || 0)] }), s = g.state;

@@ -147,7 +147,7 @@
       bio: m.dit + ' ' + lien.bio,
       carac: { FOR: c.FOR, CON: c.CON, TAI: c.TAI, DEX: c.DEX, APP: c.APP, INT: c.INT, POU: c.POU, EDU: c.EDU },
       pv: pv, pvMax: pv, pm: pm, pmMax: pm, san: c.POU, sanMax: 99, chance: p.chance, mvt: mvt - A.mvt,
-      skills: skills, inv: m.inv.slice(), money: Math.max(5, Math.round((skills['Crédit'] || 0) * 0.9)), portrait: photo(p)
+      skills: skills, inv: m.inv.slice(), money: Math.max(5, Math.round((skills['Crédit'] || 0) * 0.9)), portrait: photo(p), paranoia: photo(p).replace('img/creation/', 'paranoia/').replace('.webp', '')
     };
   }
 

@@ -103,4 +103,7 @@
   V['portraits/32_leroux'] = {};
   V['portraits/33_mandrin'] = { lamps: [[344, 38, 5]] };
   V['portraits/34_guetteur'] = { rain: [dehors(50)] };
+
+  // ---------------------------------------------------------------- les visions éclair (art.js les fait passer une ou deux images)
+  G.PixelArt.VISIONS = ["visions/01_dents-a-la-place-des-yeux", "visions/02_dents-qui-transpirent", "visions/03_spirale-dans-la-buee", "visions/04_fideles-noyes", "visions/05_cite-engloutie", "visions/06_forme-sur-la-mer", "visions/07_yeux-dans-le-papier-peint", "visions/08_main-trop-articulee", "visions/09_visage-de-poisson", "visions/10_bouche-dans-la-paume", "visions/11_peau-sur-un-cintre", "visions/12_voiture-des-morts", "visions/13_statue-qui-ouvre-l-oeil", "visions/14_foule-sans-visage", "visions/15_visage-dans-l-eau-noire", "visions/16_sigle-grave", "visions/17_etoile-et-oeil", "visions/18_sous-la-porte", "visions/19_reflet-qui-sourit", "visions/20_etoiles-en-oeil"];
 })(typeof window !== 'undefined' ? window : globalThis);
