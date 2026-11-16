@@ -405,6 +405,34 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 .title-screen .tinstall { margin: 4px 0 0; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; color: var(--muted); }
 .title-screen .tinstall b { color: var(--text); font-weight: 500; }
 
+/* ================================================================ iPad en paysage, grands écrans : l'image en fond
+   L'image remplit l'écran ; le récit, les suggestions et la saisie flottent dans un panneau sombre à droite.
+   Le cadrage place le sujet de l'image (--fx, d'après son prompt) au milieu de la partie libre, sans jamais
+   laisser de bord vide : l'image (2,4:1) couvre toute la hauteur, et donc plus que la largeur de l'écran. */
+@media (orientation: landscape) and (min-width: 960px) and (min-height: 600px) {
+  :root { --panneau: clamp(420px, 41vw, 600px); --hauteur: 100vh; }
+  @supports (height: 100dvh) { :root { --hauteur: 100dvh; } }
+  .app { max-width: none; margin: 0; padding: 0; display: grid; gap: 0;
+    grid-template-columns: minmax(0, 1fr) var(--panneau); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .top { display: contents; }
+  .stage { position: fixed; inset: 0; width: auto; height: auto; aspect-ratio: auto; margin: 0; z-index: 0; align-self: stretch; justify-self: stretch; }
+  .stage canvas { object-fit: cover; object-position: clamp(calc(100vw - 2.4 * var(--hauteur)), calc((100vw - var(--panneau)) / 2 - var(--fx, .5) * 2.4 * var(--hauteur)), 0px) 50%; }
+  .veil { background: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, transparent 22%, transparent 68%, rgba(10, 10, 11, .88) 100%); }
+  .app::before { content: ''; position: fixed; top: 14px; right: 14px; bottom: 14px; width: calc(var(--panneau) - 14px); z-index: 1;
+    background: rgba(10, 10, 11, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border: 1px solid rgba(243, 239, 230, .08); }
+  .brand { grid-column: 1; grid-row: 1; align-self: start; position: relative; z-index: 2; padding: 16px 20px 0; text-shadow: 0 1px 8px rgba(0, 0, 0, .8); }
+  .nav { grid-column: 2; grid-row: 1; position: relative; z-index: 2; justify-content: flex-end; padding: 28px 30px 6px 22px; }
+  .hud { top: 52px; left: 8px; right: calc(var(--panneau) + 22px); }
+  .where { left: 20px; right: calc(var(--panneau) + 150px); bottom: 86px; }
+  .sanstate { right: calc(var(--panneau) + 26px); bottom: 84px; }
+  .stats { grid-column: 1; grid-row: 3; align-self: end; position: relative; z-index: 2; padding: 0 28px 22px 20px; }
+  .story { grid-column: 2; grid-row: 2; position: relative; z-index: 2; padding: 0 30px 0 22px; }
+  .story::before { display: none; }
+  .log { -webkit-mask-image: linear-gradient(transparent 0, #000 22px); mask-image: linear-gradient(transparent 0, #000 22px); }
+  .cmd { grid-column: 2; grid-row: 3; position: relative; z-index: 2; padding: 6px 30px 30px 22px; }
+  .turn { right: 30px; }
+}
+
 </style>
 </head>
 <body data-san="0">
@@ -10986,6 +11014,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       var fy = !pk ? 46 : (Art.PHOTO_FOCUS && Art.PHOTO_FOCUS[pk] !== undefined) ? Art.PHOTO_FOCUS[pk] : /^portraits\//.test(pk) ? 24 : 46;
       this._fy = fy;
       var host = this.out && this.out.parentNode; if (host && host.style) host.style.setProperty('--focus', (CWd > W ? 50 : fy) + '%');
+      // où est le sujet, de gauche à droite (0 à 1) : la disposition « image en fond » s'en sert pour cadrer
+      var fxc = pk && Art.PHOTO_CADRAGE && Art.PHOTO_CADRAGE[pk] !== undefined ? Art.PHOTO_CADRAGE[pk] : 50;
+      if (host && host.style) host.style.setProperty('--fx', String(fxc / 100));
     }
     // en format cinéma, un dessin ou une image 4:3 est agrandi(e) à la largeur du cadre et recadré(e) en hauteur
     var kx = CWd / W, top = (H - H / kx) * ((this._fy === undefined ? 46 : this._fy) / 100);
@@ -12117,6 +12148,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   G.PixelArt.PHOTO_FOCUS = {};
   // recadrage horizontal d'une image cinéma dans un cadre 4:3 (en %, 50 = centre) : le sujet reste dans le cadre
   G.PixelArt.PHOTO_FOCUSX = { 'ecran-titre/titre': 74, 'londres/26_brouillard_trajet': 50 };
+  // où se trouve le sujet de chaque image (en % de sa largeur), d'après son prompt (jeu/tools/cadrage.py) :
+  // dans la disposition « image en fond » de l'iPad en paysage, le sujet est centré dans la partie libre de l'écran
+  G.PixelArt.PHOTO_CADRAGE = {"paris/06_bibliotheque-de-l-arsenal": 76, "paris/08_charenton_secretariat": 24, "paris/10_cafe-de-charenton": 24, "portraits/01_smith_institut": 24, "portraits/02_smith_cheapside": 24, "portraits/03_beddows_institut": 76, "portraits/04_beddows_cheapside": 76, "portraits/05_brule": 24, "portraits/06_fleming": 24, "portraits/07_rigby": 76, "portraits/08_chelseaclerk": 24, "portraits/09_mustapha": 24, "portraits/10_voisin": 24, "portraits/11_atkins": 24, "portraits/12_sergent": 24, "portraits/13_butter": 24, "portraits/14_alexis": 24, "portraits/15_stanley": 24, "portraits/16_bibliothecaire": 24, "portraits/17_planton": 24, "portraits/18_concierge": 24, "portraits/19_agentsj": 76, "portraits/20_laitier": 24, "portraits/21_pike": 24, "portraits/22_serveur": 24, "portraits/23_veuve": 24, "portraits/24_conducteur": 24, "portraits/25_mort": 24, "portraits/26_vane": 76, "portraits/27_blain": 24, "portraits/28_gaudry": 76, "portraits/29_remi": 24, "portraits/30_brevin": 76, "portraits/31_rogniat": 24, "portraits/32_leroux": 76, "portraits/33_mandrin": 24, "portraits/34_guetteur": 24, "portraits/pj_arnaud": 24, "portraits/pj_ashby": 76, "portraits/pj_doyle": 24, "portraits/pj_pemberton": 76};
 
   // ---------------------------------------------------------------- écran-titre et prologue
   V['ecran-titre/titre'] = { rain: [dehors(90)] };
@@ -12663,7 +12697,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   // L'image d'en-tête est-elle à l'écran ? (sur iPhone, le clavier ouvert la fait sortir de la partie visible)
   // Si oui, c'est elle qui change : pas de seconde image dans le fil.
   function enteteVisible() {
-    var st = document.querySelector('.stage'); if (!st || !st.offsetParent) return false;
+    // (offsetParent ne convient pas : il est nul pour l'image en fond, fixée à l'écran, sur l'iPad en paysage)
+    var st = document.querySelector('.stage'); if (!st || !st.getClientRects().length || getComputedStyle(st).visibility === 'hidden') return false;
     var r = st.getBoundingClientRect(); if (r.height < 40) return false;
     var vv = window.visualViewport, haut = vv ? vv.offsetTop : 0, h = vv ? vv.height : window.innerHeight;
     return Math.min(r.bottom, haut + h) - Math.max(r.top, haut) >= r.height * 0.6;
