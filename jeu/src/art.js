@@ -683,16 +683,16 @@
       o.restore();
     } else this.phWait = 0;
     // les visions : une image du Mythe, le temps d'une ou deux images seulement, au hasard, quand la raison lâche.
-    // Préchargées dès que l'investigateur est troublé, pour qu'elles tombent sans délai ; coupées par le menu et
-    // quand l'appareil demande moins d'animations.
+    // Préchargées dès que l'investigateur est troublé, pour qu'elles tombent sans délai ; actives par défaut,
+    // le menu peut les couper.
     var VIS = Art.VISIONS, self = this;
     if (VIS && VIS.length && this.visions !== false && san >= 1) {
       if (!this._visPre) { this._visPre = true; VIS.forEach(function (k) { self.photo(k); }); }
       if (this.flashN > 0) {
         var fim = this.photo(this.flashK);
         if (fim) { o.save(); o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1; o.drawImage(fim, 0, 0, pw, ph); o.restore(); }
-        this.flashN--;
-      } else if (san >= 2 && this.trans >= 1 && this.rnd() < dt / (san >= 3 ? 12 : 40)) {
+        this.flashN--; this.flashTail = true;
+      } else if ((this.flashTail = false) || san >= 2 && this.trans >= 1 && this.rnd() < dt / (san >= 3 ? 12 : 40)) {
         var prets = VIS.filter(function (k) { return self.imgs && self.imgs[k] && self.imgs[k]._ok; });
         if (prets.length) { this.flashK = prets[Math.floor(this.rnd() * prets.length)]; this.flashN = this.rnd() < 0.5 ? 1 : 2; }
       }

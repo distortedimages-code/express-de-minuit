@@ -624,7 +624,7 @@
     });
     list.appendChild(ib2);
     // les visions éclair : une image du Mythe, une fraction de seconde, quand la raison lâche
-    if (!reduce) { var vb = btn('Visions : ' + (visionsVoulues() ? 'oui' : 'non'), 'ghost', function () { var v = !visionsVoulues(); try { localStorage.setItem(VKEY, v ? 'oui' : 'non'); } catch (e) {} art.visions = v; vb.innerHTML = 'Visions : ' + (v ? 'oui' : 'non'); }); list.appendChild(vb); }
+    { var vb = btn('Visions : ' + (visionsVoulues() ? 'oui' : 'non'), 'ghost', function () { var v = !visionsVoulues(); try { localStorage.setItem(VKEY, v ? 'oui' : 'non'); } catch (e) {} art.visions = v; vb.innerHTML = 'Visions : ' + (v ? 'oui' : 'non'); }); list.appendChild(vb); }
     if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
@@ -761,7 +761,8 @@
   var lastT = 0, acc = 0;
   function loop(ts) {
     var dt = Math.min(0.1, (ts - lastT) / 1000 || 0); lastT = ts; acc += dt;
-    var step = reduce ? 1 : 1 / 24;
+    // animations réduites : une image par seconde, sauf le temps d'une vision éclair, qui garde sa vitesse
+    var step = reduce && !(art && $('title').hidden && (art.flashN > 0 || art.flashTail)) ? 1 : 1 / 24;
     if (acc >= step && !document.hidden) {
       if (!$('title').hidden && titleArt) titleArt.frame(acc);
       else if (art) art.frame(acc);
@@ -803,7 +804,7 @@
   function start(data) {
     art = new window.PixelArt($('art'), $('artBloom'));
     art.onCadre = nouvelleImage; brancherFond(); window.__art = art; // pour les tests automatiques
-    art.visions = visionsVoulues() && !reduce;
+    art.visions = visionsVoulues();
     if (art.setWide) art.setWide(true); // l'image du jeu en format cinéma, sur toute la largeur
     titleArt = new window.PixelArt($('titleArt'), $('titleBloom'));
     titleArt.scene = 'brouillard'; titleArt.trans = 0;
