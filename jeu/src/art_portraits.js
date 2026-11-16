@@ -366,6 +366,7 @@
     bibliothecaire: '16_bibliothecaire', planton: '17_planton', concierge: '18_concierge', agentsj: '19_agentsj', laitier: '20_laitier', pike: '21_pike', serveur: '22_serveur',
     veuve: '23_veuve', conducteur: '24_conducteur', mort: '25_mort', vane: '26_vane',
     // Paris
+    patron: '35_patron', hollis: '36_hollis',
     gerant: '27_blain', gaudry: '28_gaudry', remi: '29_remi', brevin: '30_brevin', rogniat: '31_rogniat', leroux: '32_leroux', mandrin: '33_mandrin' };
   Object.keys(PTF).forEach(function (id) { [].concat(PTF[id]).forEach(function (f) { A.PHOTO_LIST.push('portraits/' + f); }); });
   P.photoKeyP = function (id, st) {
