@@ -31,7 +31,7 @@
   window.__sound = sound;
   var CH = window.CHAPTERS || { prologue: window.SCENE };
   var SC = window.SCENE; // le chapitre en cours
-  var soundOn = true, lastKind = null, rendered = 0, queue = [], current = null, typingTimer = null, instant = false, busy = false, ideasOpen = false, lastCheck = null;
+  var soundOn = true, lastKind = null, rendered = 0, queue = [], current = null, typingTimer = null, instant = false, busy = false, ideasOpen = true, lastCheck = null;
   var logEl = $('log');
 
   try { soundOn = localStorage.getItem(SKEY) !== 'off'; } catch (e) {}
@@ -458,26 +458,38 @@
       bar.appendChild(btn('Laisser tomber', '', function () { act(function () { game.declinePush(); }); }));
       return;
     }
+    // les suggestions : visibles par défaut (on peut les replier), sauf en mode « sans suggestions »
+    var mode = modeIdees();
     if (s.talk) {
-      // les sujets restent repliés : on parle librement, et on ne les déplie que si l'on sèche
+      if (mode === 'aucune') { var h0 = document.createElement('span'); h0.className = 'label'; h0.textContent = '« Dire » : vos paroles · « Agir » : vos gestes'; bar.appendChild(h0); return; }
       var tb = btn(ideasOpen ? 'Sujets ▾' : 'Sujets ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
       tb.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
       bar.appendChild(tb);
-      if (ideasOpen) game.topicChips().forEach(function (t) { bar.appendChild(btn(esc(t.label), '', function () { act(function () { game.choose({ label: t.label, topic: t.topic }); }); })); });
+      if (ideasOpen) game.suggestionsParole(5, mode).forEach(function (t) {
+        bar.appendChild(btn(esc(t.label), '', function () { act(function () {
+          if (t.say) game.step(t.say, 'dire');
+          else if (t.mal) game.choose({ label: t.label, mal: t.mal });
+          else game.choose({ label: t.label, topic: t.topic });
+        }); }));
+      });
       else { var h2 = document.createElement('span'); h2.className = 'label'; h2.textContent = '« Dire » : vos paroles · « Agir » : vos gestes'; bar.appendChild(h2); }
       return;
     }
+    if (mode === 'aucune') { var h3 = document.createElement('span'); h3.className = 'label'; h3.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(h3); return; }
     var ib = btn(ideasOpen ? 'Idées ▾' : 'Idées ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
     ib.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
     bar.appendChild(ib);
-    if (ideasOpen) game.ideas(4).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
+    if (ideasOpen) {
+      game.ideas(4, mode).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
+      // réfléchir : un jet d'Idée (INT), au plus toutes les trois heures de jeu
+      if (game.reflexionPossible()) bar.appendChild(btn('Réfléchir', 'reflechir', function () { act(function () { game.choose({ label: 'Réfléchir', reflechir: true }); }); }));
+    }
     else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(hint); }
   }
 
   function act(fn) {
     if (busy) return;
     skip();
-    ideasOpen = false;
     fn();
     render();
     if (window.matchMedia && !window.matchMedia('(pointer: coarse)').matches) $('cmd').focus();
@@ -592,6 +604,12 @@
     list.appendChild(sb);
     var mb = btn('Musique : ' + (musicOn ? 'oui' : 'non'), 'ghost', function () { toggleMusic(); mb.innerHTML = 'Musique : ' + (musicOn ? 'oui' : 'non'); });
     list.appendChild(mb);
+    var ordre = ['guide', 'normal', 'aucune'];
+    var ib2 = btn('Suggestions : ' + NOMS_MODES[modeIdees()], 'ghost', function () {
+      var m = ordre[(ordre.indexOf(modeIdees()) + 1) % 3]; try { localStorage.setItem(IKEY, m); } catch (e) {}
+      ib2.innerHTML = 'Suggestions : ' + NOMS_MODES[m]; actions();
+    });
+    list.appendChild(ib2);
     if (pleinEcranPossible()) { var fb = btn('Plein écran : ' + (pleinEcranVoulu() ? 'oui' : 'non'), 'ghost', function () { fb.innerHTML = 'Plein écran : ' + (basculerPleinEcran() ? 'oui' : 'non'); }); list.appendChild(fb); }
     body.appendChild(list);
     var help = document.createElement('div'); help.className = 'help';
@@ -653,6 +671,10 @@
   // Le navigateur n'accorde le plein écran qu'après un geste du joueur : on le demande chaque fois qu'on quitte
   // l'écran-titre (préférence « Plein écran » du menu). Sur iPhone et iPad, Safari ne le permet pas pour une page
   // où l'on tape du texte : on y conseille d'installer le jeu sur l'écran d'accueil, d'où il s'ouvre sans barres.
+  // les suggestions : « guide » (plus de pistes, pas de tentations), « normal », « aucune »
+  var IKEY = 'express-minuit-idees';
+  function modeIdees() { try { var m = localStorage.getItem(IKEY); return m === 'guide' || m === 'aucune' ? m : 'normal'; } catch (e) { return 'normal'; } }
+  var NOMS_MODES = { guide: 'guidées', normal: 'normales', aucune: 'aucune' };
   var FKEY = 'express-minuit-plein';
   // (« display-mode: fullscreen » vaut aussi pour une page mise en plein écran : ce n'est l'application installée que sans élément plein écran)
   function installe() { try { return !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches || (matchMedia('(display-mode: fullscreen)').matches && !(document.fullscreenElement || document.webkitFullscreenElement))); } catch (e) { return false; } }

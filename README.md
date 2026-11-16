@@ -159,7 +159,17 @@ Le jeu se souvient des quatre dernières personnes ou choses dont il a été que
 
 ## Les idées et les sujets
 
-Les idées (hors conversation) et les sujets (en conversation) sont repliés par défaut, et se replient après chaque geste. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.
+Les idées (hors conversation) et les sujets (en conversation) sont visibles par défaut ; on peut les replier. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.
+
+Le carnet d’idées mêle, sans jamais les signaler, cinq familles : les gestes de base (regarder, parler à quelqu’un), les pistes qui font avancer l’enquête, les fausses pistes (cohérentes mais inutiles : du temps, parfois de l’argent), les tentations (santé mentale, blessure, plainte, arrestation, porte qui se ferme) et, quand la santé mentale passe à « Fragile », les folies. Fausses pistes, tentations et folies sont dans `jeu/src/idees.js`.
+
+- L’intelligence décide du mélange : sur quatre idées, une piste vers INT 40, deux vers INT 75, parfois trois au-delà.
+- Les idées suivent l’enquête : elles changent quand on change de lieu, qu’on trouve un indice, que l’heure tourne ou que la santé mentale baisse, et ne bougent pas sinon. Quand un lieu n’a plus rien à dire, « Aller ailleurs » apparaît.
+- Le bouton « Réfléchir » lance un jet d’Idée (INT), au plus toutes les trois heures de jeu ; réussi, il met en tête la meilleure piste.
+- En conversation, les sujets à aborder se mêlent à des banalités (le brouillard, la Ruhr, la TSF) et à des maladresses : une insulte, une menace, ou une phrase propre au personnage qui le vexe, le fait partir ou, avec la police, vous mène au poste.
+- Dans le menu, « Suggestions : guidées » ajoute une piste et retire les tentations ; « normales » est le réglage par défaut ; « aucune » laisse le joueur seul avec son clavier.
+
+Vérifications : `node jeu/tools/test_idees.js` (chaque idée réussie et ratée, chaque maladresse) et `node jeu/tools/test_carnet.js paris 10` (des parties jouées uniquement avec les suggestions, par intelligence et par mode ; même chose avec `prologue` ou `londres`).
 
 Une suggestion de sujet n’apparaît que si ce sujet a déjà été abordé avec ce personnage : vous l’avez nommé devant lui, ou lui-même en a parlé. Les choses qu’on a sous les yeux comptent aussi (la table de Ravel, le serveur), et les gestes restent toujours proposés (prendre congé, glisser un pourboire, l’interroger sur lui-même). Ainsi, la vieille dame ne propose « l’homme qui est venu le chercher » qu’après avoir dit qu’un autre homme était venu. Vérification : `node jeu/tools/test_suggestions.js`.
 

@@ -147,20 +147,22 @@
         api.flag('plainte', p);
       },
       // l'outrage à agent : une nuit au poste ; à la troisième arrestation, le juge
-      arreter: function (api, id) {
+      // o.motif remplace « Outrage à agent. » ; o.fleming, ce que l'inspecteur en dit le lendemain
+      arreter: function (api, id, o) {
+        o = o || {};
         var n = (api.flag('arrestations') || 0) + 1, D = 1440;
         api.flag('arrestations', n);
         api.endTalk(false);
         if (n >= 3) { api.say('Le juge de Bow Street vous reconnaît. Il ne sourit pas.'); api.flag('fin', 'prison'); api.flag('combat', null); api.end(); return; }
         api.say(n === 1
-          ? 'Outrage à agent. La nuit au poste de Bow Street, sur un banc de bois, entre un pickpocket et un marin qui chante. Au matin, on vous rend votre chapeau et vos lacets.'
-          : 'Outrage à agent, encore. Cette fois, on prend votre nom, vos empreintes et deux nuits de votre temps. Le juge vous inflige cinq livres d’amende.');
+          ? (o.motif || 'Outrage à agent.') + ' La nuit au poste de Bow Street, sur un banc de bois, entre un pickpocket et un marin qui chante. Au matin, on vous rend votre chapeau et vos lacets.'
+          : (o.motif ? o.motif + ' Encore.' : 'Outrage à agent, encore.') + ' Cette fois, on prend votre nom, vos empreintes et deux nuits de votre temps. Le juge vous inflige cinq livres d’amende.');
         api.s.min = (Math.floor(api.s.min / D) + n) * D + 9 * 60; api.s.tick = 0;
         if (n > 1) api.pay(Math.min(5, api.s.money));
         api.go('yard');
         if (!api.flag('mort:fleming')) api.npc('fleming', id === 'fleming'
           ? '« Vous avez eu la nuit pour réfléchir. » Fleming ne lève pas les yeux de son dossier. « Je ne retiens rien contre vous. Cette fois. »'
-          : '« On m’a raconté votre soirée. » Fleming referme un dossier. « Insulter mes hommes ne vous avancera à rien. Une fois, je veux bien. Pas deux. »');
+          : '« On m’a raconté votre soirée. » Fleming referme un dossier. « ' + (o.fleming || 'Insulter mes hommes ne vous avancera à rien.') + ' Une fois, je veux bien. Pas deux. »');
         if (!api.flag('mort:fleming') && id !== 'fleming' && !api.s.ended) { api.s.talk = 'fleming'; api.npcs('fleming').met = true; }
         api.lose(1);
       }

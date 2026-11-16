@@ -964,13 +964,103 @@
       return thingsHere().some(function (t) { return t.ids.indexOf(id) >= 0; }) || porte(id);
     }
 
-    function ideas(n) {
-      var acts = availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)); });
-      var fresh = acts.filter(function (a) { return !s.done[a.id]; });
-      var pool = (fresh.length >= n ? fresh : fresh.concat(acts.filter(function (a) { return s.done[a.id]; })));
-      return pool.slice(0, n).map(function (a) { return { label: a.idea === true ? a.label : a.idea, action: a.id }; });
+    // ----- le carnet d'idées -----
+    // Quatre suggestions, tirées de cinq familles, jamais signalées à l'écran :
+    //   base   : les gestes de tout le monde (regarder, parler à quelqu'un, dormir) ;
+    //   piste  : ce qui fait avancer l'enquête (les actions marquées idea dans les chapitres) ;
+    //   fausse : cohérent, mais inutile ; coûte du temps ou de l'argent (idees.js) ;
+    //   risque : la tentation ; santé mentale, blessure, arrestation, porte fermée, parfois un indice au prix fort ;
+    //   folie  : ce que propose un esprit fragile (santé mentale « Fragile » et pire).
+    // Le nombre de pistes suit l'intelligence (INT 40 : une ; 75 : deux ; 90 : deux ou trois) ; le mode « guide »
+    // en ajoute une et retire les tentations. La liste ne bouge pas tant que la situation ne change pas.
+    function natureIdee(a) {
+      if (a.ideaKind) return a.ideaKind;
+      if (a.talkTo || /_look$/.test(a.id) || a.idea === 'Regarder autour de vous') return 'base';
+      return 'piste';
     }
-
+    function signatureIdees() { return [s.loc, s.talk || '', s.clues.length, Object.keys(s.done).length, Math.floor(s.min / 240), sanState(), s.inv.length].join('|'); }
+    function alea(cle) {
+      var h = 2166136261; for (var i = 0; i < cle.length; i++) { h ^= cle.charCodeAt(i); h = Math.imul(h, 16777619); }
+      return function () { h += 0x6D2B79F5; var t = h; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    }
+    function melanger(l, r) { for (var i = l.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), x = l[i]; l[i] = l[j]; l[j] = x; } return l; }
+    function nbPistes(r, mode) {
+      var INT = (s.pc.carac && s.pc.carac.INT) || 60, attendu = 1 + Math.max(0, INT - 40) / 35;
+      return Math.floor(attendu) + (r() < attendu % 1 ? 1 : 0) + (mode === 'guide' ? 1 : 0);
+    }
+    function etiquette(a) { return a.idea === true ? a.label : a.idea; }
+    function ideas(n, mode) {
+      n = n || 4; mode = mode || 'normal';
+      var acts = availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)); });
+      var r = alea(signatureIdees()), F = { base: [], piste: [], fausse: [], risque: [], folie: [] };
+      acts.forEach(function (a) { (F[natureIdee(a)] || F.piste).push(a); });
+      var neuf = function (l) { return l.filter(function (a) { return !s.done[a.id]; }); };
+      ['fausse', 'risque', 'folie'].forEach(function (k) { F[k] = melanger(neuf(F[k]), r); });
+      var out = [], pris = {};
+      function prend(a, lab) { if (!a || pris[a.id] || out.length >= n) return; pris[a.id] = 1; out.push({ label: lab || etiquette(a), action: a.id }); }
+      // les bonnes idées : les pistes, dans l'ordre du scénario, puis les gens qu'on n'a pas encore entendus
+      var parler = F.base.filter(function (a) { return a.talkTo; }), regard = F.base.filter(function (a) { return !a.talkTo; });
+      var bons = neuf(F.piste).concat(neuf(parler));
+      // ce qui a déjà servi : d'abord ce qu'on refait volontiers (changer de voiture, attendre, relire), puis les gens déjà vus
+      var faits = F.piste.filter(function (a) { return s.done[a.id]; });
+      var refaire = faits.filter(function (a) { return a.repeatable; }).sort(function (x, y) { return s.done[x.id] - s.done[y.id]; });
+      var revus = parler.filter(function (a) { return s.done[a.id]; }), restes = faits.filter(function (a) { return !a.repeatable; });
+      if (!bons.length) bons = refaire.concat(revus);
+      // l'idée qu'un jet d'Idée réussi a fait venir, tant qu'elle n'est pas faite
+      var ec = s.flags.eclair, eca = ec && ec.loc === s.loc && acts.filter(function (a) { return a.id === ec.id && !s.done[a.id]; })[0];
+      var tete = eca ? { label: 'Idée : ' + etiquette(eca), action: eca.id } : null;
+      if (eca) pris[eca.id] = 1;
+      var etat = sanState(), k = nbPistes(r, mode) - (eca ? 1 : 0);
+      // quand le lieu n'a plus rien à dire, l'idée la plus juste est d'aller ailleurs
+      var partir = availableActions().filter(function (a) { return /_lieux$/.test(a.id); })[0];
+      if (partir && !neuf(F.piste).length) { prend(partir, 'Aller ailleurs'); k--; }
+      bons.slice(0, Math.max(0, k)).forEach(function (a) { prend(a); });
+      prend(neuf(regard)[0]);
+      // le reste : ce qu'un esprit troublé propose, la tentation, les fausses pistes
+      var folies = etat >= 3 ? 2 : etat >= 2 ? 1 : 0;
+      F.folie.slice(0, folies).forEach(function (a) { prend(a); });
+      if (mode !== 'guide' || etat >= 2) prend(F.risque[0]);
+      (mode === 'guide' ? F.fausse.slice(0, 1) : F.fausse).forEach(function (a) { prend(a); });
+      if (mode !== 'guide') F.risque.slice(1).forEach(function (a) { prend(a); });
+      bons.forEach(function (a) { prend(a); });
+      if (partir) prend(partir, 'Aller ailleurs');
+      refaire.concat(revus, restes, regard).forEach(function (a) { prend(a); });
+      if (tete) out.length = Math.min(out.length, n - 1);
+      melanger(out, r);
+      return tete ? [tete].concat(out) : out;
+    }
+    // les pistes seules, dans l'ordre du scénario : ce que fait venir un jet d'Idée réussi
+    function pistes(n) {
+      return availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)) && natureIdee(a) === 'piste' && !s.done[a.id]; })
+        .slice(0, n).map(function (a) { return { label: etiquette(a), action: a.id }; });
+    }
+    // une suggestion recopiée au clavier vaut la suggestion touchée
+    function ideeTapee(raw) {
+      var t = normalize(raw).replace(/^(je |j )/, ''), mots = t.split(/\s+/).filter(function (m) { return m.length > 3; });
+      if (!mots.length) return null;
+      return availableActions().filter(function (a) { return /^(fausse|risque|folie)$/.test(a.ideaKind || '') && (!a.ideaCond || a.ideaCond(api)); }).filter(function (a) {
+        var l = normalize(etiquette(a)).split(/\s+/).filter(function (m) { return m.length > 3; });
+        var communs = l.filter(function (m) { return t.indexOf(m.slice(0, Math.max(4, m.length - 2))) >= 0; }).length;
+        return l.length && communs / l.length >= 0.75 && mots.length <= l.length + 3;
+      })[0] || null;
+    }
+    // ----- en conversation : de bonnes questions, des banalités, des maladresses -----
+    function suggestionsParole(n, mode) {
+      var npc = scene.npcs[s.talk]; if (!npc) return [];
+      n = n || 5; mode = mode || 'normal';
+      var st = npcState(npc.id), r = alea(signatureIdees() + '|' + Object.keys(st.asked).length + '|' + s.turn);
+      var sujets = topicChips(npc).map(function (t) { return { label: t.label, topic: t.topic, asked: t.asked }; });
+      var ex = scene.paroles ? scene.paroles(api, npc) : null, banal = melanger(((ex && ex.banal) || []).slice(), r), mal = melanger(((ex && ex.maladresse) || []).slice(), r);
+      var out = [], vus = {};
+      function prend(c) { if (!c || vus[c.label] || out.length >= n) return; vus[c.label] = 1; out.push(c); }
+      var k = Math.max(1, nbPistes(r, mode));
+      sujets.filter(function (t) { return !t.asked; }).slice(0, k).forEach(prend);
+      prend(banal[0]);
+      if (mode !== 'guide' || sanState() >= 2) prend(mal[0]);
+      sujets.forEach(prend);
+      banal.slice(1).forEach(prend);
+      return melanger(out, r);
+    }
     function fallback(p, cands) {
       var near = cands.filter(function (c) { return c.score >= 0.75; }).slice(0, 3);
       var noun = p.nouns[0], verb = p.verbs[0];
@@ -1633,7 +1723,8 @@
         if (r.success) {
           var hint = J.idee ? J.idee(api) : null;
           if (hint && hint.x) { api.say(jetText('ideeOk', 'Une idée vous vient. ') + hint.x); if (hint.chips) api.chips(hint.chips); }
-          else { var ch = ideas(3); api.say(jetText('ideeLoc', 'Une idée vous vient : ici même, il reste des choses à tenter.')); if (ch.length) api.chips(ch); }
+          else { var ch = pistes(2); api.say(jetText('ideeLoc', 'Une idée vous vient : ici même, il reste des choses à tenter.')); if (ch.length) api.chips(ch); }
+          var meilleure = pistes(1)[0]; if (meilleure) s.flags.eclair = { loc: s.loc, id: meilleure.action };
         } else if (r.pushed) { s.tick = 60; api.say(fresh('ideeForce', jetText('ideeForce', ['Une heure à ruminer, à tourner en rond dans votre tête. Rien. Juste une migraine.']))); }
         else api.say(fresh('ideeRate', jetText('ideeRate', ['Rien ne vient. Les pièces du puzzle refusent de s’assembler.', 'Vous tournez la question dans tous les sens, sans rien en tirer.'])));
       }
@@ -1739,6 +1830,8 @@
       if (dire) { s.tick = scene.talkTick || 1; parler(raw, p); afterTurn(); finish(); return; }
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
+      var ia = !s.talk && ideeTapee(raw);
+      if (ia) { exec(ia, p); afterTurn(); finish(); return; }
       // « dire qu'on est de la police » : c'est une parole. On la dit à son interlocuteur, ou à la seule personne présente.
       var dit = discoursRapporte(raw);
       if (dit) {
@@ -1857,6 +1950,18 @@
       if (s.ended) return;
       paroleJoueur = null;
       var MJ = mjModule();
+      if (chip.reflechir) {
+        if (s.pending) return;
+        log({ t: 'player', x: chip.label || 'Réfléchir' }); s.turn++; s.tick = 1;
+        jetIdee(); afterTurn(); finish(); return;
+      }
+      if (chip.mal && s.talk) {
+        var mn = scene.npcs[s.talk], ml = scene.paroles && scene.paroles(api, mn), mx = ml && (ml.maladresse || []).filter(function (m) { return m.mal === chip.mal; })[0];
+        if (!mx || !mx.run) return;
+        log({ t: 'player', x: mx.dit || chip.label, said: !!mx.dit }); s.turn++; s.tick = scene.talkTick || 1;
+        talkMode = 'raw'; try { mx.run(api, mn); } finally { talkMode = null; }
+        afterTurn(); finish(); return;
+      }
       if (chip.act && scene.chipAct) {
         if (s.pending) return;
         log({ t: 'player', x: chip.label }); s.turn++; s.tick = 1;
@@ -1943,6 +2048,9 @@
       rank: function (raw) { return rankActions(rewrite(lex, parse(lex, raw, scene.phrases))); },
       step: step, choose: choose, roll: roll, push: push, declinePush: declinePush,
       ideas: ideas,
+      pistes: pistes,
+      suggestionsParole: function (n, mode) { return s.talk ? suggestionsParole(n, mode) : []; },
+      reflexionPossible: function () { return !s.talk && !s.pending && !(s.flags.jidee !== undefined && s.min - s.flags.jidee < 180); },
       clock: function () { return fmtTime(s.min); },
       where: function () { return scene.where ? scene.where(s.min) : ''; },
       topicChips: function () { return s.talk ? topicChips(scene.npcs[s.talk]) : []; },

@@ -419,3 +419,6 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   .cmd { grid-column: 2; grid-row: 3; position: relative; z-index: 2; padding: 6px 30px 30px 22px; }
   .turn { right: 30px; }
 }
+
+/* réfléchir : le jet d'Idée, discret, au bout des suggestions */
+.actions .reflechir { font-style: italic; border-style: dashed; }

@@ -1,7 +1,7 @@
 // La suite d'un chapitre à l'autre : l'arrivée à Paris dépend de ce que l'investigateur a vécu à Londres.
 // On fabrique le « passé » comme le fait l'interface à la fin de Londres (pc.passe.londres), puis on lance Paris.
 global.window = global;
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees']) require('../src/' + f + '.js');
 const L = CHAPTERS.londres, P = CHAPTERS.paris, J = 1440;
 let rates = 0;
 function paris(nom, passe, pcIndex) {
