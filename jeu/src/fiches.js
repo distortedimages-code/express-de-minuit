@@ -6,6 +6,8 @@
   function day(api) { return Math.floor(api.s.min / 1440); }
   function cls(f) { return f.fr ? 'fr' : /police/.test(f.groupe) ? 'o' : /savant|diplomate|mondain|occultiste|hotel|domestique/.test(f.groupe) ? 'h' : 'p'; }
   function brule(api) { return api.s.min >= 2820; }
+  // ce que les journaux ont pu raconter : l'édition du matin, jamais avant cinq heures (voir londres.js)
+  function presse(api) { return L && L._h && L._h.presse ? L._h.presse(api.s.min) : Math.floor((api.s.min - 300) / 1440); }
 
   // ================================================================ Londres
   if (L) {
@@ -110,11 +112,11 @@
     // ce que tout Londres sait, selon les jours et selon le milieu
     L.rumeurs = {
       SMITH: function (api, f) { return { h: '« Le professeur Smith ? Le chasseur de médiums. Un homme brillant, et un peu théâtral. »', p: '« Le professeur des fantômes ? Celui des journaux ? »', o: '« Smith ? Il nous a rendu service, autrefois. »' }[cls(f)] || null; },
-      MEURTRES: function (api, f) { if (day(api) < 3) return null; return { h: '« Ces trois Turcs du Chelsea Arms… Une horreur. On dit qu’ils portaient tous le même nom. »', p: '« Les trois Turcs de Chelsea ? On dit qu’ils avaient le même nom, tous les trois. Ça porte malheur, un nom pareil. »', o: '« Chelsea ? C’est l’affaire de Fleming, au Yard. »' }[cls(f)]; },
-      INCENDIE: function (api, f) { if (!brule(api)) return null; return { h: '« La maison du professeur Smith, à St John’s Wood. Réduite en cendres. On ne sait même pas s’il est vivant. »', p: '« La maison du savant qui a brûlé ? J’ai lu ça. Le domestique a filé, qu’ils disent. »', o: '« L’incendie de St John’s Wood ? C’est Rigby, aux incendies. »' }[cls(f)]; },
-      STANLEY: function (api, f) { if (day(api) < 4) return null; return { h: '« Cet homme parti en fumée à Stoke Newington ? Une combustion spontanée, disent les journaux. Absurde. »', p: '« Le type de Stoke Newington qui a disparu dans la fumée ? Ma femme en fait des cauchemars. »', o: '« Stoke Newington ? Pas mon secteur. Une drôle d’histoire, paraît-il. »' }[cls(f)]; },
-      TURCS: function (api, f) { return day(api) >= 3 ? '« Les Turcs ? Depuis Chelsea, on ne parle que d’eux. »' : '« Les Turcs ? On s’est battus contre eux, pendant la guerre. Maintenant on négocie, à Lausanne. »'; },
-      CONFERENCE: function (api, f) { return day(api) >= 1 ? { h: '« La conférence de Smith ? J’ai lu le compte rendu. Le sceptique devenu prophète. Quel retournement. »', p: '« La conférence ? Paraît que le professeur a dit que les fantômes reviennent. Moi, je l’ai toujours su. »', o: '« La conférence de l’Institut ? Ce n’est pas mon rayon. »' }[cls(f)] : null; },
+      MEURTRES: function (api, f) { if (presse(api) < 3) return null; return { h: '« Ces trois Turcs du Chelsea Arms… Une horreur. On dit qu’ils portaient tous le même nom. »', p: '« Les trois Turcs de Chelsea ? On dit qu’ils avaient le même nom, tous les trois. Ça porte malheur, un nom pareil. »', o: '« Chelsea ? C’est l’affaire de Fleming, au Yard. »' }[cls(f)]; },
+      INCENDIE: function (api, f) { if (presse(api) < 2) return null; return { h: '« La maison du professeur Smith, à St John’s Wood. Réduite en cendres. On ne sait même pas s’il est vivant. »', p: '« La maison du savant qui a brûlé ? J’ai lu ça. Le domestique a filé, qu’ils disent. »', o: '« L’incendie de St John’s Wood ? C’est Rigby, aux incendies. »' }[cls(f)]; },
+      STANLEY: function (api, f) { if (presse(api) < 4) return null; return { h: '« Cet homme parti en fumée à Stoke Newington ? Une combustion spontanée, disent les journaux. Absurde. »', p: '« Le type de Stoke Newington qui a disparu dans la fumée ? Ma femme en fait des cauchemars. »', o: '« Stoke Newington ? Pas mon secteur. Une drôle d’histoire, paraît-il. »' }[cls(f)]; },
+      TURCS: function (api, f) { return presse(api) >= 3 ? '« Les Turcs ? Depuis Chelsea, on ne parle que d’eux. »' : '« Les Turcs ? On s’est battus contre eux, pendant la guerre. Maintenant on négocie, à Lausanne. »'; },
+      CONFERENCE: function (api, f) { return presse(api) >= 1 ? { h: '« La conférence de Smith ? J’ai lu le compte rendu. Le sceptique devenu prophète. Quel retournement. »', p: '« La conférence ? Paraît que le professeur a dit que les fantômes reviennent. Moi, je l’ai toujours su. »', o: '« La conférence de l’Institut ? Ce n’est pas mon rayon. »' }[cls(f)] : null; },
       MUSEE: function (api, f) { return '« Le British Museum ? Tout le monde connaît. Des momies, des statues, et une bibliothèque où il faut chuchoter. »'; },
       VICTORIA: function (api, f) { return '« Victoria ? La gare des trains pour le Continent. Douvres, le ferry, Paris. »'; },
       YARD: function (api, f) { return { h: '« Scotland Yard ? Sur l’Embankment, au bord de la Tamise. »', p: '« Le Yard ? J’y mets pas les pieds si je peux éviter. »', o: '« Le Yard, c’est la maison. »' }[cls(f)]; },
@@ -263,7 +265,7 @@
       ],
       concierge: [
         { t: 'courrier', cond: function (api) { return (api.flag('billetAttend') && !api.has('BILLET')) || (api.flag('courrier') || []).some(function (x) { return x.due <= api.s.min; }); }, x: '« À propos, {m}… » Il jette un œil aux casiers derrière lui. « Vous attendiez du courrier, je crois ? »' },
-        { t: 'smith', cond: function (api) { return api.s.min >= 1440 + 23 * 60 && !api.has('INCENDIE'); }, x: '« Vous avez vu les journaux, {m} ? St John’s Wood… On ne parle que de ça aux cuisines. »' },
+        { t: 'smith', cond: function (api) { return presse(api) >= 2 && !api.has('INCENDIE'); }, x: '« Vous avez vu les journaux, {m} ? St John’s Wood… On ne parle que de ça aux cuisines. »' },
         { t: 'ragots', cond: function (api) { return jour(api) >= 3; }, x: '« Le quartier est nerveux, {m}. Le groom ne veut plus faire les courses du côté de Chelsea. »' },
         { t: 'vane', cond: function (api) { return !api.has('VANE'); }, x: '« Une cliente me demandait hier l’adresse d’une médium. Les gens s’ennuient, par ce brouillard. »' },
         { t: 'lieux', x: '« Si {m} cherche à s’occuper, Londres ne manque pas de vieux papiers. Je connais des adresses. »' }

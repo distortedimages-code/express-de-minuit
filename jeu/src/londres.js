@@ -11,6 +11,9 @@
   var JOURS = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function day(min) { return Math.floor(min / D); }
+  // le jour du journal le plus récent : l'édition du matin sort des presses vers cinq heures ;
+  // avant, la nuit, on n'a encore que celle de la veille. Tout ce que « disent les journaux » se règle là-dessus.
+  function presse(min) { return Math.floor((min - 5 * 60) / D); }
   function hour(min) { return Math.floor((min % D) / 60); }
   function at(d, h, m) { return d * D + h * 60 + (m || 0); }
 
@@ -832,26 +835,28 @@
     api.say('À Constantinople, les porteurs de la gare de Sirkeci perdent les bagages avec un talent rare. Un petit pourboire facilite certaines frontières, mais surtout pas en France. Et un membre absent ce soir, Walter Partridge, toussoteux, compte justement prendre le Simplon-Orient cette saison.');
   }
   function lirePresse(api) {
+    var jp = presse(api.s.min);
     // avant lundi, les journaux ne savent rien des meurtres : la conférence le samedi, l'incendie le dimanche
-    if (!api.flag('presse1') && day(api.s.min) < 3) {
-      if (day(api.s.min) === 1 && !api.flag('presseSam')) {
+    if (!api.flag('presse1') && jp < 3) {
+      if (jp === 1 && !api.flag('presseSam')) {
         api.flag('presseSam', true);
         api.doc('LE PROFESSEUR ET LES FANTÔMES EN RELIEF — Hier soir, à l’Institut impérial, le professeur Julius Smith, l’homme qui a démasqué plus de médiums que Scotland Yard de pickpockets, a stupéfié la Fondation Challenger en soutenant que les hantises seraient des « tentatives de retour ». Un administrateur, sous couvert d’anonymat : « Nous attendions un sceptique. Nous avons eu un prophète. »', 'The Times · samedi 6 janvier 1923');
         if (!api.has('CONFERENCE')) api.clue('CONFERENCE');
         return;
       }
-      if (day(api.s.min) === 2 && !api.flag('presseDim')) {
+      if (jp === 2 && !api.flag('presseDim')) {
         api.flag('presseDim', true);
         api.doc('ST JOHN’S WOOD : LA MAISON D’UN SAVANT EN FLAMMES — La villa du professeur Julius Arthur Smith a été détruite par le feu dans la nuit de samedi. Le professeur demeure introuvable, de même que son domestique, James Beddows, qu’un voisin dit avoir vu s’éloigner de la maison peu avant le sinistre, chargé d’un lourd fardeau. Le sergent Rigby, de la brigade des incendies de Scotland Yard, prie toute personne informée de se manifester.', 'The Observer · dimanche 7 janvier 1923');
         api.clue('INCENDIE'); learn(api, 'yard');
         return;
       }
+      if (hour(api.s.min) < 5) { api.say(api.fresh('presseNuit', ['Ce sont encore les journaux d’hier. L’édition du matin ne sortira des presses qu’à l’aube.', 'Vous relisez les journaux de la veille, faute de mieux. Les nouvelles du jour ne seront imprimées qu’au petit matin.'])); return; }
       api.say(api.fresh('presse0', ['Les journaux du jour : la Ruhr, le mark qui s’effondre, un match de rugby à Twickenham. Rien de plus sur vos affaires.', 'Vous feuilletez la presse. Le brouillard fait la une, et la Ruhr, et un pasteur scandalisé par le charleston.']));
       return;
     }
     if (!api.flag('presse1')) {
       api.flag('presse1', true);
-      if (day(api.s.min) > 3) api.say('Dans la pile de journaux de la réception, un numéro de lundi attire votre œil.');
+      if (jp > 3) api.say('Dans la pile de journaux de la réception, un numéro de lundi attire votre œil.');
       api.doc('TROIS FOIS LE MÊME MORT — Trois hommes ont été découverts hier, poignardés en plein cœur, dans une chambre de l’hôtel Chelsea Arms. Tous trois portaient des papiers en règle au nom de M. Mehmet Makryat, antiquaire turc établi à Islington, à qui la chambre était également louée. Arrivés séparément à Londres il y a trois jours, ils avaient voyagé chacun de leur côté à travers le monde. Le vrai M. Makryat demeure introuvable. Scotland Yard l’invite à se présenter.', 'The Times · lundi 8 janvier 1923');
       api.clue('MEURTRES'); learn(api, 'chelsea'); learn(api, 'yard'); learn(api, 'ambassade');
       if (api.has('OBSERVATEUR') && !api.flag('reconnu')) { api.flag('reconnu', true); api.say('Sous l’article, trois croquis d’audience. Le deuxième visage vous glace : la moustache épaisse, le regard d’excuse. L’homme qui vous observait au banquet de l’Institut. Il était déjà mort, ou presque, quand vous l’avez vu.'); if (api.has('INCENDIE')) api.check('san_reconnu'); else api.flag('aReconnaitre', true); }
@@ -860,18 +865,19 @@
     }
     if (api.flag('stanleyDispo') && !api.flag('presse2') && api.has('BILLET')) {
       api.flag('presse2', true);
-      if (day(api.s.min) > 4) api.say('Dans un numéro de mardi oublié sur une banquette, un titre vous arrête.');
+      if (jp > 4) api.say('Dans un numéro de mardi oublié sur une banquette, un titre vous arrête.');
       api.doc('VOLATILISÉ DANS UN NUAGE DE FUMÉE — M. Henry Stanley, 41 ans, de Stoke Newington, a disparu lundi soir. Sa logeuse, Mrs Constance Atkins, l’a entendu crier vers huit heures, puis a trouvé sa chambre pleine de fumée et vide. Célibataire, passionné de chemins de fer, M. Stanley venait d’acheter un train miniature… dans la boutique de M. Mehmet Makryat. Combustion humaine spontanée ? La police ne commente pas.', 'The Scoop · mardi 9 janvier 1923');
       api.clue('STANLEY'); learn(api, 'stoke');
       return;
     }
-    if (api.flag('peauDemain') && day(api.s.min) >= api.flag('peauDemain') && !api.flag('presse3')) {
+    if (api.flag('peauDemain') && jp >= api.flag('peauDemain') && !api.flag('presse3')) {
       api.flag('presse3', true);
       api.doc('LE CADAVRE DU BRITISH MUSEUM — Un lecteur retrouvé sans vie dans la salle de lecture, dépouillé de sa peau de la tête aux pieds. Un message en turc, épinglé à ses vêtements, a été traduit par la police : « Celui-qui-n’a-pas-de-peau ne se laisse pas refuser. »' + (api.flag('demasque') ? ' La victime n’a pas été identifiée.' : ' Grâce aux chaussures de la victime, ressemelées la semaine dernière chez un cordonnier de St John’s Wood, le coroner l’a identifiée : il s’agit de James Beddows, le domestique du professeur Smith, recherché depuis l’incendie.'), 'The Times');
       api.clue('PEAU');
       if (!api.flag('demasque')) { api.clue('BEDDOWS'); api.say('Beddows. Vous revoyez ses mains tremblantes, à Cheapside, son regard sans cesse tourné vers le lit. Et vous vous demandez, pour la première fois, qui était couché dans ce lit.'); api.check('san_beddows'); }
       return;
     }
+    if (hour(api.s.min) < 5) { api.say(api.fresh('presseNuit', ['Ce sont encore les journaux d’hier. L’édition du matin ne sortira des presses qu’à l’aube.', 'Vous relisez les journaux de la veille, faute de mieux. Les nouvelles du jour ne seront imprimées qu’au petit matin.'])); return; }
     api.say(api.fresh('presseX', ['Les journaux du jour : la Ruhr, le mark qui s’effondre, un chanteur de music-hall fiancé pour la troisième fois. Rien sur vos affaires.', 'Vous feuilletez la presse. La police « suit plusieurs pistes ». Autrement dit, aucune.', 'Rien de neuf dans les journaux. Le brouillard, lui, fait la une : on n’a jamais vu ça depuis 1880.']));
   }
 
@@ -966,7 +972,7 @@
         { label: null, ids: ['SALLE', 'CARTEVISITE', 'BILLETS', 'VALISE', 'DESTINATIONS', 'LAMPE', 'PORTE', 'CHAMBRE', 'TABLE', 'COULOIR', 'DAMEDEUX'] }
       ],
       nudges: [
-        { at: 4, cond: function (api) { return !api.flag('presse1') && day(api.s.min) >= 3; }, run: function (api) { api.event('Le garçon d’étage frappe. « Les journaux de {m}, sous la porte. Une sale histoire à Chelsea, si je puis me permettre. »'); } },
+        { at: 4, cond: function (api) { return !api.flag('presse1') && presse(api.s.min) >= 3; }, run: function (api) { api.event('Le garçon d’étage frappe. « Les journaux de {m}, sous la porte. Une sale histoire à Chelsea, si je puis me permettre. »'); } },
         { at: 8, cond: function (api) { return api.has('QUETE') && !api.item(BILLETS); }, run: function (api) { api.event('Vous repensez à la voix brisée de Smith : « Allez vite. » La réception peut réserver vos billets chez Cook.'); } },
         { at: 3, cond: function (api) { return api.has('QUETE') && !api.flag('carteMusee'); }, run: function (api) { api.event('Le simulacre, les rouleaux, Fenalik, Gremanci… La salle de lecture du British Museum n’est qu’à dix minutes à pied. S’il existe une trace écrite de tout cela, c’est là.'); } }
       ],
@@ -1666,6 +1672,6 @@
   };
   L.boutiquesOuvertes = function (api) { var h = hour(api.s.min); return h >= 8 && h < 20 && JOURS[(4 + day(api.s.min)) % 7] !== 'dimanche'; };
 
-  L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
+  L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -265,7 +265,7 @@
     topics: [
       T('alexis', ['ALEXIS', 'TRAIN', 'MAQUETTE', 'OCCULTE', 'FILS'], function (api) { search(api, 'alexis'); }, { chip: 'L’accident de 1897', cond: function (api) { return api.has('MAQUETTE') || api.has('TRAIN') || api.has('STANLEY') || api.has('RAILS'); } }),
       T('makryat', ['MAKRYAT', 'MEURTRES', 'TURCS', 'CHELSEA'], function (api) { search(api, 'makryat'); }, { chip: 'Makryat, l’antiquaire', cond: function (api) { return api.has('MEURTRES'); } }),
-      T('stanley', ['STANLEY', 'STOKE', 'SUIE'], function (api) { search(api, 'stanley'); }, { chip: 'La disparition de Stoke Newington', cond: function (api) { return day(api.s.min) >= 4; } }),
+      T('stanley', ['STANLEY', 'STOKE', 'SUIE'], function (api) { search(api, 'stanley'); }, { chip: 'La disparition de Stoke Newington', cond: function (api) { return H.presse(api.s.min) >= 4; } }),
       T('smith', ['SMITH', 'CONFERENCE', 'INCENDIE', 'BEDDOWS'], function (api) { search(api, 'smith'); }, { chip: 'Le professeur Smith' }),
       T('aide', ['AIDE', 'SUITE', 'ARCHIVES', 'JOURNAL', 'FOUILLER'], ['« Donnez-moi un nom ou un fait divers, {m}, et je vous trouve l’article. Les années, je les connais par cœur. Les gens, beaucoup moins. »'])
     ] });
