@@ -509,16 +509,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 /* l'influence du Simulacre, sur la fiche */
 #sheetBody .sim { margin: 10px 0 0; font-family: var(--mono); font-size: 11.5px; letter-spacing: .04em; color: var(--red, #c8102e); }
 
-/* les visions : des images du Mythe en plein écran, en rafale, qui flanchent puis disparaissent */
+/* les visions : des images du Mythe en plein écran, en rafale : un éclair blanc, puis les images, très vite */
 #vision { position: fixed; inset: 0; z-index: 9999; background: #000; display: none; pointer-events: none; overflow: hidden; }
 #vision.on { display: block; }
-#vision.noir img { visibility: hidden; }
-#vision img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-#vision.flanche img { animation: flanche 0.2s steps(1, end) forwards; }
-@keyframes flanche {
-  0%   { transform: scale(1.06) translate(0, 0);       filter: contrast(1.5) brightness(1.1); }
-  20%  { transform: scale(1.15) translate(-2.5%, 1%);  filter: contrast(2.1) brightness(0.7); }
-  35%  { transform: scale(1.08) translate(1.5%, -1%);  filter: contrast(1.6) brightness(1); }
-  60%  { transform: scale(1.12) translate(-1%, 0.5%);  filter: contrast(1.9) brightness(0.8); }
-  100% { transform: scale(1.1) translate(0.5%, 0);     filter: contrast(1.7) brightness(0.55); }
-}
+#vision.blanc { background: #fff; }
+#vision.noir img, #vision.blanc img { visibility: hidden; }
+#vision img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.35); }

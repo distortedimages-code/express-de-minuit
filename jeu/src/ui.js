@@ -699,7 +699,7 @@
   // les suggestions : « guide » (plus de pistes, pas de tentations), « normal », « aucune »
   var IKEY = 'express-minuit-idees';
   var VKEY = 'express-minuit-visions';
-  // une vision du Mythe en plein écran, d'un coup, qui flanche puis disparaît (le menu « Visions » peut les couper)
+  // une vision du Mythe en plein écran, d'un coup, en rafale, après un éclair blanc (le menu « Visions » peut les couper)
   var chargement = false;
   // n = nombre d'images de la rafale : 1 au hasard quand la raison vacille, 2 à 5 selon la perte de Santé mentale
   function vision(n, essai) {
@@ -709,18 +709,19 @@
     if (!srcs.length) return;
     var v = $('vision'), im = v.querySelector('img');
     clearTimeout(vision.t);
-    (function montre(i) {
+    // un éclair blanc, puis les images très vite, un noir à peine visible entre deux ; pas de secousse
+    function montre(i) {
       if (i >= srcs.length) { v.className = ''; return; }
-      // chaque image : un à deux dixièmes de seconde, la dernière un peu plus longue ; un noir très bref entre deux
-      var dur = reduce ? 350 : (i === srcs.length - 1 ? 260 : 120 + Math.floor(Math.random() * 70));
-      im.src = srcs[i]; im.style.animationDuration = dur + 'ms';
-      v.className = ''; void v.offsetWidth; // relance l'animation
-      v.className = 'on' + (reduce ? '' : ' flanche');
+      var dur = reduce ? 350 : (i === srcs.length - 1 ? 140 : 70 + Math.floor(Math.random() * 30));
+      im.src = srcs[i]; v.className = 'on';
       vision.t = setTimeout(function () {
         if (i + 1 >= srcs.length) { v.className = ''; return; }
-        v.className = 'on noir'; vision.t = setTimeout(function () { montre(i + 1); }, 45);
+        v.className = 'on noir'; vision.t = setTimeout(function () { montre(i + 1); }, 25);
       }, dur);
-    })(0);
+    }
+    if (reduce) { montre(0); return; }
+    v.className = 'on blanc';
+    vision.t = setTimeout(function () { montre(0); }, 45);
   }
   function visionsVoulues() { try { return localStorage.getItem(VKEY) !== 'non'; } catch (e) { return true; } }
   function modeIdees() { try { var m = localStorage.getItem(IKEY); return m === 'guide' || m === 'aucune' ? m : 'normal'; } catch (e) { return 'normal'; } }
