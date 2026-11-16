@@ -328,7 +328,7 @@
       api.say('Vous vous réveillez à trois heures, sans raison. La chambre est glacée, et il y flotte une odeur de terre mouillée, de cave, qui n’y était pas hier. Vous allez à la fenêtre.');
       api.say('Sous le réverbère d’en face, quelqu’un se tient debout, la tête levée vers votre étage. Très maigre. Les bras trop longs, peut-être. Il ne bouge pas, comme ne bougent pas les choses qui ont tout leur temps. Vous ouvrez la croisée : le trottoir est vide.');
       api.clue('GUETTEUR');
-      api.s.min = d * D + 8 * 60; api.s.tick = 0;
+      api.s.min = d * D + 8 * 60; api.s.tick = 0; api.flag('guetteurMin', api.s.min);
       api.check('san_guetteur');
       return;
     }
@@ -837,14 +837,30 @@
   };
 
   // ================================================================ images provisoires (en attendant celles de Paris)
+  // les images de Paris (série du 15 novembre 2026) ; à la fin, le train de banlieue de Saint-Lazare
+  function vue(f) { return function (st) { return st.flags && st.flags.fin === 'poissy' ? 'paris/11_saint-lazare_train-de-banlieue' : typeof f === 'function' ? f(st) : f; }; }
   G.PHOTO_SCENES = Object.assign(G.PHOTO_SCENES || {}, {
-    p_gare: 'londres/25_gare-victoria',
-    p_hotel: function (st) { var h = Math.floor(((st.min || 0) % D) / 60); return (h >= 19 || h < 7) ? 'londres/02_hotel-chambre_nuit' : 'londres/03_hotel-chambre_jour'; },
-    p_bn: 'londres/18_british-museum_salle-de-lecture',
-    p_arsenal: 'londres/09_fleet-street_archives',
-    p_asile: 'londres/10_st-johns-wood_villa_jour',
-    p_cafe: 'londres/07_chelsea-arms_reception'
+    p_gare: vue('paris/01_gare-du-nord'),
+    // la nuit, une fois le guetteur venu, c'est lui qu'on voit sous le réverbère, au moins pour un esprit troublé
+    p_hotel: vue(function (st) {
+      var f = st.flags || {}, h = Math.floor(((st.min || 0) % D) / 60), nuit = h >= 19 || h < 7;
+      if (f.guetteurMin !== undefined && (st.min || 0) - f.guetteurMin < 30) return 'paris/04_hotel-du-cygne_guetteur';
+      if (nuit && f.guetteur && (st.san | 0) >= 1) return 'paris/04_hotel-du-cygne_guetteur';
+      return nuit ? 'paris/03_hotel-du-cygne_chambre_nuit' : 'paris/02_hotel-du-cygne_chambre_jour';
+    }),
+    p_bn: vue('paris/05_bibliotheque-nationale_salle-de-travail'),
+    p_arsenal: vue('paris/06_bibliotheque-de-l-arsenal'),
+    p_asile: vue(function (st) { var v = (st.flags || {}).vueCharenton; return v === 'registres' ? 'paris/09_charenton_registres' : v === 'secretariat' ? 'paris/08_charenton_secretariat' : 'paris/07_charenton_arcades'; }),
+    p_cafe: vue('paris/10_cafe-de-charenton')
   });
+  // à Charenton, l'image suit ce qu'on fait : les arcades en arrivant, le secrétariat, les registres
+  var VUES_CH = { ch_look: 'arcades', ch_guetter: 'arcades', ch_rogniat: 'secretariat', ch_caisses: 'secretariat', ch_cahier: 'secretariat', ch_guimart: 'secretariat', ch_registres: 'registres' };
+  (P.locations.charenton.actions || []).forEach(function (a) {
+    var v = VUES_CH[a.id]; if (!v) return;
+    var r = a.run; a.run = function (api) { api.flag('vueCharenton', v); return r.apply(this, arguments); };
+  });
+  var entreCh = P.locations.charenton.enter;
+  P.locations.charenton.enter = function (api) { api.flag('vueCharenton', 'arcades'); return entreCh.apply(this, arguments); };
 
   L.suite = 'paris';
   P.precedent = 'londres';

@@ -364,7 +364,9 @@
   var PTF = { smith: ['01_smith_institut', '02_smith_cheapside'], beddows: ['03_beddows_institut', '04_beddows_cheapside'], brule: '05_brule', fleming: '06_fleming', rigby: '07_rigby',
     chelseaclerk: '08_chelseaclerk', mustapha: '09_mustapha', voisin: '10_voisin', atkins: '11_atkins', sergent: '12_sergent', butter: '13_butter', alexis: '14_alexis', stanley: '15_stanley',
     bibliothecaire: '16_bibliothecaire', planton: '17_planton', concierge: '18_concierge', agentsj: '19_agentsj', laitier: '20_laitier', pike: '21_pike', serveur: '22_serveur',
-    veuve: '23_veuve', conducteur: '24_conducteur', mort: '25_mort', vane: '26_vane' };
+    veuve: '23_veuve', conducteur: '24_conducteur', mort: '25_mort', vane: '26_vane',
+    // Paris
+    gerant: '27_blain', gaudry: '28_gaudry', remi: '29_remi', brevin: '30_brevin', rogniat: '31_rogniat', leroux: '32_leroux', mandrin: '33_mandrin' };
   Object.keys(PTF).forEach(function (id) { [].concat(PTF[id]).forEach(function (f) { A.PHOTO_LIST.push('portraits/' + f); }); });
   P.photoKeyP = function (id, st) {
     var f = PTF[id]; if (!f) return null;
@@ -379,6 +381,8 @@
     if (sp.pipe || sp.cigarette) this.smoke(g, { x: x, y: 150, s: 1.2, flip: x > 200 }, sp, t);
   };
   Object.keys(PT).forEach(function (id) { P['pt_' + id] = function (g) { if (!this.portraitScene(g, id)) this.restaurant(g, this.t, this.state); }; });
+  // les personnages de Paris n'ont que leur portrait peint : en attendant qu'il arrive, le brouillard
+  Object.keys(PTF).forEach(function (id) { if (!P['pt_' + id]) P['pt_' + id] = function (g) { (this.brouillard || this.restaurant).call(this, g, this.t, this.state); }; });
   // Mrs Vane n'a pas de portrait dessiné : tant que son image n'existe pas, on garde le décor du salon
   P.pt_vane = function (g) { this.bureau(g, this.t, this.state); };
 })(typeof window !== 'undefined' ? window : globalThis);
