@@ -2,20 +2,43 @@
 (function (G) {
   'use strict';
   function Sound() { this.on = false; this.ctx = null; this.loc = 'restaurant'; this.san = 0; this.musicOn = true; this.decks = {}; this.track = null; }
-  // ---- musique : trois morceaux, choisis selon le lieu et la santé mentale, en fondu enchaîné
-  // house : « The House That Breathes », de Yoann, pour la maison de santé de Charenton (puis la maison du comte, à Poissy)
-  // deep : « The Deep Ones Sing », de Yoann : le chant qu'entend un esprit fragile, et les quais de la Tamise
-  var TRACKS = { haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3', deep: 'audio/the_deep_ones_sing.mp3' };
-  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48, deep: 0.6 };
-  var MUSIC = { title: 'train', restaurant: 'train', couloir: 'train', lits: 'train', compartiment: 'dissolve', victoria: 'train',
-    wagon1: 'dissolve', wagon2: 'dissolve', retour: 'dissolve', cave: 'dissolve', charenton: 'house', quais: 'deep' };
+  // ---- musique : des morceaux de Yoann, choisis selon le lieu et la santé mentale, en fondu enchaîné.
+  // Un morceau peut avoir plusieurs versions : on en tire une au hasard chaque fois qu'il reprend.
+  // house : « The House That Breathes », pour la maison de santé de Charenton (puis la maison du comte, à Poissy)
+  // deep : « The Deep Ones Sing », et appel : « The Call from the Deep », le chant qu'entend un esprit fragile
+  // eau : « Something in the Water », l'eau qui coule dans le train de nuit, et la Tamise
+  // attente : « Stillness Before the Surge », les chambres d'hôtel, la nuit, et le champ au petit matin
+  // statique : « Static in the Dark », les pièces sombres où quelque chose attend (Cheapside, la boutique, la chambre de Stanley)
+  // bourdon : « Gothic Drone », les salles de lecture et les archives
+  // gothique : « Gothic Shadows », l'église, le salon de Mrs Vane, la maison de Smith
+  // abysse : « Abyssal Static », le train fantôme, et l'investigateur au bord du gouffre
+  var TRACKS = { haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3', deep: 'audio/the_deep_ones_sing.mp3',
+    eau: ['audio/something_in_the_water.mp3', 'audio/something_in_the_water_2.mp3'],
+    attente: ['audio/stillness_before_the_surge.mp3', 'audio/stillness_before_the_surge_2.mp3'],
+    appel: ['audio/the_call_from_the_deep.mp3', 'audio/the_call_from_the_deep_2.mp3', 'audio/the_call_from_the_deep_3.mp3'],
+    gothique: ['audio/gothic_shadows.mp3', 'audio/gothic_shadows_2.mp3'],
+    statique: ['audio/static_in_the_dark.mp3', 'audio/static_in_the_dark_2.mp3'],
+    abysse: ['audio/abyssal_static.mp3', 'audio/abyssal_static_2.mp3'],
+    bourdon: ['audio/gothic_drone.mp3', 'audio/gothic_drone_2.mp3'] };
+  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48, deep: 0.6, eau: 0.56, attente: 0.42, appel: 0.5, gothique: 0.44, statique: 0.5, abysse: 0.5, bourdon: 0.46 };
+  // une liste de morceaux : on en tire un en arrivant, et l'on s'y tient tant qu'on reste
+  var MUSIC = { title: 'train', restaurant: 'train', couloir: 'eau', lits: 'eau', compartiment: 'dissolve', victoria: 'train', gare: 'train',
+    hotel: 'attente', campagne: 'attente',
+    cheapside: 'statique', boutique: 'statique', chambre_stanley: 'statique', chelsea: 'statique',
+    musee: 'bourdon', archives: 'bourdon', bn: 'bourdon', arsenal: 'bourdon',
+    eglise: 'gothique', vane: 'gothique', stjohn: 'gothique',
+    wagon1: 'abysse', wagon2: 'abysse', retour: 'appel', cave: 'dissolve', charenton: 'house', quais: ['eau', 'deep'] };
+  function tirer(l) { return Array.isArray(l) ? l[Math.floor(Math.random() * l.length)] : l; }
   // un lieu qui a sa musique la garde ; ailleurs, la musique suit la raison : la brume, puis le chant des profondeurs
-  // quand l'investigateur devient fragile, puis la dissolution quand il est au bord du gouffre
-  Sound.musicFor = function (loc, san) {
-    if (loc === 'title') return MUSIC.title;
-    if (san >= 3) return 'dissolve';
-    return MUSIC[loc] || (san >= 2 ? 'deep' : 'haze');
+  // quand l'investigateur devient fragile, puis l'abîme quand il est au bord du gouffre
+  Sound.musicFor = function (loc, san, memo) {
+    var cle = loc + '|' + (loc === 'title' ? 0 : san >= 3 ? 3 : MUSIC[loc] ? 1 : san >= 2 ? 2 : 1);
+    if (memo && memo.cle === cle) return memo.id;
+    var id = loc === 'title' ? MUSIC.title : san >= 3 ? 'abysse' : MUSIC[loc] ? tirer(MUSIC[loc]) : san >= 2 ? tirer(['deep', 'appel']) : 'haze';
+    if (memo) { memo.cle = cle; memo.id = id; }
+    return id;
   };
+  Sound.TRACKS = TRACKS;
   Sound.prototype.start = function () {
     if (this.ctx) { this.ctx.resume(); this.on = true; this.master.gain.setTargetAtTime(0.9, this.ctx.currentTime, 0.4); this.musicBus.gain.setTargetAtTime(1, this.ctx.currentTime, 0.4); this.pickMusic(); return; }
     var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
@@ -133,7 +156,7 @@
     this.music(null);
   };
   Sound.prototype.setMusic = function (on) { this.musicOn = on; this.pickMusic(); };
-  Sound.prototype.pickMusic = function () { this.music(this.on && this.musicOn ? Sound.musicFor(this.loc, this.san) : null); };
+  Sound.prototype.pickMusic = function () { this.memo = this.memo || {}; this.music(this.on && this.musicOn ? Sound.musicFor(this.loc, this.san, this.memo) : null); };
   Sound.prototype.music = function (id) {
     if (!this.ctx) return;
     if (id === this.track) return;
@@ -149,11 +172,15 @@
     if (!id) return;
     var d = this.decks[id];
     if (!d) {
-      var el = new Audio(); el.loop = true; el.preload = 'auto'; el.src = TRACKS[id];
+      var el = new Audio(); el.loop = true; el.preload = 'auto'; el.src = tirer(TRACKS[id]);
       d = this.decks[id] = { el: el, playing: false, vol: 0 };
       try { var src = ctx.createMediaElementSource(el); d.g = ctx.createGain(); d.g.gain.value = 0; src.connect(d.g); d.g.connect(this.musicBus); }
       catch (e) { d.g = null; el.volume = 0; }
       el.addEventListener('error', function () { d.broken = true; });
+    }
+    else if (Array.isArray(TRACKS[id]) && d.el.paused) {
+      // une autre version du même morceau, quand il reprend après s'être tu
+      var v = tirer(TRACKS[id]); if (d.el.src.indexOf(v) < 0) { d.broken = false; d.el.src = v; }
     }
     if (d.broken) return;
     clearTimeout(d.to); d.playing = true;

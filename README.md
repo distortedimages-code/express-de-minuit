@@ -271,7 +271,19 @@ Sur ordinateur et Android, le jeu passe en plein écran quand on quitte l'écran
 
 ## La musique
 
-Cinq morceaux, en fondu enchaîné (`TRACKS`, `MUSIC` et `musicFor`, dans `jeu/src/audio.js`). Un lieu qui a sa musique la garde : « Midnight Train Whispers » dans les trains et les gares de Londres, « Mechanical Dissolve » dans les lieux les plus étranges (le train fantôme, la cave de Butter), « The House That Breathes », de Yoann, à la maison de santé de Charenton (il servira aussi à la maison du comte, à Poissy), « The Deep Ones Sing », de Yoann, sur les quais de la Tamise. Ailleurs, la musique suit la raison de l'investigateur : « Rumble in the Haze » tant qu'il est lucide ou troublé, « The Deep Ones Sing » quand il devient fragile, « Mechanical Dissolve » au bord du gouffre (partout, sauf l'écran-titre). Les fichiers sont dans `audio/` sur la branche `gh-pages`, en MP3 (lu partout, iPhone compris ; les originaux, en Opus, ne passent pas sur tous les iPhone).
+Vingt morceaux de Yoann, en fondu enchaîné (`TRACKS`, `MUSIC` et `musicFor`, dans `jeu/src/audio.js`). Un morceau peut avoir plusieurs versions : le jeu en tire une au hasard chaque fois qu’il reprend. Un lieu qui a sa musique la garde :
+
+- « Midnight Train Whispers » : l’écran-titre, le wagon-restaurant, les gares (Victoria, gare du Nord) ;
+- « Something in the Water » : le soufflet et les voitures-lits du prologue, là où coule l’eau ; la Tamise, en alternance avec « The Deep Ones Sing » ;
+- « Stillness Before the Surge » : les chambres d’hôtel, à Londres et à Paris, et le champ au petit matin, après le train fantôme ;
+- « Static in the Dark » : Cheapside, la boutique de Makryat, la chambre de Stanley, le Chelsea Arms ;
+- « Gothic Drone » : la salle de lecture du British Museum, les archives du Daily Courier, la Bibliothèque nationale, l’Arsenal ;
+- « Gothic Shadows » : l’église St George, le salon de Mrs Vane, la maison de Smith ;
+- « Abyssal Static » : les voitures du train fantôme ; « The Call from the Deep » : son retour vers l’Angleterre ;
+- « Mechanical Dissolve » : le compartiment 7 et la cave d’Arthur Butter ;
+- « The House That Breathes » : la maison de santé de Charenton.
+
+Ailleurs, la musique suit la santé mentale : « Rumble in the Haze » tant que l’investigateur est lucide ou troublé, « The Deep Ones Sing » ou « The Call from the Deep » quand il devient fragile, « Abyssal Static » partout quand il est au bord du gouffre. Les fichiers sont réencodés à 96 kb/s, à un niveau sonore commun, sans pochette.
 
 ## Les bruitages
 
