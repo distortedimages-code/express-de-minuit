@@ -667,7 +667,13 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     [/\b(?:je |nous )?(?:prends|prendre|prenons|hele|heler|appelle|appeler|siffle|siffler|attrape|attraper|saute dans|monte dans) (?:un |le |mon |dans un )?(?:taxi|fiacre|omnibus|metro|bus|tramway|tram|cab)\s+(?:pour|jusqu a|jusqu au|jusqu aux|vers|direction|en direction de|en direction du|et (?:je )?(?:vais|file|fonce|rentre|retourne))\s+/g, ' aller a '],
     [/\ben (taxi|fiacre|omnibus|metro|bus|tram|tramway)\b/g, ' '],
     // « je vais au British Museum pour chercher les rouleaux » : le but ne change pas le geste
-    [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)[a-z]+(er|ir|re|oir)\b.*$/g, ' '],
+    // … sauf quand le geste n'est qu'un déplacement sans destination (« je sors pour trouver l'homme ») : le but est le geste
+    [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)([a-z]+(?:er|ir|re|oir))\b(.*)$/g, function (m, pour, inf, reste, off, tout) {
+      var avant = tout.slice(0, off).replace(/\b(je|j|nous|on|me|m|vite|alors|donc|y|en|dehors|vais|va|allons|aller|sors|sort|sortons|sortir|ressors|ressortir|pars|part|partons|partir|file|filer|cours|courir|descends|descendre|monte|monter|retourne|retourner|reviens|revenir)\b/g, ' ').trim();
+      return avant ? ' ' : ' ' + inf + reste;
+    }],
+    // « je vais dehors », « je sors à l'extérieur » : on sort (et pas la fenêtre)
+    [/\b(vais|va|allons|aller|sors|sortir|sortons|ressors|passe|passer|file|filer)\s+(?:voir\s+)?(?:dehors|a l exterieur|au dehors)\b/g, ' sortir '],
     // « je m'approche d'elle » : on y va
     [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
     // « je vais le voir », « je vais la trouver » : on va lui parler
@@ -860,7 +866,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   function coreLexicon(L) {
     // Verbes d'action
     L.add('EXAMINER', 'v', 'examiner, examine, regarder, regarde, observer, inspecter, voir, vois, scruter, etudier, analyser, detailler, lorgner, mater, zieuter, guetter, lire, decrire, admirer, verifier, consulter, montrer moi');
-    L.add('FOUILLER', 'v', 'fouiller, chercher, explorer, farfouiller, tater, palper, trier, fureter, debusquer, rechercher, inventorier');
+    L.add('FOUILLER', 'v', 'fouiller, chercher, trouver, retrouver, explorer, farfouiller, tater, palper, trier, fureter, debusquer, rechercher, inventorier');
     L.add('PRENDRE', 'v', 'prendre, prends, ramasser, saisir, recuperer, empocher, garder, emporter, voler, piquer, chiper, attraper, subtiliser, choper, emparer, embarquer, chourer');
     L.add('SENTIR', 'v', 'sentir, renifler, humer, flairer, odeur, odeurs, parfum');
     L.add('BOIRE', 'v', 'boire, bois, gouter, avaler, siroter, lecher, deguster, trinquer');
@@ -984,7 +990,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       var m = lex.best(t);
       // « un chapeau », « des moustaches » : un vêtement ou un trait quelconque. Seule une référence définie
       // (« l'homme au chapeau », « le chapeau », « son visage ») désigne le personnage qu'on reconnaît à ce détail.
-      if (m && ATTRIBUTS.has(t) && lex.concepts[m.id].type === 'n' && !DEFINI.test(toks[i - 1] || '') && !DEFINI.test(toks[i - 2] || '')) return;
+      // … mais « un homme à moustache », « une dame au chapeau » désignent bien quelqu'un par ce détail
+      var porteur = /^(a|aux|avec)$/.test(toks[i - 1] || '') && /^(homme|monsieur|type|individu|inconnu|gars|bonhomme|dame|femme|vieux|vieille|jeune)$/.test(toks[i - 2] || '');
+      if (m && ATTRIBUTS.has(t) && lex.concepts[m.id].type === 'n' && !porteur && !DEFINI.test(toks[i - 1] || '') && !DEFINI.test(toks[i - 2] || '')) return;
       // « ne porte-t-il pas plainte », « je note », « il garde » : un verbe conjugué, pas la porte, la note ou le garde
       if (m && /^[nx]$/.test(lex.concepts[m.id].type) && m.score >= 1 && VERBE_NOM.has(t) && (SUJET.test(toks[i - 1] || '') || (toks[i + 1] === 't' && /^(il|elle|on|ils|elles)$/.test(toks[i + 2] || '')) || /^(je|tu|il|elle|on|nous|vous|ils|elles)$/.test(toks[i + 1] || '') && !DEFINI.test(toks[i - 1] || ''))) return;
       if (m) push(m.id, m.score, i); else if (t.length > 1) p.unknown.push(t);
@@ -1777,7 +1785,11 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       var generic = scene.generic;
       if (noun && !nounHere(noun.id) && !(lex.concepts[noun.id].type === 'x')) {
         var lab = labelOf(noun.id);
-        api.say(fresh('absent', generic.absent).replace('{x}', lab).replace('{X}', lab.charAt(0).toUpperCase() + lab.slice(1)) + ' ' + (listThings() ? 'Ici, vous remarquez : ' + listThings() + '.' : ''));
+        // partir à la recherche de quelqu'un qui n'est pas là : il faut une piste, pas un « il n'est pas ici »
+        var enQuete = p.verbs.some(function (v) { return /^(ALLER|FOUILLER|SUIVRE)$/.test(v.id); }) && !lex.concepts[noun.id].lieu && !(scene.locations && Object.keys(scene.locations).some(function (k) { return k.toUpperCase() === noun.id; }));
+        var personne = lex.concepts[noun.id].npc || /^(l’homme|la femme|le monsieur|la dame|l’inconnu)/.test(lab);
+        if (enQuete && personne) api.say(fresh('sansPiste', generic.sansPiste || ['Vous ne savez pas où trouver {x}. Il vous faudrait une piste : un nom, une adresse, un lieu.', 'Chercher {x} au hasard, dans une ville de cette taille ? Il faudrait savoir par où commencer.']).replace('{x}', lab));
+        else api.say(fresh('absent', generic.absent).replace('{x}', lab).replace('{X}', lab.charAt(0).toUpperCase() + lab.slice(1)) + ' ' + (listThings() ? 'Ici, vous remarquez : ' + listThings() + '.' : ''));
       } else if (verb && generic.verbs[verb.id]) {
         var g = generic.verbs[verb.id];
         var txt = typeof g === 'function' ? g(api, p, noun) : Array.isArray(g) ? fresh('gen:' + verb.id, g) : g;
@@ -1816,7 +1828,10 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         return;
       }
       // « j'ai essayé de l'étrangler », dit à personne : c'est du passé, on ne le rejoue pas
-      if (R_PASSE.test(' ' + normalize(p.raw) + ' ') && !/\?\s*$/.test(p.raw) && !/\b(decide|choisi|fini|termine|compris|change d avis)\b/.test(normalize(p.raw))) {
+      var brut = ' ' + normalize(p.raw) + ' ', mp = brut.match(R_PASSE);
+      // « demander à l'accueil s'ils ont vu l'homme », « savoir si quelqu'un l'a vu » : une question indirecte, pas un récit
+      var indirecte = mp && /\b(demand\w*|interrog\w*|question\w*|renseign\w*|savoir|voir|verifi\w*|cherch\w*|enquet\w*|si|s|est ce qu|est ce que)\b/.test(brut.slice(0, mp.index + 1));
+      if (mp && !indirecte && !/\?\s*$/.test(p.raw) && !/\b(decide|choisi|fini|termine|compris|change d avis)\b/.test(normalize(p.raw))) {
         api.say(fresh('recitSeul', ['Ce qui est fait est fait. Reste à savoir ce que vous faites maintenant.', 'Vous y repensez un instant. Mais personne, ici, ne vous a rien demandé. Que faites-vous ?', 'Le passé ne se rejoue pas. Et maintenant ?']));
         s.tick = 0; return;
       }
@@ -5133,7 +5148,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
           run: function (api, p) { if (api.flag('conference')) { if (p && p.c.SMITH !== undefined && p.c.ECOUTER === undefined) { api.exec('i_smith'); return; } api.say(api.fresh('apres', ['La conférence est terminée. On se presse autour de Smith pour le féliciter.', 'L’écran est éteint. Les discussions vont bon train.'])); return; } conference(api); } },
         { id: 'i_boire', label: 'Prendre une coupe de champagne', obj: 'le champagne', verbs: ['BOIRE', 'COMMANDER', 'PRENDRE'], nouns: ['BOISSON'], bare: true,
           run: function (api) { api.say(api.fresh('champ', ['Le champagne est tiède et un peu trop sucré. Un serveur en gants blancs remplit déjà votre coupe.', 'Une deuxième coupe. Les lustres se mettent à briller un peu plus fort.', 'Vous déclinez la troisième. Il faut garder les idées claires, sans savoir encore pourquoi.'])); } },
-        { id: 'i_moustachu', label: 'Chercher l’homme à la moustache', verbs: ['FOUILLER', 'EXAMINER', 'ALLER', 'PARLER'], nouns: ['MOUSTACHU'], cond: function (api) { return api.has('OBSERVATEUR'); },
+        { id: 'i_moustachu', label: 'Chercher l’homme à la moustache', verbs: ['FOUILLER', 'EXAMINER', 'PARLER'], nouns: ['MOUSTACHU'], cond: function (api) { return api.has('OBSERVATEUR'); },
           run: function (api) { api.say(api.fresh('moust', ['Vous fendez la foule jusqu’à l’endroit où il se tenait. Personne. Un serveur jure qu’il n’a vu aucun monsieur de ce genre.', 'Vous faites le tour de la galerie. Des moustaches, il y en a cent. Pas la sienne.'])); } },
         { id: 'i_suivre', label: 'Raccompagner Smith et Beddows', verbs: ['SUIVRE', 'ALLER', 'ACCOMPAGNER'], nouns: ['BEDDOWS', 'SMITH', 'STJOHN'], repeatable: true,
           run: function (api) {
@@ -6246,7 +6261,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
 
   // ================================================================ filatures
   L.locations.institut.actions.push(
-    { id: 'f_moustachu', label: 'Suivre l’homme à la moustache', verbs: ['SUIVRE', 'ALLER', 'VISITER'], nouns: ['MOUSTACHU'], needVerb: true,
+    { id: 'f_moustachu', label: 'Suivre l’homme à la moustache', verbs: ['SUIVRE', 'ALLER', 'VISITER', 'FOUILLER'], nouns: ['MOUSTACHU'], needVerb: true,
       cond: function (api) { return api.has('OBSERVATEUR') && !api.flag('moustachuSuivi'); },
       run: function (api) {
         api.flag('moustachuSuivi', true); api.endTalk(false);
@@ -6257,6 +6272,22 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     { id: 'f_smith', label: 'Suivre Smith et Beddows', verbs: ['SUIVRE'], nouns: ['SMITH', 'BEDDOWS'], needVerb: true, cond: function (api) { return api.flag('conference'); },
       run: function (api) { api.say('Vous les regardez partir. Beddows aide Smith à monter dans un taxi, lui pose une couverture sur les genoux comme à un vieillard. Le taxi prend la direction de St John’s Wood. Vous connaissez l’adresse : vous y avez dîné vingt fois.'); } }
   );
+  // chercher l'homme, ou demander au vestiaire s'il est passé : tant qu'il est encore là, cela mène à la même filature
+  (function () {
+    var acts = L.locations.institut.actions, im = acts.filter(function (a) { return a.id === 'i_moustachu'; })[0], fm = acts.filter(function (a) { return a.id === 'f_moustachu'; })[0];
+    if (!im || !fm) return;
+    var r0 = im.run;
+    im.run = function (api, p) {
+      var raw = String((p && p.raw) || '').toLowerCase(), personnel = /accueil|vestiaire|portier|huissier|serveur|maitre d|maître d|domestique|chasseur|demand|employ/.test(raw);
+      if (!api.flag('moustachuSuivi')) {
+        if (personnel) api.say('La préposée du vestiaire tend le menton vers la porte. « Le monsieur brun, à moustache ? Il vient de reprendre son manteau, et sans ticket encore. Il sort, là. »');
+        return fm.run.apply(this, arguments);
+      }
+      if (/sort|dehors|rue|marches|perron|exterieur|extérieur/.test(raw)) { api.say(api.fresh('moustDehors', ['Sur les marches de l’Institut, le brouillard a tout pris. Des lanternes de fiacres, des voix sans visage. Il est loin, maintenant.', 'Vous faites quelques pas sur Exhibition Road. Rien que le brouillard et le pas d’un agent qui s’éloigne. Vous rentrez dans la chaleur de la galerie.'])); return; }
+      if (personnel) { api.say(api.fresh('moustVest', ['Au vestiaire, la préposée se souvient de lui : un monsieur brun, poli, pressé, qui a repris son pardessus sans ticket. Pas de nom. Il est parti à pied, dans le brouillard.', 'Le portier en livrée hausse les épaules. Des messieurs à moustache, il en a vu passer deux cents ce soir. Celui-là est parti seul, à pied, sans attendre de voiture.'])); return; }
+      return r0.apply(this, arguments);
+    };
+  })();;
   L.locations.cheapside.actions.push(
     { id: 'f_beddows', label: 'Guetter Beddows dans la rue', verbs: ['SUIVRE', 'ATTENDRE', 'CACHER'], nouns: ['BEDDOWS', 'PORTE', 'CHEAPSIDE'], bare: true, needVerb: true,
       cond: function (api) { return api.flag('discours') && !api.flag('demasque') && !api.flag('beddowsSeul') && !api.flag('cheapsideFini'); },
@@ -14330,7 +14361,9 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     veuve: '23_veuve', conducteur: '24_conducteur', mort: '25_mort', vane: '26_vane',
     // Paris
     patron: '35_patron', hollis: '36_hollis',
-    gerant: '27_blain', gaudry: '28_gaudry', remi: '29_remi', brevin: '30_brevin', rogniat: '31_rogniat', leroux: '32_leroux', mandrin: '33_mandrin' };
+    gerant: '27_blain', gaudry: '28_gaudry', remi: '29_remi', brevin: '30_brevin', rogniat: '31_rogniat', leroux: '32_leroux', mandrin: '33_mandrin',
+    // Poissy et le Simplon-Orient (pas de portrait de l'enfant)
+    fauvel: '38_fauvel', thibierge: '39_thibierge', arnoult: '40_arnoult', lorien: '41_lorien', veronique: '42_veronique', caterina: '43_caterina', bertin: '44_bertin', pruvost: '45_pruvost' };
   Object.keys(PTF).forEach(function (id) { [].concat(PTF[id]).forEach(function (f) { A.PHOTO_LIST.push('portraits/' + f); }); });
   P.photoKeyP = function (id, st) {
     var f = PTF[id]; if (!f) return null;
@@ -14366,7 +14399,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   G.PixelArt.PHOTO_FOCUSX = { 'ecran-titre/titre': 74, 'londres/26_brouillard_trajet': 50 };
   // où regarder dans chaque image (en % de sa largeur), relevé à la main ou lu dans son prompt (jeu/tools/cadrage.py) :
   // dans la disposition « image en fond » de l'iPad en paysage, ce point tombe au milieu de la partie libre de l'écran
-  G.PixelArt.PHOTO_CADRAGE = {"creation/antiquaire_f_charme": 24, "creation/antiquaire_f_terne": 24, "creation/antiquaire_h_charme": 24, "creation/antiquaire_h_terne": 24, "creation/archeologue_f_charme": 76, "creation/archeologue_f_terne": 76, "creation/archeologue_h_charme": 76, "creation/archeologue_h_terne": 76, "creation/avocat_f_charme": 24, "creation/avocat_f_terne": 24, "creation/avocat_h_charme": 24, "creation/avocat_h_terne": 24, "creation/detective_f_charme": 76, "creation/detective_f_terne": 76, "creation/detective_h_charme": 76, "creation/detective_h_terne": 76, "creation/dilettante_f_charme": 24, "creation/dilettante_f_terne": 24, "creation/dilettante_h_charme": 24, "creation/dilettante_h_terne": 24, "creation/ecrivain_f_charme": 76, "creation/ecrivain_f_terne": 76, "creation/ecrivain_h_charme": 76, "creation/ecrivain_h_terne": 76, "creation/journaliste_f_charme": 24, "creation/journaliste_f_terne": 24, "creation/journaliste_h_charme": 24, "creation/journaliste_h_terne": 24, "creation/medecin_f_charme": 76, "creation/medecin_f_terne": 76, "creation/medecin_h_charme": 76, "creation/medecin_h_terne": 76, "creation/parapsychologue_f_charme": 24, "creation/parapsychologue_f_terne": 24, "creation/parapsychologue_h_charme": 24, "creation/parapsychologue_h_terne": 24, "creation/professeur_f_charme": 76, "creation/professeur_f_terne": 76, "creation/professeur_h_charme": 76, "creation/professeur_h_terne": 76, "ecran-titre/titre": 45, "londres/01_institut-imperial": 28, "londres/02_hotel-chambre_nuit": 50, "londres/03_hotel-chambre_jour": 55, "londres/04_cheapside-chambre-meublee": 36, "londres/05_scotland-yard_bureau-fleming": 42, "londres/06_ambassade-de-turquie": 58, "londres/07_chelsea-arms_reception": 62, "londres/08_camberwell_salon-butter": 55, "londres/09_fleet-street_archives": 30, "londres/10_st-johns-wood_villa_jour": 58, "londres/11_st-johns-wood_villa_nuit": 60, "londres/12_st-johns-wood_ruines": 70, "londres/13_islington_brophy-lane_jour": 55, "londres/14_islington_brophy-lane_nuit": 50, "londres/15_stoke-newington_jour": 30, "londres/16_stoke-newington_nuit": 32, "londres/17_boutique-makryat": 45, "londres/18_british-museum_salle-de-lecture": 35, "londres/19_chambre-henry-stanley": 50, "londres/20_cave-butter_maquette": 52, "londres/21_train-fantome_voiture-1": 45, "londres/22_train-fantome_voiture-2": 52, "londres/23_train-fantome_retour": 50, "londres/24_campagne_au-petit-matin": 30, "londres/25_gare-victoria": 55, "londres/26_brouillard_trajet": 45, "londres/27_gordon-square_seance": 52, "londres/28_museum-tavern": 40, "londres/29_eglise-st-george": 38, "londres/30_quais-de-la-tamise": 45, "paris/01_gare-du-nord": 40, "paris/02_hotel-du-cygne_chambre_jour": 45, "paris/03_hotel-du-cygne_chambre_nuit": 55, "paris/04_hotel-du-cygne_guetteur": 42, "paris/05_bibliotheque-nationale_salle-de-travail": 50, "paris/06_bibliotheque-de-l-arsenal": 75, "paris/07_charenton_arcades": 35, "paris/08_charenton_secretariat": 27, "paris/09_charenton_registres": 45, "paris/10_cafe-de-charenton": 28, "paris/11_saint-lazare_train-de-banlieue": 55, "portraits/01_smith_institut": 30, "portraits/02_smith_cheapside": 37, "portraits/03_beddows_institut": 76, "portraits/04_beddows_cheapside": 77, "portraits/05_brule": 26, "portraits/06_fleming": 31, "portraits/07_rigby": 79, "portraits/08_chelseaclerk": 27, "portraits/09_mustapha": 28, "portraits/10_voisin": 25, "portraits/11_atkins": 26, "portraits/12_sergent": 33, "portraits/13_butter": 22, "portraits/14_alexis": 33, "portraits/15_stanley": 30, "portraits/16_bibliothecaire": 27, "portraits/17_planton": 27, "portraits/18_concierge": 27, "portraits/19_agentsj": 77, "portraits/20_laitier": 25, "portraits/21_pike": 25, "portraits/22_serveur": 23, "portraits/23_veuve": 33, "portraits/24_conducteur": 30, "portraits/25_mort": 25, "portraits/26_vane": 74, "portraits/27_blain": 16, "portraits/28_gaudry": 76, "portraits/29_remi": 33, "portraits/30_brevin": 27, "portraits/31_rogniat": 25, "portraits/32_leroux": 74, "portraits/33_mandrin": 23, "portraits/34_guetteur": 27, "portraits/35_patron": 74, "portraits/36_hollis": 22, "portraits/37_ramasseur": 73, "portraits/pj_arnaud": 33, "portraits/pj_ashby": 78, "portraits/pj_doyle": 28, "portraits/pj_pemberton": 72, "prologue/01_wagon-restaurant": 35, "prologue/02_soufflet": 48, "prologue/03_voitures-lits": 40, "prologue/04_compartiment-7": 60, "situations/01_poste-de-bow-street": 60, "situations/02_poste-de-la-rue-de-la-banque": 68};
+  G.PixelArt.PHOTO_CADRAGE = {"creation/antiquaire_f_charme": 24, "creation/antiquaire_f_terne": 24, "creation/antiquaire_h_charme": 24, "creation/antiquaire_h_terne": 24, "creation/archeologue_f_charme": 76, "creation/archeologue_f_terne": 76, "creation/archeologue_h_charme": 76, "creation/archeologue_h_terne": 76, "creation/avocat_f_charme": 24, "creation/avocat_f_terne": 24, "creation/avocat_h_charme": 24, "creation/avocat_h_terne": 24, "creation/detective_f_charme": 76, "creation/detective_f_terne": 76, "creation/detective_h_charme": 76, "creation/detective_h_terne": 76, "creation/dilettante_f_charme": 24, "creation/dilettante_f_terne": 24, "creation/dilettante_h_charme": 24, "creation/dilettante_h_terne": 24, "creation/ecrivain_f_charme": 76, "creation/ecrivain_f_terne": 76, "creation/ecrivain_h_charme": 76, "creation/ecrivain_h_terne": 76, "creation/journaliste_f_charme": 24, "creation/journaliste_f_terne": 24, "creation/journaliste_h_charme": 24, "creation/journaliste_h_terne": 24, "creation/medecin_f_charme": 76, "creation/medecin_f_terne": 76, "creation/medecin_h_charme": 76, "creation/medecin_h_terne": 76, "creation/parapsychologue_f_charme": 24, "creation/parapsychologue_f_terne": 24, "creation/parapsychologue_h_charme": 24, "creation/parapsychologue_h_terne": 24, "creation/professeur_f_charme": 76, "creation/professeur_f_terne": 76, "creation/professeur_h_charme": 76, "creation/professeur_h_terne": 76, "ecran-titre/titre": 45, "londres/01_institut-imperial": 28, "londres/02_hotel-chambre_nuit": 50, "londres/03_hotel-chambre_jour": 55, "londres/04_cheapside-chambre-meublee": 36, "londres/05_scotland-yard_bureau-fleming": 42, "londres/06_ambassade-de-turquie": 58, "londres/07_chelsea-arms_reception": 62, "londres/08_camberwell_salon-butter": 55, "londres/09_fleet-street_archives": 30, "londres/10_st-johns-wood_villa_jour": 58, "londres/11_st-johns-wood_villa_nuit": 60, "londres/12_st-johns-wood_ruines": 70, "londres/13_islington_brophy-lane_jour": 55, "londres/14_islington_brophy-lane_nuit": 50, "londres/15_stoke-newington_jour": 30, "londres/16_stoke-newington_nuit": 32, "londres/17_boutique-makryat": 45, "londres/18_british-museum_salle-de-lecture": 35, "londres/19_chambre-henry-stanley": 50, "londres/20_cave-butter_maquette": 52, "londres/21_train-fantome_voiture-1": 45, "londres/22_train-fantome_voiture-2": 52, "londres/23_train-fantome_retour": 50, "londres/24_campagne_au-petit-matin": 30, "londres/25_gare-victoria": 55, "londres/26_brouillard_trajet": 45, "londres/27_gordon-square_seance": 52, "londres/28_museum-tavern": 40, "londres/29_eglise-st-george": 38, "londres/30_quais-de-la-tamise": 45, "paris/01_gare-du-nord": 40, "paris/02_hotel-du-cygne_chambre_jour": 45, "paris/03_hotel-du-cygne_chambre_nuit": 55, "paris/04_hotel-du-cygne_guetteur": 42, "paris/05_bibliotheque-nationale_salle-de-travail": 50, "paris/06_bibliotheque-de-l-arsenal": 75, "paris/07_charenton_arcades": 35, "paris/08_charenton_secretariat": 27, "paris/09_charenton_registres": 45, "paris/10_cafe-de-charenton": 28, "paris/11_saint-lazare_train-de-banlieue": 55, "poissy/01_gare-de-poissy": 74, "poissy/02_grand-rue_eglise": 55, "poissy/03_mairie_archives": 50, "poissy/04_eglise_fonts": 30, "poissy/05_auberge-du-lion-d-or": 30, "poissy/06_maison-lorien_rosiers": 40, "poissy/07_cuisine-des-lorien": 50, "poissy/08_chambre-d-enfant_nuit": 55, "poissy/09_fouille_porte-d-acier": 45, "poissy/10_caves_cellules": 45, "poissy/11_salle-du-bras": 47, "poissy/12_gare-de-lyon_nuit": 70, "poissy/13_compartiment": 45, "poissy/14_voiture-salon": 55, "portraits/01_smith_institut": 30, "portraits/02_smith_cheapside": 37, "portraits/03_beddows_institut": 76, "portraits/04_beddows_cheapside": 77, "portraits/05_brule": 26, "portraits/06_fleming": 31, "portraits/07_rigby": 79, "portraits/08_chelseaclerk": 27, "portraits/09_mustapha": 28, "portraits/10_voisin": 25, "portraits/11_atkins": 26, "portraits/12_sergent": 33, "portraits/13_butter": 22, "portraits/14_alexis": 33, "portraits/15_stanley": 30, "portraits/16_bibliothecaire": 27, "portraits/17_planton": 27, "portraits/18_concierge": 27, "portraits/19_agentsj": 77, "portraits/20_laitier": 25, "portraits/21_pike": 25, "portraits/22_serveur": 23, "portraits/23_veuve": 33, "portraits/24_conducteur": 30, "portraits/25_mort": 25, "portraits/26_vane": 74, "portraits/27_blain": 16, "portraits/28_gaudry": 76, "portraits/29_remi": 33, "portraits/30_brevin": 27, "portraits/31_rogniat": 25, "portraits/32_leroux": 74, "portraits/33_mandrin": 23, "portraits/34_guetteur": 27, "portraits/35_patron": 74, "portraits/36_hollis": 22, "portraits/37_ramasseur": 73, "portraits/38_fauvel": 37, "portraits/39_thibierge": 75, "portraits/40_arnoult": 22, "portraits/41_lorien": 74, "portraits/42_veronique": 25, "portraits/43_caterina": 85, "portraits/44_bertin": 27, "portraits/45_pruvost": 60, "portraits/pj_arnaud": 33, "portraits/pj_ashby": 78, "portraits/pj_doyle": 28, "portraits/pj_pemberton": 72, "prologue/01_wagon-restaurant": 35, "prologue/02_soufflet": 48, "prologue/03_voitures-lits": 40, "prologue/04_compartiment-7": 60, "situations/01_poste-de-bow-street": 60, "situations/02_poste-de-la-rue-de-la-banque": 68};
 
   // ---------------------------------------------------------------- écran-titre et prologue
   V['ecran-titre/titre'] = { rain: [dehors(90)] };
@@ -14456,6 +14489,32 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   V['portraits/32_leroux'] = {};
   V['portraits/33_mandrin'] = { lamps: [[344, 38, 5]] };
   V['portraits/34_guetteur'] = { rain: [dehors(50)] };
+
+  // ---------------------------------------------------------------- Poissy, la gare de Lyon et le Simplon-Orient
+  ['poissy/01_gare-de-poissy', 'poissy/02_grand-rue_eglise', 'poissy/03_mairie_archives', 'poissy/04_eglise_fonts', 'poissy/05_auberge-du-lion-d-or', 'poissy/06_maison-lorien_rosiers', 'poissy/07_cuisine-des-lorien', 'poissy/08_chambre-d-enfant_nuit', 'poissy/09_fouille_porte-d-acier', 'poissy/10_caves_cellules', 'poissy/11_salle-du-bras', 'poissy/12_gare-de-lyon_nuit', 'poissy/13_compartiment', 'poissy/14_voiture-salon', 'portraits/38_fauvel', 'portraits/39_thibierge', 'portraits/40_arnoult', 'portraits/41_lorien', 'portraits/42_veronique', 'portraits/43_caterina', 'portraits/44_bertin', 'portraits/45_pruvost'
+  ].forEach(function (k) { if (G.PixelArt.PHOTO_LIST && G.PixelArt.PHOTO_LIST.indexOf(k) < 0) G.PixelArt.PHOTO_LIST.push(k); });
+  V['poissy/01_gare-de-poissy'] = { lamps: [[373, 259, 4], [104, 114, 4]] };
+  V['poissy/02_grand-rue_eglise'] = {};
+  V['poissy/03_mairie_archives'] = { lamps: [[467, 185, 6], [315, 149, 6]] };
+  V['poissy/04_eglise_fonts'] = { lamps: [[212, 234, 6], [80, 42, 6], [70, 82, 4]] };
+  V['poissy/05_auberge-du-lion-d-or'] = { lamps: [[65, 157, 6], [96, 157, 6]] };
+  V['poissy/06_maison-lorien_rosiers'] = {};
+  V['poissy/07_cuisine-des-lorien'] = { lamps: [[355, 27, 6]] };
+  V['poissy/08_chambre-d-enfant_nuit'] = {};
+  V['poissy/09_fouille_porte-d-acier'] = { lamps: [[312, 188, 6]] };
+  V['poissy/10_caves_cellules'] = { lamps: [[53, 89, 4], [35, 161, 4]] };
+  V['poissy/11_salle-du-bras'] = { lamps: [[243, 84, 6], [507, 65, 6], [146, 20, 6]] };
+  V['poissy/12_gare-de-lyon_nuit'] = { lamps: [[117, 194, 4]] };
+  V['poissy/13_compartiment'] = {};
+  V['poissy/14_voiture-salon'] = { lamps: [[232, 85, 6], [151, 67, 6], [482, 22, 6]] };
+  V['portraits/38_fauvel'] = {};
+  V['portraits/39_thibierge'] = {};
+  V['portraits/40_arnoult'] = {};
+  V['portraits/41_lorien'] = { lamps: [[99, 80, 6]] };
+  V['portraits/42_veronique'] = { lamps: [[384, 174, 4]] };
+  V['portraits/43_caterina'] = { lamps: [[212, 99, 6], [374, 77, 6], [135, 75, 6]] };
+  V['portraits/44_bertin'] = { lamps: [[357, 111, 6], [392, 102, 6], [442, 58, 4]] };
+  V['portraits/45_pruvost'] = {};
 
   // ---------------------------------------------------------------- les lieux des improvisations, leurs gens, les nuits au poste
   ['londres/28_museum-tavern', 'londres/29_eglise-st-george', 'londres/30_quais-de-la-tamise', 'portraits/35_patron', 'portraits/36_hollis', 'portraits/37_ramasseur'
