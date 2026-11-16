@@ -66,7 +66,7 @@
         if (POLICE.test(n.id)) api.say('Un carnet s’ouvre. On note quelque chose, longuement, sans vous quitter des yeux.');
       } };
     });
-    var insultes = (f ? ['Pimbêche !', 'Vieille baderne !', 'Mégère !', 'Fripouille !'] : ['Malotru !', 'Faquin !', 'Pignouf !', 'Vieille baderne !', 'Bougre d’âne !', 'Gredin !'])
+    var insultes = (f ? ['Pimbêche !', 'Vous êtes une vieille baderne !', 'Mégère !', 'Fripouille !'] : ['Malotru !', 'Faquin !', 'Pignouf !', 'Vous êtes une vieille baderne !', 'Bougre d’âne !', 'Gredin !'])
       .map(function (m) { return { label: m, say: m.replace('Mégère', 'Espèce de mégère') }; });
     var visions = [
       ['Lui dire qu’il a des dents à la place des yeux', '« Vous avez des dents à la place des yeux. Vous le savez, au moins ? »'],

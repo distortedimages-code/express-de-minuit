@@ -33,7 +33,7 @@ for (const ch of ['prologue', 'londres', 'paris']) {
       if (!ta) continue;
       try { if (g.state.loc !== ta[0]) g.api.go(ta[0]); g.state.talk = id; g.api.npcs(id).met = true; } catch (e) { continue; }
       const b = g.state.seq;
-      try { if (m.mal) { g.choose({ label: m.label, mal: m.mal }); mal++; } else { g.step(m.say, 'dire'); m.say && (ex.banal.indexOf(m) >= 0 ? banal++ : mal++); } } catch (e) { ko++; notes.push('PLANTAGE parole ' + ch + ' ' + id + ' ' + m.label + ' ' + e.message); continue; }
+      try { if (m.mal) { g.choose({ label: m.label, mal: m.mal }); mal++; } else if (m.cult) { g.choose({ label: m.label, say: m.say, cult: m.cult }); banal++; } else { g.step(m.say, 'dire'); m.say && (ex.banal.indexOf(m) >= 0 ? banal++ : mal++); } } catch (e) { ko++; notes.push('PLANTAGE parole ' + ch + ' ' + id + ' ' + m.label + ' ' + e.message); continue; }
       lire(g, b, ch + ' ' + id + ' « ' + m.label + ' »');
       const rep = g.state.log.filter(e => e.n > b && (e.t === 'npc' || e.t === 'narr' || e.t === 'event')).length;
       if (!rep) { ko++; notes.push('SANS RÉPONSE ' + ch + ' ' + id + ' « ' + m.label + ' »'); }

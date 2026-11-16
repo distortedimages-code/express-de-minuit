@@ -707,6 +707,7 @@
     arreter: function (api, id) {
       var n = (api.flag('arrestations') || 0) + 1; api.flag('arrestations', n);
       api.endTalk(false);
+      api.vue('situations/02_poste-de-la-rue-de-la-banque', 'Le poste de la rue de la Banque');
       if (api.flag('fugitif')) { api.say('Au poste de la rue de la Banque, on relève votre nom. Une heure plus tard, un inspecteur de la Sûreté pose devant vous un télégramme de Scotland Yard, avec votre signalement. « Londres vous réclame, ' + (api.pc.sex === 'f' ? 'madame' : 'monsieur') + '. »'); api.flag('fin', 'extrade'); api.end(); return; }
       if (n >= 3) { api.say('Le commissaire ne lève même plus les yeux. « Encore lui. Le dépôt, puis le juge. »'); api.flag('fin', 'prison'); api.end(); return; }
       api.say(n === 1 ? 'Deux agents à pèlerine vous prennent chacun par un coude. La nuit au poste de la rue de la Banque, sur un bat-flanc, entre un camelot et un ivrogne qui récite du Racine. Au matin, un commissaire fatigué vous rend vos papiers. « Vous êtes étranger. Je veux bien croire à un malentendu. Une fois. »' : 'Le même poste, le même bat-flanc. Cette fois, on relève votre identité, et l’amende est de cent francs. « La prochaine fois, c’est le dépôt. »');

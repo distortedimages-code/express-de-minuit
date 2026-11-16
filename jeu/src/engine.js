@@ -659,6 +659,8 @@
       event: function (x) { log({ t: 'event', x: x }); },
       doc: function (x, title) { log({ t: 'doc', x: x, title: title || '' }); var D = s.docs || (s.docs = []); if (!D.some(function (d) { return d.x === x; })) D.push({ x: x, title: title || '' }); },
       title: function (x, sub) { log({ t: 'title', x: x, sub: sub || '' }); },
+      // une image posée dans le fil, pour un moment qui n'est pas un lieu (la cellule, une vision)
+      vue: function (key, nom) { log({ t: 'vue', img: key, nom: nom || '' }); },
       things: function () { return listThings(); },
       where: function () { return scene.where ? scene.where(s.min) : ''; },
       clock: function () { return fmtTime(s.min); },
@@ -1954,6 +1956,14 @@
         if (s.pending) return;
         log({ t: 'player', x: chip.label || 'Réfléchir' }); s.turn++; s.tick = 1;
         jetIdee(); afterTurn(); finish(); return;
+      }
+      // une banalité : la phrase du joueur, puis la réponse de la culture du temps, sans détour par les sujets
+      if (chip.cult && s.talk) {
+        var cn = scene.npcs[s.talk];
+        log({ t: 'player', x: chip.say || chip.label, said: true }); s.turn++; s.tick = scene.talkTick || 1;
+        var fait = false; try { fait = !!(scene.converse && scene.converse.causer && scene.converse.causer(api, cn, chip.cult)); } catch (err) { fait = false; }
+        if (!fait) { s.turn--; s.log.pop(); step(chip.say || chip.label, 'dire'); return; }
+        afterTurn(); finish(); return;
       }
       if (chip.mal && s.talk) {
         var mn = scene.npcs[s.talk], ml = scene.paroles && scene.paroles(api, mn), mx = ml && (ml.maladresse || []).concat(ml.banal || []).filter(function (m) { return m.mal === chip.mal; })[0];

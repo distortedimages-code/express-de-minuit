@@ -153,6 +153,7 @@
         var n = (api.flag('arrestations') || 0) + 1, D = 1440;
         api.flag('arrestations', n);
         api.endTalk(false);
+        api.vue('situations/01_poste-de-bow-street', 'Une cellule du poste de Bow Street');
         if (n >= 3) { api.say('Le juge de Bow Street vous reconnaît. Il ne sourit pas.'); api.flag('fin', 'prison'); api.flag('combat', null); api.end(); return; }
         api.say(n === 1
           ? (o.motif || 'Outrage à agent.') + ' La nuit au poste de Bow Street, sur un banc de bois, entre un pickpocket et un marin qui chante. Au matin, on vous rend votre chapeau et vos lacets.'

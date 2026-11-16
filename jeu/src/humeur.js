@@ -158,7 +158,7 @@
   // quand le joueur menace : la réaction dépend de ce qu'on est
   L.contre = {
     police: ['« Vous menacez un officier de police ? Réfléchissez bien à ce que vous allez dire ensuite. »', '« Des menaces. Devant témoins. » On sort un carnet. « Continuez, je prends des notes. »'],
-    fort: ['« Me tuer ? Vous ? » Un rire mauvais. « Essayez, pour voir. »', '« Ah oui ? » On se lève, lentement. « Allez-y. Je vous attends. »'],
+    fort: ['« Vous, me faire du mal ? » Un rire mauvais. « Essayez, pour voir. »', '« Ah oui ? » On se lève, lentement. « Allez-y. Je vous attends. »'],
     appel: ['« Vous me menacez ? Très bien. » Une main se pose sur la sonnette.', '« Je n’ai pas bien entendu, et je vous conseille de ne pas répéter. »'],
     faible: ['« Vous… vous me menacez ? » {PIl} recule, livide.', '{PIl} pâlit et recule jusqu’au mur. « Je n’ai rien fait. Je n’ai rien fait… »'],
     gifle: ['« Me menacer, moi ? Vous ne manquez pas d’aplomb. »', '« Des menaces, à une femme ? Vous me dégoûtez. »'],

@@ -154,6 +154,7 @@
         d.className = 'e-chips';
         e.list.forEach(function (c) { d.appendChild(btn(esc(c.label), '', function () { act(function () { game.choose(c); }); })); });
         break;
+      case 'vue': return carteImage(e.img, e.nom || '', 'lieu');
       case 'end': d.appendChild(endCard()); break;
       default: return null;
     }
@@ -478,7 +479,8 @@
       bar.appendChild(tb);
       if (ideasOpen) game.suggestionsParole(5, mode).forEach(function (t) {
         bar.appendChild(btn(esc(t.label), '', function () { act(function () {
-          if (t.say) game.step(t.say, 'dire');
+          if (t.cult) game.choose({ label: t.label, say: t.say, cult: t.cult });
+          else if (t.say) game.step(t.say, 'dire');
           else if (t.mal) game.choose({ label: t.label, mal: t.mal });
           else game.choose({ label: t.label, topic: t.topic });
         }); }));

@@ -504,12 +504,21 @@
     'londres/06_ambassade-de-turquie', 'londres/08_camberwell_salon-butter', 'londres/09_fleet-street_archives', 'londres/10_st-johns-wood_villa_jour', 'londres/11_st-johns-wood_villa_nuit',
     'londres/12_st-johns-wood_ruines', 'londres/13_islington_brophy-lane_jour', 'londres/14_islington_brophy-lane_nuit', 'londres/15_stoke-newington_jour', 'londres/16_stoke-newington_nuit',
     'londres/17_boutique-makryat', 'londres/18_british-museum_salle-de-lecture', 'londres/19_chambre-henry-stanley', 'londres/20_cave-butter_maquette', 'londres/21_train-fantome_voiture-1',
-    'londres/22_train-fantome_voiture-2', 'londres/23_train-fantome_retour', 'londres/24_campagne_au-petit-matin', 'londres/25_gare-victoria', 'londres/26_brouillard_trajet', 'londres/27_gordon-square_seance'];
+    'londres/22_train-fantome_voiture-2', 'londres/23_train-fantome_retour', 'londres/24_campagne_au-petit-matin', 'londres/25_gare-victoria', 'londres/26_brouillard_trajet', 'londres/27_gordon-square_seance',
+    'londres/28_museum-tavern', 'londres/29_eglise-st-george', 'londres/30_quais-de-la-tamise'];
   // l'image de la réception du Chelsea Arms est arrivée abîmée : ce décor reste dessiné en attendant
   var BROKEN = {};
   PL.forEach(function (k) { if (A.PHOTO_LIST.indexOf(k) < 0) A.PHOTO_LIST.push(k); });
   P.photoKeyL = function (scene, st) {
     var loc = st.loc, nt = night(st), burnt = (st.min || 0) >= 2820, k = null;
+    // les lieux nés des improvisations ont maintenant leur image ; sur les quais, le ramasseur d'épaves le temps de la rencontre
+    var IMPRO = { pub: 'londres/28_museum-tavern', eglise: 'londres/29_eglise-st-george', quais: 'londres/30_quais-de-la-tamise' };
+    if (IMPRO[loc] && (scene === 'bureau' || scene === 'rue')) {
+      var fl = st.flags || {};
+      var kk = loc === 'quais' && fl.mudlarkMin !== undefined && (st.min || 0) - fl.mudlarkMin < 30 ? 'portraits/37_ramasseur' : IMPRO[loc];
+      // tant que l'image n'est pas générée, l'ancienne fait l'affaire
+      if (this.photo) { this.photo(kk); var im = this.imgs && this.imgs[kk]; if (!(im && im._bad)) return kk; }
+    }
     if (scene === 'rue' && loc === 'stjohn') scene = 'stjohn';
     switch (scene) {
       case 'institut': k = 'londres/01_institut-imperial'; break;

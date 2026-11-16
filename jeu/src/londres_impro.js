@@ -205,7 +205,7 @@
       { id: 'qu_mudlark', label: 'Parler au ramasseur d’épaves', idea: true, verbs: ['PARLER', 'POLI', 'DONNER', 'EXAMINER'], nouns: ['MUDLARK', 'QUELQUUN'],
         run: function (api) {
           if (api.flag('mudlark')) { api.say('Le gamin a disparu sous l’arche du pont, avec son sac. Il ne reste que des empreintes dans la vase.'); return; }
-          api.flag('mudlark', true);
+          api.flag('mudlark', true); api.flag('mudlarkMin', api.s.min);
           api.say('Sur la grève, en contrebas, un gamin en haillons fouille la vase avec un crochet. Il vous montre ses trouvailles pour un penny : un clou de fer à cheval, une pipe en terre, une pièce romaine, peut-être.');
           api.say('« Et ça, m’sieur-dame. » Il sort de son sac un gant de cuir fin, intact, d’homme. Sauf qu’à l’intérieur, il y a encore la peau d’une main, retournée comme une chaussette. Le gamin rit. « Ça arrive, ici. La Tamise rend tout. »');
           api.check('san_quais');

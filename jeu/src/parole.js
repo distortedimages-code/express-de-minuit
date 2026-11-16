@@ -461,7 +461,7 @@
       fr: ['« La Ruhr ? Nos soldats y sont depuis janvier. Les Allemands font la grève, et le mark ne vaut plus le papier. »', '« On dit qu’à Berlin, un pain coûte un milliard. Un milliard, monsieur ! »'] },
     { k: 'egypte', re: /\b(toutankhamon|tutankhamun|carnarvon|carter|egypte|pharaon|tombeau|momie|louxor|vallee des rois)\b/,
       h: ['« Le tombeau de Toutankhamon ! Lord Carnarvon et Carter ont trouvé l’antichambre intacte en novembre. Tout Londres ne parle que de ça. »', '« De l’or, des chars, des lits funéraires. Et la chambre scellée n’est même pas encore ouverte. »'],
-      p: ['« Le pharaon en or ? Ma femme a acheté un chapeau égyptien. Un chapeau ! »', '« Des trésors plein un trou dans le sable. Et nous, on gratte pour le charbon. »'],
+      p: ['« Le pharaon en or ? Ma belle-sœur s’est acheté un chapeau égyptien. Un chapeau ! »', '« Des trésors plein un trou dans le sable. Et nous, on gratte pour le charbon. »'],
       o: ['« Toutankhamon ? Si on m’apporte une momie volée, je saurai à qui la rendre. »'],
       fr: ['« L’Égypte ? Les Anglais y ont trouvé un roi en or. Toujours les Anglais. »'] },
     { k: 'mussolini', re: /\b(mussolini|fascistes?|chemises noires|marche sur rome|italie|rome)\b/,
@@ -486,7 +486,7 @@
       fr: ['« L’Irlande ? Ils ont eu leur indépendance, comme nous la Lorraine. Enfin, presque. »'] },
     { k: 'guerre', re: /\b(la guerre|grande guerre|front|tranchees|armistice|verdun|ypres|la somme|gallipoli|gaz|poilus?|tommies?)\b/,
       h: ['« La guerre ? Nous avons perdu une génération et gagné des monuments. »', '« On n’en parle pas, {m}. C’est la règle tacite des survivants. »'],
-      p: ['« La guerre ? J’y étais. J’en parle pas. »', '« Mon mari est revenu. Enfin, son corps est revenu. »'],
+      p: ['« La guerre ? J’y étais. J’en parle pas. »', '« Mon frère est revenu. Enfin, son corps est revenu. »'],
       o: ['« Quatre ans dans les tranchées. Ensuite on m’a donné un uniforme bleu à la place du kaki. »'],
       fr: ['« La guerre ? Vous avez vu les gueules cassées, dans le métro ? Voilà la guerre. »'] },
     { k: 'tsf', re: /\b(tsf|radio|bbc|wireless|poste a galene|emission|ondes)\b/,
@@ -1060,6 +1060,17 @@
       var T = cas === 'q' ? BREF[kind] : cas === 'd' ? (kind === 'oui' ? BREF.suite : kind === 'non' ? BREF.contre : BREF.doute) : cas === 'o' ? BREF.ouvert : BREF.seul;
       var pool = T[f.reg] || T[registre(f)] || T.populaire;
       npcLine(api, npc.id, val(api, pool, 'bref:' + kind + ':' + cas + ':' + npc.id));
+      return true;
+    };
+    // une banalité proposée par le carnet (« Quel brouillard ! ») : la réponse vient toujours de la culture du temps,
+    // dans la voix du personnage, et jamais d'un sujet de l'enquête que les mots auraient frôlé (« nuit », « train »)
+    converse.causer = function (api, npc, k) {
+      var f = (scene.fiches || {})[npc.id]; if (!f) return false;
+      var cult = CULT.filter(function (c) { return c.k === k; })[0]; if (!cult) return false;
+      var pool = (f.avis && f.avis[k]) || (f.pa && CULT_PA[k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
+      if (!pool) return false;
+      npcLine(api, npc.id, val(api, pool, 'cult:' + npc.id + ':' + k));
+      var m = mem(api, npc.id); relance(api, f, npc.id, m); saveMem(api, npc.id, m);
       return true;
     };
     converse.note = function (api, npc, id) { if (!(scene.fiches || {})[npc.id]) return; var m = mem(api, npc.id); m.last = id; saveMem(api, npc.id, m); };

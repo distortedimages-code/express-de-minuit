@@ -412,7 +412,7 @@
     Pa.idee('arsenal', { id: 'ip_sully', kind: 'fausse', idea: 'Visiter les salons de Sully', time: 30,
       txt: 'Mlle Brévin vous ouvre, avec une fierté discrète, le cabinet doré du duc de Sully : des boiseries peintes, des plafonds à caissons, un silence de trois siècles. C’est très beau. Cela ne vous apprend rien sur personne, et la lumière baisse déjà.' });
     Pa.idee('arsenal', { id: 'ip_emporter', kind: 'risque', idea: 'Demander à emporter un dossier à l’hôtel', time: 5,
-      txt: 'Mlle Brévin vous regarde comme si vous aviez proposé d’emporter une colonne du bâtiment. « Rien ne sort d’ici, monsieur. Rien. Jamais. » Elle ne vous a plus tout à fait à la bonne.', vexe: 'brevin' });
+      txt: 'Mlle Brévin vous regarde comme si vous aviez proposé d’emporter une colonne du bâtiment. « Rien ne sort d’ici, {m}. Rien. Jamais. » Elle ne vous a plus tout à fait à la bonne.', vexe: 'brevin' });
 
     // ----- Charenton
     Pa.idee('charenton', { id: 'ip_parc', kind: 'fausse', idea: 'Faire le tour du parc avec les pensionnaires', time: 30,
@@ -445,26 +445,26 @@
   var POLICE = /^(fleming|rigby|planton|sergent|agentsj)$/;
   var BANAL = {
     prologue: [
-      { label: 'Parler du temps qu’il fait', say: 'Quel temps de chien, cette nuit.' },
-      { label: 'Parler du train', say: 'C’est un beau train, l’Orient-Express.' },
-      { label: 'Parler de la guerre', say: 'Vous étiez où, pendant la guerre ?' },
-      { label: 'Demander s’il a bien dormi', say: 'Vous avez pu dormir un peu ?' }
+      { label: 'Parler du temps qu’il fait', say: 'Quel temps de chien, cette nuit.', cult: 'brouillard' },
+      { label: 'Parler du train', say: 'C’est un beau train, l’Orient-Express.', cult: 'train' },
+      { label: 'Parler de la guerre', say: 'Vous étiez où, pendant la guerre ?', cult: 'guerre' },
+      { label: 'Demander s’il a pu dormir', say: 'Vous avez pu dormir un peu ?', cult: 'sommeil' }
     ],
     londres: [
-      { label: 'Parler du brouillard', say: 'Quel brouillard, on n’y voit pas à dix pas.' },
-      { label: 'Parler du tombeau de Toutankhamon', say: 'Vous avez lu ce qu’on a trouvé dans le tombeau de Toutankhamon ?' },
-      { label: 'Parler du cricket', say: 'Vous suivez le cricket ?' },
-      { label: 'Parler de la TSF', say: 'Vous avez déjà écouté la TSF, la BBC ?' },
-      { label: 'Parler de la vie chère', say: 'Tout est si cher, en ce moment.' },
-      { label: 'Parler du spiritisme', say: 'Vous croyez au spiritisme, vous ?' }
+      { label: 'Parler du brouillard', say: 'Quel brouillard, on n’y voit pas à dix pas.', cult: 'brouillard' },
+      { label: 'Parler du tombeau de Toutankhamon', say: 'Vous avez lu ce qu’on a trouvé dans le tombeau de Toutankhamon ?', cult: 'egypte' },
+      { label: 'Parler de sport', say: 'Vous suivez le sport ?', cult: 'sport' },
+      { label: 'Parler de la TSF', say: 'Vous avez déjà écouté la TSF, la BBC ?', cult: 'tsf' },
+      { label: 'Parler de la vie chère', say: 'Tout est si cher, en ce moment.', cult: 'argent' },
+      { label: 'Parler du spiritisme', say: 'Vous croyez au spiritisme, vous ?', cult: 'spiritisme' }
     ],
     paris: [
-      { label: 'Parler de la pluie', say: 'Quel temps, il pleut depuis des jours.' },
-      { label: 'Parler de la Ruhr', say: 'Et la Ruhr, qu’est-ce que vous en pensez ?' },
-      { label: 'Parler de Paris', say: 'Paris est une ville magnifique.' },
-      { label: 'Parler du cinéma', say: 'Vous allez au cinéma, de temps en temps ?' },
-      { label: 'Parler des Russes de Paris', say: 'On dit qu’il y a beaucoup de Russes à Paris.' },
-      { label: 'Parler de la vie chère', say: 'Tout est hors de prix, en ce moment.' }
+      { label: 'Parler de la pluie', say: 'Quel temps, il pleut depuis des jours.', cult: 'brouillard' },
+      { label: 'Parler de la Ruhr', say: 'Et la Ruhr, qu’est-ce que vous en pensez ?', cult: 'ruhr' },
+      { label: 'Parler de Paris', say: 'Paris est une ville magnifique.', cult: 'paris' },
+      { label: 'Parler du cinéma', say: 'Vous allez au cinéma, de temps en temps ?', cult: 'cinema' },
+      { label: 'Parler des Russes de Paris', say: 'On dit qu’il y a beaucoup de Russes à Paris.', cult: 'russie' },
+      { label: 'Parler de la vie chère', say: 'Tout est hors de prix, en ce moment.', cult: 'argent' }
     ]
   };
   function generiques(ch, npc) {
@@ -484,9 +484,9 @@
   var PROPRES = {
     prologue: {
       serveur: [{ label: 'Lui reprocher la lenteur du service', mal: 'service', dit: 'Le service est d’une lenteur, dans ce train.',
-        run: function (api, n) { froisse(api, n, 'Bastien se raidit. « Je suis seul pour tout le wagon, monsieur. » Il s’éloigne vers l’office, très droit, et ne revient pas tout de suite.', 15, true); } }],
+        run: function (api, n) { froisse(api, n, 'Bastien se raidit. « Je suis seul pour tout le wagon, {m}. » Il s’éloigne vers l’office, très droit, et ne revient pas tout de suite.', 15, true); } }],
       veuve: [{ label: 'Lui dire que le tarot est une superstition', mal: 'tarot', dit: 'Vous croyez vraiment à ces cartes ? C’est de la superstition.',
-        run: function (api, n) { froisse(api, n, 'Mme Vasseur retourne une carte, sans vous regarder. « La Tour. » Elle range son jeu. « Bonsoir, monsieur. »', 20, true); } }],
+        run: function (api, n) { froisse(api, n, 'Mme Vasseur retourne une carte, sans vous regarder. « La Tour. » Elle range son jeu. « Bonsoir, {m}. »', 20, true); } }],
       conducteur: [{ label: 'Le menacer de le signaler à la Compagnie', mal: 'compagnie', dit: 'Je vais signaler à la Compagnie que vous dormez pendant votre service.',
         run: function (api, n) { froisse(api, n, 'Paolo se lève d’un bond, la casquette de travers. « Signalez, signalez. » Il ne vous dira plus rien de lui-même.', 15, false); } }]
     },
@@ -496,7 +496,7 @@
       beddows: [{ label: 'Lui demander combien le professeur le paie', mal: 'gages', dit: 'Il vous paie bien, le professeur, pour une telle dévotion ?',
         run: function (api, n) { froisse(api, n, 'Beddows blêmit. « Je sers le professeur depuis vingt-deux ans, {m}. » Il ne vous adressera plus la parole de la journée.', 600, true); } }],
       fleming: [{ label: 'Lui dire que Scotland Yard est dépassé', mal: 'yard', dit: 'Franchement, inspecteur, Scotland Yard est dépassé par cette affaire.',
-        run: function (api, n) { froisse(api, n, 'Fleming referme son carnet, sans hâte. « Merci de votre avis. Sergent, raccompagnez ce visiteur. Et ne le laissez pas remonter avant demain. »', J, true); } }],
+        run: function (api, n) { froisse(api, n, 'Fleming referme son carnet, sans hâte. « Merci de votre avis. Sergent, raccompagnez-{le} jusqu’à la porte. Et ne {le} laissez pas remonter avant demain. »', J, true); } }],
       rigby: [{ label: 'Lui demander s’il a déjà vu un vrai incendie', mal: 'incendie', dit: 'Vous avez déjà vu un vrai incendie, sergent, ou seulement des rapports ?',
         run: function (api, n) { froisse(api, n, 'Rigby pose sa pipe. « Silvertown, 1917. Soixante-treize morts. J’ai sorti les enfants. » Il ne dit plus rien, et vous comprenez qu’il ne dira plus rien.', 240, true); } }],
       mustapha: [{ label: 'Lui parler de Gallipoli', mal: 'gallipoli', dit: 'Vous étiez à Gallipoli, vous aussi ? Quelle boucherie, de votre côté.',
@@ -518,15 +518,15 @@
     },
     paris: {
       gerant: [{ label: 'Lui demander une chambre moins chère', mal: 'prix', dit: 'Vous n’auriez pas une chambre moins chère ?',
-        run: function (api, n) { froisse(api, n, 'M. Blain consulte son registre avec une lenteur ostentatoire. « Sous les toits, il y a la chambre de la bonne, monsieur. Mais la bonne y est. »', 0, false); } }],
+        run: function (api, n) { froisse(api, n, 'M. Blain consulte son registre avec une lenteur ostentatoire. « Sous les toits, il y a la chambre de la bonne, {m}. Mais la bonne y est. »', 0, false); } }],
       gaudry: [{ label: 'Lui rappeler qui vous êtes', mal: 'rang', dit: 'Savez-vous à qui vous parlez ? Je ne suis pas n’importe qui.',
-        run: function (api, n) { froisse(api, n, 'M. Gaudry lève les yeux, enfin. « Un lecteur, monsieur. Comme les trois cent quarante autres. Asseyez-vous, je vous appellerai. » Il vous appelle une heure plus tard.', 0, false); api.time(60); } }],
+        run: function (api, n) { froisse(api, n, 'M. Gaudry lève les yeux, enfin. « Un lecteur, {m}. Comme les trois cent quarante autres. Asseyez-vous, je vous appellerai. » Il vous appelle une heure plus tard.', 0, false); api.time(60); } }],
       remi: [{ label: 'Se moquer de ses recherches', mal: 'moquer', dit: 'Vous passez vos journées sur des grimoires, à votre âge ?',
-        run: function (api, n) { froisse(api, n, 'L’étudiant roux rougit jusqu’aux oreilles. « C’est ma thèse, monsieur. » Il replonge dans son livre et ne relève plus la tête.', 240, true); } }],
+        run: function (api, n) { froisse(api, n, 'L’étudiant roux rougit jusqu’aux oreilles. « C’est ma thèse, {m}. » Il replonge dans son livre et ne relève plus la tête.', 240, true); } }],
       brevin: [{ label: 'Lui demander si elle est mariée', mal: 'mariee', dit: 'Une femme comme vous, mademoiselle, vous n’êtes pas mariée ?',
-        run: function (api, n) { froisse(api, n, 'Mlle Brévin vous regarde comme une reliure mangée aux vers. « Je suis archiviste, monsieur. » Elle tourne les talons.', 180, true); } }],
+        run: function (api, n) { froisse(api, n, 'Mlle Brévin vous regarde comme une reliure mangée aux vers. « Je suis archiviste, {m}. » Elle tourne les talons.', 180, true); } }],
       rogniat: [{ label: 'Lui demander si elle couvre le directeur', mal: 'couvre', dit: 'Vous couvrez le docteur Leroux, n’est-ce pas ?',
-        run: function (api, n) { froisse(api, n, 'Mme Rogniat pose les deux mains à plat sur son bureau. « Je couvre ce bureau, monsieur. Personne n’y touche. » Elle ne vous quittera plus des yeux, ni les caisses.', 240, true); } }],
+        run: function (api, n) { froisse(api, n, 'Mme Rogniat pose les deux mains à plat sur son bureau. « Je couvre ce bureau, {m}. Personne n’y touche. » Elle ne vous quittera plus des yeux, ni les caisses.', 240, true); } }],
       leroux: [{ label: 'L’accuser d’avoir tué Delplace', mal: 'accuser', dit: 'C’est vous qui avez tué le docteur Delplace, n’est-ce pas ?',
         run: function (api, n) {
           api.npc('leroux', 'Le pince-nez saute. « Sortez. Sortez, ou je vous fais sortir par les infirmiers, et la police avec ! »');
@@ -537,11 +537,19 @@
         run: function (api, n) { froisse(api, n, 'Mandrin blêmit, puis ricane. « Vous lui direz quoi ? Que j’ai bu un coup ? » Il se ressert, sans vous en proposer. « Ça va vous coûter une autre bouteille, de me reparler. »', 0, false); api.pay(Math.min(0.05, api.s.money)); } }]
     }
   };
+  // quelques avis propres, là où la culture du temps sonnerait faux dans leur bouche
+  function avis(ch, id, k, l) { var f = CH[ch] && CH[ch].fiches && CH[ch].fiches[id]; if (!f) return; f.avis = f.avis || {}; if (!f.avis[k]) f.avis[k] = l; }
+  avis('prologue', 'veuve', 'train', ['« Je le prends tous les mois, jeune homme, depuis vingt ans. Il a changé. Moi aussi. Tous les deux en mal. »']);
+  avis('londres', 'vane', 'spiritisme', ['« Si j’y crois ? » Elle rit, d’un rire de gorge. « Très {cher}, ils sont ici même. Ils vous écoutent. L’un d’eux trouve votre chapeau épouvantable. »']);
+  avis('londres', 'hollis', 'spiritisme', ['« Les tables tournantes ? » Il soupire. « Des veuves qui paient pour entendre leurs morts leur dire qu’ils vont bien. L’Église leur offre la même chose, gratuitement, et on la trouve ennuyeuse. »']);
+  avis('londres', 'mustapha', 'sport', ['« Le cricket ? Je l’ai vu jouer à Lord’s. Cinq jours pour un match nul. Les Anglais appellent cela du suspense. »']);
+  avis('londres', 'pike', 'sport', ['« Le sport ? Je classe les résultats depuis 1887, {m}. Je n’en ai jamais regardé un seul. »']);
+  avis('londres', 'hollis', 'sport', ['« Le cricket, voyez-vous, est la seule liturgie que mes paroissiens suivent sans s’endormir. »']);
   Object.keys(BANAL).forEach(function (ch) {
     var sc = CH[ch]; if (!sc) return;
     sc.paroles = function (api, npc) {
       if (!npc || MUETS.test(npc.id)) return { banal: [], maladresse: [] };
-      return { banal: BANAL[ch].slice(), maladresse: generiques(ch, npc).concat((PROPRES[ch] || {})[npc.id] || []) };
+      return { banal: sc.fiches && sc.fiches[npc.id] ? BANAL[ch].slice() : [], maladresse: generiques(ch, npc).concat((PROPRES[ch] || {})[npc.id] || []) };
     };
   });
 })(typeof window !== 'undefined' ? window : globalThis);

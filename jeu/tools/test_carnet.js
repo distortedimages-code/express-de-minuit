@@ -24,6 +24,7 @@ function joue(INT, mode, graine) {
       if (!c.length || enTalk > 7 || rng() < 0.12) { g.step('Au revoir.', 'dire'); enTalk = 0; continue; }
       const x = c[Math.floor(rng() * c.length)];
       if (x.mal) { mauvaises++; g.choose({ label: x.label, mal: x.mal }); }
+      else if (x.cult) g.choose({ label: x.label, say: x.say, cult: x.cult });
       else if (x.say) g.step(x.say, 'dire');
       else g.choose({ label: x.label, topic: x.topic });
       continue;
