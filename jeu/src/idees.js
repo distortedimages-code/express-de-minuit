@@ -440,7 +440,9 @@
   // =================================================================
   //  EN CONVERSATION : banalités et maladresses
   // =================================================================
-  var FEM = { veuve: 1, atkins: 1, pike: 1, vane: 1, brevin: 1, rogniat: 1 };
+  var FEM = { veuve: 1, atkins: 1, pike: 1, vane: 1, brevin: 1, rogniat: 1, arnoult: 1, veronique: 1, quitterie: 1, caterina: 1 };
+  // une enfant : pas de menaces ni d'insultes à lui souffler
+  var ENFANTS = /^(quitterie)$/;
   var MUETS = /^(morts|ravel|brule|stanley|alexis)$/;
   var POLICE = /^(fleming|rigby|planton|sergent|agentsj)$/;
   var BANAL = {
@@ -468,6 +470,7 @@
     ]
   };
   function generiques(ch, npc) {
+    if (ENFANTS.test(npc.id)) return [];
     var f = FEM[npc.id], l = [
       { label: f ? 'La traiter de menteuse' : 'Le traiter de menteur', say: f ? 'Vous êtes une menteuse.' : 'Vous êtes un menteur.' },
       { label: f ? 'La menacer' : 'Le menacer', say: 'Parlez, ou je vais vous casser la figure.' }
@@ -535,6 +538,18 @@
         } }],
       mandrin: [{ label: 'Le menacer de le dénoncer à Leroux', mal: 'denoncer', dit: 'Si vous ne parlez pas, je dirai à Leroux que vous m’avez parlé.',
         run: function (api, n) { froisse(api, n, 'Mandrin blêmit, puis ricane. « Vous lui direz quoi ? Que j’ai bu un coup ? » Il se ressert, sans vous en proposer. « Ça va vous coûter une autre bouteille, de me reparler. »', 0, false); api.pay(Math.min(0.05, api.s.money)); } }]
+      ,fauvel: [{ label: 'Lui dire que son règlement est ridicule', mal: 'reglement', dit: 'Votre règlement est ridicule. On n’est pas à la préfecture, ici.',
+        run: function (api, n) { froisse(api, n, 'M. Fauvel repose sa plume avec une douceur inquiétante. « Ici, c’est moi, la préfecture. » Il rouvre son registre et ne vous voit plus.', 240, true); api.flag('fauvelNon', day(api.s.min)); } }],
+      thibierge: [{ label: 'Lui dire que la religion est une superstition', mal: 'superstition', dit: 'Tout ça, les fonts, les reliques, c’est de la superstition, mon père.',
+        run: function (api, n) { froisse(api, n, 'L’abbé Thibierge sourit, sans se fâcher. « Sans doute. Et c’est vous qui êtes venu me demander où dorment les morts. » Il retourne à sa sacristie.', 60, true); } }],
+      arnoult: [{ label: 'Se plaindre de la soupe', mal: 'soupe', dit: 'Votre soupe est infecte, madame.',
+        run: function (api, n) { froisse(api, n, 'Mme Arnoult pose les poings sur les hanches. « Elle nourrit trois rouliers et un curé depuis vingt ans, ma soupe. Allez manger à Paris. »', 120, true); } }],
+      lorien: [{ label: 'Lui dire qu’il est un piètre médecin', mal: 'medecin', dit: 'Un médecin qui ne sait pas soigner sa propre famille, c’est un piètre médecin.',
+        run: function (api, n) { froisse(api, n, 'Christian Lorien pâlit. Il ouvre la porte de la cuisine et attend, sans un mot, que vous passiez devant lui.', 600, true); } }],
+      quitterie: [{ label: 'Lui dire que les monstres n’existent pas', mal: 'monstres', dit: 'Les monstres, ça n’existe pas, tu sais.',
+        run: function (api, n) { api.npc('quitterie', 'Elle vous regarde longtemps, très sérieuse, comme on regarde quelqu’un qui ment pour être gentil. Puis elle retourne à sa poupée.'); } }],
+      caterina: [{ label: 'Lui dire que l’opéra vous ennuie', mal: 'ennui', dit: 'L’opéra, franchement, ça m’ennuie.',
+        run: function (api, n) { froisse(api, n, 'Caterina éclate de rire, un rire de scène, très beau et très froid. « Alors vous êtes dans le mauvais wagon, caro. » Elle se tourne vers quelqu’un d’autre.', 120, true); } }]
     }
   };
   // quelques avis propres, là où la culture du temps sonnerait faux dans leur bouche

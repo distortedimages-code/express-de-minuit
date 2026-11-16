@@ -1,7 +1,7 @@
 // Paris, de la gare du Nord au train de Poissy : un joueur méthodique, avec des dés ordinaires.
 // On vérifie que le chapitre se termine toujours, en combien de jours, et avec quels indices.
 global.window = global; global.RPG_ABSENTS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 const P = CHAPTERS.paris, J = 1440;
 let ok = 0, ko = 0; const jours = [], indices = [], notes = [];
 for (let seed0 = 1; seed0 <= 20; seed0++) for (let pi = 0; pi < 3; pi++) {
@@ -40,9 +40,36 @@ for (let seed0 = 1; seed0 <= 20; seed0++) for (let pi = 0; pi < 3; pi++) {
     if (s.loc === 'charenton') act('ch_guetter');
     if (s.talk === 'mandrin') { top('delplace'); top('patient'); top('parole'); top('guimart'); fin(); }
     dodo();
-    garde = 0; while (!s.ended && garde++ < 6) { act('go_poissy'); if (!s.ended) act('go_poissy'); if (!s.ended) dodo(); }
+    garde = 0; while (!/^po_/.test(s.loc) && garde++ < 6) { act('go_poissy'); if (!/^po_/.test(s.loc)) act('go_poissy'); if (!/^po_/.test(s.loc)) dodo(); }
+    // Poissy : la mairie (ou le curé), les Lorien, le dîner, la fouille, le bras
+    const nuitPo = () => { fin(); if (A.flag('diner') && !A.flag('lorienFerme')) { if (s.loc !== 'po_lorien') act('go_po_lorien'); act('pl_dormir'); } else { act('go_po_auberge'); act('pa_dormir'); } };
+    act('pg_ville');
+    garde = 0; while (!A.has('ACTES') && garde++ < 20) { fin(); if (s.loc !== 'po_mairie') act('go_po_mairie'); if (P.disponible(A, 'fauvel')) { if (h() >= 17 || h() < 8 || P._h.jour(A) === 'dimanche') nuitPo(); else A.s.min += 30; continue; } if (!A.flag('actesOK')) act('pm_billet'); act('pm_actes'); }
+    if (!A.flag('connu:lorien')) { act('go_po_eglise'); act('pe_cure'); top('comte'); fin(); }
+    act('go_po_lorien'); if (s.loc === 'po_lorien' && !A.flag('lorienVu')) act('pl_attendre');
+    if (s.talk !== 'lorien') act('pl_christian'); top('histoire'); fin();
+    act('pl_diner'); act('pl_diner'); fin();
+    act('pl_dormir');
+    garde = 0; while (!A.item('Le Bras gauche du Simulacre') && garde++ < 30) {
+      fin();
+      if (!A.flag('fouilleOK')) { if (s.loc !== 'po_lorien') act('go_po_lorien'); act('pl_permission'); fin(); if (!A.flag('fouilleOK')) nuitPo(); continue; }
+      if (h() >= 17 || h() < 8) { nuitPo(); continue; }
+      if (s.loc !== 'po_jardin') { if (s.loc !== 'po_lorien') act('go_po_lorien'); act('pl_jardin'); }
+      if (!A.flag('marches')) { act('pj_marches'); continue; }
+      if (!A.flag('escalier')) { act('pj_creuser'); continue; }
+      if (!A.flag('porte')) { act('pj_porte'); continue; }
+      act('pj_descendre'); act('pc_avancer'); act('ps_couper'); act('ps_prendre'); act('ps_remonter');
+    }
+    garde = 0; while (!s.ended && garde++ < 12) {
+      fin();
+      if (/^po_/.test(s.loc)) { if (h() >= 21 || h() < 6) { nuitPo(); continue; } act('go_po_gare'); act('pg_train'); continue; }
+      if (/^oe_/.test(s.loc)) { act('oc_dormir'); continue; }
+      if (s.loc !== 'p_lyon') { act('p_versLyon'); act('go_lyon'); }
+      if (h() < 21) act('ly_buffet'); if (h() < 21) act('ly_buffet');
+      act('ly_monter');
+    }
   } catch (e) { notes.push('PLANTAGE graine ' + seed0 + ' pj ' + pi + ' : ' + e.stack.split('\n').slice(0, 3).join(' | ')); }
-  if (s.ended && s.flags.fin === 'poissy') { ok++; jours.push(Math.floor(s.min / J) - Math.floor(P.start.min / J)); indices.push(s.clues.length); }
+  if (s.ended && s.flags.arriveeLausanne && (s.pc.simulacre || []).length === 1) { ok++; jours.push(Math.floor(s.min / J) - Math.floor(P.start.min / J)); indices.push(s.clues.length); }
   else { ko++; notes.push('NON TERMINÉ graine ' + seed0 + ' pj ' + pi + ' @' + s.loc + ' ' + g.clock() + ' indices ' + s.clues.join(',') + ' fin ' + s.flags.fin); }
 }
 notes.slice(0, 10).forEach(n => console.log(n));

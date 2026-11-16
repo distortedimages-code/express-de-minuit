@@ -1,6 +1,6 @@
 // « Dire » et « Agir » : une parole ne déclenche jamais un geste ; un geste reste un geste
 global.window = global;
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 function jeu(ch, prep) { const sc = CHAPTERS[ch]; let seed = 4; const rng = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; const g = RPG.createGame(sc, null, sc.pregens ? { rng, pc: sc.pregens[0] } : { rng }); if (prep) prep(g); return g; }
 let bad = 0;
 function cas(titre, g, texte, mode, test) {

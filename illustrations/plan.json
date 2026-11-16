@@ -1143,6 +1143,118 @@
       "image": "visions/20_etoiles-en-oeil",
       "prompt": "prompts/visions/20_etoiles-en-oeil.txt",
       "references": []
+    },
+    {
+      "image": "portraits/38_fauvel",
+      "prompt": "prompts/portraits/38_fauvel.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/39_thibierge",
+      "prompt": "prompts/portraits/39_thibierge.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/40_arnoult",
+      "prompt": "prompts/portraits/40_arnoult.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/41_lorien",
+      "prompt": "prompts/portraits/41_lorien.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/42_veronique",
+      "prompt": "prompts/portraits/42_veronique.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/43_caterina",
+      "prompt": "prompts/portraits/43_caterina.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/44_bertin",
+      "prompt": "prompts/portraits/44_bertin.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/45_pruvost",
+      "prompt": "prompts/portraits/45_pruvost.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/01_gare-de-poissy",
+      "prompt": "prompts/poissy/01_gare-de-poissy.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/02_grand-rue_eglise",
+      "prompt": "prompts/poissy/02_grand-rue_eglise.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/03_mairie_archives",
+      "prompt": "prompts/poissy/03_mairie_archives.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/04_eglise_fonts",
+      "prompt": "prompts/poissy/04_eglise_fonts.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/05_auberge-du-lion-d-or",
+      "prompt": "prompts/poissy/05_auberge-du-lion-d-or.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/06_maison-lorien_rosiers",
+      "prompt": "prompts/poissy/06_maison-lorien_rosiers.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/07_cuisine-des-lorien",
+      "prompt": "prompts/poissy/07_cuisine-des-lorien.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/08_chambre-d-enfant_nuit",
+      "prompt": "prompts/poissy/08_chambre-d-enfant_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/09_fouille_porte-d-acier",
+      "prompt": "prompts/poissy/09_fouille_porte-d-acier.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/10_caves_cellules",
+      "prompt": "prompts/poissy/10_caves_cellules.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/11_salle-du-bras",
+      "prompt": "prompts/poissy/11_salle-du-bras.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/12_gare-de-lyon_nuit",
+      "prompt": "prompts/poissy/12_gare-de-lyon_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/13_compartiment",
+      "prompt": "prompts/poissy/13_compartiment.txt",
+      "references": []
+    },
+    {
+      "image": "poissy/14_voiture-salon",
+      "prompt": "prompts/poissy/14_voiture-salon.txt",
+      "references": [
+        "portraits/43_caterina"
+      ]
     }
   ],
   "version": 2

@@ -521,6 +521,7 @@
     function closeTalk(npc) {
       var st = npcState(npc.id);
       talkMode = 'raw';
+      pnjVenus[npc.id] = s.turn; // celui qui met fin à l'entretien est forcément là
       api.npc(npc.id, fresh('close:' + npc.id, npc.close || [npc.bye]));
       talkMode = null;
       st.closedUntil = s.min + (npc.cooldown || 8);
@@ -619,13 +620,16 @@
       if (c && thingsHere().some(function (t) { return (t.ids || []).indexOf(c) >= 0; })) return true;
       return !!(scene.pnjIci && scene.pnjIci(api, id));
     }
+    // l'influence du Simulacre : chaque pièce possédée retire 5 % aux jets d'Idée, de Connaissance et de Chance
+    function influence() { return 5 * ((s.pc && s.pc.simulacre) || []).length; }
     function skillValue(name) {
       if (name === 'SAN') return s.pc.san;
-      if (name === 'CHANCE') return s.pc.chance;
+      if (name === 'CHANCE') return Math.max(1, s.pc.chance - influence());
+      if ((name === 'INT' || name === 'EDU') && s.pc.carac[name] !== undefined) return Math.max(1, s.pc.carac[name] - influence());
       if (s.pc.skills[name] !== undefined) return s.pc.skills[name];
       if (s.pc.carac[name] !== undefined) return s.pc.carac[name];
       if (name === 'Esquive') return Math.floor(s.pc.carac.DEX / 2);
-      var base = { 'Comptabilité': 5, 'Crochetage': 1, 'Droit': 5, 'Histoire': 5, 'Occultisme': 5, 'Médecine': 1, 'Mécanique': 10, 'Discrétion': 20, 'Bibliothèque': 20, 'Crédit': 0, 'Écouter': 20, 'Psychologie': 10, 'Persuasion': 10, 'Charme': 15, 'Baratin': 5, 'Intimidation': 15, 'Trouver Objet Caché': 25, 'Premiers soins': 30, 'Sauter': 20, 'Grimper': 20, 'Photographie': 5, 'Langue (turc)': 1, 'Corps à corps': 25, 'Lancer': 20 };
+      var base = { 'Comptabilité': 5, 'Crochetage': 1, 'Droit': 5, 'Histoire': 5, 'Occultisme': 5, 'Médecine': 1, 'Mécanique': 10, 'Discrétion': 20, 'Bibliothèque': 20, 'Crédit': 0, 'Écouter': 20, 'Psychologie': 10, 'Persuasion': 10, 'Charme': 15, 'Baratin': 5, 'Intimidation': 15, 'Trouver Objet Caché': 25, 'Premiers soins': 30, 'Sauter': 20, 'Grimper': 20, 'Orientation': 10, 'Photographie': 5, 'Langue (turc)': 1, 'Corps à corps': 25, 'Lancer': 20 };
       return base[name] !== undefined ? base[name] : 5;
     }
     function money(n) { return scene.money ? scene.money(n) : Math.round(n * 100) / 100 + ' francs'; }
@@ -663,7 +667,7 @@
       // une image posée dans le fil, pour un moment qui n'est pas un lieu (la cellule, une vision)
       vue: function (key, nom) { log({ t: 'vue', img: key, nom: nom || '' }); },
       things: function () { return listThings(); },
-      where: function () { return scene.where ? scene.where(s.min) : ''; },
+      where: function () { return scene.where ? scene.where(s.min, s) : ''; },
       clock: function () { return fmtTime(s.min); },
       ask: function () { log({ t: 'ask', x: s.talk ? 'Que dites-vous ?' : 'Que faites-vous ?' }); },
       chips: function (list) { log({ t: 'chips', list: list }); },
@@ -685,6 +689,14 @@
       cycle: function (k, arr) { var i = api.count(k); return arr[i % arr.length]; },
       time: function (n) { s.tick = (s.tick || 0) + n; },
       item: function (name) { return s.inv.indexOf(name) >= 0; },
+      // une pièce du Simulacre : elle entre dans les bagages et pèse sur l'esprit (voir influence)
+      piece: function (id, name) {
+        var l = s.pc.simulacre || (s.pc.simulacre = []);
+        if (l.indexOf(id) < 0) l.push(id);
+        if (name) this.take(name);
+      },
+      pieces: function () { return ((s.pc && s.pc.simulacre) || []).slice(); },
+      influence: function () { return influence(); },
       take: function (name) { if (s.inv.indexOf(name) < 0) { s.inv.push(name); log({ t: 'item', x: name }); } },
       drop: function (name) { var i = s.inv.indexOf(name); if (i >= 0) s.inv.splice(i, 1); },
       pay: function (n) { if (s.money < n) return false; s.money -= n; return true; },
@@ -989,7 +1001,7 @@
     }
     function melanger(l, r) { for (var i = l.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), x = l[i]; l[i] = l[j]; l[j] = x; } return l; }
     function nbPistes(r, mode) {
-      var INT = (s.pc.carac && s.pc.carac.INT) || 60, attendu = 1 + Math.max(0, INT - 40) / 35;
+      var INT = ((s.pc.carac && s.pc.carac.INT) || 60) - influence(), attendu = 1 + Math.max(0, INT - 40) / 35;
       return Math.floor(attendu) + (r() < attendu % 1 ? 1 : 0) + (mode === 'guide' ? 1 : 0);
     }
     function brute(a) { return a.idea === true ? a.label : a.idea; }
@@ -2119,6 +2131,8 @@
       finish();
     }
 
+    // une sauvegarde d'une version précédente du chapitre (par exemple, Paris fini avant que Poissy existe)
+    if (saved && scene.reprise) scene.reprise(api);
     if (!saved) {
       scene.intro(api);
       s.visited[s.loc] = 1;
@@ -2136,7 +2150,7 @@
       suggestionsParole: function (n, mode) { return s.talk ? suggestionsParole(n, mode) : []; },
       reflexionPossible: function () { return !s.talk && !s.pending && !(s.flags.jidee !== undefined && s.min - s.flags.jidee < 180); },
       clock: function () { return fmtTime(s.min); },
-      where: function () { return scene.where ? scene.where(s.min) : ''; },
+      where: function () { return scene.where ? scene.where(s.min, s) : ''; },
       topicChips: function () { return s.talk ? topicChips(scene.npcs[s.talk]) : []; },
       skillValue: skillValue,
       levels: LEVELS,

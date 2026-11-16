@@ -1,7 +1,7 @@
 // la création d'investigateur : les règles (dés, âge, points) et une partie lancée avec chaque fiche
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
 global.localStorage = { _: {}, getItem(k) { return this._[k] || null; }, setItem(k, v) { this._[k] = String(v); } };
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie','creation']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie','creation']) require('../src/' + f + '.js');
 const R = Creation._regles; let ko = 0, n = 0; const notes = [], photos = new Set();
 function hasard(l) { return l[Math.floor(Math.random() * l.length)]; }
 for (let i = 0; i < 600; i++) {

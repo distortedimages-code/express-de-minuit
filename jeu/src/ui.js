@@ -557,6 +557,8 @@
       '<div><div class="k">État</div>' + esc(game.api.sanLabel()) + '</div>' +
       '<div><div class="k">Chance</div>' + pc.chance + '</div>' +
       '<div><div class="k">Mouvement</div>' + pc.mvt + '</div></div>';
+    var nbS = (pc.simulacre || []).length;
+    if (nbS) h += '<p class="sim">Le Simulacre : ' + nbS + ' pièce' + (nbS > 1 ? 's' : '') + ' dans vos bagages. Idée, Connaissance et Chance : −' + (5 * nbS) + ' %.</p>';
     h += '<h3>Compétences</h3><div class="skills">';
     Object.keys(pc.skills).sort(function (a, b) { return a.localeCompare(b, 'fr'); }).forEach(function (k) { var v = pc.skills[k]; h += '<span>' + esc(k) + '</span><span>' + v + ' % <small>' + Math.floor(v / 2) + '/' + Math.floor(v / 5) + '</small></span>'; });
     h += '</div><h3>Possessions</h3><div>' + s.inv.map(function (x) { return esc(SC && SC.invLabel ? SC.invLabel(game.api, x) : x); }).join('<br>') + '<br>' + esc(game.api.money()) + '</div>';

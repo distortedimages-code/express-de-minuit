@@ -1,6 +1,6 @@
 // quand la raison lâche : répliques déréglées, délires en conversation, fin par la folie, soins
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 const MAUVAIS = /undefined|NaN|\[object|\{[A-Za-z]{1,8}\}|\bnull\b|«\s*»/;
 let ko = 0, n = 0, dereg = 0, total = 0; const notes = [];
 function partie(ch, san, seed) {

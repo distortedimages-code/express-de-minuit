@@ -1,6 +1,6 @@
 // le carnet d'idées : chaque fausse piste, tentation et folie, réussie et ratée ; chaque maladresse en conversation
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 const MAUVAIS = /undefined|NaN|\[object|\{[A-Za-z]{1,8}\}|\bnull\b|  +«|«\s*»/;
 let n = 0, ko = 0, jets = 0, mal = 0, banal = 0; const notes = [];
 function partie(ch, sort) {
@@ -31,7 +31,7 @@ for (const ch of ['prologue', 'londres', 'paris']) {
       const g = partie(ch, 0.5);
       const ta = Object.keys(sc.locations).map(k => [k, (sc.locations[k].actions || []).find(a => a.talkTo === id)]).find(x => x[1]);
       if (!ta) continue;
-      try { if (g.state.loc !== ta[0]) g.api.go(ta[0]); g.state.talk = id; g.api.npcs(id).met = true; } catch (e) { continue; }
+      try { if (g.state.loc !== ta[0]) g.api.go(ta[0]); g.state.pending = null; g.state.talk = id; g.api.npcs(id).met = true; } catch (e) { continue; }
       const b = g.state.seq;
       try { if (m.mal) { g.choose({ label: m.label, mal: m.mal }); mal++; } else if (m.cult) { g.choose({ label: m.label, say: m.say, cult: m.cult }); banal++; } else { g.step(m.say, 'dire'); m.say && (ex.banal.indexOf(m) >= 0 ? banal++ : mal++); } } catch (e) { ko++; notes.push('PLANTAGE parole ' + ch + ' ' + id + ' ' + m.label + ' ' + e.message); continue; }
       lire(g, b, ch + ' ' + id + ' « ' + m.label + ' »');

@@ -121,7 +121,7 @@
   };
   var BROMURE = 'Un flacon de bromure';
   function ouvert(api) { var h = hour(api.s.min), wd = (4 + day(api.s.min)) % 7; return h >= 9 && h < 18 && wd !== 6; }
-  function enVille(api) { return !/^(wagon1|wagon2|retour|campagne|cave|gare)$/.test(api.s.loc) && !api.flag('combat') && !api.s.talk; }
+  function enVille(api) { return !/^(wagon1|wagon2|retour|campagne|cave|gare)$/.test(api.s.loc) && !/^(po|oe)_/.test(api.s.loc) && !api.flag('combat') && !api.s.talk; }
   ['londres', 'paris'].forEach(function (k) {
     var sc = CH[k], S = SOINS[k]; if (!sc) return;
     sc.globalActions = sc.globalActions || [];

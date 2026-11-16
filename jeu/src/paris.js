@@ -28,9 +28,12 @@
       closed: 'La bibliothèque de l’Arsenal n’ouvre que de 10 h à 16 h.', fermeJour: 'L’Arsenal est fermé le dimanche.' },
     charenton: { label: 'la maison de santé de Charenton', concept: 'CHARENTON', also: ['LEROUX', 'ROGNIAT', 'DELPLACE', 'GUIMART'], hours: [9, 19],
       closed: 'La nuit, la grille de Charenton est fermée, et le portier ne se dérange que pour les ambulances.' },
-    poissy: { label: 'Poissy', concept: 'POISSY', also: ['VILLA'] }
+    poissy: { label: 'Poissy', concept: 'POISSY', also: ['VILLA'] },
+    lyon: { label: 'la gare de Lyon', concept: 'LYON', also: [] }
   };
   function connu(api, id) { return id === 'hotel' || id === 'bn' || !!api.flag('connu:' + id); }
+  // hors de Paris (Poissy, le train de nuit) : les déplacements de Paris ne valent plus
+  function ailleurs(api) { return /^(po|oe)_/.test(api.s.loc); }
   function apprendre(api, id) {
     if (connu(api, id)) return;
     api.flag('connu:' + id, true);
@@ -51,10 +54,12 @@
   function goP(id) {
     var p = PL[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
-      cond: function (api) { return api.s.loc !== id && api.s.loc !== 'gare'; },
+      cond: function (api) { return api.s.loc !== id && api.s.loc !== 'p_' + id && api.s.loc !== 'gare' && !ailleurs(api); },
       run: function (api) {
-        if (!connu(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il vous faudrait d’abord une adresse, ou une raison.'); return; }
+        // la gare de Lyon, on la connaît depuis l'arrivée (le train y attend) : elle n'apparaît dans les destinations qu'une fois utile
+        if (!connu(api, id) && id !== 'lyon') { api.say('Vous ne savez pas encore où aller pour ça. Il vous faudrait d’abord une adresse, ou une raison.'); return; }
         if (id === 'poissy') { versPoissy(api); return; }
+        if (id === 'lyon' && P.versLyon) { P.versLyon(api); return; }
         var h = hour(api.s.min);
         if (p.jours && p.jours.indexOf(jour(api)) >= 0) { api.say(p.fermeJour); return; }
         if (p.hours && h >= p.hours[1]) { api.say(p.closed + ' Il faudra y retourner demain.'); return; }
@@ -79,6 +84,7 @@
     }
     api.say('Gare Saint-Lazare, un train de banlieue aux banquettes de bois. Vingt-huit kilomètres vers l’ouest, le long de la Seine. Vous regardez défiler les jardins ouvriers, puis la forêt de Saint-Germain, noire sous la pluie.');
     api.say(api.has('GUETTEUR') ? 'Sur le quai, au moment où le train s’ébranle, vous cherchez des yeux une silhouette trop maigre. Il n’y a que des voyageurs. Vous regardez quand même jusqu’au bout.' : 'Quelque part là-bas, sous une maison que vous ne connaissez pas encore, il y a une cave que des soldats ont refusé de décrire.');
+    if (P.arriverPoissy) { P.arriverPoissy(api); return; }
     api.flag('fin', 'poissy');
     api.end();
   }
@@ -95,7 +101,7 @@
     start: { loc: 'gare', min: at(7, 17, 40), money: 40, inv: [] },
     investigator: null,
     clock: function (min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1, 3) + ' ' + (5 + d) + ' · ' + pad(hour(min)) + ' h ' + pad(min % 60); },
-    where: function (min) { var h = hour(min), mom = h < 6 ? 'nuit' : h < 12 ? 'matin' : h < 18 ? 'après-midi' : h < 22 ? 'soir' : 'nuit'; return 'Paris · ' + (5 + day(min)) + ' janvier 1923 · ' + mom; },
+    where: function (min, s) { var h = hour(min), mom = h < 6 ? 'nuit' : h < 12 ? 'matin' : h < 18 ? 'après-midi' : h < 22 ? 'soir' : 'nuit', l = (s && s.loc) || ''; return (/^po_/.test(l) ? 'Poissy · ' : /^oe_/.test(l) ? 'Orient-Express · ' : 'Paris · ') + (5 + day(min)) + ' janvier 1923 · ' + mom; },
     examples: '« je vais à la Bibliothèque nationale », « je demande une carte de lecteur », « je cherche le comte Fenalik »',
     phrases: [
       [/\bbibliotheque nationale\b|\bsalle de travail\b|\brue de richelieu\b|\bla nationale\b/g, ' bn '],
@@ -348,7 +354,7 @@
         T('lieux', ['DESTINATIONS', 'TAXI'], function (api) { api.npc('gerant', '« Le métro est à Palais-Royal. Pour un taxi, je sonne le chasseur. Où souhaitez-vous vous rendre, {m} ? »'); api.chips(destChips(api).slice(0, 5)); }, { chip: 'Se déplacer dans Paris' }),
         T('charenton', ['CHARENTON', 'DELPLACE', 'DECES'], ['« Charenton ? » Il se signe presque. « C’est au bout de la ligne, {m}, après Bercy. On y a mis le marquis de Sade, autrefois. On n’y va pas pour son plaisir. »', '« Les journaux ont parlé du directeur, la semaine dernière. Un accident. On n’a pas dit lequel, ce qui est toujours mauvais signe. »']),
         T('fenalik', ['FENALIK', 'POISSY'], ['« Fenalik ? Ce nom ne me dit rien. Un Alsacien ? » Il réfléchit. « Poissy, je connais : ma belle-sœur y tient une mercerie. Une petite ville tranquille. Il ne s’y passe jamais rien. »']),
-        T('train', ['VOYAGE', 'TRAIN', 'BILLETS', 'VICTORIA'], ['« Le Simplon-Orient part de la gare de Lyon, {m}, le soir. Vos places sont retenues : la Compagnie nous a prévenus. Vous partirez quand vos affaires à Paris seront finies. »'], { chip: 'L’Orient-Express' })
+        T('train', ['VOYAGE', 'TRAIN', 'BILLETS', 'VICTORIA', 'LYON'], function (api) { api.npc('gerant', '« Le Simplon-Orient part de la gare de Lyon, {m}, chaque soir à 22 h 50. Vos places sont retenues : la Compagnie nous a prévenus. Vous partirez quand vos affaires à Paris seront finies. »'); apprendre(api, 'lyon'); }, { chip: 'L’Orient-Express' })
       ] }),
     gaudry: H.npc({ id: 'gaudry', name: 'M. Gaudry, au secrétariat', short: 'M. Gaudry', patience: 5, cooldown: 60, selfKeys: ['GAUDRY', 'SECRETAIRE'],
       greet: function (api, first) { api.npc('gaudry', first ? 'Derrière un guichet de chêne, un homme gris en manchettes de lustrine vous regarde par-dessus ses lorgnons. « L’objet de vos recherches ? »' : api.fresh('gaudryG', ['« Encore vous. »', '« L’objet de votre visite ? »'])); },
@@ -659,11 +665,11 @@
   };
 
   // ================================================================ actions communes
-  P.globalActions = [goP('hotel'), goP('bn'), goP('arsenal'), goP('charenton'), goP('poissy'),
+  P.globalActions = [goP('hotel'), goP('bn'), goP('arsenal'), goP('charenton'), goP('poissy'), goP('lyon'),
     { id: 'p_ici', label: 'Rester ici', verbs: ['ALLER', 'VISITER'], nouns: Object.keys(PL).map(function (k) { return PL[k].concept; }), boost: -0.2, repeatable: true,
       run: function (api, p) { var here = PL[api.s.loc]; if (here && p && p.c[here.concept] !== undefined) { api.say(api.fresh('iciP', ['Vous y êtes déjà.', 'C’est ici même.'])); return; } api.say(P.generic.verbs.ALLER(api)); } },
     { id: 'p_lieux', label: 'Où aller ?', verbs: ['ALLER', 'EXAMINER', 'PRENDRE', 'COMMANDER'], nouns: ['DESTINATIONS', 'TAXI'], repeatable: true,
-      cond: function (api) { return api.s.loc !== 'gare'; },
+      cond: function (api) { return api.s.loc !== 'gare' && !ailleurs(api); },
       run: function (api) { var c = destChips(api); if (!c.length) { api.say('Vous ne connaissez encore aucune autre adresse à Paris.'); return; } api.say('Vous pouvez vous rendre à : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.'); api.chips(c); } },
     { id: 'p_notes', label: 'Relire vos notes', obj: 'vos notes', verbs: ['EXAMINER', 'ATTENDRE'], nouns: ['PISTE', 'NOTE'], repeatable: true,
       run: function (api) {
@@ -673,7 +679,8 @@
         if (connu(api, 'arsenal') && !api.has('MALON')) s.push('Lire les papiers du capitaine Malon, à l’Arsenal.');
         if (connu(api, 'charenton') && !api.has('REGISTRE')) s.push('Voir, à Charenton, ce que disent les registres de 1789.');
         if (api.has('DELPLACE') && !api.has('CAHIER') && !api.has('MANDRIN')) s.push('Comprendre de quoi est mort le docteur Delplace.');
-        if (api.has('MALON')) s.push('Poissy : la maison du comte, et ce qu’il y a dessous.');
+        if (P.notesPoissy) s = s.concat(P.notesPoissy(api));
+        else if (api.has('MALON')) s.push('Poissy : la maison du comte, et ce qu’il y a dessous.');
         api.say(s.length ? 'Vous relisez votre carnet. ' + s.join(' ') : 'Vous relisez votre carnet. Tout y est. Il ne reste qu’à partir.');
       } }
   ];
@@ -681,10 +688,10 @@
 
   // ================================================================ réponses générales, horaires, humeur
   P.generic = Object.assign({}, L.generic, {
-    loop: ['Vous tournez en rond. Paris, lui, continue sans vous.', 'Il y a sûrement autre chose à tenter.', 'Il faudrait changer d’approche.'],
+    loop: ['Vous tournez en rond. Le monde, lui, continue sans vous.', 'Il y a sûrement autre chose à tenter.', 'Il faudrait changer d’approche.'],
     lost: ['Vous hésitez. Fenalik, la Nationale, Charenton : par quel bout reprendre ?', 'Vous consultez votre carnet. Le fil est là, quelque part entre deux pages.'],
     verbs: Object.assign({}, L.generic.verbs, {
-      ALLER: function (api) { var c = destChips(api); return c.length ? 'Pour aller où ? Vous connaissez : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.' : 'Vous ne connaissez pas encore d’autre adresse à Paris.'; }
+      ALLER: function (api) { if (ailleurs(api) && P.allerAilleurs) return P.allerAilleurs(api); var c = destChips(api); return c.length ? 'Pour aller où ? Vous connaissez : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.' : 'Vous ne connaissez pas encore d’autre adresse à Paris.'; }
     })
   });
   var DISPO = {
@@ -694,8 +701,10 @@
     leroux: { h: [9, 18], x: 'Le directeur ne reçoit plus à cette heure.' },
     brevin: { h: [10, 16], x: 'Mlle Brévin a rangé ses crayons : l’Arsenal ferme.' }
   };
+  P.dispo = DISPO;
   P.disponible = function (api, id) {
     var d = DISPO[id]; if (!d || (P.pnjIci && P.pnjIci(api, id))) return null;
+    if (d.f) return d.f(api);
     var h = hour(api.s.min);
     if (jour(api) === 'dimanche' && /^(gaudry|remi|brevin)$/.test(id)) return 'Un dimanche ? La maison est fermée.';
     return (h < d.h[0] || h >= d.h[1]) ? d.x : null;
@@ -724,7 +733,7 @@
     if (!VIOLENCE.test(' ' + t.trim().split(/\s+/).slice(0, 6).join(' ') + ' ') || /\b(porte|fenetre|mur|table|vitre)\b/.test(t)) return false;
     var qui = api.s.talk;
     if (!qui) return false;
-    api.say('Votre geste part avant votre pensée. ' + (P.npcs[qui].short || 'On') + ' crie. À Paris, on crie vite, et l’on accourt plus vite encore.');
+    api.say('Votre geste part avant votre pensée. ' + (P.npcs[qui].short || 'On') + ' crie. ' + (/^oe_/.test(api.s.loc) ? 'Dans un train, tout un wagon se lève d’un coup.' : /^po_/.test(api.s.loc) ? 'À Poissy, on accourt moins vite qu’à Paris, mais on accourt.' : 'À Paris, on crie vite, et l’on accourt plus vite encore.'));
     api.lose(1);
     P.humeur.arreter(api, qui);
     return true;
@@ -863,6 +872,7 @@
   var entreCh = P.locations.charenton.enter;
   P.locations.charenton.enter = function (api) { api.flag('vueCharenton', 'arcades'); return entreCh.apply(this, arguments); };
 
+  P._h = { at: at, day: day, hour: hour, jour: jour, nuit: nuit, francais: francais, aide: aide, connu: connu, apprendre: apprendre, ailleurs: ailleurs, passe: passe, dateLongue: dateLongue, vue: vue, JOURS: JOURS };
   L.suite = 'paris';
   P.precedent = 'londres';
   // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)

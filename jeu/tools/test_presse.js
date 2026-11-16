@@ -1,7 +1,7 @@
 // les journaux ne savent rien avant l'édition du matin : la conférence (vendredi soir) n'est dans la presse
 // que le samedi à l'aube, l'incendie (samedi soir) le dimanche, les meurtres le lundi
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 const sc = CHAPTERS.londres, H = sc._h; let ko = 0;
 function partie(min, flags) {
   const g = RPG.createGame(sc, null, { rng: () => 0.3, pc: JSON.parse(JSON.stringify(sc.pregens[0])) });

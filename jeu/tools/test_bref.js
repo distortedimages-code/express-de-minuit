@@ -1,7 +1,7 @@
 // La réponse brève : « oui », « non », « peut-être », « d'accord ». Aucun personnage ne doit répondre
 // « je n'ai pas saisi » à un oui ; et quand il vient d'amorcer un sujet par une question, le oui ouvre ce sujet.
 global.window = global; global.RPG_FILS = []; global.RPG_BREFS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 let rates = 0, vus = 0; const notes = [];
 function partie(ch, pc) { let seed = 5; const rng = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; const sc = CHAPTERS[ch]; return RPG.createGame(sc, null, sc.pregens ? { rng, pc: sc.pregens[pc || 0] } : { rng }); }
 const roll = g => { let n = 0; while (g.state.pending && n++ < 6) g.roll(); };
