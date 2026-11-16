@@ -533,8 +533,8 @@
   function closePanels() { ['ovSheet', 'ovNotes', 'ovMenu'].forEach(function (id) { $(id).hidden = true; }); }
   function fillSheet() {
     var pc = game.state.pc, s = game.state;
-    var pk = pc.key || (/Arnaud/.test(pc.name || '') ? 'arnaud' : '');
-    var h = (pk ? '<div class="sheet-img" style="background-image:url(img/portraits/pj_' + pk + '.webp)"></div>' : '') + '<div class="sheet-head"><div class="n">' + esc(pc.name) + '</div><div class="o">' + esc(pc.occupation) + ' · ' + pc.age + ' ans · ' + esc(pc.origin) + '</div></div>';
+    var pk = pc.key || (/Arnaud/.test(pc.name || '') ? 'arnaud' : ''), ph = pc.portrait || (pk ? 'img/portraits/pj_' + pk + '.webp' : '');
+    var h = (ph ? '<div class="sheet-img" style="background-image:url(' + ph + ')"></div>' : '') + '<div class="sheet-head"><div class="n">' + esc(pc.name) + '</div><div class="o">' + esc(pc.occupation) + ' · ' + pc.age + ' ans · ' + esc(pc.origin) + '</div></div>';
     h += '<h3>Caractéristiques</h3><div class="carac">';
     Object.keys(pc.carac).forEach(function (k) { var v = pc.carac[k]; h += '<div><div class="k">' + k.replace('EDU', 'ÉDU') + '</div><div class="v">' + v + ' <small>' + Math.floor(v / 2) + '/' + Math.floor(v / 5) + '</small></div></div>'; });
     h += '</div><div class="derived">' +
@@ -639,7 +639,7 @@
   // ---------------------------------------------------------------- partie
   function pregen(chap, key) {
     var c = CH[chap]; if (!c || !c.pregens) return null;
-    return c.pregens.find(function (p) { return p.key === key; }) || null;
+    return c.pregens.find(function (p) { return p.key === key; }) || (window.Creation && window.Creation.perso(key)) || null;
   }
   function mount(saved, chap, pc) {
     if (typingTimer) { clearInterval(typingTimer); typingTimer = null; }
@@ -698,6 +698,7 @@
   function hideTitle() { $('title').hidden = true; pleinEcran(); if (soundOn) sound.start(); }
   function showTitle() {
     $('title').hidden = false; $('tpick').hidden = true; $('tmain').hidden = false;
+    if ($('tcreate')) $('tcreate').hidden = true;
     if ($('tinstall')) $('tinstall').hidden = !(appareilApple() && !installe() && !dansCadre());
     if ($('btnParis')) $('btnParis').hidden = !(CH.paris && enAttente('paris').length);
     var saved = loadSave();
@@ -711,16 +712,28 @@
   function showPick(chap, suite) {
     var c = CH[chap], box = $('cards');
     box.innerHTML = '';
-    (suite || c.pregens).forEach(function (p) {
+    if ($('tcreate')) $('tcreate').hidden = true;
+    // au chapitre 1 : créer son investigateur, ou reprendre ceux qu'on a déjà créés
+    var crees = !suite && chap === 'londres' && window.Creation ? window.Creation.persos() : [];
+    if (!suite && chap === 'londres' && window.Creation) {
+      var nc = document.createElement('div'); nc.className = 'pcard pcree';
+      nc.innerHTML = '<div class="pimg vide"><span>?</span></div><div class="pn">Votre investigateur</div><div class="po">À créer</div>' +
+        '<p class="pb">Le Gardien vous pose ses questions, une à une ; les dés répondent aux autres, comme dans les règles. Genre, nom, métier, caractéristiques, compétences, et votre photographie.</p>';
+      nc.appendChild(btn('Créer mon investigateur', 'act', function () { $('tpick').hidden = true; window.Creation.ouvrir(); }));
+      box.appendChild(nc);
+    }
+    (suite || crees.concat(c.pregens)).forEach(function (p) {
       var card = document.createElement('div'); card.className = 'pcard';
       var top = Object.keys(p.skills).filter(function (k) { return p.skills[k] >= 45 && k !== 'Mythe de Cthulhu'; }).sort(function (a, b) { return p.skills[b] - p.skills[a]; }).slice(0, 5);
       var avant = suite && p.passe && p.passe[c.precedent];
-      card.innerHTML = (p.key ? '<div class="pimg" style="background-image:url(img/portraits/pj_' + p.key + '.webp)"></div>' : '') + '<div class="pn">' + esc((p.title === 'Dr' ? 'Dr ' : '') + p.name) + '</div>' +
+      var ph = p.portrait || (p.key ? 'img/portraits/pj_' + p.key + '.webp' : '');
+      card.innerHTML = (ph ? '<div class="pimg" style="background-image:url(' + ph + ')"></div>' : '') + '<div class="pn">' + esc((p.title === 'Dr' ? 'Dr ' : '') + p.name) + '</div>' +
         '<div class="po">' + esc(p.occupation) + ' · ' + p.age + ' ans</div>' +
         (avant ? '<p class="pb">' + esc(avant.titre + ' : parti' + (p.sex === 'f' ? 'e' : '') + ' ' + String(avant.quand || '').replace(/^\S+\s/, 'le ').replace(/\s·.*/, '') + ' janvier, ' + avant.indices.length + ' indice' + (avant.indices.length > 1 ? 's' : '') + ' au carnet' + (avant.fin === 'fugitif' ? ', recherché' + (p.sex === 'f' ? 'e' : '') + ' par Scotland Yard' : '') + '.') + '</p>' : '<p class="pb">' + esc(p.bio) + '</p>') +
         '<div class="ps">' + top.map(function (k) { return '<span>' + esc(k) + ' <b>' + p.skills[k] + '</b></span>'; }).join('') + '</div>' +
         '<div class="pst"><span>SAN <b>' + p.san + '</b></span><span>PV <b>' + p.pv + '</b></span><span>Chance <b>' + p.chance + '</b></span></div>';
       card.appendChild(btn((suite ? 'Reprendre ' : 'Incarner ') + esc(p.first), 'act', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, chap, JSON.parse(JSON.stringify(p))); }));
+      if (p.cree && !suite) card.appendChild(btn('Oublier ' + esc(p.first), 'ghost oubli', function () { if (window.confirm('Oublier ' + p.name + ' ? La fiche sera effacée de ce navigateur.')) { window.Creation.oublier(p.key); showPick(chap); } }));
       box.appendChild(card);
     });
     $('tmain').hidden = true; $('tpick').hidden = false;
@@ -783,6 +796,11 @@
     if ($('btnParis')) $('btnParis').addEventListener('click', function () { var l = enAttente('paris'); if (CH.paris && l.length) showPick('paris', l); });
     $('btnProlo').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'prologue'); });
     $('btnBack').addEventListener('click', function () { $('tpick').hidden = true; $('tmain').hidden = false; });
+    // la création d'investigateur : on revient au choix, ou l'on part pour Londres avec la nouvelle fiche
+    if (window.Creation) window.Creation.init({
+      lancer: function (pc) { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'londres', pc); },
+      retour: function () { showPick('londres'); }
+    });
     $('fichierSauvegarde').addEventListener('change', function () {
       var f = this.files && this.files[0], fin = apresChoix; apresChoix = null;
       if (f && fin) lireFichier(f, fin);

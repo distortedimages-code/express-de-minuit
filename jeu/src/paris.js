@@ -432,7 +432,7 @@
           api.check('credit_leroux', { diff: api.pc.academic ? 'normal' : 'difficile' });
         }, { chip: 'Demander à voir le directeur' }),
         T('registres', ['REGISTRE', 'FENALIK', 'ARCHIVES', 'HISTOIRE'], function (api) {
-          api.npc('rogniat', api.pc.key === 'pemberton' ? '« Un confrère ? » Son ton change d’un demi-ton. « Les registres anciens sont aux archives, sous les combles. Un médecin peut consulter tout ce qui précède 1900. Je vous fais accompagner. »' : '« Des recherches historiques ? Les registres antérieurs à 1810 sont consultables. Le reste pourrait peiner des familles. Sous les combles, deuxième escalier. »');
+          api.npc('rogniat', (api.pc.profession === 'medecin' || api.pc.key === 'pemberton') ? '« Un confrère ? » Son ton change d’un demi-ton. « Les registres anciens sont aux archives, sous les combles. Un médecin peut consulter tout ce qui précède 1900. Je vous fais accompagner. »' : '« Des recherches historiques ? Les registres antérieurs à 1810 sont consultables. Le reste pourrait peiner des familles. Sous les combles, deuxième escalier. »');
           api.flag('registresOuverts', true);
           api.chips([{ label: 'Consulter les registres de 1789', action: 'ch_registres' }]);
         }, { chip: 'Les anciens registres' }),

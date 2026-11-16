@@ -157,6 +157,19 @@ Le jeu tolère les fautes de frappe : « tabel » devient « table ». Mais un v
 
 Le jeu se souvient des quatre dernières personnes ou choses dont il a été question. « Je regarde la vieille dame », puis « je lui parle » : c’est à elle qu’on parle. « Lui », « leur », « avec elle » et les verbes de conversation désignent une personne ; « la », « le », « l’ » peuvent désigner un objet (« j’examine la table », puis « je la fouille »). Une action déjà faite n’est pas redite en entier : le Gardien rappelle qu’on l’a déjà faite et résume ce qu’on avait vu. Vérification : `node jeu/tools/test_pronoms.js`.
 
+## Créer son investigateur
+
+Au chapitre 1, la première carte du choix des personnages ouvre la création (`jeu/src/creation.js`). Le Gardien pose ses questions une à une, sur des tuiles qui glissent de droite à gauche : genre, nom (Miss ou Mrs pour une femme), ville d’origine, profession, lien avec le professeur Smith, puis les dés.
+
+- Les caractéristiques suivent les règles de L’Appel de Cthulhu : 3D6 × 5 pour FOR, CON, DEX, APP et POU, (2D6 + 6) × 5 pour TAI, INT et ÉDU. On peut tout relancer une fois.
+- L’âge : de 20 à 39 ans, un jet d’amélioration d’Éducation ; de 40 à 49 ans, deux jets, 5 points à retirer entre FOR, CON et DEX (le joueur choisit, ou « Répartir pour moi »), 5 points d’APP en moins ; de 50 à 59 ans, trois jets, 10 et 10.
+- La Chance : 3D6 × 5.
+- Dix professions du livre de règles, choisies pour Londres en 1923 : antiquaire, archéologue, avocat, détective privé, dilettante, écrivain, journaliste, médecin, parapsychologue, professeur. Chacune a ses huit compétences (certaines au choix), sa fourchette de Crédit et sa formule de points (ÉDU × 4, ou ÉDU × 2 + APP × 2 pour le dilettante, ÉDU × 2 + DEX ou FOR × 2 pour le détective).
+- Les points de profession puis les points d’intérêt personnel (INT × 2) se répartissent avec des boutons + et −, par 5 ; « Répartir pour moi » fait une répartition équilibrée.
+- La fiche finale donne PV, SAN, Magie, Chance, argent (d’après le Crédit) et les trois objets du métier. Elle est gardée dans le navigateur (huit au plus) et revient dans le choix des personnages ; elle passe au chapitre 2 comme les autres.
+
+La photographie est choisie d’après trois critères : le genre, la profession et l’Apparence (50 ou plus : la version charismatique, sinon une version terne, ordinaire, jamais caricaturale). Soit 40 images, `creation/<profession>_<h|f>_<charme|terne>`, dont les prompts sont écrits par `python3 jeu/tools/prompts_creation.py` et déjà inscrits dans `illustrations/plan.json`. Tant qu’elles ne sont pas générées, la fiche affiche « La photographie est encore au développement ». Vérification : `node jeu/tools/test_creation.js`.
+
 ## Les idées et les sujets
 
 Les idées (hors conversation) et les sujets (en conversation) sont visibles par défaut ; on peut les replier. Quand on en choisit un, le Gardien reformule l’action (« Vous vous adressez au professeur Smith », « Vous interrogez Mme Vasseur sur son tarot ») : c’est `jeu/src/mj.js`.

@@ -344,7 +344,7 @@
       if (api.s.loc === 'pub') { api.exec('pb_flechettes'); return true; }
       return quoi(api, api.s.loc === 'hotel' ? 'Vous faites une réussite sur le couvre-lit avec le jeu de cartes du tiroir. Elle ne sort pas. Elle ne sort jamais, avec ce jeu-là : il manque la dame de pique.' : 'Personne ici ne joue aux cartes avec un{e} inconnu{e}. Au pub, peut-être.'); } },
     { re: /\b(un medecin|un docteur|l hopital|un hopital|une pharmacie|me soigner|me faire soigner)\b/, run: function (api) {
-      if (api.s.pc && api.s.pc.key === 'pemberton') return quoi(api, 'Un médecin ? Vous en êtes un. Vous ouvrez votre trousse et vous vous examinez vous-même, avec la sévérité qu’on réserve aux patients qui ne vous écoutent jamais.');
+      if (api.s.pc && (api.s.pc.profession === 'medecin' || api.s.pc.key === 'pemberton')) return quoi(api, 'Un médecin ? Vous en êtes un. Vous ouvrez votre trousse et vous vous examinez vous-même, avec la sévérité qu’on réserve aux patients qui ne vous écoutent jamais.');
       return quoi(api, 'Il y a une pharmacie dans Southampton Row, et l’hôpital de Great Ormond Street à cinq minutes. Mais ce qui vous fait mal, ce soir, aucun pharmacien ne le vend en flacon.'); } },
     { re: /\b(chat|chats|chien|chiens|pigeon|pigeons|rat|rats|corbeau)\b/, run: function (api) {
       return quoi(api, api.s.loc === 'cave' ? 'Un rat traverse la cave en longeant le mur, sans se presser, comme le vrai maître des lieux.' : dehors(api) ? 'Un chat noir vous observe depuis une grille, puis disparaît dans le brouillard. Pas de superstition, s’il vous plaît.' : 'Le chat de la maison, un gros tigré, se frotte contre vos jambes, puis file en crachant vers quelque chose que vous ne voyez pas.'); } }

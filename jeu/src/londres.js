@@ -1607,19 +1607,19 @@
 
   // ---------------------------------------------------------------- trois investigateurs prêts à jouer
   L.pregens = [
-    { key: 'pemberton', name: 'Arthur Pemberton', first: 'Arthur', last: 'Pemberton', title: 'Dr', sex: 'm', age: 52, origin: 'Londres', academic: true,
+    { key: 'pemberton', name: 'Arthur Pemberton', first: 'Arthur', last: 'Pemberton', title: 'Dr', sex: 'm', age: 52, origin: 'Londres', academic: true, profession: 'medecin',
       occupation: 'Médecin à Harley Street', bio: 'Ancien chirurgien de guerre, médecin des beaux quartiers. Smith lui doit la vie depuis une fièvre attrapée à Vienne. Sang-froid, rigueur, et des cauchemars de la Somme qu’il ne raconte à personne.',
       carac: { FOR: 50, CON: 60, TAI: 65, DEX: 55, APP: 60, INT: 80, POU: 55, EDU: 85 },
       pv: 12, pvMax: 12, pm: 11, pmMax: 11, san: 55, sanMax: 99, chance: 50, mvt: 7,
       skills: { 'Médecine': 70, 'Premiers soins': 70, 'Psychologie': 60, 'Sciences (biologie)': 50, 'Langue (latin)': 50, 'Langue (français)': 45, 'Crédit': 60, 'Bibliothèque': 55, 'Persuasion': 45, 'Trouver Objet Caché': 45, 'Écouter': 40, 'Esquive': 27, 'Intimidation': 30, 'Histoire': 30, 'Occultisme': 15, 'Droit': 15, 'Comptabilité': 10, 'Baratin': 15, 'Charme': 30, 'Sauter': 20, 'Mythe de Cthulhu': 0 },
       inv: ['Une trousse de médecin', 'Une montre de gousset', 'Un carnet relié de cuir'], money: 60 },
-    { key: 'doyle', name: 'Margaret Doyle', first: 'Maggie', last: 'Doyle', title: 'Miss', sex: 'f', age: 31, origin: 'Dublin',
+    { key: 'doyle', name: 'Margaret Doyle', first: 'Maggie', last: 'Doyle', title: 'Miss', sex: 'f', age: 31, origin: 'Dublin', profession: 'journaliste',
       occupation: 'Reporter au Daily Courier', bio: 'Irlandaise, insolente avec les puissants. Elle a couvert un démasquage de médium par Smith et ne l’a plus lâché depuis. Curieuse jusqu’à l’imprudence, rapide, impossible à faire taire.',
       carac: { FOR: 45, CON: 55, TAI: 50, DEX: 70, APP: 65, INT: 75, POU: 65, EDU: 70 },
       pv: 10, pvMax: 10, pm: 13, pmMax: 13, san: 65, sanMax: 99, chance: 60, mvt: 9,
       skills: { 'Baratin': 60, 'Persuasion': 50, 'Psychologie': 50, 'Trouver Objet Caché': 60, 'Écouter': 50, 'Bibliothèque': 50, 'Photographie': 45, 'Discrétion': 45, 'Esquive': 45, 'Charme': 45, 'Crochetage': 30, 'Langue (français)': 35, 'Histoire': 25, 'Droit': 20, 'Crédit': 30, 'Occultisme': 15, 'Intimidation': 25, 'Comptabilité': 15, 'Premiers soins': 30, 'Sauter': 40, 'Mythe de Cthulhu': 0 },
       inv: ['Un appareil photo Kodak pliant', 'Un carnet de sténo', 'Une épingle à chapeau'], money: 25 },
-    { key: 'ashby', name: 'Julian Ashby', first: 'Julian', last: 'Ashby', title: 'Mr', sex: 'm', age: 39, origin: 'Oxford', academic: true,
+    { key: 'ashby', name: 'Julian Ashby', first: 'Julian', last: 'Ashby', title: 'Mr', sex: 'm', age: 39, origin: 'Oxford', academic: true, profession: 'antiquaire',
       occupation: 'Antiquaire à Museum Street', bio: 'Ancien élève de Smith, il tient une boutique d’antiquités près du British Museum. Il connaît les objets, leurs prix et leurs légendes, lit le turc, et croit à moitié aux légendes, ce qui l’inquiète.',
       carac: { FOR: 40, CON: 50, TAI: 55, DEX: 60, APP: 55, INT: 80, POU: 70, EDU: 80 },
       pv: 10, pvMax: 10, pm: 14, pmMax: 14, san: 70, sanMax: 99, chance: 45, mvt: 8,

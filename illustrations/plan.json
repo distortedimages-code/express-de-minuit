@@ -495,6 +495,206 @@
       "image": "paris/11_saint-lazare_train-de-banlieue",
       "prompt": "prompts/paris/11_saint-lazare_train-de-banlieue.txt",
       "references": []
+    },
+    {
+      "image": "creation/antiquaire_h_charme",
+      "prompt": "prompts/creation/antiquaire_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/antiquaire_h_terne",
+      "prompt": "prompts/creation/antiquaire_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/antiquaire_f_charme",
+      "prompt": "prompts/creation/antiquaire_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/antiquaire_f_terne",
+      "prompt": "prompts/creation/antiquaire_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/archeologue_h_charme",
+      "prompt": "prompts/creation/archeologue_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/archeologue_h_terne",
+      "prompt": "prompts/creation/archeologue_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/archeologue_f_charme",
+      "prompt": "prompts/creation/archeologue_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/archeologue_f_terne",
+      "prompt": "prompts/creation/archeologue_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/avocat_h_charme",
+      "prompt": "prompts/creation/avocat_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/avocat_h_terne",
+      "prompt": "prompts/creation/avocat_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/avocat_f_charme",
+      "prompt": "prompts/creation/avocat_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/avocat_f_terne",
+      "prompt": "prompts/creation/avocat_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/detective_h_charme",
+      "prompt": "prompts/creation/detective_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/detective_h_terne",
+      "prompt": "prompts/creation/detective_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/detective_f_charme",
+      "prompt": "prompts/creation/detective_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/detective_f_terne",
+      "prompt": "prompts/creation/detective_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/dilettante_h_charme",
+      "prompt": "prompts/creation/dilettante_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/dilettante_h_terne",
+      "prompt": "prompts/creation/dilettante_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/dilettante_f_charme",
+      "prompt": "prompts/creation/dilettante_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/dilettante_f_terne",
+      "prompt": "prompts/creation/dilettante_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/ecrivain_h_charme",
+      "prompt": "prompts/creation/ecrivain_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/ecrivain_h_terne",
+      "prompt": "prompts/creation/ecrivain_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/ecrivain_f_charme",
+      "prompt": "prompts/creation/ecrivain_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/ecrivain_f_terne",
+      "prompt": "prompts/creation/ecrivain_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/journaliste_h_charme",
+      "prompt": "prompts/creation/journaliste_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/journaliste_h_terne",
+      "prompt": "prompts/creation/journaliste_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/journaliste_f_charme",
+      "prompt": "prompts/creation/journaliste_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/journaliste_f_terne",
+      "prompt": "prompts/creation/journaliste_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/medecin_h_charme",
+      "prompt": "prompts/creation/medecin_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/medecin_h_terne",
+      "prompt": "prompts/creation/medecin_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/medecin_f_charme",
+      "prompt": "prompts/creation/medecin_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/medecin_f_terne",
+      "prompt": "prompts/creation/medecin_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/parapsychologue_h_charme",
+      "prompt": "prompts/creation/parapsychologue_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/parapsychologue_h_terne",
+      "prompt": "prompts/creation/parapsychologue_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/parapsychologue_f_charme",
+      "prompt": "prompts/creation/parapsychologue_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/parapsychologue_f_terne",
+      "prompt": "prompts/creation/parapsychologue_f_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/professeur_h_charme",
+      "prompt": "prompts/creation/professeur_h_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/professeur_h_terne",
+      "prompt": "prompts/creation/professeur_h_terne.txt",
+      "references": []
+    },
+    {
+      "image": "creation/professeur_f_charme",
+      "prompt": "prompts/creation/professeur_f_charme.txt",
+      "references": []
+    },
+    {
+      "image": "creation/professeur_f_terne",
+      "prompt": "prompts/creation/professeur_f_terne.txt",
+      "references": []
     }
   ],
   "version": 2
