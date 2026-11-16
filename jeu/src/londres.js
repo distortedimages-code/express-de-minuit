@@ -1116,9 +1116,9 @@
       enter: function (api, first) { if (first) api.say('Les briques rouges et blanches de New Scotland Yard, au bord de la Tamise. Un hall bruyant, des agents qui courent, des bancs où attendent des gens qui ont perdu quelque chose : un chien, un mari, une montre.'); else api.say(api.fresh('yardR', ['Scotland Yard, de nouveau. Le planton vous reconnaît et soupire.', 'Le hall de Scotland Yard sent le tabac froid et le papier humide.'])); },
       things: [{ label: 'l’inspecteur Fleming', ids: ['FLEMING'] }, { label: 'le sergent Rigby, aux incendies', ids: ['RIGBY'], cond: function (api) { return api.s.min >= at(1, 23, 0); } }, { label: 'les agents du hall', ids: ['POLICE', 'QUELQUUN'] }, { label: null, ids: ['SALLE', 'YARD'] }],
       actions: [
-        { id: 'y_fleming', label: 'Demander à voir l’inspecteur Fleming', obj: 'l’inspecteur Fleming', idea: true, talkTo: 'fleming', verbs: ['PARLER', 'ALLER', 'VISITER', 'PERSUADER', 'BARATIN', 'POLI'], nouns: ['FLEMING', 'MAKRYAT'], extra: ['SMITH', 'INCENDIE', 'BEDDOWS', 'CHELSEA', 'ARGENT'],
+        { id: 'y_fleming', label: 'Demander à voir l’inspecteur Fleming', ideaAnon: 'Demander à parler à un inspecteur', obj: 'l’inspecteur Fleming', idea: true, talkTo: 'fleming', verbs: ['PARLER', 'ALLER', 'VISITER', 'PERSUADER', 'BARATIN', 'POLI'], nouns: ['FLEMING', 'MAKRYAT'], extra: ['SMITH', 'INCENDIE', 'BEDDOWS', 'CHELSEA', 'ARGENT'],
           run: function (api, p) { api.talk('fleming', p); } },
-        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, cond: function (api) { return api.s.min >= at(1, 23, 0); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
+        { id: 'y_rigby', label: 'Voir le sergent Rigby, aux incendies', ideaAnon: 'Voir le sergent chargé des incendies', idea: true, ideaCond: function (api) { return api.has('INCENDIE'); }, cond: function (api) { return api.s.min >= at(1, 23, 0); }, talkTo: 'rigby', verbs: ['PARLER', 'ALLER', 'VISITER', 'POLI'], nouns: ['RIGBY', 'INCENDIE', 'SMITH'], extra: ['BEDDOWS', 'HOTEL', 'MAKRYAT', 'QUELQUUN'],
           run: function (api, p) { api.talk('rigby', p); } },
         { id: 'y_glaner', label: 'Glaner des informations auprès des agents', obj: 'les agents du hall', idea: true, verbs: ['BARATIN', 'ECOUTER', 'PARLER', 'FOUILLER', 'PSY'], nouns: ['POLICE', 'QUELQUUN', 'MAKRYAT'], bare: true,
           run: function (api) {
@@ -1215,7 +1215,7 @@
       enter: function (api, first) { if (first) api.say('Une rue de petites maisons ouvrières, toutes pareilles. Devant l’une d’elles, à la craie sur le trottoir : « VOYEZ LA CHAMBRE DE LA MORT — 6 PENCE ». À la fenêtre, un carton écrit à la main : « Chambre à louer ».'); else api.say('Stoke Newington. L’inscription à la craie a été repassée pour mieux se voir.'); },
       things: [{ label: 'Mrs Atkins', ids: ['ATKINS'] }, { label: 'la chambre de Stanley', ids: ['CHAMBRE', 'ETAGE', 'STANLEY', 'SUIE'] }, { label: 'le poste de police du coin', ids: ['POLICE', 'YARD'] }, { label: null, ids: ['SALLE', 'STOKE'] }],
       actions: [
-        { id: 's_atkins', label: 'Parler à Mrs Atkins', idea: true, talkTo: 'atkins', verbs: ['PARLER', 'ALLER', 'VISITER', 'FRAPPER', 'DONNER', 'POLI'], nouns: ['ATKINS', 'STOKE'], extra: ['STANLEY', 'MAQUETTE', 'POLICE', 'ARGENT', 'CHAMBRE', 'TOIMEME', 'SUITE', 'FANTOME', 'QUELQUUN'],
+        { id: 's_atkins', label: 'Parler à Mrs Atkins', ideaAnon: 'Parler à la logeuse de Stanley', idea: true, talkTo: 'atkins', verbs: ['PARLER', 'ALLER', 'VISITER', 'FRAPPER', 'DONNER', 'POLI'], nouns: ['ATKINS', 'STOKE'], extra: ['STANLEY', 'MAQUETTE', 'POLICE', 'ARGENT', 'CHAMBRE', 'TOIMEME', 'SUITE', 'FANTOME', 'QUELQUUN'],
           run: function (api, p) { api.talk('atkins', p); } },
         { id: 's_chambre', label: 'Visiter la chambre de Stanley', idea: true, verbs: ['ALLER', 'VISITER', 'EXAMINER', 'FOUILLER', 'OUVRIR'], nouns: ['CHAMBRE', 'ETAGE', 'STANLEY', 'SUIE'],
           run: function (api) { if (!api.flag('chambrePayee')) { api.npc('atkins', 'Mrs Atkins vous barre l’escalier, la main tendue. « Six pence, mon chou. C’est le tarif. »'); return; } api.go('chambre_stanley'); } },
@@ -1672,6 +1672,8 @@
   };
   L.boutiquesOuvertes = function (api) { var h = hour(api.s.min); return h >= 8 && h < 20 && JOURS[(4 + day(api.s.min)) % 7] !== 'dimanche'; };
 
-  L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
+    // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)
+  L.nomsCommuns = { Enfer: 1, Harley: 1, Street: 1 };
+L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -504,7 +504,7 @@
           run: function (api) { api.say(api.fresh('phlook', ['Un lit de cuivre, un édredon rouge, une table où tiennent vos notes et la liste de Smith. Paris, Venise, Trieste, Belgrade. Vous avez souligné le premier nom deux fois.', 'Le papier peint répète le même bouquet jusqu’au plafond. Sur la table, votre carnet, ouvert à la page « Fenalik ».'])); } },
         { id: 'ph_fenetre', label: 'Regarder par la fenêtre', verbs: ['EXAMINER', 'OUVRIR'], nouns: ['FENETRE'],
           run: function (api) { var h = hour(api.s.min); api.say(h >= 17 || h < 8 ? (api.flag('guetteur') ? 'La rue de Richelieu, luisante. Le réverbère d’en face, son rond de lumière. Personne dessous. Vous vérifiez deux fois.' : 'La rue de Richelieu, luisante. Un réverbère, son rond de lumière sur le trottoir d’en face.') : 'La rue de Richelieu, ses voitures de livraison, ses lecteurs pressés qui serrent une serviette sous le bras.'); } },
-        { id: 'ph_gerant', label: 'Parler à M. Blain', idea: true, talkTo: 'gerant', verbs: ['PARLER', 'VISITER', 'POLI', 'DONNER', 'FLATTER', 'PERSUADER'], nouns: ['GERANT', 'RECEPTION', 'QUELQUUN'],
+        { id: 'ph_gerant', label: 'Parler à M. Blain', ideaAnon: 'Parler au gérant', idea: true, talkTo: 'gerant', verbs: ['PARLER', 'VISITER', 'POLI', 'DONNER', 'FLATTER', 'PERSUADER'], nouns: ['GERANT', 'RECEPTION', 'QUELQUUN'],
           extra: ['BN', 'SMITH', 'CHARENTON', 'FENALIK', 'POISSY', 'DESTINATIONS', 'TAXI', 'VOYAGE', 'TRAIN'], run: function (api, p) { api.talk('gerant', p); } },
         { id: 'ph_journal', label: 'Lire les journaux', idea: true, verbs: ['EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['JOURNAL'], repeatable: true, time: 15,
           run: function (api) {
@@ -581,7 +581,7 @@
       actions: [
         { id: 'ar_look', label: 'Regarder la salle', idea: 'Regarder autour de vous', verbs: ['EXAMINER'], nouns: ['SALLE', 'ARSENAL'], bare: true,
           run: function (api) { api.say('Des boiseries dorées qui s’écaillent, des portraits de grands maîtres de l’artillerie, et partout des cartons étiquetés à la plume : « Bastille », « Lettres de cachet », « Prisonniers ». Trois lecteurs, emmitouflés.'); } },
-        { id: 'ar_brevin', label: 'Parler à Mlle Brévin', idea: true, talkTo: 'brevin', verbs: ['PARLER', 'VISITER', 'POLI', 'PERSUADER', 'COMMANDER', 'FLATTER'], nouns: ['BREVIN', 'BIBLIOTHECAIRE', 'QUELQUUN'],
+        { id: 'ar_brevin', label: 'Parler à Mlle Brévin', ideaAnon: 'Parler à la bibliothécaire', idea: true, talkTo: 'brevin', verbs: ['PARLER', 'VISITER', 'POLI', 'PERSUADER', 'COMMANDER', 'FLATTER'], nouns: ['BREVIN', 'BIBLIOTHECAIRE', 'QUELQUUN'],
           extra: ['MALON', 'FENALIK', 'POISSY', 'ARSENAL', 'ARCHIVES'], run: function (api, p) { api.talk('brevin', p); } },
         { id: 'ar_chercher', label: 'Chercher le journal du capitaine Malon', idea: true, verbs: ['FOUILLER', 'EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['MALON', 'ARCHIVES', 'LIVRE', 'FENALIK'], bare: true, repeatable: true,
           run: function (api) {
@@ -865,5 +865,7 @@
 
   L.suite = 'paris';
   P.precedent = 'londres';
+  // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)
+  P.nomsCommuns = { Sully: 1 };
   G.CHAPTERS.paris = P;
 })(typeof window !== 'undefined' ? window : globalThis);

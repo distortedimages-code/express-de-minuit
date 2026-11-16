@@ -487,6 +487,7 @@
       }
       if (scene.perceive && (e.t === 'narr' || e.t === 'npc' || e.t === 'event') && typeof e.x === 'string') e.x = scene.perceive(api, e.x, e);
       e.n = ++s.seq; e.san = sanState(); s.log.push(e);
+      noterNoms(e);
       if (s.log.length > 400) s.log.splice(0, s.log.length - 400);
       return e;
     }
@@ -991,10 +992,66 @@
       var INT = (s.pc.carac && s.pc.carac.INT) || 60, attendu = 1 + Math.max(0, INT - 40) / 35;
       return Math.floor(attendu) + (r() < attendu % 1 ? 1 : 0) + (mode === 'guide' ? 1 : 0);
     }
-    function etiquette(a) { return a.idea === true ? a.label : a.idea; }
+    function brute(a) { return a.idea === true ? a.label : a.idea; }
+    // l'étiquette montrée : si elle nomme quelqu'un que le joueur ne connaît pas encore, sa version anonyme (ideaAnon)
+    function etiquette(a) { var l = brute(a); return a.ideaAnon && !nomsConnus(l) ? a.ideaAnon : l; }
+    // ---- garde-fou : le carnet ne souffle jamais un nom que le joueur n'a pas encore lu.
+    // Les noms guettés sont les mots à majuscule des idées du chapitre (sauf le premier mot, et les titres) ;
+    // chaque texte affiché marque ceux qu'il contient (s.noms, gardé dans la sauvegarde, car le journal est tronqué).
+    var TITRES = { M: 1, Mme: 1, Mlle: 1, Mrs: 1, Mr: 1, Miss: 1, Dr: 1, Sir: 1, Lady: 1, Monsieur: 1, Madame: 1, Mademoiselle: 1 };
+    var guettes = null;
+    // (une idée commence par un verbe, qu'on ignore ; un sujet de conversation peut commencer par un nom, sauf un petit mot)
+    var PETITS = /^(Le|La|Les|L|Un|Une|Des|Du|De|D|Sa|Son|Ses|Votre|Vos|Leur|Leurs|Ce|Cet|Cette|Ces|Mon|Ma|Mes|Qui|Que|Quoi|Où|Pourquoi|Comment|Combien|Quand|Quel|Quelle|Et|Ou|À|Au|Aux|En|Pour|Sur|Avec|Sans|Ici|Rien|Tout|Autre|Autres|Encore|Oui|Non)$/;
+    // des noms que tout voyageur de 1923 connaît : jamais cachés (un chapitre peut en ajouter, scene.nomsCommuns)
+    var COMMUNS = { Europe: 1, 'Orient-Express': 1, 'Simplon-Orient': 1, Constantinople: 1, Londres: 1, Paris: 1, Douvres: 1, Calais: 1, Seine: 1, Tamise: 1, France: 1, Angleterre: 1, Turquie: 1, Bottin: 1, Baedeker: 1 };
+    function motsPropres(label, sujet) {
+      // (une compétence entre parenthèses, « (Psychologie) », n'est pas un nom)
+      var m = String(label || '').replace(/\([^)]*\)/g, ' ').split(/[\s,’'()«»:;.!?…\u00a0]+/).filter(Boolean);
+      // le premier mot d'une idée est un verbe ; celui d'un sujet de conversation n'est guetté que s'il est déjà un nom guetté
+      var premier = m.shift();
+      if (sujet && premier && guettes && guettes[premier]) m.unshift(premier);
+      return m.filter(function (w) { return /^[A-ZÀ-Ý]/.test(w) && !TITRES[w] && !PETITS.test(w) && !COMMUNS[w] && !(scene.nomsCommuns && scene.nomsCommuns[w]); });
+    }
+    function nomsGuettes() {
+      if (guettes) return guettes;
+      guettes = {};
+      var acts = (scene.globalActions || []).slice();
+      Object.keys(scene.locations || {}).forEach(function (l) { acts = acts.concat(scene.locations[l].actions || []); });
+      var mots = [];
+      acts.forEach(function (a) { if (a.idea) mots = mots.concat(motsPropres(brute(a)), motsPropres(a.ideaAnon)); });
+      Object.keys(scene.npcs || {}).forEach(function (k) { (scene.npcs[k].topics || []).forEach(function (t) { if (t.chip) mots = mots.concat(motsPropres(t.chip)); }); });
+      // sans tenir compte de la casse : « un antiquaire turc » apprend « le vieux Turc »
+      mots.forEach(function (w) { guettes[w] = new RegExp('(^|[^0-9A-Za-zÀ-ÿ])' + w.replace(/[-.]/g, '\\$&') + '($|[^0-9A-Za-zÀ-ÿ])', 'i'); });
+      return guettes;
+    }
+    function noterNoms(e) {
+      var t = typeof e.x === 'string' ? e.x : '';
+      if (e.d && typeof e.d === 'string') t += ' ' + e.d;
+      if (!t) return;
+      var g = nomsGuettes(); s.noms = s.noms || {};
+      for (var w in g) if (!s.noms[w] && g[w].test(t)) s.noms[w] = 1;
+    }
+    function nomsInitiaux() {
+      // une ancienne sauvegarde : on relit ce qui reste du journal, les indices et la fiche du personnage
+      s.noms = {};
+      (s.log || []).forEach(noterNoms);
+      (s.clues || []).forEach(function (k) { var c = scene.clues && scene.clues[k]; if (c) noterNoms({ x: (c.title || '') + ' ' + (c.text || '') }); });
+      if (s.pc) noterNoms({ x: JSON.stringify(s.pc) });
+    }
+    function nomsConnus(label, sujet) {
+      if (G.RPG_SANS_NOMS) return true; // pour comparer, dans les tests
+      if (!s.noms) nomsInitiaux();
+      var g = nomsGuettes();
+      return motsPropres(label, sujet).every(function (w) { return !g[w] || s.noms[w]; });
+    }
+    function nomsLus(a) {
+      var ok = nomsConnus(etiquette(a));
+      if (!ok && G.RPG_NOMS) G.RPG_NOMS.push({ chapitre: s.chapter, lieu: s.loc, idee: brute(a), manque: motsPropres(brute(a)).filter(function (w) { return !s.noms[w]; }) });
+      return ok;
+    }
     function ideas(n, mode) {
       n = n || 4; mode = mode || 'normal';
-      var acts = availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)); });
+      var acts = availableActions().filter(function (a) { return a.idea && (!a.ideaCond || a.ideaCond(api)) && nomsLus(a); });
       var r = alea(signatureIdees()), F = { base: [], piste: [], fausse: [], risque: [], folie: [] };
       acts.forEach(function (a) { (F[natureIdee(a)] || F.piste).push(a); });
       var neuf = function (l) { return l.filter(function (a) { return !s.done[a.id]; }); };
@@ -1198,10 +1255,16 @@
     }
     function topicChips(npc) {
       var st = npcState(npc.id);
-      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st); })
+      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st) && chipLu(npc, t); })
         .map(function (t) { return { label: t.chip, topic: t.id, asked: !!st.asked[t.id] }; });
       list.sort(function (a, b) { return (a.asked ? 1 : 0) - (b.asked ? 1 : 0); });
       return list.slice(0, 6);
+    }
+    // même garde-fou pour les sujets proposés en conversation
+    function chipLu(npc, t) {
+      var ok = nomsConnus(t.chip, true);
+      if (!ok && G.RPG_NOMS) G.RPG_NOMS.push({ chapitre: s.chapter, lieu: s.loc, idee: npc.id + ' › ' + t.chip, manque: motsPropres(t.chip, true).filter(function (w) { return !s.noms[w]; }) });
+      return ok;
     }
     function runTopic(npc, topicId, p) {
       var t = npc.topics.find(function (x) { return x.id === topicId; });

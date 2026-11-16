@@ -83,7 +83,7 @@
       var lieu = loc === '*' ? null : sc.locations[loc];
       if (loc !== '*' && !lieu) return;
       var a = {
-        id: o.id, label: o.label || o.idea, idea: o.idea, ideaKind: o.kind, verbs: [], nouns: [], time: o.time || 10,
+        id: o.id, label: o.label || o.idea, idea: o.idea, ideaAnon: o.anon, ideaKind: o.kind, verbs: [], nouns: [], time: o.time || 10,
         cond: o.cond, obj: o.obj,
         ideaCond: o.kind === 'folie' ? function (api) { return api.sanState() >= (o.fragile || 2) && (!o.ideaCond || o.ideaCond(api)); } : o.ideaCond,
         run: function (api) {
@@ -251,7 +251,7 @@
         ko: 'Un traité allemand de 1702, dont une gravure vous retient trop longtemps : un homme qu’on retourne comme un gant, et qui sourit. Vous refermez. Rien sur Sedefkar. Seulement cette image, qui ne vous quitte plus.' } });
 
     // ----- Stoke Newington : Mrs Atkins et la chambre de la mort
-    L.idee('stoke', { id: 'il_voisins', kind: 'fausse', idea: 'Questionner les voisins de Mrs Atkins', time: 35,
+    L.idee('stoke', { id: 'il_voisins', kind: 'fausse', idea: 'Questionner les voisins de Mrs Atkins', anon: 'Questionner les voisins', time: 35,
       txt: 'Porte après porte, la même rue, les mêmes rideaux qui bougent. Tout le monde a une histoire sur Mr Stanley, et chacune contredit la précédente : il était communiste, il était prêtre, il était fou, il était charmant. Une dame vous offre du thé. Vous ressortez riche de rumeurs.' });
     L.idee('stoke', { id: 'il_louer', kind: 'risque', idea: 'Louer la chambre de Stanley pour la nuit', time: 10,
       cond: function (api) { var h = hour(api.s.min); return h >= 17 || h < 2; },
