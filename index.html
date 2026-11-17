@@ -322,8 +322,6 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 @keyframes drift { 48% { transform: none; } 50% { transform: translateX(2px) skewX(-1deg); } 52% { transform: none; } }
 .app.shudder { animation: shudder .6s steps(6) 1; }
 @keyframes shudder { 15% { transform: translate(-4px, 1px); } 30% { transform: translate(4px, -1px); } 45% { transform: translate(-3px, 0) skewX(2deg); } 60% { transform: translate(2px, 1px); } 75% { transform: translate(-1px, 0); } }
-.app.madness { animation: madness 1.4s steps(10) 1; }
-@keyframes madness { 10% { filter: invert(1); transform: skewX(4deg); } 25% { filter: none; transform: translateX(-8px); } 40% { filter: invert(1) contrast(1.6); transform: skewX(-6deg); } 60% { transform: translate(5px, -2px); filter: none; } 80% { filter: contrast(2); } }
 
 @media (max-width: 700px) { .stage { width: calc(100% - 6px); aspect-ratio: 2 / 1; max-height: 42vh; } }
 @media (max-width: 520px) {
@@ -534,6 +532,24 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 #vision.noir img, #vision.blanc img { visibility: hidden; }
 #vision img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.35); }
 
+/* les objets importants de l'enquête : leur image carrée en grand, puis des vignettes dans le carnet et la fiche */
+#objet { position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; background: rgba(6, 6, 8, .95); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); padding: 18px; cursor: pointer; }
+#objet[hidden] { display: none; }
+#objet .ocarte { width: min(86vw, 62vh, 560px); display: flex; flex-direction: column; gap: 10px; opacity: 0; transform: scale(.94); transition: opacity .25s ease, transform .25s ease; }
+#objet.on .ocarte { opacity: 1; transform: none; }
+#objet img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; border: 3px solid var(--text); box-shadow: 8px 8px 0 var(--red); }
+#objet .ol { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+#objet .ok { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); background: var(--red); padding: 2px 8px; transform: skewX(-10deg); }
+#objet .ot { font-family: var(--display); font-size: 22px; line-height: 1.1; text-transform: uppercase; color: var(--text); }
+#objet .ox { color: #d6d1c8; font-style: italic; line-height: 1.4; }
+#objet .ox:empty { display: none; }
+#objet .of { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8d8880; }
+.vign { float: right; width: 56px; height: 56px; padding: 0; margin: 0 0 6px 10px; border: 2px solid var(--text); background: #000; cursor: pointer; box-shadow: 3px 3px 0 var(--red); }
+.vign img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.clues .c::after { content: ''; display: block; clear: both; }
+#sheetBody .inv > div { display: flex; align-items: center; gap: 10px; min-height: 22px; margin: 2px 0; }
+#sheetBody .inv .vign { float: none; width: 44px; height: 44px; margin: 2px 0; flex: none; }
+
 </style>
 </head>
 <body data-san="0">
@@ -642,6 +658,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 </div>
 
 <div id="vision" aria-hidden="true"><img alt=""></div>
+<div id="objet" hidden role="dialog" aria-label="Objet"><div class="ocarte"><img alt=""><div class="ol"><span class="ok">Objet</span><span class="ot"></span></div><div class="ox"></div><div class="of">Touchez pour fermer</div></div></div>
 
 <input type="file" id="fichierSauvegarde" accept=".json,application/json" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" tabindex="-1" aria-hidden="true">
 <script>
@@ -11925,6 +11942,56 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   P.nomsCommuns = Object.assign(P.nomsCommuns || {}, { Saint: 1, Louis: 1, Germain: 1, Lyon: 1 });
 })(typeof window !== 'undefined' ? window : globalThis);
 
+// =============================================================================
+// Les objets importants de l'enquête : quand on les trouve, qu'on les examine ou qu'on les prend, leur image
+// carrée s'affiche en grand, une seule fois par partie ; on les revoit ensuite depuis le carnet et la fiche.
+// Seuls les objets qui comptent pour l'enquête sont ici : pas les couteaux à poisson ni les achats du jour.
+//
+// Une entrée : k (nom court), img (l'image carrée, dans img/), titre, et ce qui la déclenche dans le chapitre :
+// les indices (clues, par leur id) et les possessions (items, par leur nom exact). Le chapitre de Paris comprend
+// Poissy et le Simplon-Orient. Une image absente (pas encore générée) ne montre rien : le jeu continue sans elle.
+// =============================================================================
+(function (G) {
+  'use strict';
+  var OBJETS = {
+    prologue: [
+      { k: 'serviette', img: 'objets/01_serviette-de-ravel', titre: 'La serviette de Ravel', clues: ['SYMBOLE'], items: ['La serviette de Ravel'] },
+      { k: 'billet7', img: 'objets/02_billet-brule', titre: 'Le billet brûlé', clues: ['NOTE7'] },
+      { k: 'manchette', img: 'objets/03_bouton-de-manchette', titre: 'Le bouton de manchette', clues: ['MANCHETTE'], items: ['Le bouton de manchette gravé « A.R. »'] }
+    ],
+    londres: [
+      { k: 'carte', img: 'objets/04_carte-de-smith', titre: 'La carte de Smith', clues: ['BILLET'], items: ['La carte de visite de Smith, au cachet de sa chevalière'] },
+      { k: 'valise', img: 'objets/05_valise-de-beddows', titre: 'La valise de Beddows', items: ['La valise de Beddows (1 000 £ en billets neufs)'] },
+      { k: 'cle14', img: 'objets/06_plaque-de-cle', titre: 'La clé de la chambre 14', clues: ['CLE14'], items: ['Une plaque de clé en cuivre : « Chelsea Arms, 14 »'] },
+      { k: 'roussie', img: 'objets/07_lettre-roussie', titre: 'La lettre roussie', clues: ['LETTRE'], items: ['Une lettre roussie, à en-tête de M. Makryat'] },
+      { k: 'peau', img: 'objets/08_message-sur-la-peau', titre: 'Le message sur la peau', clues: ['PEAU'] },
+      { k: 'maquette', img: 'objets/09_maquette-des-alexis', titre: 'La maquette des Alexis', clues: ['MAQUETTE'], items: ['La maquette des Alexis, dans sa caisse'] },
+      { k: 'gueridon', img: 'objets/10_gueridon-truque', titre: 'Le guéridon truqué', clues: ['TRUQUEE'] }
+    ],
+    paris: [
+      { k: 'cahier', img: 'objets/11_cahier-de-delplace', titre: 'Le cahier bleu du docteur Delplace', clues: ['CAHIER'], items: ['Le cahier bleu du docteur Delplace'] },
+      { k: 'registre', img: 'objets/12_registre-de-charenton', titre: 'Le registre de Charenton', clues: ['REGISTRE'] },
+      { k: 'plans', img: 'objets/13_plans-de-la-villa', titre: 'Les plans de la villa', clues: ['VILLA'] },
+      { k: 'actes', img: 'objets/14_actes-de-1789', titre: 'Les actes de 1789', clues: ['ACTES'] },
+      { k: 'wellington', img: 'objets/15_lettre-de-wellington', titre: 'La lettre de Lausanne', clues: ['LETTRE'] },
+      { k: 'bras', img: 'objets/16_bras-gauche', titre: 'Le Bras gauche du Simulacre', clues: ['BRAS'], items: ['Le Bras gauche du Simulacre'] },
+      { k: 'aida', img: 'objets/17_places-pour-aida', titre: 'Deux places pour Aïda', items: ['Deux places pour Aïda, à la Scala'] }
+    ]
+  };
+  // l'objet d'un indice ou d'une possession, dans un chapitre ; null s'il n'en a pas
+  function objetDe(chapitre, quoi) {
+    var l = OBJETS[chapitre] || [];
+    for (var i = 0; i < l.length; i++) {
+      var o = l[i];
+      if (quoi.clue && (o.clues || []).indexOf(quoi.clue) >= 0) return o;
+      if (quoi.item && (o.items || []).indexOf(quoi.item) >= 0) return o;
+    }
+    return null;
+  }
+  G.OBJETS = OBJETS;
+  G.objetDe = objetDe;
+})(typeof window !== 'undefined' ? window : globalThis);
+
 // =====================================================================
 //  Le carnet d'idées : les fausses pistes, les tentations et les folies
 //  Ce module ajoute aux lieux des chapitres des idées qui ne font pas avancer l'enquête,
@@ -13111,12 +13178,17 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     this.rain(g, 80, 0.35, 0.4, 320);
   };
 
-  P.blackout = function (g, t) {
-    D.rect(g, 0, 0, W, H, K);
-    var lx = W - ((t * 520) % (W + 300));
-    D.poly(g, [lx, 0, lx + 40, 0, lx - 60, H, lx - 110, H], 'rgba(243,239,230,0.85)');
-    D.poly(g, [lx + 70, 0, lx + 80, 0, lx - 20, H, lx - 34, H], R);
-    if (((t * 3) | 0) % 5 === 0) { D.rect(g, 190, 150, 3, 2, C); D.rect(g, 205, 150, 3, 2, C); }
+  // le tunnel : les lampes du train vacillent et s'éteignent sur l'image même ; dans le noir, la lueur d'une lampe
+  // du tunnel glisse de temps en temps sur la vitre, puis la lumière revient en clignotant (l'interface y ajoute une vision)
+  P.noirTunnel = function (g, t, cw) {
+    var reste = this.fx.blackout - this.t, ecoule = 3.2 - reste, a = 0.92;
+    if (ecoule < 0.55) a = this.rnd() < 0.45 ? 0.3 : 0.88;
+    else if (reste < 0.5) a = this.rnd() < 0.5 ? 0.25 : 0.8;
+    D.rect(g, 0, 0, cw, H, 'rgba(6,6,8,' + a + ')');
+    var x = cw + 200 - ((t * 380) % (cw + 420));
+    var gr = g.createLinearGradient(x - 110, 0, x + 110, 0);
+    gr.addColorStop(0, 'rgba(243,239,230,0)'); gr.addColorStop(0.5, 'rgba(243,239,230,0.12)'); gr.addColorStop(1, 'rgba(243,239,230,0)');
+    g.save(); g.fillStyle = gr; g.beginPath(); g.moveTo(x - 70, 0); g.lineTo(x + 130, 0); g.lineTo(x + 30, H); g.lineTo(x - 170, H); g.closePath(); g.fill(); g.restore();
   };
 
   // ======================================================================= rendu
@@ -13273,9 +13345,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     // en format cinéma, un dessin ou une image 4:3 est agrandi(e) à la largeur du cadre et recadré(e) en hauteur
     var kx = CWd / W, top = (H - H / kx) * ((this._fy === undefined ? 46 : this._fy) / 100);
     var wideImg = ph && ph.naturalWidth && ph.naturalWidth / ph.naturalHeight > 1.6;
-    if (this.on('blackout')) { if (CWd > W) { g.save(); g.scale(kx, kx); g.translate(0, -top); this.blackout(g, t); g.restore(); } else this.blackout(g, t); }
     // l'image peinte n'est pas encore arrivée : du noir, jamais l'ancien dessin (il ne reste qu'en secours, si l'image manque)
-    else if (pk && !ph && !(this.imgs && this.imgs[pk] && this.imgs[pk]._bad)) { (this._attendu || (this._attendu = {}))[pk] = true; }
+    if (pk && !ph && !(this.imgs && this.imgs[pk] && this.imgs[pk]._bad)) { (this._attendu || (this._attendu = {}))[pk] = true; }
     else if (ph) {
       // une respiration de caméra, très lente : l'image et ce qui bouge dessus restent solidaires
       var zs = 1.012 + 0.006 * Math.sin(t * 0.11), zx = (W * (zs - 1)) * (0.5 + 0.4 * Math.sin(t * 0.07)), zy = (H * (zs - 1)) * (0.5 + 0.4 * Math.cos(t * 0.05));
@@ -13309,6 +13380,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     else if (CWd > W) { g.save(); g.scale(kx, kx); g.translate(0, -top); (this[this.scene] || this.restaurant).call(this, g, t, st); g.restore(); }
     else (this[this.scene] || this.restaurant).call(this, g, t, st);
     if (this.on('flicker') && this.rnd() < 0.35) D.rect(g, 0, 0, CWd, H, 'rgba(10,10,11,0.72)');
+    if (this.on('blackout')) this.noirTunnel(g, t, CWd);
     // la folie : tout rougit, et parfois s'inverse
     var m = [0, 0, 0.14, 0.28][san] || 0; if (this.on('madness')) m = 0.55;
     if (m) { g.globalCompositeOperation = 'multiply'; D.rect(g, 0, 0, CWd, H, 'rgba(227,32,45,' + m + ')'); g.globalCompositeOperation = 'source-over'; }
@@ -15499,11 +15571,11 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
       case 'narr': case 'event': case 'intrusion': d.innerHTML = rich(e.x); break;
       case 'player': d.textContent = e.x; if (e.said) d.classList.add('said'); if (e.mj) { d.classList.add('mj'); d.title = e.chip || ''; } break;
       case 'npc': d.dataset.who = e.who; d.innerHTML = '<span class="who">' + esc(e.name) + '</span>' + rich(e.x); break;
-      case 'sys': case 'push': case 'item': d.textContent = e.x; break;
+      case 'sys': case 'push': case 'item': d.textContent = e.x; if (e.t === 'item') objetVu({ item: e.x }); break;
       case 'ask': d.textContent = (e.san >= 3 && Math.random() < 0.25) ? 'Qu’avez-vous fait ?' : e.x; break;
       case 'loc': d.textContent = e.name; break;
       case 'doc': var dh = docHTML(e); d.classList.add(dh.cls); d.innerHTML = dh.html; break;
-      case 'clue': d.innerHTML = '<div class="h">Nouvel indice · noté dans le carnet</div><div class="t">' + esc(e.title) + '</div><div class="x">' + esc(e.x) + '</div>'; break;
+      case 'clue': d.innerHTML = '<div class="h">Nouvel indice · noté dans le carnet</div><div class="t">' + esc(e.title) + '</div><div class="x">' + esc(e.x) + '</div>'; objetVu({ clue: e.id, x: e.x }); break;
       case 'stat': d.textContent = (e.stat === 'Mythe' ? 'Mythe de Cthulhu' : e.stat) + ' ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v; if (e.stat === 'Mythe') d.className = 'e-san'; break;
       case 'san': if (e.d < 0 && !chargement) setTimeout(function () { vision(e.d <= -1 ? 1 + Math.min(4, -e.d) : 1); }, 150);
         d.textContent = e.d ? 'Santé mentale ' + (e.d > 0 ? '+' : '') + e.d + ' → ' + e.v : 'Santé mentale : aucune perte'; if (!e.d) d.classList.add('none'); if (e.d > 0) d.classList.add('gain'); break;
@@ -15539,7 +15611,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   function investigateurSuivant(s) {
     var pc = JSON.parse(JSON.stringify(s.pc)), f = s.flags || {}, drapeaux = {};
     (SC.memoire || []).forEach(function (k) { if (f[k] !== undefined && f[k] !== null && typeof f[k] !== 'object') drapeaux[k] = f[k]; });
-    var carnet = s.clues.map(function (id) { var c = SC.clues[id]; if (!c) return null; if (SC.clueView) c = SC.clueView(s, id, c); return { title: c.title, text: c.text }; }).filter(Boolean);
+    var carnet = s.clues.map(function (id) { var c = SC.clues[id]; if (!c) return null; if (SC.clueView) c = SC.clueView(s, id, c); return { id: id, title: c.title, text: c.text }; }).filter(Boolean);
     var docs = (s.docs || []).slice(), vus = {}; docs.forEach(function (d) { vus[d.x] = 1; });
     s.log.forEach(function (e) { if (e.t === 'doc' && !vus[e.x]) { vus[e.x] = 1; docs.push({ x: e.x, title: e.title || '' }); } });
     var P = SC.people || {}, gens = Object.keys(s.npcs).filter(function (k) { return s.npcs[k].met && P[k]; }).map(function (k) { return P[k]; });
@@ -15781,10 +15853,11 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     if (instant && queue.length > 30) return;
     var app = $('app');
     if (name === 'shudder') { app.classList.remove('shudder'); void app.offsetWidth; app.classList.add('shudder'); art.trigger('shudder', 0.8); setTimeout(function () { app.classList.remove('shudder'); }, 800); }
-    else if (name === 'madness') { app.classList.add('madness'); art.trigger('madness', 1.8); setTimeout(function () { app.classList.remove('madness'); }, 1700); }
+    // la folie passagère : une grande rafale de visions (l'ancien écran inversé et penché est retiré)
+    else if (name === 'madness') { setTimeout(function () { vision(5); }, 200); }
     else if (name === 'flicker') art.trigger('flicker', 1.6);
     else if (name === 'face') art.trigger('face', 1.3);
-    else if (name === 'blackout') art.trigger('blackout', 3.2);
+    else if (name === 'blackout') { art.trigger('blackout', 3.2); setTimeout(function () { vision(1); }, 1500); }
   }
 
   // ---------------------------------------------------------------- en-tête, jauges, barre d'actions
@@ -15929,8 +16002,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     if (nbS) h += '<p class="sim">Le Simulacre : ' + nbS + ' pièce' + (nbS > 1 ? 's' : '') + ' dans vos bagages. Idée, Connaissance et Chance : −' + (5 * nbS) + ' %.</p>';
     h += '<h3>Compétences</h3><div class="skills">';
     Object.keys(pc.skills).sort(function (a, b) { return a.localeCompare(b, 'fr'); }).forEach(function (k) { var v = pc.skills[k]; h += '<span>' + esc(k) + '</span><span>' + v + ' % <small>' + Math.floor(v / 2) + '/' + Math.floor(v / 5) + '</small></span>'; });
-    h += '</div><h3>Possessions</h3><div>' + s.inv.map(function (x) { return esc(SC && SC.invLabel ? SC.invLabel(game.api, x) : x); }).join('<br>') + '<br>' + esc(game.api.money()) + '</div>';
-    $('sheetBody').innerHTML = h;
+    h += '</div><h3>Possessions</h3><div class="inv">' + s.inv.map(function (x) { var o = objetPartout({ item: x }); return (o ? '<div class="io">' + vignette(o, '') + '<span>' : '<div><span>') + esc(SC && SC.invLabel ? SC.invLabel(game.api, x) : x) + '</span></div>'; }).join('') + '<div><span>' + esc(game.api.money()) + '</span></div></div>';
+    $('sheetBody').innerHTML = h; brancherVignettes($('sheetBody'));
   }
   function fillNotes() {
     var s = game.state, h = '';
@@ -15949,11 +16022,11 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     Object.keys(SC.clues).forEach(function (id) {
       var c = SC.clues[id];
       if (SC.clueView && s.clues.indexOf(id) >= 0) c = SC.clueView(s, id, c);
-      h += s.clues.indexOf(id) >= 0 ? '<div class="c"><div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>' : '<div class="c unk">Indice non découvert</div>';
+      h += s.clues.indexOf(id) >= 0 ? '<div class="c">' + vignette(window.objetDe && window.objetDe(s.chapter, { clue: id }), c.text) + '<div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>' : '<div class="c unk">Indice non découvert</div>';
     });
     Object.keys(anciens).forEach(function (ch) {
       var a = anciens[ch]; if (!a.carnet || !a.carnet.length) return;
-      h += '</div><h3>Indices · ' + esc(a.titre || ch) + '</h3><div class="clues">' + a.carnet.map(function (c) { return '<div class="c"><div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>'; }).join('');
+      h += '</div><h3>Indices · ' + esc(a.titre || ch) + '</h3><div class="clues">' + a.carnet.map(function (c) { return '<div class="c">' + vignette(c.id && window.objetDe && window.objetDe(ch, { clue: c.id }), c.text) + '<div class="t">' + esc(c.title) + '</div><div class="x">' + esc(c.text) + '</div></div>'; }).join('');
     });
     var scr = SC.notesScrawl ? SC.notesScrawl(s) : [];
     if (scr.length) h += '</div><h3>En marge, de votre écriture</h3><div class="scrawl">' + scr.map(esc).join('<br>');
@@ -15963,7 +16036,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     h += met.length ? met.map(function (k) { return '<div>' + esc(PEOPLE[k]) + '</div>'; }).join('') : '<div>Personne pour l’instant.</div>';
     Object.keys(anciens).forEach(function (ch) { var g = anciens[ch].gens || []; if (g.length) h += '<div class="ancien"><b>' + esc(anciens[ch].titre || ch) + ' :</b> ' + g.map(esc).join(' · ') + '</div>'; });
     h += '</div><h3>Heure</h3><div>' + esc(game.clock()) + ' · ' + esc(game.where()) + '</div>';
-    $('notesBody').innerHTML = h;
+    $('notesBody').innerHTML = h; brancherVignettes($('notesBody'));
   }
   function fillMenu() {
     var body = $('menuBody'); body.innerHTML = '';
@@ -16059,6 +16132,55 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   // les suggestions : « guide » (plus de pistes, pas de tentations), « normal », « aucune »
   var IKEY = 'express-minuit-idees';
   var VKEY = 'express-minuit-visions';
+  // ---- les objets importants de l'enquête (objets.js) : leur image carrée en grand, une seule fois par partie,
+  // quand on les trouve ; ensuite, une vignette dans le carnet et dans la fiche pour les revoir. Sans image, rien.
+  var objFile = [], objOuvert = false, objEchec = {};
+  function objetPartout(quoi) {
+    // une possession peut venir d'un chapitre précédent (le bras de Poissy, à Lausanne) : on cherche partout
+    var o = window.objetDe && window.objetDe(game.state.chapter, quoi); if (o || !quoi.item || !window.OBJETS) return o;
+    for (var ch in window.OBJETS) { o = window.objetDe(ch, quoi); if (o) return o; }
+    return null;
+  }
+  function objetVu(quoi) {
+    if (chargement || !game || !window.objetDe) return;
+    var s = game.state, o = objetPartout(quoi); if (!o || objEchec[o.k]) return;
+    if ((s.objetsVus || []).indexOf(o.k) >= 0 || objFile.some(function (e) { return e.o === o; })) return;
+    objFile.push({ o: o, x: quoi.x || '' });
+    if (!objOuvert) { objOuvert = true; setTimeout(objetSuivant, 500); }
+  }
+  function objetSuivant() {
+    var e = objFile.shift(); if (!e) { objOuvert = false; return; }
+    montrerObjet(e.o, e.x, true);
+  }
+  function montrerObjet(o, x, file) {
+    var im = new Image();
+    // la légende : le texte de l'indice, s'il est déjà au carnet (l'objet pris juste avant d'être compris)
+    if (!x && o.clues && game) { var s = game.state; o.clues.forEach(function (c) { if (!x && s.clues.indexOf(c) >= 0 && SC.clues[c]) x = (SC.clueView ? SC.clueView(s, c, SC.clues[c]) : SC.clues[c]).text; }); }
+    im.onload = function () {
+      if (file && game) { var vus = game.state.objetsVus || (game.state.objetsVus = []); if (vus.indexOf(o.k) < 0) vus.push(o.k); }
+      var v = $('objet'); v.querySelector('img').src = im.src; v.querySelector('.ot').textContent = o.titre; v.querySelector('.ox').textContent = x || '';
+      v.hidden = false; objOuvert = true; void v.offsetWidth; v.classList.add('on');
+      if (sound && sound.blip) sound.blip('clue');
+    };
+    im.onerror = function () { objEchec[o.k] = true; if (file) objetSuivant(); };
+    im.src = 'img/' + o.img + '.webp';
+  }
+  function fermerObjet() {
+    var v = $('objet'); if (v.hidden) return;
+    v.classList.remove('on'); v.hidden = true;
+    if (objFile.length) setTimeout(objetSuivant, 300); else objOuvert = false;
+  }
+  // une vignette cliquable (carnet, fiche) ; elle s'efface d'elle-même si l'image n'existe pas encore
+  function vignette(o, x) { return o ? '<button type="button" class="vign" data-obj="' + esc(o.k) + '" data-x="' + esc(x || '') + '"><img alt="" src="img/' + esc(o.img) + '.webp"></button>' : ''; }
+  function brancherVignettes(racine) {
+    racine.querySelectorAll('.vign img').forEach(function (im) { im.addEventListener('error', function () { var b = im.parentNode; if (b && b.parentNode) b.parentNode.removeChild(b); }); });
+  }
+  function objetParCle(k) { for (var ch in (window.OBJETS || {})) { var l = window.OBJETS[ch]; for (var i = 0; i < l.length; i++) if (l[i].k === k) return l[i]; } return null; }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('.vign'); if (!b) return;
+    ev.preventDefault(); ev.stopPropagation();
+    var o = objetParCle(b.dataset.obj); if (o) montrerObjet(o, b.dataset.x, false);
+  }, true);
   // une vision du Mythe en plein écran, d'un coup, en rafale, après un éclair blanc (le menu « Visions » peut les couper)
   var chargement = false;
   // n = nombre d'images de la rafale : 1 au hasard quand la raison vacille, 2 à 5 selon la perte de Santé mentale
@@ -16188,7 +16310,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   $('btnMenu').addEventListener('click', function () { openPanel('ovMenu'); });
   document.querySelectorAll('[data-close]').forEach(function (b) { b.addEventListener('click', closePanels); });
   document.querySelectorAll('.overlay').forEach(function (o) { o.addEventListener('click', function (ev) { if (ev.target === o && o.id !== 'ovDice') closePanels(); }); });
-  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closePanels(); });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') { if (!$('objet').hidden) fermerObjet(); else closePanels(); } });
+  $('objet').addEventListener('click', fermerObjet);
   $('btnSound').addEventListener('click', function () { toggleSound(); if (!soundOn) sound.stop(); });
   $('btnSound').textContent = 'Son : ' + (soundOn ? 'oui' : 'non');
   $('btnSound').setAttribute('aria-pressed', soundOn ? 'true' : 'false');
