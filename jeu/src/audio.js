@@ -66,6 +66,7 @@
     this.rainSynth = ctx.createGain(); this.rainSynth.gain.value = 1;
     rain.connect(bp); bp.connect(this.rainSynth); this.rainSynth.connect(this.rainGain); this.rainGain.connect(this.master); rain.start();
     this.vraiePluie();
+    this.vraiTrain();
     this.chargerBruits();
     // grondement du train
     var rum = ctx.createBufferSource(); rum.buffer = buf; rum.loop = true;
@@ -107,6 +108,26 @@
     return { debut: bord / sr, fin: (bord + len) / sr };
   }
   Sound.boucle = boucle;
+  // ---- le train enregistré : un wagon en marche (enregistrement de Yoann), sous la musique, dans les scènes de train.
+  // Dès qu'il est chargé, il remplace le grondement synthétisé et les claquements réguliers de ces lieux-là.
+  var TRAIN = { src: 'audio/train.mp3', fondu: 3 };
+  // le niveau du wagon enregistré, lieu par lieu (0 ou absent : pas de train)
+  var TRAINV = { restaurant: 0.2, couloir: 0.28, lits: 0.13, compartiment: 0.12, wagon1: 0.22, wagon2: 0.2, retour: 0.3, oe_compartiment: 0.14, oe_salon: 0.09 };
+  Sound.TRAIN = TRAIN; Sound.TRAINV = TRAINV;
+  Sound.prototype.vraiTrain = function () {
+    var self = this, ctx = this.ctx;
+    if (this.train || typeof fetch !== 'function') return;
+    this.train = 'chargement';
+    this.trainGain = ctx.createGain(); this.trainGain.gain.value = 0; this.trainGain.connect(this.master);
+    fetch(TRAIN.src).then(function (r) { if (!r.ok) throw new Error('absent'); return r.arrayBuffer(); })
+      .then(function (ab) { return new Promise(function (ok, ko) { ctx.decodeAudioData(ab, ok, ko); }); })
+      .then(function (buf) {
+        var b = boucle(buf, TRAIN.fondu), src = ctx.createBufferSource();
+        src.buffer = buf; src.loop = true; src.loopStart = b.debut; src.loopEnd = b.fin;
+        src.connect(self.trainGain); src.start(0, b.debut + Math.random() * (b.fin - b.debut));
+        self.train = 'ok'; self.apply();
+      }).catch(function () { self.train = 'absent'; });
+  };
   Sound.prototype.vraiePluie = function () {
     var self = this, ctx = this.ctx;
     if (this.pluie || typeof fetch !== 'function') return;
@@ -209,7 +230,7 @@
     var ctx = this.ctx;
     while (this.nextClack < ctx.currentTime + 0.3) {
       var CL = { restaurant: 0.22, couloir: 0.5, lits: 0.14, compartiment: 0.08, title: 0.22, wagon1: 0.3, wagon2: 0.24, retour: 0.55, gare: 0.1, victoria: 0.1, cave: 0.04 };
-      var tt = this.nextClack, vol = CL[this.loc] || 0;
+      var tt = this.nextClack, vol = (this.train === 'ok' && TRAINV[this.loc]) ? 0 : (CL[this.loc] || 0);
       if (vol) { this.clack(tt, vol); this.clack(tt + 0.13, vol * 0.8); }
       this.nextClack += this.san >= 3 ? (Math.random() < 0.3 ? 0.7 : 1.05) : 1.05;
     }
@@ -233,6 +254,9 @@
       gare: 0.3, bn: 0.04, arsenal: 0.04, charenton: 0.05, cafe: 0.07 }[this.loc];
     if (rain === undefined) rain = 0.04;
     if (rum === undefined) rum = 0.1;
+    var tv = TRAINV[this.loc] || 0;
+    if (this.trainGain) this.trainGain.gain.setTargetAtTime(this.train === 'ok' ? tv : 0, t, 0.8);
+    if (this.train === 'ok' && tv) rum *= 0.25;
     this.rainGain.gain.setTargetAtTime(rain, t, 0.8);
     this.rumGain.gain.setTargetAtTime(rum, t, 0.8);
     this.drone.gain.setTargetAtTime([0.012, 0.025, 0.045, 0.07][this.san] + (this.loc === 'compartiment' || this.loc === 'wagon1' || this.loc === 'wagon2' || this.loc === 'cheapside' ? 0.04 : 0), t, 2);
