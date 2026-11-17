@@ -447,12 +447,17 @@
     this.rain(g, 80, 0.35, 0.4, 320);
   };
 
-  P.blackout = function (g, t) {
-    D.rect(g, 0, 0, W, H, K);
-    var lx = W - ((t * 520) % (W + 300));
-    D.poly(g, [lx, 0, lx + 40, 0, lx - 60, H, lx - 110, H], 'rgba(243,239,230,0.85)');
-    D.poly(g, [lx + 70, 0, lx + 80, 0, lx - 20, H, lx - 34, H], R);
-    if (((t * 3) | 0) % 5 === 0) { D.rect(g, 190, 150, 3, 2, C); D.rect(g, 205, 150, 3, 2, C); }
+  // le tunnel : les lampes du train vacillent et s'éteignent sur l'image même ; dans le noir, la lueur d'une lampe
+  // du tunnel glisse de temps en temps sur la vitre, puis la lumière revient en clignotant (l'interface y ajoute une vision)
+  P.noirTunnel = function (g, t, cw) {
+    var reste = this.fx.blackout - this.t, ecoule = 3.2 - reste, a = 0.92;
+    if (ecoule < 0.55) a = this.rnd() < 0.45 ? 0.3 : 0.88;
+    else if (reste < 0.5) a = this.rnd() < 0.5 ? 0.25 : 0.8;
+    D.rect(g, 0, 0, cw, H, 'rgba(6,6,8,' + a + ')');
+    var x = cw + 200 - ((t * 380) % (cw + 420));
+    var gr = g.createLinearGradient(x - 110, 0, x + 110, 0);
+    gr.addColorStop(0, 'rgba(243,239,230,0)'); gr.addColorStop(0.5, 'rgba(243,239,230,0.12)'); gr.addColorStop(1, 'rgba(243,239,230,0)');
+    g.save(); g.fillStyle = gr; g.beginPath(); g.moveTo(x - 70, 0); g.lineTo(x + 130, 0); g.lineTo(x + 30, H); g.lineTo(x - 170, H); g.closePath(); g.fill(); g.restore();
   };
 
   // ======================================================================= rendu
@@ -609,9 +614,8 @@
     // en format cinéma, un dessin ou une image 4:3 est agrandi(e) à la largeur du cadre et recadré(e) en hauteur
     var kx = CWd / W, top = (H - H / kx) * ((this._fy === undefined ? 46 : this._fy) / 100);
     var wideImg = ph && ph.naturalWidth && ph.naturalWidth / ph.naturalHeight > 1.6;
-    if (this.on('blackout')) { if (CWd > W) { g.save(); g.scale(kx, kx); g.translate(0, -top); this.blackout(g, t); g.restore(); } else this.blackout(g, t); }
     // l'image peinte n'est pas encore arrivée : du noir, jamais l'ancien dessin (il ne reste qu'en secours, si l'image manque)
-    else if (pk && !ph && !(this.imgs && this.imgs[pk] && this.imgs[pk]._bad)) { (this._attendu || (this._attendu = {}))[pk] = true; }
+    if (pk && !ph && !(this.imgs && this.imgs[pk] && this.imgs[pk]._bad)) { (this._attendu || (this._attendu = {}))[pk] = true; }
     else if (ph) {
       // une respiration de caméra, très lente : l'image et ce qui bouge dessus restent solidaires
       var zs = 1.012 + 0.006 * Math.sin(t * 0.11), zx = (W * (zs - 1)) * (0.5 + 0.4 * Math.sin(t * 0.07)), zy = (H * (zs - 1)) * (0.5 + 0.4 * Math.cos(t * 0.05));
@@ -645,6 +649,7 @@
     else if (CWd > W) { g.save(); g.scale(kx, kx); g.translate(0, -top); (this[this.scene] || this.restaurant).call(this, g, t, st); g.restore(); }
     else (this[this.scene] || this.restaurant).call(this, g, t, st);
     if (this.on('flicker') && this.rnd() < 0.35) D.rect(g, 0, 0, CWd, H, 'rgba(10,10,11,0.72)');
+    if (this.on('blackout')) this.noirTunnel(g, t, CWd);
     // la folie : tout rougit, et parfois s'inverse
     var m = [0, 0, 0.14, 0.28][san] || 0; if (this.on('madness')) m = 0.55;
     if (m) { g.globalCompositeOperation = 'multiply'; D.rect(g, 0, 0, CWd, H, 'rgba(227,32,45,' + m + ')'); g.globalCompositeOperation = 'source-over'; }

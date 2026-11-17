@@ -17,6 +17,11 @@ for f in imgs:
     key = str(f.relative_to(src / 'images'))[:-4]
     if statut.get(key, {}).get('version', 1) < VMIN: continue
     im = Image.open(f).convert('RGB')
+    if im.size == (1024, 1024):  # un objet de l'enquête, carré : 800 × 800, sans points lumineux
+        d = dst / (key + '.webp'); d.parent.mkdir(parents=True, exist_ok=True)
+        im.resize((800, 800), Image.LANCZOS).save(d, 'WEBP', quality=84, method=6)
+        anchors[key] = {'lamps': [], 'rouge': None, 'carre': True}
+        continue
     large = im.width / im.height > 1.6  # format cinéma 2,4:1 : repère 720 × 300 dans le jeu
     if im.size not in ((1600, 1200), (2304, 960)):
         print('taille inattendue', key, im.size); continue
@@ -53,8 +58,8 @@ keys = sorted(anchors)
 for n in range(0, len(keys), 16):
     sheet = Image.new('RGB', (1600, 1200), (20, 20, 20)); dr = ImageDraw.Draw(sheet)
     for i, k in enumerate(keys[n:n + 16]):
-        lg = anchors[k]['large']; sc = 400 / 720 if lg else 1
-        t = Image.open(dst / (k + '.webp')).convert('RGB').resize((400, 167) if lg else (400, 300))
+        lg = anchors[k].get('large'); sc = 400 / 720 if lg else 1
+        t = Image.open(dst / (k + '.webp')).convert('RGB').resize((400, 167) if lg else (300, 300) if anchors[k].get('carre') else (400, 300))
         ox, oy = (i % 4) * 400, (i // 4) * 300
         sheet.paste(t, (ox, oy))
         for x, y, r in anchors[k]['lamps']: x, y = x * sc, y * sc; dr.ellipse((ox + x - 6, oy + y - 6, ox + x + 6, oy + y + 6), outline=(0, 255, 0), width=2)

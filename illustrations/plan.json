@@ -1255,6 +1255,108 @@
       "references": [
         "portraits/43_caterina"
       ]
+    },
+    {
+      "image": "objets/01_serviette-de-ravel",
+      "prompt": "prompts/objets/01_serviette-de-ravel.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/02_billet-brule",
+      "prompt": "prompts/objets/02_billet-brule.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/03_bouton-de-manchette",
+      "prompt": "prompts/objets/03_bouton-de-manchette.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/04_carte-de-smith",
+      "prompt": "prompts/objets/04_carte-de-smith.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/05_valise-de-beddows",
+      "prompt": "prompts/objets/05_valise-de-beddows.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/06_plaque-de-cle",
+      "prompt": "prompts/objets/06_plaque-de-cle.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/07_lettre-roussie",
+      "prompt": "prompts/objets/07_lettre-roussie.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/08_message-sur-la-peau",
+      "prompt": "prompts/objets/08_message-sur-la-peau.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/09_maquette-des-alexis",
+      "prompt": "prompts/objets/09_maquette-des-alexis.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/10_gueridon-truque",
+      "prompt": "prompts/objets/10_gueridon-truque.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/11_cahier-de-delplace",
+      "prompt": "prompts/objets/11_cahier-de-delplace.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/12_registre-de-charenton",
+      "prompt": "prompts/objets/12_registre-de-charenton.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/13_plans-de-la-villa",
+      "prompt": "prompts/objets/13_plans-de-la-villa.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/14_actes-de-1789",
+      "prompt": "prompts/objets/14_actes-de-1789.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/15_lettre-de-wellington",
+      "prompt": "prompts/objets/15_lettre-de-wellington.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/16_bras-gauche",
+      "prompt": "prompts/objets/16_bras-gauche.txt",
+      "references": [],
+      "taille": "1024x1024"
+    },
+    {
+      "image": "objets/17_places-pour-aida",
+      "prompt": "prompts/objets/17_places-pour-aida.txt",
+      "references": [],
+      "taille": "1024x1024"
     }
   ],
   "version": 2

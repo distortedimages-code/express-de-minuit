@@ -304,8 +304,6 @@ body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
 @keyframes drift { 48% { transform: none; } 50% { transform: translateX(2px) skewX(-1deg); } 52% { transform: none; } }
 .app.shudder { animation: shudder .6s steps(6) 1; }
 @keyframes shudder { 15% { transform: translate(-4px, 1px); } 30% { transform: translate(4px, -1px); } 45% { transform: translate(-3px, 0) skewX(2deg); } 60% { transform: translate(2px, 1px); } 75% { transform: translate(-1px, 0); } }
-.app.madness { animation: madness 1.4s steps(10) 1; }
-@keyframes madness { 10% { filter: invert(1); transform: skewX(4deg); } 25% { filter: none; transform: translateX(-8px); } 40% { filter: invert(1) contrast(1.6); transform: skewX(-6deg); } 60% { transform: translate(5px, -2px); filter: none; } 80% { filter: contrast(2); } }
 
 @media (max-width: 700px) { .stage { width: calc(100% - 6px); aspect-ratio: 2 / 1; max-height: 42vh; } }
 @media (max-width: 520px) {
@@ -515,3 +513,21 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 #vision.blanc { background: #fff; }
 #vision.noir img, #vision.blanc img { visibility: hidden; }
 #vision img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.35); }
+
+/* les objets importants de l'enquête : leur image carrée en grand, puis des vignettes dans le carnet et la fiche */
+#objet { position: fixed; inset: 0; z-index: 9000; display: grid; place-items: center; background: rgba(6, 6, 8, .95); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); padding: 18px; cursor: pointer; }
+#objet[hidden] { display: none; }
+#objet .ocarte { width: min(86vw, 62vh, 560px); display: flex; flex-direction: column; gap: 10px; opacity: 0; transform: scale(.94); transition: opacity .25s ease, transform .25s ease; }
+#objet.on .ocarte { opacity: 1; transform: none; }
+#objet img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; border: 3px solid var(--text); box-shadow: 8px 8px 0 var(--red); }
+#objet .ol { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+#objet .ok { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); background: var(--red); padding: 2px 8px; transform: skewX(-10deg); }
+#objet .ot { font-family: var(--display); font-size: 22px; line-height: 1.1; text-transform: uppercase; color: var(--text); }
+#objet .ox { color: #d6d1c8; font-style: italic; line-height: 1.4; }
+#objet .ox:empty { display: none; }
+#objet .of { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8d8880; }
+.vign { float: right; width: 56px; height: 56px; padding: 0; margin: 0 0 6px 10px; border: 2px solid var(--text); background: #000; cursor: pointer; box-shadow: 3px 3px 0 var(--red); }
+.vign img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.clues .c::after { content: ''; display: block; clear: both; }
+#sheetBody .inv > div { display: flex; align-items: center; gap: 10px; min-height: 22px; margin: 2px 0; }
+#sheetBody .inv .vign { float: none; width: 44px; height: 44px; margin: 2px 0; flex: none; }
