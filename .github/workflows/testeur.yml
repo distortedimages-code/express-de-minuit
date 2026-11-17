@@ -1,7 +1,7 @@
 # ChatGPT joue des parties entières de L'Express de Minuit et relève ce qui sonne faux.
 # Se lance à la main (onglet Actions → Testeur IA → Run workflow). Par défaut : simulation gratuite.
 name: Testeur IA
-run-name: "Testeur IA — ${{ inputs.simulation && 'simulation gratuite' || 'parties RÉELLES' }} — ${{ inputs.parties }} partie(s), profil ${{ inputs.profil }}"
+run-name: "Testeur IA — ${{ inputs.simulation && 'simulation gratuite' || 'parties RÉELLES' }} — ${{ inputs.parties }} partie(s) depuis ${{ inputs.depart }}, profil ${{ inputs.profil }}"
 
 on:
   workflow_dispatch:
@@ -25,10 +25,15 @@ on:
         type: choice
         options: [tous, pemberton, doyle, ashby, prologue]
         default: tous
+      depart:
+        description: "Chapitre de départ (Londres enchaîne sur Paris et Poissy avec le même investigateur)"
+        type: choice
+        options: [londres, paris, prologue]
+        default: londres
       tours:
-        description: "Nombre maximal de tours par partie"
+        description: "Nombre maximal de tours par partie, tous chapitres confondus"
         type: string
-        default: "120"
+        default: "500"
       modele:
         description: "Modèle OpenAI qui joue et relit"
         type: choice
@@ -49,7 +54,7 @@ concurrency:
 jobs:
   jouer:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 330
     steps:
       - uses: actions/checkout@v7
 
@@ -66,34 +71,40 @@ jobs:
           echo "Clé présente (sa valeur n'est jamais affichée)."
 
       - name: Faire jouer les parties
-        timeout-minutes: 170
+        timeout-minutes: 300
         env:
           OPENAI_API_KEY: ${{ !inputs.simulation && secrets.OPENAI_API_KEY || '' }}
           SIMULATION: ${{ inputs.simulation }}
           PARTIES: ${{ inputs.parties }}
           PROFIL: ${{ inputs.profil }}
           PERSONNAGE: ${{ inputs.personnage }}
+          DEPART: ${{ inputs.depart }}
           TOURS: ${{ inputs.tours }}
           MODELE: ${{ inputs.modele }}
           PLAFOND: ${{ inputs.plafond }}
         run: |
           options=()
           if [ "$SIMULATION" = "true" ]; then options+=(--simulation); fi
-          node testeur/jouer.js "${options[@]}" --parties "$PARTIES" --profil "$PROFIL" --personnage "$PERSONNAGE" \
-            --tours "$TOURS" --modele "$MODELE" --plafond "$PLAFOND"
+          node testeur/jouer.js "${options[@]}" --parties "$PARTIES" --profil "$PROFIL" --personnage "$PERSONNAGE" --depart "$DEPART" \
+            --paralleles 6 --tours "$TOURS" --modele "$MODELE" --plafond "$PLAFOND"
 
+      # chaque lancement range ses transcriptions dans son propre dossier : deux lancements ne s'écrasent pas
       - name: Publier les transcriptions sur la branche « tests-ia »
         if: ${{ always() && hashFiles('testeur/sortie/rapport.md') != '' }}
-        working-directory: testeur/sortie
         env:
           GH_TOKEN: ${{ github.token }}
+          DOSSIER: ${{ format('{0}-{1}-{2}', github.run_number, inputs.depart, inputs.simulation && 'simulation' || 'reel') }}
         run: |
-          git init -q -b tests-ia
+          depot="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$depot" tests-ia >/dev/null; then git clone -q --depth 1 -b tests-ia "$depot" /tmp/tests-ia
+          else git init -q -b tests-ia /tmp/tests-ia; fi
+          mkdir -p "/tmp/tests-ia/$DOSSIER" && cp -r testeur/sortie/. "/tmp/tests-ia/$DOSSIER/"
+          cd /tmp/tests-ia
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -qm "Testeur IA : $(find . -maxdepth 1 -name 'partie_*.md' | wc -l) partie(s)"
-          git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" tests-ia
+          git commit -qm "Testeur IA ${DOSSIER} : $(find "$DOSSIER" -maxdepth 1 -name 'partie_*.md' | wc -l) partie(s)"
+          for essai in 1 2 3; do git push -q "$depot" HEAD:tests-ia && break; git pull -q --rebase "$depot" tests-ia; done
 
       - name: Joindre les transcriptions
         if: ${{ always() }}

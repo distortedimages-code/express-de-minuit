@@ -1178,6 +1178,8 @@
       var near = cands.filter(function (c) { return c.score >= 0.75; }).slice(0, 3);
       var noun = p.nouns[0], verb = p.verbs[0];
       var generic = scene.generic;
+      // pour les tests : quelle sorte de réponse générique (absent, verbe connu sans objet, nom seul, rien compris)
+      if (G.RPG_REPLIS) G.RPG_REPLIS.push({ k: noun && !nounHere(noun.id) && lex.concepts[noun.id].type !== 'x' ? 'absent' : verb && generic.verbs[verb.id] ? 'verbe' : noun ? 'nom' : 'perdu', raw: p.raw, loc: s.loc, turn: s.turn });
       if (noun && !nounHere(noun.id) && !(lex.concepts[noun.id].type === 'x')) {
         var lab = labelOf(noun.id);
         // partir à la recherche de quelqu'un qui n'est pas là : il faut une piste, pas un « il n'est pas ici »
@@ -1258,6 +1260,7 @@
         if (vb.id === 'ECOUTER') { doJet({ skill: 'Écouter' }, p); return; }
       }
       if (best && best.score >= SOFT) {
+        if (G.RPG_REPLIS) G.RPG_REPLIS.push({ k: 'clarifier', raw: p.raw, loc: s.loc, turn: s.turn });
         api.say(fresh('clarify', scene.generic.clarify));
         api.chips(cands.filter(function (c) { return c.score >= best.score - 0.3; }).slice(0, 3).map(function (c) { return { label: c.a.label, action: c.a.id }; }));
         s.tick = 0;
@@ -1754,6 +1757,7 @@
       }
       // Aucun sujet reconnu : le PNJ réagit dans son propre ton, de moins en moins patient
       st.patience -= 1;
+      if (G.RPG_REPLIS) G.RPG_REPLIS.push({ k: st.patience <= 0 ? 'pnj-part' : 'pnj', who: npc.id, raw: p.raw, loc: s.loc, turn: s.turn });
       if (st.patience <= 0) { closeTalk(npc); s.tick = scene.talkTick || 1; return; }
       var tier = patienceTier(npc, st);
       var dpool = tier === 0 ? npc.deflect : tier === 1 ? (npc.deflect2 || npc.deflect) : (npc.deflect3 || npc.deflect2 || npc.deflect);

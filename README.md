@@ -364,8 +364,18 @@ La branche `gh-pages` contient le jeu prêt à jouer : `index.html`, les images 
 
 ## Le testeur IA
 
-Le workflow **Testeur IA** fait jouer ChatGPT à des parties entières du jeu, qui tourne sans écran sur les serveurs de GitHub (sources dans `jeu/src`). À chaque tour, le modèle lit ce que le jeu vient d'écrire et tape l'action suivante, selon un profil de joueur : méthodique, bavard, absurde, menteur, pressé, ou qui fait des fautes de frappe. À la fin de chaque partie, il relit la transcription et relève ce qui sonne faux. Un filtre automatique gratuit s'ajoute à sa relecture.
+Le workflow **Testeur IA** fait jouer ChatGPT à des parties entières du jeu, qui tourne sans écran sur les serveurs de GitHub (sources dans `jeu/src`). À chaque tour, le modèle lit ce que le jeu vient d'écrire et ce que montre l'écran (lieu, heure, carnet, boutons). Il répond comme un joueur : `AGIR : …` pour un geste, `DIRE : …` pour une réplique, ou `BOUTON n`. Il joue selon un profil : méthodique, bavard, absurde, menteur, pressé, ou qui fait des fautes de frappe.
 
+- **Jusqu'au bout** : un chapitre fini enchaîne sur le suivant avec le même investigateur, comme dans le jeu (Londres, puis Paris et Poissy). On peut aussi partir directement de Paris ou du prologue (option « Chapitre de départ »).
+- **Relecture** : à la fin, le modèle relit toute la transcription, par morceaux. Il relève les incompréhensions, les incohérences, les blocages, les sorties de rôle, les répétitions et les fautes.
+- **Filtres automatiques gratuits**, branchés sur le moteur :
+  - les réponses génériques « pas compris » ;
+  - les conversations closes à bout de patience ;
+  - les personnages qui parlent alors qu'ils sont absents ;
+  - les plantages ;
+  - 40 tours sans aucun progrès (le joueur tourne en rond) ;
+  - les réponses répétées.
+- Six parties se jouent en même temps.
 - Par défaut, c'est une **simulation gratuite** : des actions tirées au hasard, aucun appel à OpenAI.
-- En réel, le **plafond** arrête tout dès que la dépense estimée l'atteint. Avec `gpt-5.6-luna`, une partie de 120 tours coûte quelques centimes.
-- Les transcriptions et le rapport sont publiés sur la branche `tests-ia`, où Claude les récupère pour corriger le jeu. Ils sont aussi joints au lancement (section « Artifacts »).
+- En réel, le **plafond** arrête tout dès que la dépense estimée l'atteint. Avec `gpt-5.6-luna`, une partie de 500 tours coûte environ 0,50 $.
+- Les transcriptions, le rapport et les données de chaque tour (`partie_*.json`) sont publiés sur la branche `tests-ia`, dans un dossier par lancement. Claude les y récupère pour corriger le jeu. Ils sont aussi joints au lancement (section « Artifacts »).
