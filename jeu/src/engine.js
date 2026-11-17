@@ -1419,7 +1419,7 @@
         else if (S._choix && restants.length > 1) { direSuite(npc, st, 'table:' + tb.sujet + ':_choix', S._choix, p); tb.turn = s.turn; s.tick = scene.talkTick || 1; return true; }
         else return false;
       }
-      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null);
+      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null) || (lu.intent === 'refuser' ? (S._refus || e.prendre) : null);
       if (!rep) return false;
       direSuite(npc, st, 'table:' + tb.sujet + ':' + k + ':' + lu.intent, rep, p);
       if (lu.intent === 'prendre') tb.pris[k] = true;
