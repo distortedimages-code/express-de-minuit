@@ -33,6 +33,7 @@
     api.flag('connu:lorien', true);
     api.sys('Nouveau lieu : la maison du docteur Lorien, route de Saint-Germain. Écrivez « aller chez le docteur » ou touchez « Où aller ? ».');
   }
+  P._apprendreLorien = apprendreLorien; // pour les suites des répliques
   function aPoissy(api) { return /^po_/.test(api.s.loc); }
   function surLaPropriete(api) { return /^po_(jardin|caves|salle)$/.test(api.s.loc); }
   function destPo(api) {
@@ -1088,3 +1089,162 @@
   );
   P.nomsCommuns = Object.assign(P.nomsCommuns || {}, { Saint: 1, Louis: 1, Germain: 1, Lyon: 1 });
 })(typeof window !== 'undefined' ? window : globalThis);
+
+// =============================================================================
+// Les suites des répliques de Paris, de Poissy et du Simplon-Orient : ce que chaque réplique met sur la table
+// (voir « ce qui est sur la table » dans le moteur). Chaque suite a ses mots et ses réponses : prendre, demander, refuser.
+// =============================================================================
+(function (G) {
+  'use strict';
+  var P = G.CHAPTERS && G.CHAPTERS.paris; if (!P) return;
+  function suites(npc, id, x) {
+    var t = ((P.npcs[npc] || {}).topics || []).filter(function (y) { return y.id === id; })[0];
+    if (t) t.suites = x; else if (G.console) G.console.warn('suites sans sujet', npc, id);
+  }
+  function sujet(id) { return { sujet: id }; }
+
+  // ---------------------------------------------------------------- Paris : l'hôtel, la Nationale, l'Arsenal
+  suites('gerant', 'bn', [{
+    carte: { chip: 'Comment avoir la carte ?', mots: 'carte, une carte, la carte, secretariat, comment', demander: ['« Le secrétariat, au premier, à gauche du grand escalier. Une lettre de recommandation fait des miracles, docteur. Un titre aussi. À défaut, beaucoup de patience. »'] }
+  }, null]);
+  suites('gerant', 'smith', {
+    douze: { mots: 'la 12, la douze, sur la cour, sa chambre', demander: ['« Elle donne sur la cour, au calme. Il disait qu’on y entendait l’horloge du Palais-Royal compter ses nuits blanches. »'] },
+    incendie: { mots: 'incendie, l incendie, quelle pitie, on vous a dit', demander: ['« Les journaux anglais, docteur, que lisent nos clients. Une maison brûlée, un domestique en fuite. Monsieur Smith méritait mieux. »'] }
+  });
+  suites('gerant', 'charenton', [{
+    sade: { mots: 'sade, le marquis, marquis de sade', demander: ['« Le marquis y montait des pièces de théâtre avec les fous, docteur. Le Tout-Paris venait applaudir. Drôle d’époque. Drôle de maison. »'] },
+    bout: { mots: 'au bout de la ligne, bercy, comment y aller', demander: ['« Le métro jusqu’à Charenton-Écoles, puis dix minutes à pied, le long de la Marne. Ou un taxi, si vous aimez les chauffeurs qui se taisent. »'] }
+  }, {
+    accident: { chip: 'Quel accident ?', mots: 'accident, quel accident, lequel, le directeur, mauvais signe', demander: ['« On a écrit “un tragique accident”, docteur, et rien d’autre. Quand on ne dit pas lequel, c’est qu’on a honte. Ou qu’on a peur. »'] }
+  }]);
+  suites('gerant', 'fenalik', {
+    soeur: { mots: 'belle soeur, votre belle soeur, mercerie', demander: ['« Elle vend du fil et des boutons, et elle sait tout ce qui se dit à Poissy. Malheureusement, elle le répète aussi. »'] },
+    tranquille: { mots: 'tranquille, il ne s y passe rien, jamais rien', demander: ['« Une sous-préfecture, docteur. Le marché, l’église, la Seine. On y va pour s’ennuyer, et l’on n’est jamais déçu. »'] }
+  });
+  suites('gaudry', 'carte', {
+    consul: { mots: 'consul, une lettre, mon consul, le consulat', demander: ['« Comptez une semaine. Deux, avec les fêtes. Les consulats ne se pressent pas pour la science, docteur. »'] },
+    titres: { chip: 'Quels titres ?', mots: 'titres, des titres, mes titres, quels titres', demander: ['« Docteur, professeur, membre d’une société savante. Les titres ouvrent les portes, ici. C’est une maison républicaine, mais elle a ses habitudes. »'] }
+  });
+  suites('gaudry', 'aide', {
+    rouquin: { chip: 'Le rouquin ?', mots: 'rouquin, lui, l etudiant, un etudiant, qui est ce', demander: ['« Il s’appelle Rémi. Il traduit l’anglais, l’allemand et le latin, et il a un avis sur tout. Le prix est à débattre. Avec lui, tout est à débattre. »'] }
+  });
+  suites('remi', 'travail', {
+    cinquante: { offre: true, chip: 'Cinquante francs', mots: 'cinquante, cinquante francs, 50, les deux, chercher avec moi', prendre: sujet('engager') },
+    vingt: { offre: true, chip: 'Vingt francs', mots: 'vingt, vingt francs, 20, juste traduire', prendre: sujet('engager20') },
+    _choix: ['« Vingt ou cinquante ? Je n’ai pas toute la journée. Enfin, si : c’est bien le problème. »'],
+    _refus: ['« Comme vous voudrez. Je suis là tous les matins, près du vestiaire. Les fiches, elles, ne bougent pas. »']
+  });
+  suites('remi', 'lui', [{
+    these: { mots: 'these, votre these, pamphlets', demander: ['« Les libelles contre la reine, 1789. Des centaines. On y trouve des noms qu’on ne trouve nulle part ailleurs : ce qu’on n’osait pas écrire dans les journaux, on l’imprimait la nuit, à Londres. »'] },
+    humanite: { mots: 'l humanite, journal, un autre nom', demander: ['« Des chroniques sur les loyers, sous le nom de Jacques Bonhomme. Mon père croit que je prépare l’École des chartes. Ne le lui dites pas. »'] }
+  }, null]);
+  suites('remi', 'charenton', [{
+    registres: { chip: 'Les registres ?', mots: 'registres, les registres, la bas, consulter', demander: ['« Sous les combles, à ce qu’on dit. On ne les montre pas aux étudiants en histoire. Aux médecins, si. Vous êtes médecin, je crois ? »'] }
+  }, null]);
+  suites('brevin', 'lieu', {
+    boue: { mots: 'boue, la boue, fosses, les fosses, on en seche encore', demander: ['« Le 14 juillet, on a jeté les papiers de la Bastille par les fenêtres. Les fossés étaient pleins d’eau. On en a repêché pendant des semaines. Certains cartons sentent encore la vase, docteur. »'] }
+  });
+
+  // ---------------------------------------------------------------- Charenton
+  suites('rogniat', 'caisses', {
+    veuve: { mots: 'veuve, sa veuve, madame delplace, ce soir', demander: ['« Madame Delplace, à Vincennes. On les lui porte ce soir. Elle ne les ouvrira pas, je pense. Elle n’ouvrait déjà pas ses lettres. »'] }
+  });
+  suites('mandrin', 'guimart', [{
+    treize: { chip: 'Chambre 13 ?', mots: 'chambre 13, la 13, treize, pensionnaire', demander: ['« La 13, aile des agités. Il parle tout seul, la nuit, une langue que personne ici connaît. Le docteur Leroux appelle ça du délire. Moi, j’appelle ça une langue. »'] },
+    etau: { mots: 'etau, poignet, serre dans un etau, ses griffures, os', demander: ['« Des doigts, monsieur. Cinq marques, comme une main. Mais une main qui serre comme une presse à fourrage. Et longue. Bien trop longue. »'] }
+  }, null]);
+  suites('mandrin', 'patient', {
+    bouillon: { mots: 'bouillon, on le redescendait plein, plein, il ne mangeait pas', demander: ['« Jamais touché, monsieur. Trois semaines de bouillon, et jamais touché. Mais le patron, lui, maigrissait. Je dis ça, je dis rien. »'] }
+  });
+  suites('mandrin', 'lui', [{
+    neuilly: { mots: 'neuilly, une clinique, clinique', demander: ['« Une maison de santé pour dames qui ont des vapeurs. On sert le thé à quatre heures, et personne ne crie. J’ai écrit trois fois. On m’a pas répondu. »'] }
+  }, null]);
+
+  // ---------------------------------------------------------------- Poissy
+  suites('fauvel', 'lorien', function (api) { return api.flag('connu:lorien') ? null : {
+    lorien: { chip: 'Le docteur Lorien', mots: 'lorien, christian lorien, le docteur lorien, celui qui a une femme, celui de la route', prendre: function (api) { api.npc('fauvel', '« Lorien. Route de Saint-Germain, la dernière maison, après le calvaire. Vous ne pouvez pas la manquer : il y a les rosiers. » Il reprend sa plume.'); if (P._apprendreLorien) P._apprendreLorien(api); } },
+    autre: { mots: 'l autre, l autre medecin, n importe lequel, le plus proche', prendre: ['« Le docteur Morel ? Il a quatre-vingts ans et il soigne les chevaux depuis qu’il ne voit plus les hommes. Il vous faut l’autre, sans doute. Lorien. »'] }
+  }; });
+  suites('fauvel', 'poissy', {
+    cure: { chip: 'Le curé ?', mots: 'cure, le cure, l abbe, il aime raconter', demander: ['« L’abbé Thibierge. À l’église, presque toujours. Il parle aux fonts baptismaux quand il n’a personne d’autre. »'] }
+  });
+  suites('thibierge', 'fonts', [{
+    poussiere: { mots: 'poussiere, gratter, la pierre, contre la fievre, un verre d eau', demander: ['« Saint Louis guérit la fièvre, mon enfant, c’est connu. Sept siècles de fièvres. Regardez la pierre : elle est usée jusqu’au cœur. Et pourtant, la fièvre revient toujours. »'] }
+  }, null]);
+  suites('thibierge', 'comte', [{
+    rosiers: { chip: 'Les rosiers n’ont jamais gelé ?', mots: 'rosiers, les rosiers, jamais gele, 1879, geler', demander: ['« L’hiver 1879, la Seine a gelé jusqu’à Rouen. Les rosiers du clos ont fleuri en février. Ma grand-mère disait qu’ils buvaient autre chose que l’eau. » Il remet ses lunettes. « Ma grand-mère disait beaucoup de choses. »'] },
+    cris: { mots: 'cris, des cris, des rires, on prenait pour des rires', demander: ['« On les entendait jusqu’à la porte de Paris, les nuits de fête. Puis les soldats sont venus, et on n’a plus rien entendu. Les vieux disaient que le silence était pire. »'] }
+  }, null]);
+  suites('thibierge', 'lorien', {
+    cauchemars: { mots: 'cauchemars, la petite, des cauchemars, elle ne dort pas', demander: ['« Des cauchemars d’enfant, dit sa mère. Mais une enfant de trois ans qui ne veut plus regarder sa fenêtre, mon enfant, ce n’est pas un cauchemar d’enfant. »'] },
+    bras: { mots: 'bras, sa femme, son bras, depuis l automne', demander: ['« Le bras gauche. Les médecins de Paris n’y comprennent rien, et Christian non plus, qui est pourtant le meilleur d’entre eux. »'] }
+  });
+  suites('arnoult', 'chambre', {
+    prendre: { offre: true, chip: 'Je la prends', mots: 'la chambre, je la prends, le numero trois, ca me va', prendre: ['« Je vous la garde. Vous payerez en partant, comme tout le monde. Et la soupe est à sept heures, pas une minute de plus. »'] }
+  });
+  suites('arnoult', 'lorien', {
+    facteur: { mots: 'facteur, le facteur, jusqu a l os, sa main', demander: ['« Le père Dubreuil, qui fait la route de Saint-Germain. Il a voulu cueillir une rose pour sa femme. Douze points, et la main qui a gonflé comme un gant. Depuis, il jette le courrier par-dessus le mur. »'] },
+    nuit: { mots: 'crie la nuit, la petite crie, les voisins', demander: ['« Toutes les nuits vers deux heures. Les Chéron, d’à côté, ont mis du coton dans leurs oreilles. »'] }
+  });
+  suites('arnoult', 'comte', {
+    souterrains: { chip: 'Des souterrains ?', mots: 'souterrains, jusqu a la seine, la seine, tunnels', demander: ['« Jusqu’à la Seine, qu’elle disait, pour faire passer les gens qui ne devaient pas être vus. Mon arrière-grand-père a trouvé une voûte en creusant son puits, rue des Ursulines. Il l’a rebouchée le jour même. »'] },
+    musique: { mots: 'musique, la musique, brouillard, les soirs de brouillard', demander: ['« Un violon, qu’elle disait, très loin, sous la terre. Moi, je l’ai jamais entendu. » Elle essuie un verre. « Enfin, une fois. Mais j’avais bu. »'] }
+  });
+  suites('arnoult', 'outils', {
+    pruvost: { chip: 'Les frères Pruvost ?', mots: 'pruvost, les freres, les freres pruvost, ou sont ils, au comptoir', demander: ['« Au fond, à la table du poêle. L’aîné parle pour deux, le cadet boit pour deux. Ils creusent comme personne, et ils ont peur de rien. Enfin, de pas grand-chose. »'] }
+  });
+  suites('lorien', 'cicatrice', {
+    metier: { chip: 'Quel métier ?', mots: 'le metier, quel metier, comment, montrez, qu est ce qui vous est arrive', demander: ['« Une griffure, en taillant les rosiers, l’hiver dernier. Elle s’est infectée. Elle ne guérit pas. » Il rabaisse sa manche. « Un médecin qui ne guérit pas sa propre main. On en rirait. »'] }
+  });
+  suites('lorien', 'veronique', {
+    calmant: { mots: 'calmant, un calmant, quel calmant, elle descendra', demander: ['« Du véronal, une demi-dose. Elle dort mal, elle aussi. Toute la maison dort mal depuis l’automne. Sauf moi. Moi, je ne dors plus du tout. »'] }
+  });
+  suites('lorien', 'quitterie', {
+    cauchemars: { chip: 'Quels cauchemars ?', mots: 'cauchemars, des cauchemars, elle dort mal, l age', demander: ['« Elle dit qu’un monsieur la regarde, la nuit. » Il sourit sans joie. « Les enfants ont de l’imagination. Moi, j’ai mis un verrou à sa fenêtre. Le verrou ne sert à rien contre l’imagination, je sais. »'] }
+  });
+  suites('lorien', 'roses', {
+    printemps: { mots: 'printemps, mur de fleurs, saint germain, au printemps', demander: ['« Des roses grosses comme le poing, d’un rouge presque noir. Les gens de Saint-Germain viennent les voir le dimanche. Ils ne les sentent pas : elles n’ont pas d’odeur. Aucune. »'] },
+    payer: { mots: 'ils me le font payer, payer, les epines, vos mains', demander: ['« Les épines traversent les gants de cuir. Chaque hiver, je me blesse. Chaque hiver, ça guérit mal. » Il regarde sa main gauche et n’ajoute rien.'] }
+  });
+  suites('veronique', 'opera', {
+    cavollaro: { chip: 'La Cavollaro ?', mots: 'cavollaro, la cavollaro, elle chantait, la cantatrice', demander: ['« Une voix qui vous prend par la main, docteur. Elle chantait Tosca. Au troisième acte, Christian pleurait. Christian, qui ne pleure jamais. »'] },
+    milan: { mots: 'milan, la scala, aida', demander: ['« La création d’Aïda à la Scala, dans quelques jours. Toute l’Italie y sera. Si j’avais encore mes deux bras, je prendrais le train demain. »'] }
+  });
+  suites('veronique', 'bras', {
+    serre: { chip: 'Quelqu’un vous le tient ?', mots: 'quelqu un, qui, serre, la nuit, le tient', demander: ['« Une main, docteur. Froide, qui serre, et qui tire. Vers le bas. Vers le jardin. » Elle rit, un peu trop vite. « Voilà que je parle comme Quitterie. »'] }
+  });
+  suites('veronique', 'histoire', [{
+    sorbonne: { mots: 'sorbonne, l histoire, avant christian', demander: ['« L’histoire moderne, avec un vieux professeur qui croyait que tout était écrit quelque part, à condition de chercher. J’ai cherché. Puis j’ai eu Quitterie, et j’ai arrêté de chercher. »'] }
+  }, null]);
+  suites('quitterie', 'bras', {
+    poupee: { chip: 'Regarder sa poupée', mots: 'poupee, sa poupee, la poupee, comment elle s appelle', prendre: ['Elle vous la tend, très sérieuse. « Elle s’appelle Rose. Elle dort avec moi. Elle a peur du monsieur, elle aussi. » Puis elle la reprend, vite, et la serre contre elle.'], demander: ['« Rose. Elle s’appelle Rose. »'] }
+  });
+  suites('quitterie', 'jeu', {
+    encore: { offre: true, chip: 'Recommencer', mots: 'recommencer, encore, une autre fois, neuf fois', prendre: ['Vous recommencez. Neuf fois, comme promis, puis une dixième pour faire bonne mesure. À la fin, elle bâille, et pose sa tête contre votre bras, comme si vous étiez un meuble familier.'] }
+  });
+  suites('pruvost', 'travail', [{
+    dessous: { chip: 'Ce qu’il y a dessous ?', mots: 'dessous, ce qu il y a dessous, qu est ce qui vous inquiete, inquiete', demander: ['« Ma grand-mère disait : au clos du Diable, on plante pas, on creuse pas, on écoute pas. » L’aîné crache dans ses mains. « Elle disait pas qu’on refuse vingt-cinq francs. »'] }
+  }, null]);
+
+  // ---------------------------------------------------------------- le Simplon-Orient
+  suites('caterina', 'milan', {
+    chambres: { offre: true, chip: 'Accepter les chambres', mots: 'chambres, des chambres, la galleria, avec plaisir, volontiers, j accepte', prendre: function (api) { api.flag('chambresMilan', true); api.npc('caterina', '« Bene ! C’est entendu. Je télégraphie à l’hôtel depuis Lausanne. Vous serez mes invités, et vous viendrez à la première, et vous pleurerez. Tout le monde pleure. »'); } },
+    duomo: { mots: 'duomo, la cene, leonard, la galleria', demander: ['« Le Duomo, c’est une forêt de marbre où les saints vous regardent passer. Montez sur les toits au coucher du soleil, et vous me direz si Dieu n’est pas milanais. »'] }
+  });
+  suites('caterina', 'aida', {
+    voeu: { chip: 'Et votre vœu ?', mots: 'voeu, votre voeu, un voeu, s exauce', demander: ['« Mon vœu ? Si je vous le dis, il ne s’exauce pas. » Elle baisse la voix. « Mais je vais chanter avec toute la force du monde, ce soir-là. Vous verrez. »'] },
+    cheval: { mots: 'cheval, le cheval', demander: ['« Un cheval blanc, avec une selle rouge ! Il devait m’attendre devant la Scala. Il m’attend encore. Un jour, je l’achèterai moi-même, et la Scala avec. »'] }
+  });
+  suites('caterina', 'voyage', [{
+    objet: { offre: true, chip: 'Un objet perdu ?', mots: 'objet perdu, un objet, perdu, je cherche, vous avez raison', prendre: ['« Ah ! J’ai deviné. » Elle trinque contre votre verre. « Alors je vous souhaite de le trouver. Et de ne pas regretter de l’avoir trouvé : c’est le plus difficile. »'], demander: ['« Je le vois à vos yeux, docteur. Ceux qui cherchent regardent les gens comme des tiroirs. »'] }
+  }, null]);
+  suites('bertin', 'fourgon', [{
+    famille: { chip: 'Chez lui, où ?', mots: 'chez lui, la famille, ou, ou va t il, qui est ce', demander: ['« À l’Est, docteur, loin. La lettre de voiture est trempée, je n’ai pas pu lire le nom. Quatre hommes l’ont chargé. Ils n’ont pas pris de pourboire. C’est rare, des porteurs qui refusent un pourboire. »'] },
+    lettre: { mots: 'lettre de voiture, la lettre, papiers', demander: ['« Tout est en règle, docteur : cachets, signatures, taxes payées. Seul le nom est effacé. La pluie, sans doute. Il ne pleuvait pas, pourtant. »'] }
+  }, null]);
+  suites('bertin', 'horaire', [{
+    frapper: { offre: true, mots: 'frapper, une demi heure avant, reveillez moi, merci', prendre: ['« Six heures et quart, docteur. Deux coups légers, puis un troisième. Si vous ne répondez pas, j’entrerai avec le café. »'] },
+    refus: { mots: 'ne frappez pas, pas la peine, je me reveillerai seul', prendre: ['« Comme vous voudrez, docteur. Mais à Lausanne, le train ne s’arrête que quatre minutes. »'] }
+  }, null]);
+})(typeof window !== 'undefined' ? window : globalThis);
+

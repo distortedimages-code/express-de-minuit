@@ -1126,11 +1126,11 @@
     { id: 'manger', keys: ['MANGER'], run: L('serveur', ['« Le service est terminé, monsieur. Il reste de la terrine et une tarte aux pommes qui a vu la frontière plusieurs fois. »', 'Il vous apporte une part de tarte. Elle a un vague goût de vase. Tout a un vague goût de vase, ce soir.', '« Il n’y a plus rien, monsieur. Même la terrine est partie se coucher. »']),
       // ce qu'il reste en cuisine : « je prends », « la tarte », « et la terrine ? », « non merci »
       suites: [{
-        tarte: { chip: 'la tarte aux pommes', mots: 'tarte, tarte aux pommes, une part, part de tarte, pommes, dessert, sucre, quelque chose de sucre',
+        tarte: { offre: true, chip: 'la tarte aux pommes', mots: 'tarte, tarte aux pommes, une part, part de tarte, pommes, dessert, sucre, quelque chose de sucre',
           prendre: function (api) { api.npcs('serveur').asked.manger = 2; api.time(10); api.npc('serveur', 'Il revient avec une part de tarte sur une assiette à liseré doré. Elle a un vague goût de vase. Tout a un vague goût de vase, ce soir. « Monsieur ne la finira pas. Personne ne la finit. »'); },
           demander: ['« Elle a été bonne, monsieur. Mardi. Depuis, elle voyage. »', '« Aux pommes de Normandie. Enfin, elle l’était à Paris. Depuis Dole, elle a pris le goût du wagon. »'],
           refuser: ['« Monsieur a du flair. »'] },
-        terrine: { chip: 'la terrine', mots: 'terrine, terrine de campagne, pate, pate de campagne, charcuterie, quelque chose de sale, viande',
+        terrine: { offre: true, chip: 'la terrine', mots: 'terrine, terrine de campagne, pate, pate de campagne, charcuterie, quelque chose de sale, viande',
           prendre: function (api) { api.npcs('serveur').asked.manger = 2; api.time(10); api.npc('serveur', 'Il pose devant vous une tranche de terrine de campagne, trois cornichons et un quignon de pain. La terrine est bonne. Vous vous en voulez un peu de la trouver bonne, cette nuit. « Le chef la fait lui-même. Elle tient le voyage mieux que nous. »'); },
           demander: ['« Terrine de campagne, monsieur. Le chef la fait lui-même, rue de Charonne. Elle tient le voyage mieux que nous. »', '« Du porc, du foie, un trait de cognac. Le cognac, c’est moi. »'],
           refuser: ['« Bien, monsieur. »'] },
@@ -1422,7 +1422,7 @@
 
   // ---------------------------------------------------------------- Bastien, le serveur
   suites('serveur', 'etat', function (api) { return api.sanState() >= 2 ? null : {
-    cognac: { chip: 'Un cognac, finalement', mots: 'cognac, un cognac, un verre, a boire, boire, quelque chose de fort', prendre: sujet('commande'),
+    cognac: { offre: true, chip: 'Un cognac, finalement', mots: 'cognac, un cognac, un verre, a boire, boire, quelque chose de fort', prendre: sujet('commande'),
       demander: ['« Du Martell, monsieur. Le seul qui ne prenne pas le goût du wagon. »'] },
     _refus: ['« Monsieur a raison. Il faut garder les idées claires, cette nuit. »'] }; });
   suites('serveur', 'passagers', {
@@ -1515,7 +1515,7 @@
     autre: { chip: 'Quel autre ?', mots: 'l autre, quel autre, qui est venu, qui ca, venu le chercher', demander: sujet('hommegris') }
   }, null]);
   suites('veuve', 'hommegris', [{
-    lune: { chip: 'La Lune ?', mots: 'la lune, lune, la carte, cette carte, carte mouillee',
+    lune: { offre: true, chip: 'La Lune ?', mots: 'la lune, lune, la carte, cette carte, carte mouillee',
       demander: ['« La Lune, jeune homme : ce qui remonte des eaux, les chiens qui hurlent, le chemin qui mène entre deux tours. Ce qui ment, aussi. Gardez-la. Moi, je n’en veux plus. »'],
       prendre: ['Vous prenez la carte. Elle est froide comme une pierre de rivière, et elle ne sèche pas dans votre poche. « Ne la perdez pas, dit-elle. Ou perdez-la très loin. »'] },
     etangs: { mots: 'etangs, le fond des etangs, l odeur, il sentait', demander: ['« La vase, jeune homme. Les feuilles pourries, les choses qui dorment au fond. Mon mari sentait ça, les dernières semaines. »'] }
@@ -1547,7 +1547,7 @@
     heritage: { mots: 'heritage, l heritage, votre mere, trente ans', demander: ['« Une maison à Ouchy et une cloche. Ma mère a légué la maison à Agathe et la cloche à moi. Personne ne sait où est la cloche. Moi, si. »'] }
   });
   suites('veuve', 'jouer', {
-    jouer: { chip: 'Jouer une partie', mots: 'jouer, une partie, une bataille, on joue, allons y, d accord',
+    jouer: { offre: true, chip: 'Jouer une partie', mots: 'jouer, une partie, une bataille, on joue, allons y, d accord',
       prendre: function (api) { api.time(10); api.npc('veuve', 'Vous jouez. Elle gagne toutes les batailles, sans regarder ses cartes. À la fin, elle ramasse le jeu. « Le Pendu était dans votre tas depuis le début, jeune homme. Vous ne l’avez jamais retourné. Réfléchissez à ça. »'); } },
     _refus: ['« Lâcheur. »']
   });
@@ -1555,13 +1555,13 @@
     pourquoi: { chip: 'Pourquoi ?', mots: 'pourquoi, demander, la refondre, refondre, elle sonnait', demander: sujet('cloche') }
   }, null]);
   suites('veuve', 'manger', {
-    terrine: { chip: 'La terrine, alors', mots: 'terrine, la terrine', prendre: ['« Bastien ! Une terrine pour le jeune homme. » Le serveur obéit sans un mot. La terrine est bonne. Elle avait raison.'] },
+    terrine: { offre: true, chip: 'La terrine, alors', mots: 'terrine, la terrine', prendre: ['« Bastien ! Une terrine pour le jeune homme. » Le serveur obéit sans un mot. La terrine est bonne. Elle avait raison.'] },
     tarte: { mots: 'tarte, la tarte', prendre: ['« Têtu. » Elle fait signe à Bastien. La tarte a un goût de vase. Elle ne dit rien, mais elle sourit.'] },
     rien: { mots: 'rien, ne rien prendre, je ne prends rien', prendre: ['« Sage. On a les idées plus claires le ventre vide. Les moines le savent, et les assassins. »'] },
     _refus: ['« Sage. On a les idées plus claires le ventre vide. Les moines le savent, et les assassins. »']
   });
   suites('veuve', 'etat', {
-    boire: { mots: 'boire, un verre, cognac, je bois, buvons', prendre: ['« Bastien ! Un cognac pour le jeune homme, sur ma note. » Il vous l’apporte sans un mot. Elle trinque avec sa tasse de thé froid.'] }
+    boire: { offre: true, mots: 'boire, un verre, cognac, je bois, buvons', prendre: ['« Bastien ! Un cognac pour le jeune homme, sur ma note. » Il vous l’apporte sans un mot. Elle trinque avec sa tasse de thé froid.'] }
   });
   suites('veuve', 'passagers', {
     eveque: { mots: 'eveque, l eveque', demander: ['« Il lit les psaumes à voix basse depuis Dole. Les psaumes de l’eau, ceux des profondeurs. Je l’entends à travers la cloison du 4. »'] },
@@ -1615,7 +1615,7 @@
     rapport: { mots: 'rapport, votre rapport, pas fait votre rapport, faites le', demander: ['« Je le ferai, signore. Après Vallorbe. Après la Suisse. Après le tunnel. Quand il fera jour, surtout. »'] }
   });
   suites('conducteur', 'manger', {
-    pain: { chip: 'Prendre le pain', mots: 'pain, le pain, merci, je prends, je le prends, la moitie', prendre: ['Vous mordez dans le pain. Il est sec, il sent la poche et le tabac. C’est la meilleure chose que vous ayez mangée de la nuit. « Ça éponge, signore. La peur, ça éponge pas, mais le reste oui. »'] },
+    pain: { offre: true, chip: 'Prendre le pain', mots: 'pain, le pain, merci, je prends, je le prends, la moitie', prendre: ['Vous mordez dans le pain. Il est sec, il sent la poche et le tabac. C’est la meilleure chose que vous ayez mangée de la nuit. « Ça éponge, signore. La peur, ça éponge pas, mais le reste oui. »'] },
     _refus: ['« Comme vous voulez. » Il le remet dans sa poche. « Je le garde pour le tunnel. »']
   });
   suites('conducteur', 'etat', {

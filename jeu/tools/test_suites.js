@@ -29,7 +29,7 @@ for (const [ch, sc] of Object.entries(CH)) {
           g.step(e.prendre ? mot : 'et ' + mot + ' ?', 'dire'); while (g.state.pending) g.roll(); n++;
           const pris = RPG_TABLE.some(x => x.k === k);
           if (!pris) { ko++; console.log('SUITE NON PRISE', ch, id, t.id + '#' + rep, k, '«', mot, '» →', g.state.log.slice(avant).filter(x => typeof x.x === 'string' && x.t !== 'player').map(x => x.x).join(' ').slice(0, 120)); }
-        } catch (err) { ko++; console.log('PLANTAGE', ch, id, t.id, k, err.message); }
+        } catch (err) { ko++; console.log('PLANTAGE', ch, id, t.id, k, err.message, (err.stack || '').split('\n').slice(1, 4).join(' | ')); }
       }
     }
   }

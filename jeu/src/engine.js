@@ -1345,7 +1345,7 @@
       // ses répliques sont toutes dites, mais il lui reste une suite (t.more) : on passe à la suite au lieu de répéter
       var total = t.lines ? t.lines.length : (t.run && t.run.nb > 0 ? t.run.nb : 0), suiteT = typeof t.more === 'function' ? t.more(api) : t.more;
       if (total && n >= total && suiteT && suiteT.length && ((st.moreVu && st.moreVu[topicId]) || 0) < suiteT.length && !t.noFollow) {
-        st.last = topicId; st.more = st.moreVu[topicId] || 0; st.dernierSujet = { id: topicId, turn: s.turn };
+        st.last = topicId; st.more = (st.moreVu && st.moreVu[topicId]) || 0; st.dernierSujet = { id: topicId, turn: s.turn };
         followUp(npc); return;
       }
       st.asked[topicId] = n + 1;
@@ -1365,7 +1365,8 @@
     // ----- ce qui est sur la table -----
     // Une réplique met des choses sur la table (« il reste de la terrine et une tarte aux pommes ») : le sujet écrit
     // porte alors ses suites (t.suites : un objet, un tableau indexé sur la réplique dite, ou une fonction (api, n)).
-    // Chaque suite a ses mots (« tarte, tarte aux pommes, une part ») et ses réponses selon ce que fait le joueur :
+    // Chaque suite a ses mots (« tarte, tarte aux pommes, une part ») et ses réponses selon ce que fait le joueur ;
+    // offre: true quand le personnage la propose (un simple « oui » ou « je prends » la choisit alors) :
     // prendre (« je prends », « volontiers », « va pour la tarte », « la tarte »), demander (« elle est bonne ? »,
     // « et la terrine ? »), refuser (« non merci »). _choix : la question quand le joueur ne dit pas laquelle ;
     // _refus : la réponse à « non merci » pour toute l'offre. Une suite peut porter ses propres suites (une table de plus).
@@ -1386,6 +1387,8 @@
       var q = /\?/.test(p.raw || ''), pr = TABLE_PRENDRE.test(t), dm = TABLE_DEMANDE.test(t);
       var intent = TABLE_REFUS.test(t.trim()) ? 'refuser' : (q || dm) && !(pr && !q) ? 'demander' : pr ? 'prendre' : nommes.length ? 'prendre' : null;
       if (!intent) return null;
+      // « oui », « je prends », « volontiers » sans rien nommer : seulement pour ce qui a été proposé (offre: true)
+      if (!nommes.length && intent === 'prendre' && !Object.keys(S).some(function (k) { return k.charAt(0) !== '_' && S[k].offre && !tb.pris[k]; })) return null;
       if (!nommes.length) {
         // une longue phrase, ou qui nomme autre chose (« oui, et Ravel ? ») : ce n'est pas pour la table
         if (nb > 8) return null;
@@ -1405,7 +1408,7 @@
     }
     function jouerTable(npc, st, lu, p) {
       var tb = st.table, S = tb.suites, k = lu.nommes[0];
-      var restants = Object.keys(S).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x]; });
+      var restants = Object.keys(S).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x] && (k || lu.intent !== 'prendre' || S[x].offre); });
       // « les deux », « un peu de tout » : _tout, s'il est écrit
       if (!k && lu.intent === 'prendre' && S._tout && /\b(les deux|les 2|tout|un peu de tout|de chaque|des deux)\b/.test(normalize(p.raw || ''))) {
         direSuite(npc, st, 'table:' + tb.sujet + ':_tout', S._tout, p); restants.forEach(function (x) { tb.pris[x] = true; }); tb.turn = s.turn; s.tick = scene.talkTick || 1; return true;
