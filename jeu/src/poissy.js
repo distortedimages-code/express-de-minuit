@@ -896,6 +896,27 @@
   P.memoire = ['fin', 'fugitif', 'arrestations', 'brasPris', 'corpsDeclares', 'lorienAmis', 'gueris', 'lettre', 'ariaEntendue', 'billetsScala', 'brume', 'fievre', 'cri'];
 
   // ================================================================ les notes, les rumeurs, l'humeur
+  // ---------------------------------------------------------------- Réfléchir (le jet d'Idée) : une piste concrète, selon où l'on en est
+  // Comme à Londres : le premier conseil dont la condition tient. Il dit où chercher et auprès de qui, sans rien dévoiler de ce qu'on y trouvera.
+  function sait(api, id) { return id === 'hotel' || id === 'bn' || !!api.flag('connu:' + id); }
+  var CONSEILS_P = [
+    { cond: function (api) { return !api.flag('carteBN'); }, x: 'À la Nationale, sans carte de lecteur, on ne vous apportera pas un seul volume. Le secrétariat, à l’entrée, la délivre : il faudra dire l’objet de vos recherches, et faire valoir vos titres.' },
+    { cond: function (api) { return !api.has('RIGAULT') && !api.flag('remiJour') && !api.npcs('remi').met; }, x: 'Les fichiers de la Nationale sont une forêt, et vous y tournez en rond. Au secrétariat, on vous a parlé d’un étudiant, un grand rouquin près du vestiaire, qui guide les lecteurs étrangers.' },
+    { cond: function (api) { return !api.has('RIGAULT') && !api.flag('remiJour'); }, x: 'Seul devant les fichiers, vous perdez vos journées. Rémi, le rouquin, vous a fait son prix : avec lui, les bibliothécaires parleraient, et les bons volumes viendraient plus vite.' },
+    { cond: function (api) { return sait(api, 'arsenal') && !api.has('MALON'); }, x: 'Une note de bibliothécaire vous renvoyait aux papiers du capitaine Malon, à l’Arsenal. Un officier qui a pris la maison du comte a forcément vu quelque chose.' },
+    { cond: function (api) { return !api.has('RIGAULT'); }, x: 'Les histoires de la cour ont effacé le comte. Ceux qui l’ont approché ont pu écrire, eux : une dame de la cour, un médecin de la reine. Leurs papiers dorment à la Nationale.' },
+    { cond: function (api) { return api.has('RIGAULT') && !api.has('DELPLACE'); }, x: 'Charenton, en 1789. Et Charenton aujourd’hui ? Les journaux récents, à la Nationale, diraient ce qui s’y passe.' },
+    { cond: function (api) { return sait(api, 'charenton') && !api.s.visited.charenton; }, x: 'La maison de santé de Charenton existe toujours. Si ses registres remontent à 1789, le comte y a laissé une trace.' },
+    { cond: function (api) { return api.s.visited.charenton && !api.has('REGISTRE') && !api.flag('registresOuverts'); }, x: 'À Charenton, c’est la secrétaire du directeur qui garde les clés de tout. Les registres de 1789, il faudra les lui demander, poliment, ou passer par le directeur.' },
+    { cond: function (api) { return api.has('DELPLACE') && !api.has('CAHIER') && !api.has('MANDRIN'); }, x: 'La mort du docteur Delplace sent le mensonge, et le personnel a ordre de se taire. Un infirmier, à la sortie du service, loin du bureau, parlerait peut-être.' },
+    { cond: function (api) { return sait(api, 'poissy') && !api.flag('connu:lorien'); }, x: 'À Poissy, la mairie a les actes de 1789, et le curé connaît les vieilles histoires : l’un ou l’autre saura où se tenait la maison du comte.' },
+    { cond: function (api) { return api.flag('connu:lorien') && !api.flag('lorienVu'); }, x: 'Le docteur Lorien vit sur les ruines de la maison du comte. C’est chez lui qu’il faut aller, et lui qu’il faut convaincre.' },
+    { cond: function (api) { return api.flag('lorienVu') && !api.flag('fouilleOK'); }, x: 'Les Lorien ne vous laisseront pas fouiller leur jardin sans une bonne raison. Des plans de l’ancienne maison, ou la confiance du docteur, après une soirée chez lui, les décideraient.' },
+    { cond: function (api) { return api.flag('fouilleOK') && !api.item(BRAS); }, x: 'Sous les rosiers du jardin, l’ancienne maison a laissé ses caves. Un escalier, une porte : de jour, avec des outils, et sans traîner.' },
+    { cond: function (api) { return api.item(BRAS); }, x: 'Ce que vous portez ne doit pas rester en France. Le Simplon-Orient-Express part chaque soir de la gare de Lyon.' }
+  ];
+  if (P.jets) P.jets.idee = function (api) { var c = CONSEILS_P.filter(function (k) { try { return k.cond(api); } catch (e) { return false; } })[0]; return c ? { x: c.x } : null; };
+  P._conseils = CONSEILS_P;
   P.notesPoissy = function (api) {
     var s = [];
     if (!api.flag('connu:poissy')) { if (api.has('MALON')) s.push('Poissy : la maison du comte, et ce qu’il y a dessous.'); return s; }

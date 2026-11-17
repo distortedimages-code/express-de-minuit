@@ -2,7 +2,7 @@
 // Règle de travail : chaque incompréhension corrigée devient (1) une règle générale du moteur, (2) un cas du CORPUS
 // ci-dessous, joué tel quel et sous plusieurs variantes, et (3) si possible une SONDE qui cherche la même famille de
 // problèmes dans tous les lieux de tous les chapitres, y compris ceux qui seront écrits plus tard.
-// Usage : node jeu/tools/test_incomprehensions.js          (tout)    ·    … corpus | sondes | libelles
+// Usage : node jeu/tools/test_incomprehensions.js          (tout)    ·    … corpus | sondes | libelles | boutons
 global.window = global; global.RPG_ABSENTS = [];
 for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
 const QUOI = process.argv[2] || 'tout';
@@ -10,7 +10,7 @@ const CHAPITRES = Object.assign({ prologue: window.SCENE }, window.CHAPTERS);
 const RECIT = /Ce qui est fait est fait|Vous y repensez un instant|Le passé ne se rejoue pas/;
 let ko = 0; const rapport = [];
 function texte(g, n) { return g.state.log.slice(n).filter(e => typeof e.x === 'string' && e.t !== 'player').map(e => e.x).join(' '); }
-function jouer(g, cmd) { const n = g.state.log.length; g.step(cmd, g.state.talk ? 'dire' : undefined); let k = 0; while (g.state.pending && k++ < 5) g.roll(); return texte(g, n); }
+function jouer(g, cmd, mode) { const n = g.state.log.length; g.step(cmd, mode || (g.state.talk ? 'dire' : undefined)); let k = 0; while (g.state.pending && k++ < 5) g.roll(); return texte(g, n); }
 function partie(ch, prep) {
   const sc = CHAPITRES[ch];
   const g = RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.1, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.1 });
@@ -32,6 +32,7 @@ const banquet = g => { g.choose({ label: 'Écouter la conférence', action: 'i_c
 const hotelLondres = g => { banquet(g); jouer(g, 'Rentrer à l’hôtel'); };
 const poissy = loc => g => { g.api.flag('poissy', true); g.api.go(loc); };
 const tarte = g => { jouer(g, 'je parle au serveur'); g.step('J’ai faim', 'dire'); let k = 0; while (g.state.pending && k++ < 5) g.roll(); };
+const gerantSoir = g => { g.choose({ label: 'taxi', action: 'ga_taxi' }); g.choose({ label: 'gérant', action: 'ph_gerant' }); };
 const CORPUS = [
   { date: '2026-11-16', ch: 'londres', prep: banquet, ph: 'Demander à l’accueil si ils ont vu l’homme à la moustache',
     ok: (g, t) => g.state.flags.moustachuSuivi && g.state.loc === 'institut', regle: 'une question indirecte n’est pas un récit du passé' },
@@ -58,11 +59,36 @@ const CORPUS = [
   { date: '2026-11-17', ch: 'prologue', prep: tarte, ph: 'non merci', ok: (g, t) => /Comme monsieur voudra|Bien, monsieur/.test(t), regle: '« non merci » refuse l’offre, ce n’est pas un compliment' },
   { date: '2026-11-17', ch: 'prologue', prep: tarte, ph: 'les deux', ok: (g, t) => /les deux/.test(t), regle: '« les deux » prend tout' },
   { date: '2026-11-17', ch: 'prologue', prep: g => { tarte(g); jouer(g, 'je prends'); }, ph: 'la terrine', ok: (g, t) => /terrine de campagne/.test(t), regle: 'la réponse à « laquelle ? »' },
+  // testeur IA, 17 novembre : un geste du monde tapé avec « Agir » pendant une conversation, et l'annonce dite en partant
+  ...['je dors', 'dormir', 'je me couche', 'je vais dormir'].map(ph => ({ date: '2026-11-17', ch: 'paris', prep: gerantSoir, ph, mode: 'agir',
+    ok: (g, t) => !g.state.talk && /dormez|sommeil/.test(t), regle: 'avec « Agir », une action forte du lieu quitte la conversation' })),
+  ...['je lis le journal', 'lire les journaux'].map(ph => ({ date: '2026-11-17', ch: 'paris', prep: gerantSoir, ph, mode: 'agir',
+    ok: (g, t) => !g.state.talk && /Petit Parisien|journaux/.test(t), regle: 'avec « Agir », une action forte du lieu quitte la conversation' })),
+  ...['je vais me coucher', 'Bon, je monte me coucher', 'je vais dormir'].map(ph => ({ date: '2026-11-17', ch: 'paris', prep: gerantSoir, ph, mode: 'dire',
+    ok: (g, t) => !g.state.talk && /dormez|sommeil/.test(t), regle: 'dit à quelqu’un, « je vais me coucher » prend congé, puis on le fait' })),
+  { date: '2026-11-17', ch: 'paris', prep: gerantSoir, ph: 'je dors mal dans votre hôtel', mode: 'dire', ok: (g, t) => g.state.talk === 'gerant', regle: 'en « Dire », une plainte reste une parole' },
+  // testeur IA, 17 novembre, deuxième lot : les déplacements, les attentes, les adresses
+  { date: '2026-11-17', ch: 'londres', prep: g => { banquet(g); jouer(g, 'je cherche l’homme brun à la moustache dans la foule'); }, ph: 'je me rends au Chelsea Arms, à la chambre 14',
+    ok: (g, t) => g.state.loc === 'institut' && /Pas d’ici|Pas tout de suite/.test(t) && /rentrer à l’hôtel/.test(t), regle: 'un lieu connu mais inaccessible d’ici : on le dit, avec la sortie' },
+  ...['je vais au Chelsea Arms et je demande la chambre 14 à la réception en présentant la plaque de clé', 'je me rends au Chelsea Arms, décidé à découvrir qui occupe la chambre 14 et pourquoi'].map(ph => ({ date: '2026-11-17', ch: 'londres', prep: g => { banquet(g); jouer(g, 'je cherche l’homme brun à la moustache dans la foule'); jouer(g, 'je rentre à l’hôtel'); }, ph,
+    ok: (g, t) => g.state.loc === 'chelsea', regle: 'un lieu nommé avec un verbe de mouvement : on y va, le reste dit pourquoi' })),
+  { date: '2026-11-17', ch: 'londres', prep: g => { banquet(g); jouer(g, 'je cherche l’homme brun à la moustache dans la foule'); jouer(g, 'je rentre à l’hôtel'); }, ph: 'je vais au Chelsea Arms et je demande la chambre 14 à la réception',
+    ok: (g, t) => g.state.loc === 'chelsea' && g.state.talk === 'chelseaclerk', regle: 'aller quelque part et y faire quelque chose : deux gestes ; « demander X à la réception » s’adresse à la réception' },
+  ...['je dors jusqu’à huit heures', 'j’attends le matin', 'Je m’allonge sur le lit et dors jusqu’à huit heures', 'je dors jusqu’à l’ouverture des archives du Daily Courier à huit heures'].map(ph => ({ date: '2026-11-17', ch: 'londres', prep: hotelLondres, ph,
+    ok: (g, t) => /dormez/.test(t) && Math.floor((g.state.min % 1440) / 60) === 8 && !/homme sur le lit|plusieurs choses/.test(t), regle: '« jusqu’à huit heures » est un moment : on dort jusqu’au matin' })),
+  { date: '2026-11-17', ch: 'londres', prep: g => { hotelLondres(g); g.state.min = 1440 + 600; jouer(g, 'Descendre parler au concierge'); }, ph: 'Je prends congé du concierge et me rends au British Museum', mode: 'dire',
+    ok: (g, t) => g.state.loc === 'musee', regle: 'prendre congé en annonçant où l’on va : on y va' },
+  { date: '2026-11-17', ch: 'londres', prep: g => { g.api.go('islington'); g.state.min = 4 * 1440 + 21 * 60 + 41; }, ph: 'Que pouvez-vous me dire sur Brophy Lane ?', mode: 'dire',
+    ok: (g, t) => !/dans le vide/.test(t) && /rideau/.test(t), regle: 'quelqu’un d’ici qu’on ne peut pas aborder maintenant : on dit pourquoi' },
+  { date: '2026-11-17', ch: 'paris', prep: g => { g.choose({ label: 't', action: 'ga_taxi' }); g.api.go('charenton'); g.state.min = 5 * 1440 + 600; g.choose({ label: 'r', action: 'ch_rogniat' }); g.choose({ label: 'l', topic: 'leroux' }); },
+    ph: 'Docteur Leroux, connaissiez-vous les recherches du docteur Delplace ?', mode: 'dire', ok: (g, t) => g.state.talk === 'leroux', regle: 'un titre suivi d’un nom : c’est le nom qui désigne (et le personnage même, avant ceux qui le citent)' },
+  { date: '2026-11-17', ch: 'paris', prep: g => { g.choose({ label: 't', action: 'ga_taxi' }); g.api.go('bn'); g.state.min = 5 * 1440 + 600; }, ph: '1. Aller : votre hôtel, rue de Richelieu',
+    ok: (g, t) => g.state.loc === 'hotel', regle: 'le libellé d’un bouton recopié avec son numéro' },
 ];
 if (QUOI === 'tout' || QUOI === 'corpus') {
   let n = 0;
   for (const c of CORPUS) for (const ph of variantes(c.ph)) {
-    const g = partie(c.ch, c.prep); let t; try { t = jouer(g, ph); } catch (e) { t = 'PLANTAGE ' + e.message; }
+    const g = partie(c.ch, c.prep); let t; try { t = jouer(g, ph, c.mode); } catch (e) { t = 'PLANTAGE ' + e.message; }
     n++; if (!c.ok(g, t)) { ko++; rapport.push('CORPUS ' + c.date + ' « ' + ph + ' » — règle : ' + c.regle + '\n     → ' + t.slice(0, 160)); }
   }
   console.log('corpus : ' + CORPUS.length + ' cas, ' + n + ' phrases avec leurs variantes');
@@ -93,6 +119,22 @@ if (QUOI === 'tout' || QUOI === 'sondes') {
     }
   }
   console.log('sondes : ' + n + ' phrases | récit à tort ' + pb.recit + ' | dehors pris pour la fenêtre ' + pb.dehors + ' | but perdu ' + pb.but);
+  // pendant une conversation, l'action d'un bouton du lieu, tapée à l'infinitif (avec « Agir » ou avec Entrée, donc « Dire ») :
+  // on quitte la conversation pour la faire, l'interlocuteur ne s'en offusque pas
+  let m = 0, geste = 0; global.RPG_REPLIS = [];
+  for (const [ch, sc] of Object.entries(CHAPITRES)) for (const loc of Object.keys(sc.locations)) {
+    const neuf = () => partie(ch, g => { g.state.min = Math.floor(g.state.min / 1440) * 1440 + 18 * 60; try { if (g.state.loc !== loc) g.api.go(loc); } catch (e) {} });
+    const g0 = neuf(); if (g0.state.loc !== loc) continue;
+    const parler = g0.ideas(12, 'normal').filter(i => i.action && (g0.actionsIci().find(a => a.id === i.action) || {}).talkTo);
+    const gestes = g0.ideas(12, 'normal').filter(i => i.action && !(g0.actionsIci().find(a => a.id === i.action) || {}).talkTo && /^[A-ZÉ][a-zéèêàâîôûç]+(er|ir|re)\b/.test(i.label));
+    for (const p of parler.slice(0, 2)) for (const a of gestes.slice(0, 4)) for (const mode of ['agir', 'dire']) {
+      const g = neuf(); g.choose(p); let k = 0; while (g.state.pending && k++ < 5) g.roll(); const qui = g.state.talk; if (!qui || !g.actionsIci().some(x => x.id === a.action)) continue;
+      const r0 = RPG_REPLIS.length, d0 = g.state.done[a.action] || 0; let t; try { t = jouer(g, a.label, mode); } catch (e) { t = 'PLANTAGE'; } m++;
+      const vexe = RPG_REPLIS.slice(r0).some(r => /^pnj/.test(r.k)), fait = (g.state.done[a.action] || 0) > d0;
+      if (t === 'PLANTAGE' || vexe || !fait) { geste++; ko++; rapport.push('SONDE geste ' + ch + '/' + loc + ' avec ' + qui + ' (' + mode + ') : « ' + a.label + ' » → ' + t.slice(0, 120)); }
+    }
+  }
+  console.log('sondes : ' + m + ' gestes tapés en conversation | restés dans la conversation ' + geste);
 }
 
 // ---------------------------------------------------------------- C. le lexique : chaque nom se relit, aucun mot volé sans le savoir
@@ -112,6 +154,19 @@ if (QUOI === 'tout' || QUOI === 'libelles') {
     }
   }
   console.log('libellés : ' + n + ' noms relus | mots disputés entre concepts : ' + conflits + ' (voir LEXICON_WARN)');
+}
+// ---------------------------------------------------------------- D. chaque bouton se tape : son libellé, tapé tel quel, désigne son action
+if (QUOI === 'tout' || QUOI === 'boutons') {
+  let n = 0, mal = 0;
+  for (const [ch, sc] of Object.entries(CHAPITRES)) for (const loc of Object.keys(sc.locations)) for (const h of [11, 18]) {
+    const g = partie(ch, g => { g.state.min = Math.floor(g.state.min / 1440) * 1440 + h * 60; try { if (g.state.loc !== loc) g.api.go(loc); } catch (e) {} });
+    if (g.state.loc !== loc) continue;
+    for (const i of g.ideas(20, 'normal')) {
+      if (!i.action) continue;
+      for (const ph of variantes(i.label)) { n++; const r = g.rank(ph); if (!r.length || r[0].a.id !== i.action) { mal++; ko++; rapport.push('BOUTON ' + ch + '/' + loc + ' « ' + ph + ' » (' + i.action + ') → ' + (r[0] ? r[0].a.id : 'rien')); } }
+    }
+  }
+  console.log('boutons : ' + n + ' libellés tapés, avec leurs variantes | mal relus ' + mal);
 }
 rapport.slice(0, 30).forEach(r => console.log(r));
 console.log('incompréhensions : problèmes ' + ko);

@@ -80,7 +80,7 @@
       api.flag('stjohnVu', true);
       if (!brule(api)) {
         if (day(api.s.min) === 0) api.say('La villa de Smith, en brique sombre, au fond d’un jardin noyé de brouillard. Une seule fenêtre éclairée, au premier : le bureau. Derrière les rideaux, une ombre passe et repasse, sans fin.');
-        else if (hour(api.s.min) < 17) api.say('Des échafaudages contre la façade de la villa : des ouvriers repeignent les fenêtres, et le brouillard étouffe leurs coups de marteau. Les volets du bureau sont clos, en plein jour.');
+        else if (hour(api.s.min) >= 7 && hour(api.s.min) < 17) api.say('Des échafaudages contre la façade de la villa : des ouvriers repeignent les fenêtres, et le brouillard étouffe leurs coups de marteau. Les volets du bureau sont clos, en plein jour.');
         else api.say('La villa est noire. Les ouvriers sont partis. Une odeur flotte dans le jardin, que vous n’arrivez pas à nommer tout de suite : de l’essence, peut-être, ou de la térébenthine des peintres.');
         return;
       }

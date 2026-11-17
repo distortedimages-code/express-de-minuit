@@ -240,7 +240,7 @@
       // personnages
       Lx.add('SMITH', 'n', 'smith, julius, professeur, prof, conferencier, orateur', { label: 'le professeur Smith', npc: true });
       Lx.add('BEDDOWS', 'n', 'beddows, valet, majordome, domestique, james, serviteur', { label: 'Beddows', npc: true });
-      Lx.add('BRULE', 'n', 'brule, bandages, pansements, brulures, brulure, visage, lit, grabat, silhouette', { label: 'l’homme sur le lit', npc: true });
+      Lx.add('BRULE', 'n', 'brule, bandages, pansements, brulures, brulure, visage, grabat, silhouette, homme alite, alite', { label: 'l’homme sur le lit', npc: true });
       Lx.add('FLEMING', 'n', 'fleming', { label: 'l’inspecteur Fleming', npc: true });
       Lx.add('RIGBY', 'n', 'rigby, pompiers, rouquin', { label: 'le sergent Rigby', npc: true });
       Lx.add('SERGENT', 'n', 'sergent, brigadier, hobbs, planton', { label: 'le sergent', npc: true });
@@ -1145,7 +1145,7 @@
 
     islington: {
       name: 'Brophy Lane, Islington', art: 'rue',
-      enter: function (api, first) { if (first) api.say('Une ruelle pavée d’Islington, des boutiques aux vitrines embuées. Au numéro 3, une façade de brique à deux étages et un petit écriteau « Fermé » derrière la vitre. À côté, un bureau de tabac encore ouvert.'); else api.say('Brophy Lane, sa boutique fermée, son buraliste qui vous guette derrière ses bocaux.'); },
+      enter: function (api, first) { if (first) api.say('Une ruelle pavée d’Islington, des boutiques aux vitrines embuées. Au numéro 3, une façade de brique à deux étages et un petit écriteau « Fermé » derrière la vitre. À côté, un bureau de tabac encore ouvert.'); else api.say(L.disponible && L.disponible(api, 'voisin') ? 'Brophy Lane, sa boutique fermée, et le bureau de tabac, rideau baissé.' : 'Brophy Lane, sa boutique fermée, son buraliste qui vous guette derrière ses bocaux.'); },
       things: [{ label: 'la boutique fermée', ids: ['ISLINGTON', 'PORTE', 'FENETRE'] }, { label: 'le buraliste', ids: ['VOISIN'] }, { label: null, ids: ['SALLE', 'MAKRYAT'] }],
       actions: [
         { id: 'is_look', label: 'Examiner la vitrine', idea: true, verbs: ['EXAMINER'], nouns: ['ISLINGTON', 'FENETRE', 'SALLE'], bare: true,

@@ -624,6 +624,20 @@
   function saveMem(api, id, m) { api.flag('pm:' + id, m); }
   function val(api, v, k) { if (typeof v === 'function') v = v(api); if (Array.isArray(v)) return api.fresh(k, v); return v; }
   function voice(f) { var HU = G.RPG && G.RPG.Humeur; return V[f.reg] || V[HU && HU.REG[f.reg]] || V.populaire; }
+  // ce mot vient-il d'être dit, par ce personnage ou par le récit, dans les dernières répliques ?
+  function ditRecemment(api, id, nom) {
+    var mots = N(nom).split(' ').filter(function (w) { return w.length >= 5; }).map(function (w) { return w.replace(/(es|s|x)$/, ''); });
+    if (!mots.length) return false;
+    var log = (api.s && api.s.log) || [], vus = 0;
+    for (var i = log.length - 1; i >= 0 && vus < 14; i--) {
+      var e = log[i]; if (e.t === 'player' || e.t === 'ask' || e.t === 'chips' || typeof e.x !== 'string') continue; vus++;
+      if ((e.t === 'npc' && e.who === id) || e.t === 'narr' || e.t === 'event' || e.t === 'doc') {
+        var t = ' ' + N(e.x) + ' ';
+        if (mots.some(function (w) { return t.indexOf(' ' + w) >= 0; })) return true;
+      }
+    }
+    return false;
+  }
   function fill(s, a, X, W, Aw) {
     return String(s).replace(/\{X\}/g, cap(X || '')).replace(/\{x\}/g, X || '').replace(/\{de\}/g, de(X || '')).replace(/\{W\}/g, W || '').replace(/\{A\}/g, Aw || '');
   }
@@ -985,6 +999,9 @@
       // 7. un sujet nommé : ce qu'il en sait, ce qu'il en pense, sinon ce que tout le monde en dit
       var e = a.ents.filter(function (x) { return (f.sait && f.sait[x]) || (f.avis && f.avis[x]) || (scene.rumeurs && scene.rumeurs[x]); })[0] || a.ents[0];
       var cult = null; CULT.some(function (c) { if (c.re.test(a.t)) { cult = c; return true; } return false; });
+      // « Paierai ? Connais pas » : un nom commun dont il n'a rien à dire n'est pas un nom propre inconnu ; on passe la main
+      var sansRien = e && !(f.sait && f.sait[e]) && !(f.avis && f.avis[e]) && !(scene.rumeurs && scene.rumeurs[e]);
+      if (sansRien && /^(le|la|les|l’|l'|un|une|des|du|de l’|de la|de l')\s?/i.test(label(e)) && !/^[A-ZÀ-Ý]/.test(nomDit(e))) e = null;
       if (e && !(cult && !(f.sait && f.sait[e]) && !(f.avis && f.avis[e]))) {
         m.last = e;
         var k = 'ent:' + e, nn = count(k), src = (a.type === 'avis' && f.avis && f.avis[e]) || (f.sait && f.sait[e]) || (f.avis && f.avis[e]);
@@ -1001,6 +1018,9 @@
             var l2 = val(api, (f.sait && f.sait[e2]) || f.avis[e2], 'sait:' + id + ':' + e2);
             if (l2 && /^« /.test(l2)) { count('ent:' + e2); say('« ' + quantA(label(e2)) + ' : ' + lowFirst(stripName(l2.replace(/^« /, ''))), false); }
           }
+        } else if (ditRecemment(api, id, nomDit(e))) {
+          // on ne nie pas connaître ce qu'on vient soi-même de nommer (« les meurtres du Chelsea Arms ? connais pas »)
+          say(fill(val(api, f.ignoreDit || ['« Je vous en ai dit ce que je sais, {m}. Pas davantage. »', '« Pour {x}, je n’en sais pas plus que ce que je viens de vous dire. »', '« {X}… Je vous l’ai dit : c’est tout ce que j’en sais. »'], 'ignDit:' + id), a, nomDit(e)), true);
         } else say(fill(val(api, f.ignore || Vx.ignore, 'ign:' + id), a, nomDit(e)), true);
         relance(api, f, id, m); saveMem(api, id, m); return true;
       }

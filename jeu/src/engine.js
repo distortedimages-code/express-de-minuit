@@ -36,6 +36,9 @@
     }],
     // « je vais dehors », « je sors à l'extérieur » : on sort (et pas la fenêtre)
     [/\b(vais|va|allons|aller|sors|sortir|sortons|ressors|passe|passer|file|filer)\s+(?:voir\s+)?(?:dehors|a l exterieur|au dehors)\b/g, ' sortir '],
+    // « je vais ailleurs », « allons autre part » : on change de lieu, sans dire lequel (et « ailleurs » n'est pas « l'allure »)
+    [/\b(vais|va|allons|allez|aller|vas|pars|partir|partons|file|filer|passe|passer)\s+(?:ailleurs|autre part|dans un autre endroit|vers un autre endroit)\b/g, ' aller destinations '],
+    [/\b(ailleurs|autre part)\b/g, ' destinations '],
     // « je m'approche d'elle » : on y va
     [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
     // « je vais le voir », « je vais la trouver » : on va lui parler
@@ -252,7 +255,7 @@
     L.add('UTILISER', 'v', 'utiliser, montrer, presenter, exhiber, brandir, agiter, sortir de ma poche');
     L.add('FUMER', 'v', 'fumer, allumer, cigarette, cigarettes, clope, pipe, cigare, briquet, allumette');
     L.add('CRIER', 'v', 'crier, hurler, gueuler, siffler, applaudir, pleurer, rire, jurer, sangloter, gemir');
-    L.add('DORMIR', 'v', 'dormir, coucher, sieste, somnoler, roupiller, reposer');
+    L.add('DORMIR', 'v', 'dormir, coucher, sieste, somnoler, roupiller, reposer, allonger, allonge, assoupir');
     L.add('REVEILLER', 'v', 'reveiller, secouer, bousculer, tirer du sommeil');
     L.add('LANCER', 'v', 'lancer, lance, jet, roll, rouler');
     // Gestes sociaux
@@ -264,7 +267,7 @@
     L.add('INSISTER', 's', 'insister, presser, cuisiner, reessayer, recommencer, encore une fois, verite, avouer, avouez, dites, cacher, cachez, cache, sais, savez, forcer le jet');
     L.add('AUREVOIR', 's', 'aurevoir, adieu, bye, ciao, salutations, laisser, laisse, congedier, fin de la conversation, terminer, arreter');
     L.add('POLI', 's', 'merci, pardon, desole, desolee, remercier, enchante, enchantee');
-    L.add('ARGENT', 'n', 'argent, pourboire, francs, franc, pieces, monnaie, fric, thune, liasse, pognon, rembourser, recompense, prix, potdevin', { label: 'de l’argent' });
+    L.add('ARGENT', 'n', 'argent, pourboire, francs, franc, pieces, monnaie, fric, thune, liasse, pognon, rembourser, recompense, prix, potdevin, payer, paye, paierai, paierais, remunerer, remunere, remuneration, salaire, tarif, gages, honoraires, embaucher', { label: 'de l’argent' });
     // Questions générales
     L.add('HEURE', 'x', 'heure, horaire, montre, pendule, horloge, temps, longtemps, depuis, moment, minuit, tard', { label: 'l’heure' });
     L.add('TOIMEME', 'x', 'toimeme, nom, prenom, metier, travail, carriere, famille, mari, vie privee, age, origine, presentez', { label: 'lui-même' });
@@ -421,6 +424,41 @@
     if (npcNoun && p.c.ALLER !== undefined && p.nouns.length === 1) { p.moved = p.c.ALLER; swap('ALLER', 'PARLER'); }
     // « voir le sergent Rigby » : on veut lui parler
     if (npcNoun && p.c.EXAMINER !== undefined && /^(?:(?:je|j)\s+)?(?:veux\s+|voudrais\s+|dois\s+|demande a\s+|demander a\s+|souhaite\s+|aimerais\s+)?voir\b/.test(p.text)) swap('EXAMINER', 'PARLER');
+    // « j'examine la valise sans l'ouvrir », « sans le réveiller » : le verbe nié n'est pas un geste demandé
+    var toksN = p.text.split(' ');
+    toksN.forEach(function (w, i) {
+      if (w !== 'sans') return;
+      var nie = p.verbs.filter(function (v) { return v.pos > i && v.pos <= i + 3; });
+      nie.forEach(function (v) { p.verbs.splice(p.verbs.indexOf(v), 1); if (!p.verbs.some(function (x) { return x.id === v.id; })) delete p.c[v.id]; });
+      if (nie.length) p.all = (p.all || []).filter(function (x) { return nie.indexOf(x) < 0; });
+    });
+    // « dormir jusqu'à huit heures », « attendre le soir devant le salon de Mrs Vane », « rester là jusqu'à lundi » :
+    // ce qui suit « jusqu'à » est un moment, pas une chose à viser ; « devant X » dit où l'on attend (on s'y rend)
+    var T0 = ' ' + p.text + ' ';
+    if (p.c.DORMIR !== undefined || p.c.ATTENDRE !== undefined || /\b(reste|rester|restons|patiente|patienter)\b/.test(T0)) {
+      var mj = T0.match(/\bjusqu (?:a|au|aux|a l) (.*)$/) || T0.match(/\b(?:attend\w*|guett\w*|patient\w*) (?:le |l |la |les |au |a l )?((?:matin|aube|soir|soiree|nuit|demain|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|ouverture|lever du jour)\b.*)$/);
+      if (mj) {
+        var cl = mj[1], lieuApres = cl.match(/\b(devant|chez|pres d\w*|en face d\w*|a la porte d\w*|sous les fenetres d\w*)\b/);
+        var moment = lieuApres ? cl.slice(0, lieuApres.index) : cl;
+        p.jusqua = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|semaine|week end)\b/.test(moment) ? 'jours'
+          : /\b(soir|soiree|diner|crepuscule|(1[7-9]|2[0-3]) ?h|(dix sept|dix huit|dix neuf|vingt|vingt et une|vingt deux) heures)\b/.test(moment) ? 'soir'
+          : /\b(matin|aube|demain|lever du jour|jour|petit dejeuner|([5-9]|1[01]) ?h|(cinq|six|sept|huit|neuf|dix|onze) heures)\b/.test(moment) ? 'matin'
+          : /\bouverture\b/.test(moment) ? 'ouverture' : 'plus tard';
+        var i0 = T0.slice(0, T0.indexOf(mj[0]) + mj[0].indexOf(cl)).trim().split(/\s+/).length, i1 = i0 + moment.trim().split(/\s+/).filter(Boolean).length;
+        var gardes = p.nouns.filter(function (n) { return n.pos === undefined || n.pos < i0 || n.pos >= i1; });
+        p.nouns.filter(function (n) { return gardes.indexOf(n) < 0; }).forEach(function (n) { if (!gardes.some(function (g) { return g.id === n.id; })) delete p.c[n.id]; });
+        p.all = (p.all || []).filter(function (x) { return x.type !== 'n' && x.type !== 'x' || gardes.indexOf(x) >= 0 || p.c[x.id] !== undefined; });
+        p.nouns = gardes;
+        // attendre devant un lieu : on s'y rend (le déplacement dira s'il faut patienter jusqu'au soir)
+        if (lieuApres && p.c.ALLER === undefined && gardes.some(function (n) { return n.pos >= i1; })) p.c.ALLER = 0.9, p.verbs.push({ id: 'ALLER', score: 0.9, pos: 0, type: 'v' });
+        // attendre le matin, c'est laisser passer la nuit
+        if (p.jusqua === 'matin' && p.c.DORMIR === undefined && p.c.ATTENDRE !== undefined) p.c.DORMIR = p.c.ATTENDRE, p.verbs.push({ id: 'DORMIR', score: p.c.ATTENDRE, pos: 0, type: 'v' });
+      }
+    }
+    // « aller dormir », « aller me coucher », « aller chercher un médecin » : aller + verbe, sans lieu, c'est ce verbe
+    var vAller = p.verbs.find(function (x) { return x.id === 'ALLER'; });
+    var vSuite = vAller && p.verbs.find(function (x) { return x.id !== 'ALLER' && x.pos > vAller.pos && x.pos <= vAller.pos + 2; });
+    if (vSuite && !npcNoun && !p.nouns.some(function (n) { return lex.concepts[n.id].lieu; })) { delete p.c.ALLER; p.verbs.splice(p.verbs.indexOf(vAller), 1); }
     if (npcNoun && p.c.FRAPPER !== undefined) swap('FRAPPER', 'MENACER');
     if (npcNoun && p.c.REVEILLER !== undefined && !lex.concepts[firstNoun.id].sleeper) swap('REVEILLER', 'MENACER');
     if (p.c.BOISSON !== undefined && (p.c.PRENDRE !== undefined || p.c.BOIRE !== undefined)) { swap('PRENDRE', 'COMMANDER'); swap('BOIRE', 'COMMANDER'); }
@@ -565,6 +603,13 @@
       if (st.patience <= 0) { talkMode = 'raw'; logNpc(npc.id, line); talkMode = null; closeTalk(npc); return null; }
       return line;
     }
+    // « Bonne journée » à six heures du soir, « Bonjour » en pleine nuit : les formules de politesse suivent l'heure
+    function selonHeure(x) {
+      if (typeof x !== 'string' || s.min === undefined) return x;
+      var h = Math.floor(((s.min % 1440) + 1440) % 1440 / 60), soir = h >= 18 || h < 5, nuit = h >= 22 || h < 5;
+      if (soir) return x.replace(/([Bb])onne journée/g, nuit ? '$1onne nuit' : '$1onne soirée').replace(/(^|« |\. )Bonjour\b/g, '$1Bonsoir');
+      return x.replace(/([Bb])onne soirée/g, '$1onne journée').replace(/(^|« |\. )Bonsoir\b/g, '$1Bonjour');
+    }
     function logNpc(who, x) {
       // une humeur à faire entendre avant la réponse (« Bon. Je vous réponds, mais changez de ton. »)
       if (s.prefix && s.prefix.who === who && typeof x === 'string') {
@@ -574,6 +619,7 @@
         x = /^« /.test(x) ? '« ' + pre + ' ' + suite : '« ' + pre + ' » ' + x;
       }
       x = echoJuste(who, x);
+      x = selonHeure(x);
       var npc = scene.npcs[who];
       var name = npc ? npc.name : who;
       // verrou des faits : personne ne parle d'un événement qui n'a pas encore eu lieu (scene.faits)
@@ -798,9 +844,51 @@
     }
     function defaultVerb(nounId) { var c = lex.concepts[nounId]; return c && c.npc ? 'PARLER' : 'EXAMINER'; }
 
+    // Chaque bouton se tape : le libellé d'une action (« Faire honneur au buffet ») vaut des mots-clés.
+    // Tapé tel quel, il désigne son action sans hésiter ; en partie (« je lis les dossiers »), par son verbe de tête et ses mots.
+    var MOTS_LIBELLE = typeof WeakMap !== 'undefined' ? new WeakMap() : null;
+    function racine(w) { w = w.replace(/(es|s|x)$/, ''); return w.length > 5 ? w.slice(0, 5) : w; }
+    function motsPleins(t) { return t.split(' ').filter(function (w) { return w.length >= 4 && !STOP.has(w) && !MOTS_VIDES.has(w) && !/^\d+$/.test(w); }).map(racine); }
+    function clesLibelle(a) {
+      if (!MOTS_LIBELLE) return null;
+      if (MOTS_LIBELLE.has(a)) return MOTS_LIBELLE.get(a);
+      var labs = [a.label, typeof a.idea === 'string' ? a.idea : null, etiquette(a), /_lieux$/.test(a.id) ? 'Aller ailleurs' : null].filter(Boolean), r = null;
+      if (labs.length) {
+        var lab = typeof a.idea === 'string' ? a.idea : etiquette(a) || labs[0], q = parse(lex, lab, scene.phrases), v0 = q.verbs.filter(function (v) { return v.pos === 0 && v.score >= 0.9; })[0];
+        r = { textes: labs.map(function (x) { return normalize(x); }), tete: v0 ? v0.id : null, mots: motsPleins(normalize(lab)).filter(function (m, i, l) { return l.indexOf(m) === i; }) };
+      }
+      MOTS_LIBELLE.set(a, r); return r;
+    }
+    function scoreLibelle(a, p) {
+      var k = clesLibelle(a); if (!k) return 0;
+      var t = normalize(p.raw || '').replace(/^\d+ /, ''); // « 1. Aller : votre hôtel » : le numéro du bouton recopié
+      if (k.textes.indexOf(t) >= 0) return 3;
+      var tete = k.tete && p.c[k.tete] !== undefined;
+      // le libellé conjugué (« Chercher le comte Fenalik » → « je cherche le comte Fenalik ») : le même bouton
+      if (tete && k.textes.some(function (x) { var r = x.split(' ').slice(1).join(' '); return r.length >= 4 && (' ' + t).slice(-(r.length + 1)) === ' ' + r && t.split(' ').length - r.split(' ').length <= 2; })) return 2.9;
+      if (a.needVerb && !tete) return 0;
+      var dits = motsPleins(t), pris = k.mots.filter(function (m) { return dits.indexOf(m) >= 0; }).length;
+      if (!pris || (!tete && pris < 2)) return 0;
+      var restes = dits.filter(function (m) { return k.mots.indexOf(m) < 0; }).length;
+      var sc = (tete ? 1 : 0) + 0.55 * pris + (pris >= 2 ? 0.4 : 0) - 0.15 * restes;
+      // une action qui a ses propres mots-clés : son libellé, cité en partie, ne fait que l'aider à passer le seuil
+      return (a.verbs && a.verbs.length) || (a.nouns && a.nouns.length) ? Math.min(sc, THRESHOLD + 0.1) : sc;
+    }
+    // le joueur a tapé (ou presque) le libellé d'un bouton d'ici : cette action passe avant les improvisations
+    function boutonTape(p) { var b = rankActions(p)[0]; return b && scoreLibelle(b.a, p) >= THRESHOLD ? b : null; }
     function scoreAction(a, p) {
+      if (a.also) for (var j = 0; j < a.also.length; j++) if (p.c[a.also[j]] === undefined) return 0;
+      var sc = Math.max(scoreCles(a, p), scoreLibelle(a, p));
+      // « jusqu'au matin », « jusqu'à lundi » : parmi les façons d'attendre ou de dormir, celle qui va jusqu'à ce moment-là
+      if (sc > 0 && p.jusqua && (a.verbs || []).some(function (v) { return v === 'DORMIR' || v === 'ATTENDRE'; })) {
+        var h = Math.floor(((s.min % 1440) + 1440) % 1440 / 60), quand = p.jusqua === 'ouverture' ? (h >= 17 || h < 6 ? 'matin' : null) : p.jusqua;
+        var lab = (etiquette(a) || a.label || '').toLowerCase();
+        if ((quand === 'matin' && /matin|^dormir$/.test(lab)) || (quand === 'soir' && /soir|journée|dîner/.test(lab)) || (quand === 'jours' && /week-end|journée/.test(lab))) sc += 0.4;
+      }
+      return sc;
+    }
+    function scoreCles(a, p) {
       var vIn = p.verbs, nIn = p.nouns, vs = 0, ns = 0, i;
-      if (a.also) for (i = 0; i < a.also.length; i++) if (p.c[a.also[i]] === undefined) return 0;
       if (a.needVerb && !a.verbs.some(function (v) { return p.c[v] !== undefined; })) return 0;
       if (a.verbs) for (i = 0; i < vIn.length; i++) if (a.verbs.indexOf(vIn[i].id) >= 0) vs = Math.max(vs, vIn[i].score);
       if (p.moved && a.verbs && a.verbs.indexOf('ALLER') >= 0) vs = Math.max(vs, p.moved);
@@ -820,6 +908,9 @@
       } else if (a.verbs) { if (vs) sc = vs + 0.6; }
       else if (a.nouns) { if (ns) sc = ns + 0.6; }
       if (!sc) return 0;
+      // un lieu où se rendre, nommé avec un verbe de mouvement : le reste de la phrase dit pourquoi on y va
+      // (« je me rends au Chelsea Arms, décidé à découvrir qui occupe la chambre 14 ») et ne retire rien au déplacement
+      if (/^go_/.test(a.id) && vs && ns >= 0.9 && nounMatched && nounMatched.id === a.nouns[0]) return sc + (a.boost || 0);
       var handledN = (a.nouns || []).concat(a.also || [], a.extra || []);
       var extraN = nIn.filter(function (n) { return handledN.indexOf(n.id) < 0; }).length;
       if (extraN) sc -= 0.45 + 0.15 * (extraN - 1);
@@ -837,12 +928,14 @@
     function liens() {
       if (npcConcept) return;
       npcConcept = {}; conceptNpc = {};
+      // un concept qui porte le nom même d'un personnage (LEROUX → leroux) le désigne, avant les actions qui le citent
+      Object.keys(lex.concepts).forEach(function (k) { var c = lex.concepts[k], id = k.toLowerCase(); if (c.npc && scene.npcs && scene.npcs[id]) { conceptNpc[k] = id; npcConcept[id] = k; } });
       var all = (scene.globalActions || []).slice();
       Object.keys(scene.locations || {}).forEach(function (l) { all = all.concat(scene.locations[l].actions || []); });
       all.forEach(function (a) {
         if (!a.talkTo) return;
         (a.nouns || []).forEach(function (n) { var c = lex.concepts[n]; if (c && c.npc && conceptNpc[n] === undefined) conceptNpc[n] = a.talkTo; });
-        var n0 = (a.nouns || []).filter(function (n) { return lex.concepts[n] && lex.concepts[n].npc; })[0];
+        var n0 = (a.nouns || []).filter(function (n) { return lex.concepts[n] && lex.concepts[n].npc && conceptNpc[n] === a.talkTo; })[0] || (a.nouns || []).filter(function (n) { return lex.concepts[n] && lex.concepts[n].npc; })[0];
         if (n0 && !npcConcept[a.talkTo]) npcConcept[a.talkTo] = n0;
       });
       Object.keys(lex.concepts).forEach(function (k) { var c = lex.concepts[k], id = k.toLowerCase(); if (c.npc && conceptNpc[k] === undefined && scene.npcs[id]) { conceptNpc[k] = id; if (!npcConcept[id]) npcConcept[id] = k; } });
@@ -894,13 +987,22 @@
     var APPROCHE = /\b(?:visiter|aborder|aborde|rejoins|rejoindre|aller (?:vers|de|aupres d|aupres de|aupres du)|(?:me |m )?tourne\w* vers|retourne\w* (?:vers|aupres d\w*))\s+((?:[a-z]+\s*){1,4})/;
     // ce qui précède le verbe : le joueur parle de lui (« je lui demande »), pas d'un autre (« avez-vous parlé au sergent »)
     var AVANT_ADRESSE = /^(?:\s*\b(?:je|j|nous|on|puis|alors|bon|bien|et|maintenant|ensuite|donc|lui|leur|me|m|vais|veux|voudrais|dois|tente|essaie|ose|aller|enfin)\b)*\s*$/;
+    // « Docteur Leroux », « Monsieur le curé », « Mrs Pike » : le titre annonce le nom, c'est le nom qui désigne
+    var TITRES_PNJ = new Set('docteur doc dr monsieur m mr madame mme mrs mademoiselle mlle miss professeur pr inspecteur sergent agent capitaine commandant pere abbe frere soeur maitre lord lady sir signor signore signora herr'.split(' '));
     function premierPnj(texte) {
       var toks = texte.trim().split(/\s+/);
       for (var i = 0; i < toks.length; i++) {
         if (STOP.has(toks[i])) continue;
+        if (TITRES_PNJ.has(toks[i]) && i + 1 < toks.length && !STOP.has(toks[i + 1])) {
+          var mn = lex.best(toks[i + 1]);
+          if (mn && mn.score >= 0.9) { var sui = premierPnj(toks.slice(i + 1).join(' ')); if (sui) return sui; } // le nom qui suit décide
+        }
         var m = lex.best(toks[i]);
         if (m && m.score >= 0.9) {
           // le personnage présent que ce mot désigne (« la réception » : le concierge ici, le réceptionniste à Chelsea ; « l'agent » : l'agent de faction)
+          // le personnage que ce nom désigne en propre, s'il est là (ou si c'est l'interlocuteur), avant ceux dont l'action le cite
+          var propre = lex.concepts[m.id].npc && pnjDuConcept(m.id);
+          if (propre && (propre === s.talk || pnjPresent(propre))) return propre;
           var ici = availableActions().filter(function (a) { return a.talkTo && (a.nouns || []).indexOf(m.id) >= 0; })[0];
           if (ici) return ici.talkTo;
           if (lex.concepts[m.id].npc && pnjDuConcept(m.id)) return pnjDuConcept(m.id);
@@ -916,6 +1018,14 @@
       if (!id) {
         var m = t.match(ADRESSE);
         if (m && AVANT_ADRESSE.test(t.slice(0, m.index))) { id = premierPnj(m[1]); if (id) reste = raw.replace(/^.*?\b(demand|redemand|interrog|questionn|dis|dit|parl|adress|appell|interpell)\S*\s+(?:(?:à|a|au|aux)\s+)?/i, '').replace(/^\S+(\s+(de|d’|d')\s*\S+)?\s*/, ''); }
+      }
+      // « je demande la chambre 14 à la réception », « je montre la plaque au réceptionniste » : la chose, puis à qui
+      if (!id) {
+        var m3 = t.match(/\b(?:demande\w*|redemande\w*|pose\w*|montre\w*|presente\w*|tend\w*|donne\w*|dis|dit)\s+(?!a\s|au\s|aux\s)(.{3,60}?)\s(?:a|au|aux)\s+((?:[a-z]+\s*){1,3})/);
+        if (m3 && AVANT_ADRESSE.test(t.slice(0, m3.index))) {
+          id = premierPnj(m3[2]);
+          if (id) reste = raw.replace(new RegExp('\\s(?:à|a|au|aux)\\s+(?:l[’\']|la\\s|le\\s|les\\s)?' + m3[2].trim().split(/\s+/)[0] + '\\S*', 'i'), '');
+        }
       }
       if (!id) {
         var m2 = t.match(APPROCHE);
@@ -987,8 +1097,17 @@
       var l = loc();
       return (l.things || []).filter(function (t) { return !t.cond || t.cond(api); });
     }
+    // quelqu'un qu'on ne peut pas aborder maintenant (le buraliste a baissé son rideau, le curé n'est pas là) n'est pas « ici »
+    function absentDuLieu(x) {
+      liens();
+      return (x.ids || []).some(function (id) {
+        var qui = conceptNpc[id]; if (!qui) return false;
+        var ta = availableActions().filter(function (a) { return a.talkTo === qui; });
+        return !ta.length || !!(scene.disponible && scene.disponible(api, qui));
+      });
+    }
     function listThings() {
-      var t = thingsHere().filter(function (x) { return x.label; }).map(function (x) { return x.label; });
+      var t = thingsHere().filter(function (x) { return x.label && !absentDuLieu(x); }).map(function (x) { return x.label; });
       if (!t.length) return '';
       return t.length === 1 ? t[0] : t.slice(0, -1).join(', ') + ' et ' + t[t.length - 1];
     }
@@ -1146,6 +1265,19 @@
       })[0] || null;
     }
     // ----- en conversation : de bonnes questions, des banalités, des maladresses -----
+    // retrouver, dans la dernière réplique de ce personnage, les mots d'origine d'une clé écrite sans accents
+    function motDit(who, cle) {
+      var c = normalize(cle).split(' '); if (!c[0]) return null;
+      for (var i = s.log.length - 1, vus = 0; i >= 0 && vus < 6; i--) {
+        var e = s.log[i]; if (e.t !== 'npc' || e.who !== who || typeof e.x !== 'string') continue; vus++;
+        var mots = e.x.replace(/[«»“”"!?.,;:…()]/g, ' ').split(/\s+/).filter(Boolean);
+        for (var j = 0; j + c.length <= mots.length; j++) {
+          var bout = mots.slice(j, j + c.length).join(' ');
+          if (normalize(bout) === c.join(' ')) return bout;
+        }
+      }
+      return null;
+    }
     function suggestionsParole(n, mode) {
       var npc = scene.npcs[s.talk]; if (!npc) return [];
       n = n || 5; mode = mode || 'normal';
@@ -1160,7 +1292,12 @@
         var cles = Object.keys(tb.suites).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x]; });
         cles.slice(0, 2).forEach(function (x) {
           var e = tb.suites[x], m = (e.chip || String(e.mots || x).split(',')[0]).trim();
-          prend({ label: m.charAt(0).toUpperCase() + m.slice(1), say: e.dire || m });
+          // le mot tel que le personnage l'a dit, avec ses accents (« thèse », « L’Humanité »), plutôt que la clé
+          if (!e.chip) m = motDit(npc.id, m) || m;
+          var lab = m.charAt(0).toUpperCase() + m.slice(1);
+          // ce qui ne se prend pas se demande : « Thèse ? »
+          if (!e.chip && !e.prendre && !/\?$/.test(lab)) lab += ' ?';
+          prend({ label: lab, say: e.dire || (e.prendre ? m : lab), table: true });
         });
         sujets.filter(function (t) { return !t.asked; }).slice(0, 1).forEach(prend);
         prend(mal[0]);
@@ -1205,6 +1342,8 @@
     // combien de vrais mots de la phrase portent l'action choisie ? Une longue phrase ne s'interprète pas sur un seul mot.
     var MOTS_VIDES = new Set('decide decidons commence commencons continue continuons souhaite souhaitons compte comptons entreprends mets prends temps moment instant peu beaucoup grand grande petit petite vieux vieille bon bonne tout toute meme autre chose facon maniere air'.split(' '));
     function tropPeuCompris(a, p) {
+      if (scoreLibelle(a, p) >= THRESHOLD) return false; // le libellé du bouton, tapé : compris
+      if (p.jusqua && (a.verbs || []).some(function (v) { return v === 'DORMIR' || v === 'ATTENDRE'; })) return false; // « jusqu'à huit heures » : un moment, compris
       var mots = p.text.split(' ').filter(function (w) { return w.length >= 3 && !STOP.has(w) && !/^\d+$/.test(w) && !/ment$/.test(w) && !MOTS_VIDES.has(w); });
       if (mots.length < 4) return false;
       var cles = {}; [a.verbs, a.nouns, a.extra, a.extraVerbs, a.also].forEach(function (l) { (l || []).forEach(function (k) { cles[k] = 1; }); });
@@ -1213,8 +1352,36 @@
     }
     function low1(x) { x = String(x); return /^(Le|La|Les|L’) /.test(x) || /^L’/.test(x) ? x.charAt(0).toLowerCase() + x.slice(1) : x; }
     function cap1(x) { x = String(x); return x.charAt(0).toUpperCase() + x.slice(1); }
+    // les lieux où l'on peut se rendre (les noms portés par les actions « go_… » du chapitre, d'où qu'on parte)
+    var DESTS = null;
+    function destinations() {
+      if (DESTS) return DESTS;
+      DESTS = {};
+      var all = (scene.globalActions || []).slice();
+      Object.keys(scene.locations || {}).forEach(function (l) { all = all.concat(scene.locations[l].actions || []); });
+      all.forEach(function (a) { if (/^go_/.test(a.id)) (a.nouns || []).forEach(function (n) { (DESTS[n] = DESTS[n] || []).push(a.id); }); });
+      return DESTS;
+    }
+    // aller à un lieu connu depuis un endroit dont on ne part pas comme ça (le banquet, un wagon, la campagne) :
+    // on le dit, avec la sortie possible, au lieu de « Pour aller où ? » ou « vous ne voyez pas le Chelsea Arms ici »
+    function lieuInaccessible(p) {
+      if (p.c.ALLER === undefined && p.c.VISITER === undefined && !p.moved) return false;
+      var D = destinations(), n = p.nouns.filter(function (x) { return D[x.id] && x.score >= 0.9; })[0];
+      if (!n) return false;
+      var dispo = availableActions();
+      if (dispo.some(function (a) { return /^go_/.test(a.id); })) return false; // un lieu ouvert : les déplacements ordinaires s'en chargent
+      if (dispo.some(function (a) { return !(a.boost < 0) && (a.nouns || []).indexOf(n.id) >= 0; })) return false; // une sortie d'ici y mène (« rentrer à l'hôtel »)
+      var sorties = dispo.filter(function (a) { return a.label && (a.verbs || []).indexOf('ALLER') >= 0 && !a.talkTo && !(a.boost < 0); });
+      var nom = function (a) { return etiquette(a) || a.label; }, lab = function (a) { var l = nom(a); return l.charAt(0).toLowerCase() + l.slice(1); };
+      api.say(fresh('pasDIci', (scene.generic && scene.generic.pasDIci) || ['Pas d’ici, pas maintenant.', 'Pas tout de suite : vous n’en êtes pas encore là.']) +
+        (sorties.length ? ' Il faudra d’abord ' + sorties.slice(0, 2).map(lab).join(', ou ') + '.' : ''));
+      if (sorties.length) api.chips(sorties.slice(0, 2).map(function (a) { return { label: nom(a), action: a.id }; }));
+      s.tick = 1;
+      return true;
+    }
     function handleWorld(p) {
       paroleJoueur = p;
+      if (lieuInaccessible(p)) return;
       // « je demande à Pratt si… » : on va lui parler, et on lui pose la question
       var dest = destinataire(p);
       if (dest && pnjPresent(dest.id)) {
@@ -1232,7 +1399,7 @@
         api.say(fresh('recitSeul', ['Ce qui est fait est fait. Reste à savoir ce que vous faites maintenant.', 'Vous y repensez un instant. Mais personne, ici, ne vous a rien demandé. Que faites-vous ?', 'Le passé ne se rejoue pas. Et maintenant ?']));
         s.tick = 0; return;
       }
-      if (scene.improvise && scene.improvise(api, p)) return;
+      if (scene.improvise && !boutonTape(p) && scene.improvise(api, p)) return;
       var cands = rankActions(p);
       var best = cands[0], second = cands[1];
       // un personnage nommé qui n'est pas là : on le dit, plutôt que de faire autre chose
@@ -1388,8 +1555,18 @@
       var t = ' ' + normalize(p.raw || '') + ' ', nb = t.trim().split(/\s+/).length, S = tb.suites;
       var nommes = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && motsSuite(S[k], k).some(function (m) { return t.indexOf(' ' + m + ' ') >= 0; }); });
       var q = /\?/.test(p.raw || ''), pr = TABLE_PRENDRE.test(t), dm = TABLE_DEMANDE.test(t);
-      var intent = TABLE_REFUS.test(t.trim()) ? 'refuser' : (q || dm) && !(pr && !q) ? 'demander' : pr ? 'prendre' : nommes.length ? 'prendre' : null;
+      // le bouton même d'une suite (« Prendre le pain », « Regarder sa poupée ») : cette suite
+      var tapeC = normalize(p.raw || '').replace(/\s*\?$/, '');
+      var parChip = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && S[k].chip && normalize(S[k].chip) === tapeC; })[0];
+      if (parChip) return { nommes: [parChip], intent: S[parChip].prendre ? 'prendre' : S[parChip].demander ? 'demander' : 'parler', seul: true };
+      // « Rien entendu ? » : une question sur une chose de la table n'est pas un refus
+      var intent = TABLE_REFUS.test(t.trim()) && !(q && nommes.length) ? 'refuser' : (q || dm) && !(pr && !q) ? 'demander' : pr ? 'prendre' : nommes.length ? 'prendre' : null;
       if (!intent) return null;
+      // nommer une chose de la table avec un autre geste (« lire les journaux » quand on parlait d'une annonce) : c'est ce geste
+      if (intent === 'prendre' && !pr && !q && !dm && actionAnnoncee(p, rankActions(p)[0], npc)) {
+        var tete = (t.trim().split(/\s+/).filter(function (w) { return !/^(je|j|tu|il|elle|on|nous|vous|me|m|te|t|se|s|le|la|les|l|lui|leur|y|en|ne|n)$/.test(w); })[0]) || '';
+        if (!nommes.some(function (k) { return motsSuite(S[k], k).some(function (m) { return (' ' + m + ' ').indexOf(' ' + tete + ' ') >= 0; }); })) return null;
+      }
       // « oui », « je prends », « volontiers » sans rien nommer : seulement pour ce qui a été proposé (offre: true)
       if (!nommes.length && intent === 'prendre' && !Object.keys(S).some(function (k) { return k.charAt(0) !== '_' && S[k].offre && !tb.pris[k]; })) return null;
       if (!nommes.length) {
@@ -1398,7 +1575,7 @@
         if (p.nouns.some(function (x) { var c = lex.concepts[x.id]; return c && c.type === 'n' && x.score >= 0.9 && !GENERIQUES[x.id]; })) return null;
         if (intent === 'demander' && !/^\s*(et (ca|cela|alors)|c est quoi|qu est ce que c est|c est bon|elle est bonne|il est bon|combien|pourquoi|vraiment|ah oui|c est vrai)\b/.test(t)) return null;
       }
-      return { nommes: nommes, intent: intent };
+      return { nommes: nommes, intent: intent, seul: intent === 'prendre' && !pr };
     }
     function direSuite(npc, st, cle, rep, p) {
       // une réplique écrite pour la suite est dite telle quelle (pas de filtre d'écho : « La terrine ou la tarte ? » reste une question)
@@ -1425,7 +1602,8 @@
         else if (S._choix && restants.length > 1) { direSuite(npc, st, 'table:' + tb.sujet + ':_choix', S._choix, p); tb.turn = s.turn; s.tick = scene.talkTick || 1; return true; }
         else return false;
       }
-      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null) || (lu.intent === 'refuser' ? (S._refus || e.prendre) : null);
+      // une chose nommée seule (« crie la nuit ») qui ne se prend pas : on en parle
+      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null) || (lu.intent === 'refuser' ? (S._refus || e.prendre) : null) || (lu.seul ? (e.demander || e.parler) : null);
       if (!rep) return false;
       direSuite(npc, st, 'table:' + tb.sujet + ':' + k + ':' + lu.intent, rep, p);
       if (lu.intent === 'prendre') tb.pris[k] = true;
@@ -1657,6 +1835,13 @@
       var cles = (t.keys || []).map(function (k) { return typeof k === 'string' ? k : k[0]; });
       return !sujets.some(function (n) { return cles.indexOf(n.id) >= 0; });
     }
+    // « je vais me coucher », « je monte dans ma chambre », dits à quelqu'un : on prend congé
+    var ANNONCE = /^(bon |bien |allez |alors |eh bien |sur ce |excusez moi |pardon )*(je (vais|m en vais|file|monte|rentre) (aller )?(me coucher|dormir|me reposer|me retirer|monter|dans ma chambre|me mettre au lit|rentrer|a l hotel|me promener))\b|\b(je prends|je vais prendre|permettez moi de prendre|il est temps de prendre) conge\b|\bje (vous )?remercie\b.*\b(et|puis)\b.*\b(m en vais|pars|quitte|sors|me rends|vais|retourne|rentre|monte|file)\b/;
+    // une action du lieu que la phrase désigne sans hésitation : un de ses verbes dans la phrase, et un score net
+    function actionAnnoncee(p, best, npc) {
+      if (best && /^go_/.test(best.a.id) && p.c[(best.a.nouns || [])[0]] === undefined) return false; // un déplacement : le lieu lui-même doit être nommé
+      return !!(best && best.score >= 1.2 && best.a.talkTo !== npc.id && !best.a.talk && ((best.a.verbs || []).some(function (v) { return p.c[v] !== undefined; }) || scoreLibelle(best.a, p) >= THRESHOLD));
+    }
     function handleDialogue(p) {
       // un récit (« j'ai essayé de l'étrangler ») : on en parle, on ne le refait pas. Les verbes ne déclenchent rien.
       if (recit(p.raw)) {
@@ -1669,6 +1854,11 @@
       noterAborde(s.talk, p);
       var st = npcState(npc.id);
       var tops = rankTopics(npc, p).filter(function (x) { return !horsSujet(x.t, p, npc); });
+      // deux sujets accrochent presque autant : celui qui a encore quelque chose à dire passe devant celui qui est épuisé
+      if (tops.length > 1 && epuise(npc, tops[0].t, st)) {
+        var neuf = tops.filter(function (x) { return x.score >= 0.64 && x.score >= tops[0].score - 0.3 && !epuise(npc, x.t, st); })[0];
+        if (neuf) { tops.splice(tops.indexOf(neuf), 1); tops.unshift(neuf); }
+      }
       var tb = tops[0];
       var cands = rankActions(p);
       var best = cands[0];
@@ -1693,14 +1883,31 @@
       }
       // ce que la dernière réplique a mis sur la table (« je prends », « et la terrine ? ») : le dernier sujet abordé,
       // avant les gestes et l'humeur : « je prends » n'emporte rien, « non merci » refuse la tarte, ce n'est pas un compliment
+      if (G.RPG_DEBUG) G.RPG_DEBUG.push({ raw: p.raw, dit: !!p.dit, best: best && [best.a.id, +best.score.toFixed(2), best.a.verbs], tb: tb && [tb.t.id, +tb.score.toFixed(2)], verbs: p.verbs.map(function (v) { return v.id; }), geste: GESTE.test(p.text), A: A && A.a ? Object.keys(A.a).filter(function (k) { return A.a[k] === true; }) : null });
       var luTable = lireTable(npc, st, p);
       if (luTable && jouerTable(npc, st, luTable, p)) return;
+      // le libellé d'un sujet proposé, tapé tel quel (« Les anciens registres ») : ce sujet
+      var tapeT = normalize(p.raw || '').replace(/^\d+ /, ''), chipT = tapeT.split(' ').length >= 2 && (npc.topics || []).filter(function (x) { return typeof x.chip === 'string' && normalize(x.chip) === tapeT && (!x.cond || x.cond(api)); })[0];
+      if (chipT) { runTopic(npc, chipT.id, p); return; }
       // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
       // en mode « Dire », les mots restent des mots : seul « je m'en vais », dit tout haut, met fin à la conversation
-      if (p.dit && /^(bon |bien |allez |alors |eh bien |sur ce |excusez moi |pardon )*(je (m en vais|pars|sors|file|vous laisse|te laisse|vous quitte|dois (y aller|partir|filer|vous laisser))|il faut que j y aille|a bientot|a plus tard|a demain|bonne (nuit|soiree|journee))\b/.test(normalize(p.raw))) { api.endTalk(); return; }
+      if (p.dit && /^(bon |bien |allez |alors |eh bien |sur ce |excusez moi |pardon )*(je (m en vais|pars|sors|file|vous laisse|te laisse|vous quitte|dois (y aller|partir|filer|vous laisser))|il faut que j y aille|a bientot|a plus tard|a demain|bonne (nuit|soiree|journee))\b/.test(normalize(p.raw)) || p.dit && ANNONCE.test(normalize(p.raw))
+        // un ordre à l'infinitif (« aller dormir », « lire les journaux ») n'est pas une parole : on l'a tapé pour agir
+        || p.dit && /^[a-z]+(er|ir|re)\b/.test(normalize(p.raw)) && !/\?\s*$/.test(p.raw) && actionAnnoncee(p, best, npc) && (!tb || tb.score < 0.64 || best.score >= tb.score + 0.5)
+        // « je prends congé et je me rends au British Museum » : un au revoir, puis ce qu'on annonce
+        || p.dit && p.c.AUREVOIR !== undefined && !/\?\s*$/.test(p.raw) && actionAnnoncee(p, best, npc)) {
+        api.endTalk();
+        // ce qu'on annonce en partant (« je vais me coucher », « je m'en vais à la Nationale ») : on le fait
+        if (!s.talk && !s.ended && actionAnnoncee(p, best, npc)) exec(best.a, p);
+        return;
+      }
       if (!p.dit && !p.recit && GESTE.test(p.text) && !/\?\s*$/.test(p.raw) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde))) {
         var seul = rankActions(p)[0];
         if (!(seul && seul.a.talkTo === npc.id)) { api.endTalk(false); handleWorld(p); return; }
+      }
+      // un geste du monde tapé avec « Agir » (« je dors », « je lis le journal ») : une action forte, que nul sujet de la conversation n'accroche
+      if (!p.dit && !p.recit && /^(?:(?:je|j|nous|on) |[a-z]+(?:er|ir|re)\b)/.test(p.text) && !/\?\s*$/.test(p.raw) && actionAnnoncee(p, best, npc) && (!tb || tb.score < 0.9 || best.score >= tb.score + 0.5) && !(A && A.a && (A.a.insulte || A.a.menace || A.a.anaW || A.a.absurde || A.answer))) {
+        api.endTalk(false); exec(best.a, p); return;
       }
       // l'humeur passe avant tout : on ne répond pas sagement à une insulte, à une absurdité, à un mot d'un autre siècle
       if (scene.converse && scene.converse.avant) {
@@ -1747,6 +1954,21 @@
         api.endTalk(false);
         exec(best.a, p); return;
       }
+      // une longue question en plusieurs morceaux (« qui occupait la chambre 14, quand la police est-elle venue, et qui… ») :
+      // on répond au morceau qui accroche un sujet, de préférence un sujet pas encore abordé
+      if (!p.morceau && String(p.raw || '').split(/\s+/).length >= 9) {
+        var morceaux = String(p.raw).split(/\s*[,;:?]\s*(?:et\s+|mais\s+|puis\s+|ou\s+)?|\s+(?:et|mais|ou)\s+(?=(?:qui|que|qu|quel\w*|o[uù]|quand|comment|pourquoi|si|s[’']|combien|depuis|avez|avait|[eê]tes|pouvez|pourriez|savez|connaissez|est[ -]ce|dites|parlez)\b)|\s+(?:pour|afin de|afin d[’']|parce que|parce qu[’']|puisque|car)\s+/i)
+          .map(function (x) { return (x || '').trim(); }).filter(function (x) { return x.split(/\s+/).length >= 3; });
+        if (morceaux.length >= 2) {
+          var prises = morceaux.map(function (m) {
+            var q = rewrite(lex, parse(lex, m, scene.phrases)); q.raw = m; q.dit = p.dit; q.morceau = true;
+            var tq = rankTopics(npc, q).filter(function (x) { return !horsSujet(x.t, q, npc); })[0];
+            return tq && tq.score >= 0.64 ? { q: q, t: tq } : null;
+          }).filter(Boolean);
+          prises.sort(function (x, y) { return (st.asked[x.t.t.id] ? 1 : 0) - (st.asked[y.t.t.id] ? 1 : 0) || y.t.score - x.t.score; });
+          if (prises.length) { runTopic(npc, prises[0].t.t.id, prises[0].q); return; }
+        }
+      }
       // pas de sujet écrit d'avance : le PNJ répond de lui-même, avec ce qu'il est et ce qu'il sait
       if (A && talkBack()) return;
       if (tb && tb.score >= 0.64) { runTopic(npc, tb.t.id, p); return; }
@@ -1756,7 +1978,8 @@
         exec(best.a, p); return;
       }
       // Aucun sujet reconnu : le PNJ réagit dans son propre ton, de moins en moins patient
-      st.patience -= 1;
+      // (une question posée poliment use moins sa patience qu'une incongruité)
+      st.patience -= /\?\s*$/.test(p.raw || '') && !(A && A.a && (A.a.insulte || A.a.menace || A.a.absurde)) ? 0.5 : 1;
       if (G.RPG_REPLIS) G.RPG_REPLIS.push({ k: st.patience <= 0 ? 'pnj-part' : 'pnj', who: npc.id, raw: p.raw, loc: s.loc, turn: s.turn });
       if (st.patience <= 0) { closeTalk(npc); s.tick = scene.talkTick || 1; return; }
       var tier = patienceTier(npc, st);
@@ -1970,6 +2193,8 @@
       if (!m) return false;
       if (/\b(vos|votre|ses|son|sa|leurs?|ces|ce|un|une)\s+(notes|carnet|indices|bilan)\b|\b(notes|carnet)\s+(de|du|d)\s/.test(p.text)) return false;
       if (p.nouns.length > 1 || p.verbs.some(function (v) { return v.id !== 'EXAMINER' && v.id !== 'FOUILLER'; })) return false;
+      // le libellé d'une action d'ici (« Consulter le registre des objets trouvés ») passe avant le mot « objets »
+      var lb = rankActions(p)[0]; if (lb && scoreLibelle(lb.a, p) >= THRESHOLD) return false;
       if (m.id === 'AIDE') scene.help(api);
       else if (m.id === 'INVENTAIRE') {
         api.sys('Dans vos poches : ' + s.inv.join(', ') + (s.money ? ', ' + money(s.money) : '') + '.');
@@ -2066,6 +2291,11 @@
       s.tick = scene.talkTick || 1;
       var ia = !s.talk && ideeTapee(raw);
       if (ia) { exec(ia, p); afterTurn(); finish(); return; }
+      // « je réfléchis », « faire le point » : le bouton Réfléchir, tapé
+      if (!s.talk && ((p.c.REFLECHIR !== undefined && !p.nouns.length && raw.split(/\s+/).length <= 5) || /^(?:(?:je|j|bon|alors|bien)\s+)*(?:reflechi\w*|reflechir|pense a l affaire|rassemble mes idees|rassembler mes idees|cogite\w*)(?:\s+(?:un peu|un instant|un moment|a tout ca|a tout cela|a l affaire|a l enquete))?$/.test(normalize(raw)))) {
+        if (s.flags.jidee !== undefined && s.min - s.flags.jidee < 180) { api.say(fresh('reflechiTot', ['Vous avez déjà retourné tout cela il y a peu. Il vous faut du neuf : un lieu, une personne, un document.', 'Vos idées tournent en rond. Rien de nouveau ne viendra sans un fait nouveau.'])); afterTurn(); finish(); return; }
+        jetIdee(); afterTurn(); finish(); return;
+      }
       // « dire qu'on est de la police » : c'est une parole. On la dit à son interlocuteur, ou à la seule personne présente.
       var dit = discoursRapporte(raw);
       if (dit) {
@@ -2102,6 +2332,9 @@
         var gens = availableActions().filter(function (a) { return a.talkTo && !(scene.disponible && scene.disponible(api, a.talkTo)); });
         var dst = destinataire(p);
         var cible = dst ? gens.filter(function (a) { return a.talkTo === dst.id; })[0] : (gens.length === 1 ? gens[0] : null);
+        // personne à qui parler, mais quelqu'un d'ici qu'on ne peut pas aborder maintenant : on dit pourquoi
+        var empeche = !gens.length && scene.disponible && availableActions().filter(function (a) { return a.talkTo && scene.disponible(api, a.talkTo); })[0];
+        if (!cible && empeche) { api.say(scene.disponible(api, empeche.talkTo)); s.tick = 0; return; }
         if (!cible) {
           api.say(gens.length ? fresh('aQuiParler', ['À qui parlez-vous ?', 'Vous parlez, oui. Mais à qui ?', 'Plusieurs têtes se tournent. À qui vous adressez-vous ?']) : fresh('parlerSeul', ['Vous parlez dans le vide. Personne n’est là pour vous entendre.', 'Votre voix se perd. Il n’y a personne.', 'Personne ne répond. Vous êtes seul{e} à vous entendre.']));
           if (gens.length) api.chips(gens.slice(0, 4).map(function (a) { return { label: a.label, action: a.id }; }));
@@ -2129,7 +2362,7 @@
         if (dst && pnjPresent(dst.id)) { handleWorld(p); return true; }
       }
       // l'improvisation passe avant les jets demandés (« je me cache » avec une caisse dans les bras…)
-      if (!s.talk && !s.pending && scene.improvise && scene.improvise(api, p)) return false;
+      if (!s.talk && !s.pending && scene.improvise && !boutonTape(p) && scene.improvise(api, p)) return false;
       var jr = jetRequest(raw);
       if (jr) {
         // « jet de psychologie sur Fleming » : on s'adresse d'abord à lui s'il est là
@@ -2157,6 +2390,9 @@
     }
     // « …, puis je… », « … et ensuite … » : une suite de gestes
     function suites(raw) {
+      // « je vais au Chelsea Arms et je demande la chambre 14 » : on s'y rend, puis on fait le reste, là-bas
+      var dep = !s.talk && String(raw).match(/^(.*?\b(?:vais|va|allons|aller|me rends|me rendre|nous rendons|retourne|retourner|retournons|rentre|rentrer|file|filer|pars|partir|monte|monter|descends|descendre|cours|gagne|rejoins|rejoindre|passe|passer)\b.*?)\s+et\s+((?:je|j[’']|me|m[’']|nous|on)\s*\S.*)$/i);
+      if (dep && dep[1].split(/\s+/).length >= 3 && dep[2].split(/\s+/).length >= 3) return [dep[1], dep[2]];
       var parts = String(raw).split(/\s*[,;]\s*(?:et\s+)?(?:puis|ensuite|apr[eè]s quoi)\s+|\s+et\s+(?:puis|ensuite)\s+|\s+puis\s+(?=(?:je|j[’']|nous|on|vais|me|m[’']|retourne|rentre|prends|pars|sors|file|monte|descends|reviens|repars|aller|retourner|rentrer)\b)/i)
         .map(function (x) { return x.trim(); }).filter(Boolean);
       if (parts.length < 2 || parts.length > 4 || parts.some(function (x) { return x.split(/\s+/).length < 2; })) return [raw];
