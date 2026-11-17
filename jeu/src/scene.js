@@ -1103,7 +1103,7 @@
     var at = tl.findIndex(function (t) { return t.id === 'poli'; });
     tl.splice.apply(tl, [at, 0].concat(list));
   }
-  function L(npc, x) { return function (api, n) { api.npc(npc, typeof x === 'function' ? x(api, n) : Array.isArray(x) ? x[Math.min(n, x.length - 1)] : x); }; }
+  function L(npc, x) { var f = function (api, n) { api.npc(npc, typeof x === 'function' ? x(api, n) : Array.isArray(x) ? x[Math.min(n, x.length - 1)] : x); }; f.nb = Array.isArray(x) ? x.length : typeof x === 'function' ? 0 : 1; return f; }
 
   // --- Bastien ---
   SCENE.npcs.serveur.noMore = ['« C’est tout ce que je sais, monsieur. »', '« Je n’ai rien à ajouter. »', 'Il hausse les épaules, imperceptiblement.'];
@@ -1123,7 +1123,21 @@
     { id: 'insulte', keys: ['INSULTE'], run: function (api, n) { api.npcs('serveur').att -= 1; servLine(api, n === 0 ? 'Il ne cille pas. « Monsieur a raison, sans doute. Monsieur désire autre chose ? »' : '« J’ai servi des généraux, monsieur. Ils avaient plus de vocabulaire. »'); } },
     { id: 'embrasser', keys: ['EMBRASSER'], run: L('serveur', 'Il recule d’un pas, très digne. « Monsieur a trop bu. Ou pas assez. »') },
     { id: 'danser', keys: ['DANSER', 'CHANTER', 'JOUER'], run: L('serveur', ['« La Compagnie ne prévoit pas de bal, monsieur. »', '« Monsieur, je vous en prie. Il y a un évêque dans les voitures-lits. »']) },
-    { id: 'manger', keys: ['MANGER'], run: L('serveur', ['« Le service est terminé, monsieur. Il reste de la terrine et une tarte aux pommes qui a vu la frontière plusieurs fois. »', 'Il vous apporte une part de tarte. Elle a un vague goût de vase. Tout a un vague goût de vase, ce soir.', '« Il n’y a plus rien, monsieur. Même la terrine est partie se coucher. »']) },
+    { id: 'manger', keys: ['MANGER'], run: L('serveur', ['« Le service est terminé, monsieur. Il reste de la terrine et une tarte aux pommes qui a vu la frontière plusieurs fois. »', 'Il vous apporte une part de tarte. Elle a un vague goût de vase. Tout a un vague goût de vase, ce soir.', '« Il n’y a plus rien, monsieur. Même la terrine est partie se coucher. »']),
+      // ce qu'il reste en cuisine : « je prends », « la tarte », « et la terrine ? », « non merci »
+      suites: [{
+        tarte: { chip: 'la tarte aux pommes', mots: 'tarte, tarte aux pommes, une part, part de tarte, pommes, dessert, sucre, quelque chose de sucre',
+          prendre: function (api) { api.npcs('serveur').asked.manger = 2; api.time(10); api.npc('serveur', 'Il revient avec une part de tarte sur une assiette à liseré doré. Elle a un vague goût de vase. Tout a un vague goût de vase, ce soir. « Monsieur ne la finira pas. Personne ne la finit. »'); },
+          demander: ['« Elle a été bonne, monsieur. Mardi. Depuis, elle voyage. »', '« Aux pommes de Normandie. Enfin, elle l’était à Paris. Depuis Dole, elle a pris le goût du wagon. »'],
+          refuser: ['« Monsieur a du flair. »'] },
+        terrine: { chip: 'la terrine', mots: 'terrine, terrine de campagne, pate, pate de campagne, charcuterie, quelque chose de sale, viande',
+          prendre: function (api) { api.npcs('serveur').asked.manger = 2; api.time(10); api.npc('serveur', 'Il pose devant vous une tranche de terrine de campagne, trois cornichons et un quignon de pain. La terrine est bonne. Vous vous en voulez un peu de la trouver bonne, cette nuit. « Le chef la fait lui-même. Elle tient le voyage mieux que nous. »'); },
+          demander: ['« Terrine de campagne, monsieur. Le chef la fait lui-même, rue de Charonne. Elle tient le voyage mieux que nous. »', '« Du porc, du foie, un trait de cognac. Le cognac, c’est moi. »'],
+          refuser: ['« Bien, monsieur. »'] },
+        _choix: ['« La terrine ou la tarte, monsieur ? »', '« Laquelle, monsieur ? La terrine, la tarte ? »'],
+        _tout: function (api) { api.npcs('serveur').asked.manger = 2; api.time(15); api.npc('serveur', 'Il hausse un sourcil, puis revient avec les deux, sur deux assiettes. « Monsieur a l’appétit de quelqu’un qui a peur. » La terrine est bonne. La tarte a un goût de vase.'); },
+        _refus: ['« Comme monsieur voudra. »', '« Bien, monsieur. Le cognac, peut-être, plus tard. »']
+      }, null, null] },
     { id: 'etat', keys: ['ETAT'], run: L('serveur', function (api) { return api.sanState() >= 2 ? '« Monsieur n’est pas le premier à voir des choses dans ce wagon. Je ne dis pas que je les vois aussi. Je ne dis pas le contraire. »' : '« Le train fait cet effet-là, la nuit, monsieur. Un cognac ? Non ? Moi non plus, je n’en prends plus après Dole. »'; }) },
     { id: 'passagers', keys: ['PASSAGERS'], run: L('serveur', '« Une vingtaine, ce soir. Des Suisses qui rentrent, des Anglais qui partent, un évêque, un médecin allemand. Et M. Ravel. »') },
     { id: 'guerre', keys: ['GUERRE'], run: L('serveur', '« Trois ans à Verdun, monsieur, dans les cuisines. J’ai vu l’eau monter dans les tranchées. Je croyais que c’était le pire de ce que l’eau pouvait faire. »') },

@@ -10,7 +10,7 @@ const CHAPITRES = Object.assign({ prologue: window.SCENE }, window.CHAPTERS);
 const RECIT = /Ce qui est fait est fait|Vous y repensez un instant|Le passé ne se rejoue pas/;
 let ko = 0; const rapport = [];
 function texte(g, n) { return g.state.log.slice(n).filter(e => typeof e.x === 'string' && e.t !== 'player').map(e => e.x).join(' '); }
-function jouer(g, cmd) { const n = g.state.log.length; g.step(cmd); let k = 0; while (g.state.pending && k++ < 5) g.roll(); return texte(g, n); }
+function jouer(g, cmd) { const n = g.state.log.length; g.step(cmd, g.state.talk ? 'dire' : undefined); let k = 0; while (g.state.pending && k++ < 5) g.roll(); return texte(g, n); }
 function partie(ch, prep) {
   const sc = CHAPITRES[ch];
   const g = RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.1, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.1 });
@@ -31,6 +31,7 @@ function variantes(ph) {
 const banquet = g => { g.choose({ label: 'Écouter la conférence', action: 'i_conf' }); while (g.state.pending) g.roll(); };
 const hotelLondres = g => { banquet(g); jouer(g, 'Rentrer à l’hôtel'); };
 const poissy = loc => g => { g.api.flag('poissy', true); g.api.go(loc); };
+const tarte = g => { jouer(g, 'je parle au serveur'); g.step('J’ai faim', 'dire'); let k = 0; while (g.state.pending && k++ < 5) g.roll(); };
 const CORPUS = [
   { date: '2026-11-16', ch: 'londres', prep: banquet, ph: 'Demander à l’accueil si ils ont vu l’homme à la moustache',
     ok: (g, t) => g.state.flags.moustachuSuivi && g.state.loc === 'institut', regle: 'une question indirecte n’est pas un récit du passé' },
@@ -48,6 +49,15 @@ const CORPUS = [
     ok: (g, t) => !/ne voyez pas/.test(t), regle: 'deux concepts ne se volent pas leurs mots (les squelettes restent des ossements)' },
   { date: '2026-11-16', ch: 'paris', prep: poissy('po_lorien'), ph: 'je vais à la gare de Lyon',
     ok: (g, t) => !/ne voyez pas|comprends pas/.test(t), regle: 'une entrée de plusieurs mots se lit dans la phrase' },
+  // ce que la dernière réplique a mis sur la table : « je prends » se rapporte au dernier sujet abordé
+  ...['Je prend', 'je prends', 'volontiers', 'je veux bien'].map(ph => ({ date: '2026-11-17', ch: 'prologue', prep: tarte, ph,
+    ok: (g, t) => /terrine ou la tarte|Laquelle/.test(t) && g.state.talk === 'serveur', regle: 'une ellipse se rapporte au dernier sujet ; deux choses sur la table : il demande laquelle' })),
+  ...['la tarte', 'va pour la tarte', 'je prends la tarte', 'une part de tarte'].map(ph => ({ date: '2026-11-17', ch: 'prologue', prep: tarte, ph,
+    ok: (g, t) => /part de tarte/.test(t) && g.state.talk === 'serveur', regle: 'nommer une chose de la table la choisit' })),
+  { date: '2026-11-17', ch: 'prologue', prep: tarte, ph: 'et la terrine ?', ok: (g, t) => /Terrine de campagne|porc/.test(t), regle: 'une question sur une chose de la table' },
+  { date: '2026-11-17', ch: 'prologue', prep: tarte, ph: 'non merci', ok: (g, t) => /Comme monsieur voudra|Bien, monsieur/.test(t), regle: '« non merci » refuse l’offre, ce n’est pas un compliment' },
+  { date: '2026-11-17', ch: 'prologue', prep: tarte, ph: 'les deux', ok: (g, t) => /les deux/.test(t), regle: '« les deux » prend tout' },
+  { date: '2026-11-17', ch: 'prologue', prep: g => { tarte(g); jouer(g, 'je prends'); }, ph: 'la terrine', ok: (g, t) => /terrine de campagne/.test(t), regle: 'la réponse à « laquelle ? »' },
 ];
 if (QUOI === 'tout' || QUOI === 'corpus') {
   let n = 0;

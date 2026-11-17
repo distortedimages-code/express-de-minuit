@@ -479,7 +479,7 @@
       var tb = btn(ideasOpen ? 'Sujets ▾' : 'Sujets ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
       tb.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
       bar.appendChild(tb);
-      if (ideasOpen) game.suggestionsParole(5, mode).forEach(function (t) {
+      if (ideasOpen) game.suggestionsParole(4, mode).forEach(function (t) {
         bar.appendChild(btn(esc(t.label), '', function () { act(function () {
           if (t.cult) game.choose({ label: t.label, say: t.say, cult: t.cult });
           else if (t.say) game.step(t.say, 'dire');
@@ -491,13 +491,13 @@
       return;
     }
     if (mode === 'aucune') { var h3 = document.createElement('span'); h3.className = 'label'; h3.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(h3); return; }
+    // réfléchir : un jet d'Idée (INT), au plus toutes les trois heures de jeu ; toujours en premier
+    if (game.reflexionPossible()) bar.appendChild(btn('Réfléchir', 'reflechir', function () { act(function () { game.choose({ label: 'Réfléchir', reflechir: true }); }); }));
     var ib = btn(ideasOpen ? 'Idées ▾' : 'Idées ▸', '', function () { ideasOpen = !ideasOpen; actions(); });
     ib.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
     bar.appendChild(ib);
     if (ideasOpen) {
       game.ideas(4, mode).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
-      // réfléchir : un jet d'Idée (INT), au plus toutes les trois heures de jeu
-      if (game.reflexionPossible()) bar.appendChild(btn('Réfléchir', 'reflechir', function () { act(function () { game.choose({ label: 'Réfléchir', reflechir: true }); }); }));
     }
     else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(hint); }
   }

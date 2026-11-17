@@ -1154,6 +1154,18 @@
       var ex = scene.paroles ? scene.paroles(api, npc) : null, banal = melanger(((ex && ex.banal) || []).slice(), r), mal = melanger(((ex && ex.maladresse) || []).slice(), r);
       var out = [], vus = {};
       function prend(c) { if (!c || vus[c.label] || out.length >= n) return; vus[c.label] = 1; out.push(c); }
+      // ce que la dernière réplique a mis sur la table : deux réponses au plus, puis une piste du scénario et une maladresse
+      var tb = st.table && s.turn - st.table.turn <= 2 ? st.table : null;
+      if (tb) {
+        var cles = Object.keys(tb.suites).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x]; });
+        cles.slice(0, 2).forEach(function (x) {
+          var e = tb.suites[x], m = (e.chip || String(e.mots || x).split(',')[0]).trim();
+          prend({ label: m.charAt(0).toUpperCase() + m.slice(1), say: e.dire || m });
+        });
+        sujets.filter(function (t) { return !t.asked; }).slice(0, 1).forEach(prend);
+        prend(mal[0]);
+        return out;
+      }
       var k = Math.max(1, nbPistes(r, mode));
       sujets.filter(function (t) { return !t.asked; }).slice(0, k).forEach(prend);
       prend(banal[0]);
@@ -1301,9 +1313,20 @@
       });
       return ouvert || sujets === 0;
     }
+    // un sujet épuisé : abordé, et il n'a plus rien de neuf à dire (toutes ses répliques dites, plus de suite,
+    // et rien n'a changé dans l'enquête depuis) ; sa suggestion disparaît au lieu de faire répéter le personnage
+    function sigEtat() { return String(s.clues.length); } // une découverte peut donner du neuf à dire
+    function epuise(npc, t, st) {
+      var n = st.asked[t.id] || 0; if (!n) return false;
+      var more = typeof t.more === 'function' ? t.more(api) : t.more;
+      if (more && more.length && ((st.moreVu && st.moreVu[t.id]) || 0) < more.length) return false;
+      if (t.lines) return n >= t.lines.length;
+      if (t.run && t.run.nb > 1) return n >= t.run.nb;
+      return !!(st.vu && st.vu[t.id] === sigEtat());
+    }
     function topicChips(npc) {
       var st = npcState(npc.id);
-      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st) && chipLu(npc, t); })
+      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st) && chipLu(npc, t) && !epuise(npc, t, st); })
         .map(function (t) { return { label: t.chip, topic: t.id, asked: !!st.asked[t.id] }; });
       list.sort(function (a, b) { return (a.asked ? 1 : 0) - (b.asked ? 1 : 0); });
       return list.slice(0, 6);
@@ -1319,8 +1342,15 @@
       if (!t) return;
       var st = npcState(npc.id);
       var n = st.asked[topicId] || 0;
+      // ses répliques sont toutes dites, mais il lui reste une suite (t.more) : on passe à la suite au lieu de répéter
+      var total = t.lines ? t.lines.length : (t.run && t.run.nb > 0 ? t.run.nb : 0), suiteT = typeof t.more === 'function' ? t.more(api) : t.more;
+      if (total && n >= total && suiteT && suiteT.length && ((st.moreVu && st.moreVu[topicId]) || 0) < suiteT.length && !t.noFollow) {
+        st.last = topicId; st.more = st.moreVu[topicId] || 0; st.dernierSujet = { id: topicId, turn: s.turn };
+        followUp(npc); return;
+      }
       st.asked[topicId] = n + 1;
-      if (!t.noFollow) { st.last = topicId; st.more = 0; }
+      // les suites déjà dites (t.more) ne se redisent pas : on reprend là où on s'était arrêté
+      if (!t.noFollow) { st.last = topicId; st.more = (st.moreVu && st.moreVu[topicId]) || 0; }
       st.dernierSujet = { id: topicId, turn: s.turn };
       if (!/^(poli|aurevoir|toimeme|etat|insulte|embrasser|danser|chanter|manger|meta|heure)$/.test(topicId)) st.ecart = 0;
       s.tick = scene.talkTick || 1;
@@ -1329,6 +1359,76 @@
         if (t.run) t.run(api, n, p);
         else api.npc(npc.id, t.lines[Math.min(n, t.lines.length - 1)]);
       } finally { talkMode = null; sujetEnCours = null; }
+      (st.vu || (st.vu = {}))[topicId] = sigEtat();
+      poserTable(st, t, n);
+    }
+    // ----- ce qui est sur la table -----
+    // Une réplique met des choses sur la table (« il reste de la terrine et une tarte aux pommes ») : le sujet écrit
+    // porte alors ses suites (t.suites : un objet, un tableau indexé sur la réplique dite, ou une fonction (api, n)).
+    // Chaque suite a ses mots (« tarte, tarte aux pommes, une part ») et ses réponses selon ce que fait le joueur :
+    // prendre (« je prends », « volontiers », « va pour la tarte », « la tarte »), demander (« elle est bonne ? »,
+    // « et la terrine ? »), refuser (« non merci »). _choix : la question quand le joueur ne dit pas laquelle ;
+    // _refus : la réponse à « non merci » pour toute l'offre. Une suite peut porter ses propres suites (une table de plus).
+    // Pendant deux tours, ce que le joueur dit sans le nommer se rapporte à la table : c'est le dernier sujet abordé.
+    var TABLE_REFUS = /^(non|non merci|merci non|merci mais non|sans facon|ca ira|ca va aller|pas pour moi|je passe|rien|rien du tout|rien pour moi|une autre fois|plus tard|je n en veux pas|je ne veux rien|pas faim|pas soif|laissez|laissez tomber|n en parlons plus|surtout pas)\b/;
+    var TABLE_PRENDRE = /\b(je (le |la |les |l |en )?(prends|prend|prendrai|prendrais|vais prendre|veux bien|voudrais|veux|choisis|garde|mange|bois|goute|gouterai|vais gouter|tente|essaie|essaye)|j (en |le |la |l )?(aimerais|aimerai|accepte|essaie|essaye|achete|prends|prend)|volontiers|avec plaisir|pourquoi pas|va pour|ca me va|ca m ira|ca ira tres bien|allez y|allons y|oui|ouais|d accord|ok|entendu|parfait|tres bien|bonne idee|donnez|servez|apportez|mettez|une part|un morceau|un peu|un verre|une tasse|un bout|une goutte|les deux|la meme chose|ce sera)\b/;
+    var TABLE_DEMANDE = /\b(c est quoi|qu est ce|comment est|elle est comment|il est comment|ils sont comment|elles sont comment|elle est bonne|il est bon|elles sont bonnes|ils sont bons|c est bon|ca se mange|frais|fraiche|combien|ca coute|ca vaut|quel prix|de quand|quel gout|quel age|qui est|qui c est|ou est|ou ca|parlez moi|racontez|pourquoi|vraiment|c est vrai|ah oui|tiens|et (la|le|les|l|du|de la|des|ce|cette|cet|ces|lui|elle))\b/;
+    function tableDe(t, n) { var x = t && t.suites; if (typeof x === 'function') x = x(api, n); else if (Array.isArray(x)) x = x[Math.min(n, x.length - 1)]; return x && typeof x === 'object' ? x : null; }
+    function poserTable(st, t, n) { var x = tableDe(t, n); st.table = x ? { sujet: t.id, suites: x, turn: s.turn, pris: {} } : null; }
+    function motsSuite(e, k) {
+      if (!e._mots) e._mots = String(e.mots || k).split(',').map(function (m) { return normalize(m).trim(); }).filter(Boolean);
+      return e._mots;
+    }
+    function lireTable(npc, st, p) {
+      var tb = st.table; if (!tb || s.turn - tb.turn > 2) return null;
+      var t = ' ' + normalize(p.raw || '') + ' ', nb = t.trim().split(/\s+/).length, S = tb.suites;
+      var nommes = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && motsSuite(S[k], k).some(function (m) { return t.indexOf(' ' + m + ' ') >= 0; }); });
+      var q = /\?/.test(p.raw || ''), pr = TABLE_PRENDRE.test(t), dm = TABLE_DEMANDE.test(t);
+      var intent = TABLE_REFUS.test(t.trim()) ? 'refuser' : (q || dm) && !(pr && !q) ? 'demander' : pr ? 'prendre' : nommes.length ? 'prendre' : null;
+      if (!intent) return null;
+      if (!nommes.length) {
+        // une longue phrase, ou qui nomme autre chose (« oui, et Ravel ? ») : ce n'est pas pour la table
+        if (nb > 8) return null;
+        if (p.nouns.some(function (x) { var c = lex.concepts[x.id]; return c && c.type === 'n' && x.score >= 0.9 && !GENERIQUES[x.id]; })) return null;
+        if (intent === 'demander' && !/^\s*(et (ca|cela|alors)|c est quoi|qu est ce que c est|c est bon|elle est bonne|il est bon|combien|pourquoi|vraiment|ah oui|c est vrai)\b/.test(t)) return null;
+      }
+      return { nommes: nommes, intent: intent };
+    }
+    function direSuite(npc, st, cle, rep, p) {
+      // une réplique écrite pour la suite est dite telle quelle (pas de filtre d'écho : « La terrine ou la tarte ? » reste une question)
+      talkMode = typeof rep === 'function' ? 'topic' : 'raw';
+      try {
+        if (typeof rep === 'function') rep(api, p);
+        else if (rep && rep.sujet) { talkMode = null; runTopic(npc, rep.sujet, p); return; }
+        else { var l = [].concat(rep), n = st.asked[cle] || 0; st.asked[cle] = n + 1; api.npc(npc.id, l[Math.min(n, l.length - 1)]); }
+      } finally { talkMode = null; }
+    }
+    function jouerTable(npc, st, lu, p) {
+      var tb = st.table, S = tb.suites, k = lu.nommes[0];
+      var restants = Object.keys(S).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x]; });
+      // « les deux », « un peu de tout » : _tout, s'il est écrit
+      if (!k && lu.intent === 'prendre' && S._tout && /\b(les deux|les 2|tout|un peu de tout|de chaque|des deux)\b/.test(normalize(p.raw || ''))) {
+        direSuite(npc, st, 'table:' + tb.sujet + ':_tout', S._tout, p); restants.forEach(function (x) { tb.pris[x] = true; }); tb.turn = s.turn; s.tick = scene.talkTick || 1; return true;
+      }
+      if (!k) {
+        if (lu.intent === 'refuser') {
+          if (!S._refus) return false;
+          direSuite(npc, st, 'table:' + tb.sujet + ':_refus', S._refus, p); st.table = null; s.tick = scene.talkTick || 1; return true;
+        }
+        if (restants.length === 1 || (restants.length && !S._choix)) k = restants[0];
+        else if (S._choix && restants.length > 1) { direSuite(npc, st, 'table:' + tb.sujet + ':_choix', S._choix, p); tb.turn = s.turn; s.tick = scene.talkTick || 1; return true; }
+        else return false;
+      }
+      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null);
+      if (!rep) return false;
+      direSuite(npc, st, 'table:' + tb.sujet + ':' + k + ':' + lu.intent, rep, p);
+      if (lu.intent === 'prendre') tb.pris[k] = true;
+      tb.turn = s.turn;
+      if (e.suites) st.table = { sujet: tb.sujet + '.' + k, suites: e.suites, turn: s.turn, pris: {} };
+      else if (lu.intent === 'refuser') delete S[k];
+      s.tick = scene.talkTick || 1;
+      if (G.RPG_TABLE) G.RPG_TABLE.push({ who: npc.id, sujet: tb.sujet, k: k, intent: lu.intent });
+      return true;
     }
     // ----- la question en suspens -----
     // Un personnage qui vient de poser une question doit pouvoir entendre « oui », « non » ou « je ne sais pas ».
@@ -1409,6 +1509,7 @@
       if (more && more.length && (st.more || 0) < more.length) {
         api.npc(npc.id, more[st.more || 0]);
         st.more = (st.more || 0) + 1;
+        (st.moreVu || (st.moreVu = {}))[st.last] = Math.max((st.moreVu[st.last] || 0), st.more);
       } else {
         st.patience -= 1;
         if (st.patience <= 0) { talkMode = null; closeTalk(npc); s.tick = scene.talkTick || 1; return; }
@@ -1584,6 +1685,10 @@
         if (s.talk === dest.id && dest.reste.split(/\s+/).length >= 2) handleDialogue(rewrite(lex, parse(lex, dest.reste, scene.phrases)));
         return;
       }
+      // ce que la dernière réplique a mis sur la table (« je prends », « et la terrine ? ») : le dernier sujet abordé,
+      // avant les gestes et l'humeur : « je prends » n'emporte rien, « non merci » refuse la tarte, ce n'est pas un compliment
+      var luTable = lireTable(npc, st, p);
+      if (luTable && jouerTable(npc, st, luTable, p)) return;
       // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
       // en mode « Dire », les mots restent des mots : seul « je m'en vais », dit tout haut, met fin à la conversation
       if (p.dit && /^(bon |bien |allez |alors |eh bien |sur ce |excusez moi |pardon )*(je (m en vais|pars|sors|file|vous laisse|te laisse|vous quitte|dois (y aller|partir|filer|vous laisser))|il faut que j y aille|a bientot|a plus tard|a demain|bonne (nuit|soiree|journee))\b/.test(normalize(p.raw))) { api.endTalk(); return; }
