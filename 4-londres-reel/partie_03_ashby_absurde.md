@@ -1,0 +1,1578 @@
+# partie_03_ashby_absurde
+
+Partie : ashby, joueur absurde. Chapitres : londres. 400 tours · non compris : 4 · londres : inachevé, 400 tours, 12 indices
+
+
+## Londres · Danseurs dans le brouillard
+== L’Express de minuit ==
+Vendredi 5 janvier 1923. Londres disparaît sous un brouillard comme on n’en a pas vu depuis des années.
+Votre vieil ami, le professeur Julius Arthur Smith, vous a invité au banquet de la Fondation Challenger, à l’Institut impérial de Kensington. Une fois par an, les administrateurs y convient un orateur capable de les étonner : Marie Curie, Marconi, Edison s’y sont succédé. Ce soir, c’est Smith, le grand pourfendeur de médiums. Il a refusé de vous dire un mot de son sujet.
+Sous les lustres, l’Empire en habit de soirée. À la table d’honneur, Smith relit ses notes, ses énormes favoris frémissant au-dessus d’une pipe qui empeste. Derrière lui, droit comme un I, son fidèle Beddows.
+[système] Vous incarnez Julian Ashby, antiquaire à Museum Street. Écrivez ce que vous faites, comme à une table de jeu. Les fautes ne gênent pas.
+
+> (1) DIRE : Professeur Smith, votre silence devient aussi inquiétant que votre pipe ; de quoi allez-vous donc nous entretenir ce soir ?    [institut · Ven 5 · 20 h 17]
+Le professeur Smith : Smith vous accueille d’un rire qui fait se retourner les tables voisines. « Mon cher ami ! Vous êtes venu ! Asseyez-vous près de moi, que j’aie au moins un visage amical dans cette fosse aux lions. »
+Le professeur Smith : « Les Turcs ? Pourquoi me parlez-vous des Turcs ? » Un silence trop long. « Pour rien. »
+Le professeur Smith : « Question vaste. Précisez, je vous prie. Houdini me l’a dit cent fois : regardez toujours les mains. »
+Le professeur Smith : « Mais je vous retiens avec des bêtises. Dans dix minutes je monte à cette tribune, et vous comprendrez pourquoi je ne dors plus depuis trois nuits. »
+
+> (2) DIRE : Beddows a toujours l’air de savoir quelque chose avant tout le monde ; que nous cache-t-il ce soir ?    [institut · Ven 5 · 20 h 19]
+Le professeur Smith : « Beddows ? Mon ombre, mon cuisinier, ma conscience. Il cire mes chaussures et censure mes lettres. Je ne sais pas ce que je ferais sans lui. »
+Le professeur Smith : « Cache ? Le nom ne m’évoque rien, ce qui en soi est intéressant. »
+
+> (3) DIRE : Vous avez parlé de ne pas dormir depuis trois nuits ; est-ce cette conférence qui vous tourmente, ou quelque chose que vous avez découvert ?    [institut · Ven 5 · 20 h 21]
+Le professeur Smith : « Hm. « trois », « nuits »… Reformulez, mon cher, je ne vois pas le lien. »
+Le professeur Smith : « Le sujet ? Secret absolu, mon ami ! Vous le saurez en même temps que ces vieux messieurs. Disons seulement que je vais leur parler de ce qu’ils ne croient pas. »
+
+> (4) DIRE : Ce qu’ils ne croient pas ?    [institut · Ven 5 · 20 h 23]
+Le professeur Smith : « Aux revenants, mon ami ! Mais je ne dirai pas le mot avant d’être sur l’estrade. Le mot, c’est la moitié du scandale. »
+
+> (5) DIRE : Les hantises, professeur ? Vous en avez donc observé une vous-même ?    [institut · Ven 5 · 20 h 25]
+Le professeur Smith : « Les hantises sont des tentatives de retour, j’en suis convaincu. Quelque chose cherche à revenir, et se trompe de porte. »
+Le professeur Smith : « Ma maison de St John’s Wood… Éventrée ! Les ouvriers agrandissent ma bibliothèque. D’où votre hôtel, et toutes mes excuses. Dès que ce sera fini, je vous invite à dîner. Beddows fera son pâté en croûte. »
+
+> (6) DIRE : J’accepte le dîner, mais je veux d’abord savoir ce qui a éventré votre maison.    [institut · Ven 5 · 20 h 27]
+Le professeur Smith : « Entendu ! Dès que les plâtriers seront partis. Beddows vous écrira. Il écrit mieux que moi, et il se souvient des dates. »
+
+> (7) BOUTON : Bibliotheque    [institut · Ven 5 · 20 h 29]
+Le professeur Smith : « Le British Museum ? J’y ai ma place réservée sous la coupole depuis 1890. »
+
+> (8) DIRE : Vous dites que quelque chose cherche à revenir ; avez-vous trouvé une trace concrète de cette chose, professeur ?    [institut · Ven 5 · 20 h 31]
+Le professeur Smith : « Je crois vous l’avoir dit, mon ami. »
+Le professeur Smith : « Je n’ai rien lu sur les traces, je le confesse. »
+Le professeur Smith : « Et vous, monsieur, vous m’avez trouvé ridicule, ce soir ? »
+
+> (9) DIRE : Ridicule, non, mais suffisamment inquiétant pour que je préfère examiner votre bibliothèque avant votre discours.    [institut · Ven 5 · 20 h 33]
+Le professeur Smith : « Je vous l’ai dit : le British Museum ? J’y ai ma place réservée sous la coupole depuis 1890. »
+
+> (10) DIRE : Professeur, vous n’êtes pas trop vieux pour voyager dans ces histoires de revenants ?    [institut · Ven 5 · 20 h 35]
+Le professeur Smith : « Je ne croyais à rien. Je crois désormais qu’il y a des choses qui reviennent. Ce n’est pas la même chose que croire aux fantômes. »
+
+> (11) DIRE : Vous me demandez de croire à des choses qui reviennent, mais pourquoi avez-vous l’air de craindre qu’elles vous retrouvent ?    [institut · Ven 5 · 20 h 37]
+Le professeur Smith : « Mon cher, je me répète : le British Museum ? J’y ai ma place réservée sous la coupole depuis 1890. »
+
+> (12) BOUTON : Parler du brouillard    [institut · Ven 5 · 20 h 39]
+Le professeur Smith : « Ce brouillard est un scandale sanitaire. Le charbon, voilà le coupable. »
+
+> (13) DIRE : Je vais prendre l’air quelques instants avant votre discours ; si quelque chose revient, j’aimerais être là pour l’accueillir.    [institut · Ven 5 · 20 h 41]
+Le professeur Smith : « Patience ! Le meilleur moment d’une conférence, c’est juste avant. »
+Le professeur Smith : Un temps. On vous regarde comme si vous veniez de parler chinois. « Hum. Vous pourriez reformuler ? Je ne saisis pas. »
+
+> (14) DIRE : Professeur, si vous refusez de répondre clairement, dites-moi au moins ce qui vous a convaincu que les hantises sont des tentatives de retour.    [institut · Ven 5 · 20 h 43]
+Le professeur Smith : « Voyez-vous, je vous l’ai dit : les hantises sont des tentatives de retour, j’en suis convaincu. Quelque chose cherche à revenir, et se trompe de porte. »
+
+> (15) DIRE : J’ai compris que vous vous répétez, professeur, mais qui ou quoi tente exactement de revenir ?    [institut · Ven 5 · 20 h 45]
+Le professeur Smith : « Professeur, chasseur de médiums, et depuis ce soir, prophète malgré moi. »
+
+> (16) DIRE : Les hantises, professeur : quelle porte se trompe-t-elle donc de pousser ?    [institut · Ven 5 · 20 h 47]
+Le professeur Smith : « Je me répète : les hantises sont des tentatives de retour, j’en suis convaincu. Quelque chose cherche à revenir, et se trompe de porte. »
+
+> (17) BOUTON : Prendre congé    [institut · Ven 5 · 20 h 49]
+Le professeur Smith : « Filez, filez. Nous dînerons ensemble dès que ma maison sera en état. »
+Un maître de cérémonie fait tinter son verre. « Mesdames, messieurs, le professeur Julius Smith. » Les conversations s’éteignent.
+Smith monte à la tribune sous les applaudissements. Pendant une demi-heure, il fait rire la salle aux larmes en racontant comment il a démasqué médiums, voyantes et faiseurs de miracles. La plupart des tricheurs, explique-t-il, ne cherchent pas l’argent, mais l’attention, la foi, le réconfort.
+Puis sa voix change. Il existe, dit-il, des phénomènes qui résistent à toute explication : les esprits frappeurs, les voyageurs soudain transportés à mille lieues ou à mille ans de chez eux, et les hantises. C’est de celles-ci qu’il veut parler.
+La lumière baisse. Le projecteur s’allume. Sur l’écran, un bateau de pêche breton, une femme dans un escalier norvégien, un fiacre londonien, chacun photographié depuis trois positions à la fois. Smith montre que ces apparitions ne naissent pas d’un point, mais émergent d’un coup, comme à travers un rideau invisible. Qu’elles sont à demi transparentes : une vague traverse le bateau sans écume. Qu’elles luisent faiblement. Et qu’elles bougent deux fois moins vite que le monde autour d’elles.
+« Je crois, conclut-il, que ces hantises sont des tentatives, maladroites, de retour dans notre temps et notre espace, de la part de choses qui en ont été retirées. Les murs de ce que nous appelons la normalité sont plus souples que nous ne le pensons. Ce qui attend de l’autre côté est-il lumière, ténèbres, ou simplement autre chose ? Chacun, pour l’instant, doit répondre seul. »
+Un silence, puis une ovation. On se lève, on se presse autour de lui.
+[indice noté dans le carnet] Les hantises seraient des tentatives de retour, depuis un ailleurs, à travers les « rideaux de la perception ».
+[jet demandé] Trouver Objet Caché 45 %
+[dés] Trouver Objet Caché : 83/45 — Échec
+Les félicitations pleuvent, les coupes tintent. Vous ne remarquez rien de particulier, sinon que la soirée est réussie.
+
+> (18) AGIR : Je profite de la cohue pour fouiller discrètement le pardessus de Smith au vestiaire.    [institut · Ven 5 · 20 h 51 · non compris]
+Vous restez un moment sans bouger. Londres continue autour de vous, indifférente. Vous rouvrez votre carnet à la dernière page : « La conférence de Smith ». Le fil est là. Il suffit de tirer dessus.
+[boutons] Fouiller le pardessus de Smith au vestiaire | Rentrer à l’hôtel | Regarder autour de vous
+
+> (19) BOUTON : Fouiller le pardessus de Smith au vestiaire    [institut · Ven 5 · 21 h 01]
+Vous vous glissez au vestiaire, où pendent cent pardessus à peu près pareils. Celui de Smith a un col d’astrakan râpé.
+[jet demandé] Discrétion 30 %
+[dés] Discrétion : 41/30 — Échec
+Une main gantée se pose sur votre bras : le préposé du vestiaire. « Monsieur s’est trompé de manteau, sans doute. » Il le dit assez fort. Plus loin, Beddows a tourné la tête, et il ne vous quitte plus des yeux.
+
+> (20) AGIR : Je lève les mains avec un sourire innocent, puis retourne au buffet en observant discrètement Beddows.    [institut · Ven 5 · 21 h 06]
+Vous souriez dans le vide. Ça ne mène à rien.
+[boutons] Faire honneur au buffet | Rentrer à l’hôtel | Regarder autour de vous
+Beddows : Le vieux domestique s’incline, impeccable. « Monsieur. Monsieur le professeur est ravi que vous soyez venu. Il ne le dira pas, bien sûr. »
+
+> (21) DIRE : Beddows, votre maître vient de parler de choses qui reviennent ; vous semblez moins surpris que les autres, pourquoi ?    [institut · Ven 5 · 21 h 08]
+Beddows : « James Beddows, monsieur. Au service du professeur. »
+Beddows : « Ce n’est pas à moi de le savoir, monsieur. »
+Beddows : « Vous allez l’aider, n’est-ce pas, monsieur ? Vous allez faire ce qu’il demande ? »
+
+> (22) BOUTON : Le professeur    [institut · Ven 5 · 21 h 10]
+Beddows : « Monsieur a travaillé trois mois sur cette conférence. Il a refait ses plaques deux fois. Je n’ai pas dormi davantage que lui. »
+
+> (23) DIRE : Pourquoi avoir refait ces plaques deux fois, Beddows ?    [institut · Ven 5 · 21 h 12]
+Beddows : « Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce qu’elles étaient floues. »
+
+> (24) BOUTON : Plaques    [institut · Ven 5 · 21 h 14]
+Beddows : « Les plaques de Monsieur ? Je les ai portées moi-même, monsieur. Monsieur ne laisse personne d’autre y toucher. »
+
+> (25) DIRE : Qu’avez-vous aperçu sur les premières plaques avant qu’elles ne deviennent floues ?    [institut · Ven 5 · 21 h 16]
+Beddows : « Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce qu’elles étaient floues. »
+
+> (26) DIRE : Vous êtes un bien piètre menteur, Beddows ; qu’y avait-il réellement sur ces plaques ?    [institut · Ven 5 · 21 h 18]
+Beddows : « Monsieur ne pense pas ce qu’il dit, j’en suis sûr. »
+Beddows : « Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce qu’elles étaient floues. »
+
+> (27) DIRE : Vous alliez dire autre chose : qu’avez-vous vu sur ces premières plaques ?    [institut · Ven 5 · 21 h 20]
+Beddows : « Je vous l’ai dit, monsieur. »
+
+> (28) BOUTON : Le menacer    [institut · Ven 5 · 21 h 22]
+Beddows : « Vous… vous me menacez ? » Il recule, livide.
+
+> (29) DIRE : Combien le professeur vous paie-t-il pour garder ses secrets ?    [institut · Ven 5 · 21 h 24]
+Beddows : « Monsieur a été dur. Enfin. Je vous en supplie, monsieur, chaque minute compte. »
+
+> (30) BOUTON : Plaques    [institut · Ven 5 · 21 h 26]
+Beddows : « Je réponds à monsieur, mais je n’en pense pas moins. Je vous l’ai dit, monsieur : les plaques de Monsieur ? Je les ai portées moi-même, monsieur. Monsieur ne laisse personne d’autre y toucher. »
+
+> (31) BOUTON : S’impatienter    [institut · Ven 5 · 21 h 28]
+Beddows : Il semble commencer à vous ignorer.
+
+> (32) DIRE : Vous avez dit que chaque minute comptait ; qu’est-il arrivé au professeur ?    [institut · Ven 5 · 21 h 30]
+Beddows : Il relève lentement les yeux, méfiant. On dirait que vous avez retrouvé vos esprits.
+Beddows : « Non, monsieur. »
+Beddows : « Puisque monsieur me le demande. » Il ne répond plus. Il regarde le lit, et vous, et la porte.
+Beddows : « Je ne peux plus rien vous dire, monsieur. Partez, maintenant. Pour lui. » Il vous tourne le dos et s’affaire près du lit.
+La salle se vide peu à peu. Les fiacres et les taxis attendent dans le brouillard de Kensington. Il est temps de rentrer.
+[boutons] Rentrer à l’hôtel
+
+> (33) AGIR : Je regarde autour de moi pour repérer Smith, Beddows ou une sortie discrète.    [institut · Ven 5 · 21 h 35]
+La grande galerie de l’Institut impérial a été vidée de ses vitrines d’échantillons commerciaux. À la place : des smokings, des robes du soir, des uniformes chamarrés, des sabres qui brillent et des moustaches cirées. Au fond, un écran blanc et un projecteur, sous une housse. À la table d’honneur, Smith relit ses notes en tirant sur une pipe qui empeste. Derrière lui, impassible, Beddows.
+
+> (34) BOUTON : Parler au professeur Smith    [institut · Ven 5 · 21 h 40]
+Le professeur Smith : « Ah, vous voilà ! »
+
+> (35) DIRE : Professeur, vos plaques montrent-elles encore ces hantises, ou quelque chose de plus inquiétant s’y est-il manifesté ?    [institut · Ven 5 · 21 h 42]
+Le professeur Smith : « Si nous étions moins sots, nous pourrions un jour passer de l’autre côté. Ou en faire revenir quelque chose. La question est de savoir quoi. »
+
+> (36) DIRE : Votre conférence était brillante, mais vous avez éludé l’essentiel : qu’y avait-il sur les premières plaques, professeur ?    [institut · Ven 5 · 21 h 44]
+Le professeur Smith : Il rit, un peu moins fort. « Encore ? »
+
+> (37) DIRE : Je ne plaisante plus, Smith : dites-moi ce qui est apparu sur les premières plaques, ou je révèle à tous que vous falsifiez vos preuves.    [institut · Ven 5 · 21 h 46]
+Le professeur Smith : Il se tourne vers un autre invité, avec un clin d’œil désolé.
+
+> (38) DIRE : La TSF traverse-t-elle aussi ces rideaux de la perception, ou préférez-vous réserver vos mensonges aux plaques de verre ?    [institut · Ven 5 · 21 h 48]
+Le professeur Smith : « Je crois vous l’avoir dit, mon ami. »
+Le professeur Smith : « On me réclame, pardonnez-moi ! » Il s’éloigne vers un groupe d’académiciens qui l’attendent.
+
+> (39) BOUTON : Réfléchir    [institut · Ven 5 · 21 h 49]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 89/80 — Échec
+
+> (40) BOUTON : Insister (jet forcé)    [institut · Ven 5 · 21 h 49]
+[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 7/80 — Réussite extrême
+
+> (41) BOUTON : Parler au professeur Smith    [institut · Ven 5 · 21 h 54]
+Le professeur Smith : « Pas maintenant, monsieur. »
+Un officier de marine raconte Jutland pour la troisième fois.
+
+> (42) BOUTON : Rentrer à l’hôtel    [hotel · Ven 5 · 23 h 25]
+Vous rentrez à votre hôtel de Bloomsbury dans un taxi qui avance au pas. Le brouillard a avalé Londres. Dans le hall, l’horloge marque onze heures passées.
+[lieu] Votre hôtel, à Bloomsbury
+Votre chambre, au troisième étage d’un hôtel discret de Bloomsbury. Le radiateur cogne, le lit est trop mou. Dehors, le brouillard est si épais qu’on ne voit pas l’autre côté de la rue.
+[système] Le week-end commence. Vous pouvez le vivre heure par heure, ou le laisser filer jusqu’à lundi.
+[boutons] Laisser passer le week-end | Dormir jusqu’au matin
+
+> (43) BOUTON : Fouiller la chambre de fond en comble    [hotel · Ven 5 · 23 h 45]
+Vous fouillez la chambre pour de bon : le bureau et ses tiroirs vides, l’armoire, sous le lit, derrière le portrait du roi. Vos affaires sont telles que vous les avez laissées. Personne n’est entré ici. Pas encore.
+
+> (44) BOUTON : Descendre parler au concierge    [hotel · Ven 5 · 23 h 50]
+Mr Pratt, le concierge : Derrière son comptoir d’acajou, un homme rose et parfaitement coiffé s’incline d’un millimètre. « Pratt, monsieur. Concierge. Un taxi, un télégramme, un journal, une petite annonce, une réservation ? Je suis là pour ça. »
+
+> (45) BOUTON : Du courrier ?    [hotel · Ven 5 · 23 h 52]
+Mr Pratt, le concierge : « Rien pour vous, monsieur, hélas. »
+
+> (46) BOUTON : Envoyer un télégramme    [hotel · Ven 5 · 23 h 54]
+Mr Pratt, le concierge : « Un télégramme, monsieur ? Le bureau de poste de Southampton Row est à deux pas, mais je m’en charge. Pour où ? »
+[boutons] À un ami, pour qu’il s’inquiète si je disparais
+
+> (47) BOUTON : À un ami, pour qu’il s’inquiète si je disparais    [hotel · Ven 5 · 23 h 56]
+Mr Pratt, le concierge : « “Si sans nouvelles de moi d’ici un mois, ne me cherchez pas.” » Il relève la tête. « C’est… très romantique, monsieur. »
+
+> (48) BOUTON : Où trouver des renseignements ?    [hotel · Ven 5 · 23 h 58]
+Mr Pratt, le concierge : « Un taxi en dix minutes, monsieur, brouillard ou pas. Et si vous cherchez des renseignements, je me permets : le British Museum, à cinq minutes, ou la morgue du Daily Courier, à Fleet Street. Ils ont tout gardé depuis Waterloo. »
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street
+
+> (49) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 00 h 03]
+Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Il faudra y retourner demain.
+Le radiateur cogne trois fois, puis se tait.
+
+> (50) BOUTON : Lire les journaux    [hotel · Sam 6 · 00 h 08]
+Ce sont encore les journaux d’hier. L’édition du matin ne sortira des presses qu’à l’aube.
+Depuis le banquet, pas un mot de Smith. Lui qui écrit d’ordinaire trois lettres par jour. Sa maison de St John’s Wood n’est qu’à une demi-heure.
+
+> (51) BOUTON : Aller ailleurs    [hotel · Sam 6 · 00 h 13]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street
+
+> (52) BOUTON : Aller : la maison de Smith, à St John’s Wood    [stjohn · Sam 6 · 00 h 58]
+Vous trouvez un taxi de nuit, le chauffeur à moitié endormi. Les rues sont vides, luisantes.
+[lieu] St John’s Wood, la maison de Smith
+Des échafaudages contre la façade de la villa : des ouvriers repeignent les fenêtres, et le brouillard étouffe leurs coups de marteau. Les volets du bureau sont clos, en plein jour.
+
+> (53) BOUTON : Guetter la maison    [stjohn · Sam 6 · 02 h 03]
+Vous faites les cent pas devant la grille. Les ouvriers vous regardent de travers. Au bout d’une heure, vous renoncez.
+Une corne de brume, quelque part vers la Tamise.
+
+> (54) BOUTON : Interroger les peintres des échafaudages    [stjohn · Sam 6 · 02 h 23]
+Ils repeignent, ils sont payés à la fenêtre, et ils ne savent rien. Le vieux professeur ? Jamais vu. Le domestique ? Il leur apporte du thé, quand il y pense. Il n’y pense pas souvent.
+
+> (55) AGIR : Je grimpe à l’échafaudage jusqu’à une fenêtre du bureau, en priant pour que le brouillard masque ma présence.    [stjohn · Sam 6 · 02 h 25 · non compris]
+La fenêtre ? Que voulez-vous en faire, exactement ?
+[boutons] Regarder autour de vous | Sonner à la porte | Grimper à l’échafaudage jusqu’à une fenêtre
+
+> (56) BOUTON : Grimper à l’échafaudage jusqu’à une fenêtre    [stjohn · Sam 6 · 02 h 40]
+[jet demandé] Grimper 20 %
+[dés] Grimper : 37/20 — Échec
+Une planche bascule. Vous tombez de trois mètres dans un tas de sable et de seaux renversés. Les ouvriers accourent. On vous relève, on vous époussette, on vous regarde de travers.
+
+> (57) BOUTON : Sonner à la porte    [stjohn · Sam 6 · 02 h 45]
+Un peintre en salopette vous répond du haut de son échelle : le professeur ne reçoit personne. Puis Beddows paraît à la porte, et vous fait signe de vous approcher.
+Beddows : « Pardon, monsieur. Monsieur travaille. Il n’a pas dormi. Il a fait condamner les volets du bureau et il… » Il s’arrête, regarde derrière lui. « Il a peur, monsieur. Je ne l’avais jamais vu avoir peur. Revenez lundi. » Il vous ferme la porte au nez, très doucement.
+Un merle se pose sur la grille, puis repart.
+
+> (58) BOUTON : Aller ailleurs    [stjohn · Sam 6 · 02 h 50]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la salle de lecture du British Museum, la gare Victoria, les archives du Daily Courier, à Fleet Street.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : les archives du Daily Courier, à Fleet Street
+
+> (59) BOUTON : Aller : la salle de lecture du British Museum    [stjohn · Sam 6 · 02 h 55]
+La salle de lecture du British Museum ouvre de 9 h à 20 h. À cette heure, ses grilles sont fermées. Mieux vaut attendre le matin.
+
+> (60) BOUTON : Regarder autour de vous    [stjohn · Sam 6 · 03 h 00]
+Une maison de savant : des rayonnages jusqu’au plafond, que l’on devine derrière les vitres du bas. Sur le perron, deux bouteilles de lait que personne n’a rentrées.
+
+> (61) BOUTON : Aller ailleurs    [stjohn · Sam 6 · 03 h 05]
+Même résultat qu’à l’instant.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : les archives du Daily Courier, à Fleet Street
+Une voiture passe au pas, ses phares noyés dans le gris.
+
+> (62) BOUTON : Aller : votre hôtel, à Bloomsbury    [hotel · Sam 6 · 03 h 50]
+Londres dort sous son brouillard. Vos pas, puis le moteur du taxi, sont les seuls bruits de la ville.
+[lieu] Votre hôtel, à Bloomsbury
+Vous retrouvez votre chambre, son papier peint fané et son radiateur qui cogne.
+
+> (63) AGIR : Je m’endors quelques heures, puis me rends aux archives du Daily Courier dès leur ouverture.    [hotel · Sam 6 · 03 h 55 · non compris]
+Vous voulez dire :
+[boutons] Attendre des nouvelles de Smith | Laisser passer le week-end
+Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.
+
+> (64) BOUTON : Réfléchir    [hotel · Sam 6 · 03 h 56]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 86/80 — Échec
+
+> (65) BOUTON : Insister (jet forcé)    [hotel · Sam 6 · 03 h 56]
+[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 40/80 — Réussite majeure
+
+> (66) BOUTON : Aller ailleurs    [hotel · Sam 6 · 04 h 01]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street
+Dans le couloir, une valise roule sur le tapis.
+
+> (67) BOUTON : Lire les journaux    [hotel · Sam 6 · 04 h 06]
+Vous relisez les journaux de la veille, faute de mieux. Les nouvelles du jour ne seront imprimées qu’au petit matin.
+
+> (68) BOUTON : Aller ailleurs    [hotel · Sam 6 · 04 h 11]
+Rien de plus que la dernière fois.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street
+
+> (69) BOUTON : Regarder autour de vous    [hotel · Sam 6 · 04 h 16]
+Un lit trop mou, un bureau, une armoire qui grince, un portrait du roi George. Les journaux attendent sur la table. Par la fenêtre, une mer grise où flottent quelques cheminées.
+
+> (70) BOUTON : Regarder par la fenêtre    [hotel · Sam 6 · 04 h 21]
+Le brouillard est jaune, presque solide. Un réverbère, en bas, brûle dans un halo qui ne touche pas le sol.
+Une corne de brume, très loin, sur la Tamise.
+
+> (71) BOUTON : Descendre parler au concierge    [hotel · Sam 6 · 04 h 26]
+Mr Pratt, le concierge : « Monsieur ? »
+
+> (72) BOUTON : Passer une petite annonce    [hotel · Sam 6 · 04 h 28]
+Mr Pratt, le concierge : « Une annonce dans le Times ? Rien de plus simple, monsieur : je la dépose avant midi, elle paraît demain. Que doit-elle chercher ? »
+[boutons] Des nouvelles du professeur Smith
+
+> (73) BOUTON : Des nouvelles du professeur Smith    [hotel · Sam 6 · 04 h 30]
+Mr Pratt, le concierge : « “Ami du professeur J. A. Smith cherche nouvelles. Discrétion assurée. Écrire au Grand Hôtel de Russell Square.” Dix shillings, monsieur. »
+
+> (74) BOUTON : Le professeur Smith    [hotel · Sam 6 · 04 h 32]
+Mr Pratt, le concierge : « Le professeur Smith ? Un monsieur très connu. Il est venu prendre le thé ici, une fois. Il a démasqué la voyante de Lady Ashworth, vous vous souvenez ? »
+
+> (75) DIRE : La voyante de Lady Ashworth ?    [hotel · Sam 6 · 04 h 34]
+Mr Pratt, le concierge : « Une médium, monsieur… Mrs Vane, au 31, Gordon Square, à deux pas. Tous les soirs à neuf heures, sauf le dimanche. » Il baisse la voix. « C’est elle que le professeur Smith a démasquée chez Lady Ashworth. La dame du deuxième y va tous les soirs. Elle dit que c’est depuis qu’elle entend des pas au plafond. »
+[indice noté dans le carnet] Mrs Hortense Vane, que Smith a démasquée chez Lady Ashworth, tient séance chaque soir à neuf heures, sauf le dimanche. À deux pas de votre hôtel.
+[système] Nouveau lieu : le salon de Mrs Vane, à Gordon Square. Écrivez « aller à… » ou touchez « Où aller ? ».
+
+> (76) AGIR : Je prends congé et remonte dormir quelques heures avant l’ouverture des archives.    [hotel · Sam 6 · 04 h 36]
+Mr Pratt, le concierge : « Je vous l’ai déjà dit, monsieur. »
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (77) BOUTON : Prendre congé    [hotel · Sam 6 · 04 h 38]
+Mr Pratt, le concierge : « À votre service, monsieur. »
+
+> (78) BOUTON : Aller ailleurs    [hotel · Sam 6 · 04 h 43]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+Le radiateur cogne trois fois, puis se tait.
+
+> (79) BOUTON : Aller : le salon de Mrs Vane, à Gordon Square    [hotel · Sam 6 · 04 h 48]
+Mrs Vane ne reçoit que le soir, à partir de 19 h. Ses rideaux de velours sont tirés sur Gordon Square. Mieux vaut attendre le matin.
+
+> (80) BOUTON : Aller ailleurs    [hotel · Sam 6 · 04 h 53]
+Vous insistez. Le monde, lui, ne change pas d’avis.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (81) BOUTON : Aller : la salle de lecture du British Museum    [hotel · Sam 6 · 04 h 58]
+La salle de lecture du British Museum ouvre de 9 h à 20 h. À cette heure, ses grilles sont fermées. Mieux vaut attendre le matin.
+
+> (82) BOUTON : Descendre parler au concierge    [hotel · Sam 6 · 05 h 03]
+Mr Pratt, le concierge : « Que puis-je pour vous, monsieur ? »
+
+> (83) BOUTON : Le professeur Smith    [hotel · Sam 6 · 05 h 05]
+Mr Pratt, le concierge : « Comme je vous le disais… »
+
+> (84) BOUTON : La voyante de Lady Ashworth ?    [hotel · Sam 6 · 05 h 07]
+Mr Pratt, le concierge : « Vous m’avez déjà posé la question, monsieur. »
+
+> (85) AGIR : Je prends congé et remonte dormir jusqu’à l’ouverture des archives.    [hotel · Sam 6 · 05 h 09]
+Mr Pratt, le concierge : « Je vous l’ai déjà dit, monsieur. »
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (86) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 05 h 14]
+Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.
+Dans le couloir, une valise roule sur le tapis.
+
+> (87) BOUTON : Regarder autour de vous    [hotel · Sam 6 · 05 h 19]
+Vous avez déjà regardé la chambre tout à l’heure. Un lit trop mou, un bureau, une armoire qui grince, un portrait du roi George. Les journaux attendent sur la table. Rien n’a changé.
+
+> (88) AGIR : Je m’allonge enfin et dors jusqu’à l’ouverture des archives.    [hotel · Sam 6 · 05 h 21]
+Vous ne voyez pas les archives des journaux ici. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt, à la réception.
+[boutons] Lire les journaux | Aller ailleurs | Descendre parler au concierge
+
+> (89) AGIR : Je m’allonge sur le lit et tente enfin de dormir jusqu’à huit heures.    [hotel · Sam 6 · 05 h 23]
+Vous cherchez l’homme sur le lit des yeux, en vain. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt, à la réception.
+[boutons] Lire les journaux | Aller ailleurs | Descendre parler au concierge
+
+> (90) BOUTON : Aller ailleurs    [hotel · Sam 6 · 05 h 28]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+Une corne de brume, très loin, sur la Tamise.
+
+> (91) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 05 h 33]
+Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.
+
+> (92) BOUTON : Lire les journaux    [hotel · Sam 6 · 05 h 38]
+[document] LE PROFESSEUR ET LES FANTÔMES EN RELIEF — Hier soir, à l’Institut impérial, le professeur Julius Smith, l’homme qui a démasqué plus de médiums que Scotland Yard de pickpockets, a stupéfié la Fondation Challenger en soutenant que les hantises seraient des « tentatives de retour ». Un administrateur, sous couvert d’anonymat : « Nous attendions un sceptique. Nous avons eu un prophète. »
+
+> (93) BOUTON : Aller ailleurs    [hotel · Sam 6 · 05 h 43]
+Toujours la même chose. Peut-être faut-il essayer autre chose.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (94) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 05 h 48]
+Même résultat qu’à l’instant.
+Le radiateur cogne trois fois, puis se tait.
+
+> (95) BOUTON : Aller ailleurs    [hotel · Sam 6 · 05 h 53]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (96) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 05 h 58]
+Rien de plus que la dernière fois.
+
+> (97) BOUTON : Aller ailleurs    [hotel · Sam 6 · 06 h 03]
+Vous insistez. Le monde, lui, ne change pas d’avis.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (98) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 06 h 08]
+Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.
+Dans le couloir, une valise roule sur le tapis.
+
+> (99) BOUTON : Aller ailleurs    [hotel · Sam 6 · 06 h 13]
+Toujours la même chose. Peut-être faut-il essayer autre chose.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (100) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 06 h 18]
+Même résultat qu’à l’instant.
+
+> (101) BOUTON : Aller ailleurs    [hotel · Sam 6 · 06 h 23]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (102) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 06 h 28]
+Rien de plus que la dernière fois.
+Une corne de brume, très loin, sur la Tamise.
+
+> (103) BOUTON : Aller ailleurs    [hotel · Sam 6 · 06 h 33]
+Vous insistez. Le monde, lui, ne change pas d’avis.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (104) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 06 h 38]
+Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.
+
+> (105) AGIR : Je m’allonge sur le lit et attends patiemment l’ouverture des archives à huit heures.    [hotel · Sam 6 · 06 h 40]
+L’homme sur le lit ? Pas ici. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt, à la réception.
+[boutons] Lire les journaux | Aller ailleurs | Descendre parler au concierge
+
+> (106) AGIR : Je m’installe dans le fauteuil et attends patiemment huit heures en chantonnant.    [hotel · Sam 6 · 06 h 42]
+Vous vous asseyez un instant. Vos jambes vous remercient. Votre enquête, moins.
+[boutons] Lire les journaux | Aller ailleurs | Descendre parler au concierge
+Le radiateur cogne trois fois, puis se tait.
+
+> (107) BOUTON : Aller ailleurs    [hotel · Sam 6 · 06 h 47]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (108) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [hotel · Sam 6 · 06 h 52]
+Toujours la même chose. Peut-être faut-il essayer autre chose.
+
+> (109) AGIR : Je me rendors dans le fauteuil jusqu’à huit heures, malgré les coups du radiateur.    [hotel · Sam 6 · 06 h 52]
+Votre phrase peut vouloir dire plusieurs choses, et un seul mot m’y accroche. Que faites-vous, au juste ?
+[boutons] Fouiller la chambre | Attendre des nouvelles de Smith | Laisser passer le week-end
+
+> (110) BOUTON : Attendre des nouvelles de Smith    [hotel · Sam 6 · 07 h 27]
+Vous attendez. Le radiateur cogne, la pendule de l’entrée sonne la demie.
+Dans le couloir, une valise roule sur le tapis.
+
+> (111) BOUTON : Lire les journaux    [hotel · Sam 6 · 07 h 32]
+Les journaux du jour : la Ruhr, le mark qui s’effondre, un match de rugby à Twickenham. Rien de plus sur vos affaires.
+
+> (112) BOUTON : Aller ailleurs    [hotel · Sam 6 · 07 h 37]
+Vous pouvez vous rendre à : la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (113) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [archives · Sam 6 · 08 h 05]
+Vous prenez votre temps : un thé, un œuf à la coque, les nouvelles. On n’ouvre qu’à 8 h.
+Vous prenez le métro, puis un omnibus. Le brouillard s’est glissé jusque dans les couloirs du souterrain.
+[lieu] Fleet Street, les archives du Daily Courier
+Au sous-sol du Daily Courier, la « morgue » : des kilomètres de journaux reliés, une odeur d’encre et de colle, et une vieille dame en manchettes qui règne sur le tout depuis le jubilé de la reine Victoria.
+
+> (114) BOUTON : Parler à l’archiviste    [archives · Sam 6 · 08 h 10]
+Mrs Pike, l’archiviste : Elle vous toise par-dessus ses lunettes. « Les archives ne sont pas ouvertes au public, monsieur. Sauf pour les amis du journal. Ou pour ceux qui payent. Une demi-couronne la recherche. »
+
+> (115) DIRE : Je paierai la demi-couronne ; je cherche tout article récent concernant le professeur Julius Smith.    [archives · Sam 6 · 08 h 12]
+Mrs Pike, l’archiviste : « God save the King, monsieur. Et qu’il nous sauve aussi, tant qu’il y est. Mon système de fiches est le meilleur de Fleet Street. Le Times me l’a envié. Le Times peut toujours envier. »
+Mrs Pike, l’archiviste : « Donnez-moi un nom ou un fait divers, monsieur, et je vous trouve l’article. Les années, je les connais par cœur. Les gens, beaucoup moins. »
+
+> (116) BOUTON : Le professeur Smith    [archives · Sam 6 · 09 h 14]
+Vous posez une demi-couronne sur le comptoir. Elle disparaît.
+Mrs Pike, l’archiviste : « Le professeur Smith ? Nous avons un dossier gros comme ça. » Des médiums démasqués, des procès gagnés, un portrait avec Houdini. Rien qui explique pourquoi il s’est enfermé chez lui.
+
+> (117) BOUTON : Les médiums démasqués par Smith    [archives · Sam 6 · 09 h 16]
+Mrs Pike, l’archiviste : « Vane, Hortense. Dossier V-31. Médium, Gordon Square. Démasquée par Smith en 1921, chez Lady Ashworth : page trois, avec une photographie de la gaze. » Elle referme le tiroir. « Elle a toujours ses clients. Les gens préfèrent un beau mensonge à un article bien classé. »
+
+> (118) BOUTON : Parler du spiritisme    [archives · Sam 6 · 09 h 18]
+Mrs Pike, l’archiviste : « Les séances ? Ma voisine y va le jeudi. Elle parle à son fils mort à la guerre. Ça lui fait du bien, alors… »
+
+> (119) BOUTON : Prendre congé    [archives · Sam 6 · 09 h 20]
+Mrs Pike, l’archiviste : « Remettez les volumes à leur place. À LEUR place. »
+
+> (120) BOUTON : Chercher dans les journaux reliés    [archives · Sam 6 · 10 h 20]
+Mrs Pike, l’archiviste : « Quoi encore ? »
+
+> (121) BOUTON : La traiter de menteuse    [archives · Sam 6 · 10 h 22]
+Mrs Pike, l’archiviste : « Doucement. Respirez. On se calme. »
+
+> (122) BOUTON : Parler de la TSF    [archives · Sam 6 · 10 h 24]
+Mrs Pike, l’archiviste : « La TSF ? Mon beau-frère s’est fabriqué un poste. On entend de la musique qui vient de nulle part. »
+
+> (123) BOUTON : Parler du brouillard    [archives · Sam 6 · 10 h 26]
+Mrs Pike, l’archiviste : « Une vraie purée de pois, monsieur. Hier, un omnibus est entré dans une vitrine à Holborn. »
+
+> (124) BOUTON : Parler du spiritisme    [archives · Sam 6 · 10 h 28]
+Mrs Pike, l’archiviste : « Des tables qui tournent ? Dans mon pub, elles tournent aussi, à partir de onze heures. »
+
+> (125) BOUTON : Lui demander depuis combien de temps elle est là    [archives · Sam 6 · 10 h 30]
+Mrs Pike, l’archiviste : Mrs Pike pince les lèvres. « Depuis le jubilé de diamant, monsieur. Et je compte bien vous survivre. » Elle retourne à ses registres, et vous n’existez plus.
+
+> (126) BOUTON : Chercher dans les journaux reliés    [archives · Sam 6 · 11 h 30]
+Mrs Pike, l’archiviste : « Pas maintenant, monsieur. »
+Les rotatives, au-dessus, font vibrer les rayonnages.
+
+> (127) BOUTON : Chercher dans les journaux reliés    [archives · Sam 6 · 12 h 30]
+On fait mine de ne pas vous voir.
+
+> (128) BOUTON : Feuilleter les faits divers de 1900    [archives · Sam 6 · 13 h 30]
+Un aéronaute disparu au-dessus de la Manche, un éléphant échappé à Battersea, un pasteur qui a vendu sa femme. 1900 était une année riche. Elle n’a rien à vous dire.
+
+> (129) BOUTON : Chercher dans les journaux reliés    [archives · Sam 6 · 14 h 30]
+Mrs Pike, l’archiviste : « Je vous écoute. Vite. »
+
+> (130) BOUTON : Parler du spiritisme    [archives · Sam 6 · 14 h 32]
+Mrs Pike, l’archiviste : « Je vous l’ai déjà dit, monsieur. »
+
+> (131) BOUTON : Parler de sport    [archives · Sam 6 · 14 h 34]
+Mrs Pike, l’archiviste : « Le sport ? Je classe les résultats depuis 1887, monsieur. Je n’en ai jamais regardé un seul. »
+
+> (132) DIRE : Je cherche surtout tout article mentionnant Hortense Vane ou Lady Ashworth.    [archives · Sam 6 · 14 h 36]
+Mrs Pike, l’archiviste : « Bon. » Un soupir, à peine poli.
+
+> (133) DIRE : Pourriez-vous vérifier le dossier V-31 et tout article reliant Hortense Vane à Lady Ashworth ?    [archives · Sam 6 · 14 h 38]
+Mrs Pike, l’archiviste : « Passons. Encore ? »
+
+> (134) BOUTON : Parler du spiritisme    [archives · Sam 6 · 14 h 40]
+Mrs Pike, l’archiviste : Pas de réponse. Un regard vers la porte.
+
+> (135) BOUTON : Parler de la TSF    [archives · Sam 6 · 14 h 42]
+Mrs Pike, l’archiviste : Un silence épais.
+Mrs Pike, l’archiviste : « Si vous voulez bien m’excuser, monsieur. » La conversation est terminée.
+
+> (136) BOUTON : Chercher dans les journaux reliés    [archives · Sam 6 · 15 h 42]
+Mrs Pike, l’archiviste : « Pas maintenant, monsieur. »
+
+> (137) BOUTON : Réfléchir    [archives · Sam 6 · 15 h 43]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 50/80 — Réussite
+
+> (138) BOUTON : Chercher dans les journaux reliés    [archives · Sam 6 · 16 h 43]
+Mrs Pike, l’archiviste : « Oui ? »
+
+> (139) DIRE : Je voudrais savoir si le dossier V-31 mentionne une adresse, un symbole ou un objet associé aux séances d’Hortense Vane.    [archives · Sam 6 · 16 h 45]
+Mrs Pike, l’archiviste : « Je fais comme si je n’avais rien entendu. Je ne vois pas ce que je pourrais ajouter, monsieur. »
+
+> (140) BOUTON : Parler du brouillard    [archives · Sam 6 · 16 h 47]
+Mrs Pike, l’archiviste : « Ça vous colle aux poumons, ce brouillard. Ma mère dit que c’est les morts qui respirent. »
+
+> (141) BOUTON : Parler du tombeau de Toutankhamon    [archives · Sam 6 · 16 h 49]
+Mrs Pike, l’archiviste : « Le pharaon en or ? Ma belle-sœur s’est acheté un chapeau égyptien. Un chapeau ! »
+
+> (142) AGIR : Je remercie Mrs Pike, quitte les archives et me rends au salon de Mrs Vane à Gordon Square.    [archives · Sam 6 · 16 h 51]
+Mrs Pike, l’archiviste : Un soupir, à peine poli.
+
+> (143) BOUTON : Parler du spiritisme    [archives · Sam 6 · 16 h 53]
+Mrs Pike, l’archiviste : On vous regarde comme on regarde la pluie.
+
+> (144) AGIR : Je prends congé de Mrs Pike et me rends au salon de Mrs Vane, à Gordon Square.    [archives · Sam 6 · 16 h 55]
+Mrs Pike, l’archiviste : Pas de réponse. Un regard vers la porte.
+Mrs Pike, l’archiviste : « Si vous voulez bien m’excuser, monsieur. » La conversation est terminée.
+
+> (145) BOUTON : Aller ailleurs    [archives · Sam 6 · 17 h 00]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (146) BOUTON : Aller : le salon de Mrs Vane, à Gordon Square    [archives · Sam 6 · 17 h 05]
+Mrs Vane ne reçoit que le soir, à partir de 19 h. Ses rideaux de velours sont tirés sur Gordon Square. Il est 17 h : revenez ce soir, ou écrivez « attendre le soir ».
+Un coursier dévale l’escalier avec une épreuve encore humide.
+
+> (147) BOUTON : Aller ailleurs    [archives · Sam 6 · 17 h 10]
+Même résultat qu’à l’instant.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (148) DIRE : Je reste devant la maison de Mrs Vane jusqu’à dix-neuf heures.    [archives · Sam 6 · 17 h 15]
+Mrs Pike, l’archiviste : « Pas maintenant, monsieur. »
+
+> (149) BOUTON : Aller ailleurs    [archives · Sam 6 · 17 h 20]
+Rien de plus que la dernière fois.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (150) AGIR : J’attends discrètement devant la maison de Mrs Vane jusqu’à dix-neuf heures.    [archives · Sam 6 · 17 h 22]
+Il est déjà 17 h passées.
+Mrs Pike tamponne une fiche. Clac.
+
+> (151) AGIR : Je quitte les archives et retourne à l’hôtel pour attendre dix-neuf heures.    [hotel · Sam 6 · 18 h 07]
+Le chauffeur roule au pas : on ne voit pas à dix mètres. Quelque part, une corne de brume répond à une autre.
+[lieu] Votre hôtel, à Bloomsbury
+L’hôtel. Le portier vous salue d’un « Sale temps, monsieur » qui ne demande pas de réponse.
+
+> (152) BOUTON : Descendre parler au concierge    [hotel · Sam 6 · 18 h 12]
+Mr Pratt, le concierge : Mr Pratt lève les yeux de son registre.
+
+> (153) BOUTON : Du courrier ?    [hotel · Sam 6 · 18 h 14]
+Mr Pratt, le concierge : « Pas de courrier, monsieur. Le brouillard ralentit tout, même la poste. »
+
+> (154) BOUTON : Parler du spiritisme    [hotel · Sam 6 · 18 h 16]
+Mr Pratt, le concierge : « Sir Arthur Conan Doyle croit dur comme fer aux esprits. Le créateur de Sherlock Holmes ! Il faut croire que la logique se fatigue. »
+Mr Pratt, le concierge : « Votre chambre vous convient-elle, monsieur ? »
+
+> (155) BOUTON : Envoyer un télégramme    [hotel · Sam 6 · 18 h 18]
+Mr Pratt, le concierge : Un soupir, à peine poli.
+[boutons] 
+
+> (156) BOUTON : Passer une petite annonce    [hotel · Sam 6 · 18 h 20]
+Mr Pratt, le concierge : « Encore ? »
+[boutons] 
+
+> (157) AGIR : Je remercie Mr Pratt et attends dans le hall jusqu’à dix-neuf heures.    [hotel · Sam 6 · 18 h 22]
+Mr Pratt, le concierge : « Je vous en prie. »
+
+> (158) AGIR : Je reste dans le hall, feignant de lire le journal jusqu’à dix-neuf heures.    [hotel · Sam 6 · 18 h 24]
+Il est déjà 18 h passées.
+
+> (159) AGIR : Je remercie Mr Pratt, quitte l’hôtel et me rends au salon de Mrs Vane à Gordon Square.    [hotel · Sam 6 · 18 h 26]
+Mr Pratt, le concierge : « Je ne vois pas ce que je pourrais ajouter, monsieur. »
+
+> (160) AGIR : Je prends congé du concierge et me rends au salon de Mrs Vane à Gordon Square.    [hotel · Sam 6 · 18 h 28]
+Mr Pratt, le concierge : Un soupir, à peine poli.
+
+> (161) BOUTON : Parler du brouillard    [hotel · Sam 6 · 18 h 30]
+Mr Pratt, le concierge : « Ce brouillard est un scandale sanitaire. Le charbon, voilà le coupable. »
+
+> (162) AGIR : Je remercie Mr Pratt et retourne dans ma chambre pour attendre dix-neuf heures.    [hotel · Sam 6 · 18 h 32]
+Mr Pratt, le concierge : « Votre chambre, monsieur ? Le troisième, sur cour. Douze shillings la nuit, petit déjeuner compris. Le radiateur est un caractère, mais il chauffe. »
+
+> (163) BOUTON : S’impatienter    [hotel · Sam 6 · 18 h 34]
+Mr Pratt, le concierge : « Allons, monsieur, inutile de vous emporter. Nous pouvons parler calmement. »
+
+> (164) AGIR : Je quitte poliment le concierge et me rends au salon de Mrs Vane à Gordon Square.    [vane · Sam 6 · 19 h 05]
+Vous prenez votre temps : un thé, un œuf à la coque, les nouvelles. On n’ouvre qu’à 19 h.
+Un taxi vous emporte à travers le brouillard. Les réverbères passent comme des lunes malades.
+[lieu] Gordon Square, le salon de Mrs Vane
+Au premier étage d’une maison de Gordon Square, un salon tendu de velours prune, si chauffé que les vitres pleurent. Une douzaine de chaises autour d’un guéridon nappé de noir. Des photographies d’ectoplasmes encadrées comme des portraits de famille. Et, dans un fauteuil à oreilles, une dame forte et poudrée, couverte de jais, qui vous sourit comme si elle vous attendait.
+
+> (165) BOUTON : Regarder autour de vous    [vane · Sam 6 · 19 h 10]
+Les habitués : deux veuves de guerre, un colonel en retraite qui prend des notes, une jeune fille pâle qui ne quitte pas sa mère. Tout le monde a perdu quelqu’un. Tout le monde attend qu’on lui réponde.
+
+> (166) BOUTON : Parler à Mrs Vane    [vane · Sam 6 · 19 h 15]
+Mrs Hortense Vane, médium : « Bienvenue, très cher. Je vous attendais. » Elle laisse passer un temps. « C’est ce que je dis à tout le monde, voyez-vous. Et tout le monde me croit. »
+
+> (167) DIRE : Je viens au sujet du professeur Julius Smith et de la séance où vous l’avez démasqué.    [vane · Sam 6 · 19 h 17]
+Mrs Hortense Vane, médium : « Smith. » Le nom lui fait plisser la bouche. « En 1921, chez Lady Ashworth, il a rallumé les lampes au beau milieu d’une apparition et il a tiré sur ma gaze devant vingt personnes. J’ai perdu la moitié de ma clientèle en une soirée. »
+
+> (168) DIRE : Que s’est-il réellement passé pendant cette séance, et pourquoi Smith s’est-il intéressé à vous ?    [vane · Sam 6 · 19 h 19]
+Mrs Hortense Vane, médium : « Et maintenant, d’après les journaux, il croit aux revenants. » Elle a un petit rire sans joie. « Les hommes comme lui ne changent pas d’avis, très cher. Ou alors, ce n’est plus tout à fait le même homme. »
+
+> (169) DIRE : Vous dites que Smith croit désormais aux revenants : qu’a-t-il découvert, exactement ?    [vane · Sam 6 · 19 h 21]
+Mrs Hortense Vane, médium : « Je vous l’ai déjà dit, monsieur. »
+
+> (170) BOUTON : La séance de ce soir    [vane · Sam 6 · 19 h 23]
+Mrs Hortense Vane, médium : « À neuf heures, très cher. Une guinée dans la soucoupe. Et je ne promets rien : les esprits sont comme les chats, ils viennent quand ils veulent. »
+[boutons] Assister à la séance
+
+> (171) DIRE : Je paierai la guinée et assisterai à la séance de neuf heures.    [vane · Sam 6 · 19 h 25]
+Mrs Hortense Vane, médium : « À neuf heures, une guinée. Je fournis le frisson, les clients fournissent les larmes. »
+
+> (172) DIRE : J’aimerais savoir ce que Smith a découvert avant de croire aux revenants.    [vane · Sam 6 · 19 h 27]
+Mrs Hortense Vane, médium : « Comme je vous le disais… »
+
+> (173) BOUTON : Parler du spiritisme    [vane · Sam 6 · 19 h 29]
+Mrs Hortense Vane, médium : « Si j’y crois ? » Elle rit, d’un rire de gorge. « Très cher, ils sont ici même. Ils vous écoutent. L’un d’eux trouve votre chapeau épouvantable. »
+
+> (174) DIRE : Vous avez dit qu’ils sont ici : lequel d’entre eux a quelque chose à me révéler sur le professeur Smith ?    [vane · Sam 6 · 19 h 31]
+Mrs Hortense Vane, médium : « Vous m’avez déjà posé la question, monsieur. »
+
+> (175) BOUTON : Prendre congé    [vane · Sam 6 · 19 h 33]
+Mrs Hortense Vane, médium : « Que vos morts vous gardent, très cher. »
+
+> (176) BOUTON : Assister à la séance    [vane · Sam 6 · 22 h 00]
+Vous prenez une chaise contre le mur et vous attendez. Les habitués arrivent un à un, se saluent à voix basse, posent leurs chapeaux sur leurs genoux. À neuf heures précises, Mrs Vane éteint les lampes une à une.
+Une guinée dans la soucoupe, comme tout le monde. On se donne la main autour du guéridon. Il ne reste qu’une bougie, sous un globe de verre rouge.
+Le spectacle commence. La table frappe un coup, puis deux. Une clochette tinte quelque part au plafond. Une forme blanche et vaporeuse se gonfle au-dessus de l’épaule de Mrs Vane, qui annonce d’une voix de tête « le petit Edward, tombé à Ypres », et une des veuves se met à sangloter. C’est bien fait. C’est très bien fait.
+Puis il fait froid. Pas frais : froid, d’un coup, comme une porte ouverte sur l’hiver. La bougie se couche sans s’éteindre. Une odeur monte, que tout le monde reconnaît, celle des quais de gare : charbon mouillé, vapeur, fer chaud. Très loin, un sifflet de locomotive. Mrs Vane s’est tue. Elle a les yeux ouverts, et elle ne joue plus.
+La voix qui sort de sa bouche n’est pas la sienne. Une voix d’homme jeune, essoufflée, qui parle trop vite : « Papa ? Papa, c’est Albert. Je l’ai fait venir, tu vois, j’ai compris. La voie n’est pas plate, papa. Il faut qu’elle monte et qu’elle descende, sinon il ne vient pas. »
+Un silence. Puis, tout bas, comme un enfant qui avoue : « Ne montez pas. Il a faim. Il a toujours faim. » La table se fend d’un craquement sec. Quelqu’un crie. Les lampes se rallument, et Mrs Vane glisse de sa chaise, évanouie, une mousse grise au coin des lèvres.
+[indice noté dans le carnet] Chez Mrs Vane, une voix de jeune homme a parlé à travers elle. Elle disait s’appeler Albert : « La voie n’est pas plate, papa. Il faut qu’elle monte et qu’elle descende. » Puis : « Il a faim. »
+[jet demandé] Santé mentale 71 %
+[dés] Santé mentale : 17/71 — Réussite majeure
+Vous lâchez les mains de vos voisins. Elles étaient glacées. Les vôtres aussi.
+On allonge Mrs Vane sur le sofa. Quand elle rouvre les yeux, c’est vous qu’elle cherche du regard.
+Mrs Hortense Vane, médium : « Encore vous. » Elle serre son châle. « Parlez vite. »
+
+> (177) DIRE : Qui est Albert, et que signifie cette voie qui monte et descend ?    [vane · Sam 6 · 22 h 02]
+Mrs Hortense Vane, médium : « Je ne le connais pas. Je vous le jure sur la tête de Cyril. » Elle frissonne. « Ce n’était pas un mort de la guerre. Il parlait comme on parlait quand j’étais jeune fille. Et il cherchait son père, comme s’il l’avait perdu dans une gare. »
+
+> (178) DIRE : Je vous crois, mais cette voix connaissait-elle un nom, une gare ou un lieu précis ?    [vane · Sam 6 · 22 h 04]
+Mrs Hortense Vane, médium : « L’Orient-Express ? Trois jours de Londres à Constantinople, en dormant dans des draps brodés. La civilisation, sur des rails. »
+
+> (179) DIRE : Qui est Cyril, et pourquoi avez-vous juré sur sa tête ?    [vane · Sam 6 · 22 h 06]
+Mrs Hortense Vane, médium : « Très cher, mon neveu Cyril. Il m’aide. Il ne parle pas beaucoup, c’est une qualité. »
+
+> (180) DIRE : Où puis-je trouver Cyril, et quel rapport a-t-il avec le professeur Smith ?    [vane · Sam 6 · 22 h 08]
+Mrs Hortense Vane, médium : Un soupir, à peine poli.
+
+> (181) DIRE : Qui est ce Cyril, et où puis-je le trouver demain ?    [vane · Sam 6 · 22 h 10]
+Mrs Hortense Vane, médium : « Smith ? Le monsieur qui m’a ruinée chez Lady Ashworth. Je ne lui souhaite pas de mal. Pas beaucoup. »
+
+> (182) BOUTON : Prendre congé    [vane · Sam 6 · 22 h 12]
+Mrs Hortense Vane, médium : « Monsieur. »
+Une habituée tricote en attendant les esprits.
+
+> (183) BOUTON : Chercher les trucages    [vane · Sam 6 · 22 h 17]
+Pendant que les habitués s’occupent de Mrs Vane, vous passez la main sous le guéridon.
+[jet demandé] Trouver Objet Caché 45 %
+[dés] Trouver Objet Caché : 54/45 — Échec
+Sous le guéridon, du bois, de la poussière, et la chaussure d’une veuve qui vous regarde de travers. Si la table est truquée, c’est mieux fait que vous ne pensez.
+
+> (184) BOUTON : Demander une consultation privée    [vane · Sam 6 · 22 h 47]
+Deux guinées. Mrs Vane les fait disparaître dans son corsage, ferme les yeux, et prend vos mains dans les siennes.
+[jet demandé] Psychologie 35 %
+[dés] Psychologie : 93/35 — Échec
+Elle vous parle d’un homme de feu qui n’est pas celui qu’il dit, d’un train qui roule sur l’eau, d’une porte au bout d’un très long voyage. Elle ouvre les yeux et vous demande, de sa voix ordinaire, si c’était bien. Vous ne savez pas quoi croire. C’est sans doute le but.
+
+> (185) DIRE : Je voudrais parler à Cyril en privé : où puis-je le trouver demain ?    [vane · Sam 6 · 22 h 49]
+Mrs Hortense Vane, médium : « Oui ? »
+Mrs Hortense Vane, médium : « Je vous l’ai dit, mon ami : Smith ? Le monsieur qui m’a ruinée chez Lady Ashworth. Je ne lui souhaite pas de mal. Pas beaucoup. »
+
+> (186) DIRE : Vous évitez mes questions, Mrs Vane ; dites-moi au moins où Cyril travaille.    [vane · Sam 6 · 22 h 51]
+Mrs Hortense Vane, médium : « Non, mon ami. Les esprits sont comme les chats, très cher : ils viennent quand on ne les appelle pas. »
+Mrs Hortense Vane, médium : « Vous radotez, ou c’est moi ? mon neveu Cyril. Il m’aide. Il ne parle pas beaucoup, c’est une qualité. »
+
+> (187) BOUTON : La menacer    [vane · Sam 6 · 22 h 53]
+Mrs Hortense Vane, médium : « Des menaces, maintenant. Vous tombez bien bas. »
+
+> (188) BOUTON : Parler de la TSF    [vane · Sam 6 · 22 h 55]
+Mrs Hortense Vane, médium : « La BBC émet depuis novembre. Des concerts dans l’air, invisibles. Vous trouvez ça rassurant ? Moi pas. »
+
+> (189) DIRE : Je ne vous crois pas, Mrs Vane : cette séance était un tour de passe-passe.    [vane · Sam 6 · 22 h 57]
+Mrs Hortense Vane, médium : « Je fais semblant de n’avoir rien entendu. Je vous l’ai dit, mon ami : À neuf heures, une guinée. Je fournis le frisson, les clients fournissent les larmes. »
+
+> (190) BOUTON : La traiter de menteuse    [vane · Sam 6 · 22 h 59]
+Mrs Hortense Vane, médium : « Vous êtes d’une grossièreté rare. Je vous conseille de vous reprendre. »
+
+> (191) BOUTON : Lui dire en face que c’est une escroquerie    [vane · Sam 6 · 23 h 01]
+Mrs Hortense Vane, médium : Mrs Vane ne cesse pas de sourire. « Les esprits pardonnent beaucoup, très cher. Moi, moins. » Elle agite une clochette ; la bonne vous raccompagne.
+
+> (192) BOUTON : Aller ailleurs    [vane · Sam 6 · 23 h 06]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street
+Il y a eu un grand feu, cette nuit, quelque part au nord : on en parlait au petit déjeuner. Vous pensez à Smith, sans savoir pourquoi.
+
+> (193) BOUTON : Aller : la maison de Smith, à St John’s Wood    [stjohn · Sam 6 · 23 h 51]
+Londres dort sous son brouillard. Vos pas, puis le moteur du taxi, sont les seuls bruits de la ville.
+[lieu] St John’s Wood, la maison de Smith
+Il ne reste de la maison de Smith qu’une carcasse noire, ouverte sur le ciel gris. Les poutres fument encore par endroits. Des pages calcinées collent aux grilles du jardin comme des feuilles mortes. Un agent en pèlerine fait les cent pas devant le portail, et un laitier, sa carriole arrêtée, raconte quelque chose à qui veut l’entendre.
+[indice noté dans le carnet] Smith a disparu. On a vu un homme ressemblant à Beddows s’enfuir juste avant l’incendie.
+[système] Nouveau lieu : Scotland Yard. Écrivez « aller à… » ou touchez « Où aller ? ».
+
+> (194) BOUTON : Écouter le laitier    [stjohn · Sam 6 · 23 h 56]
+Le laitier a fini sa tournée depuis longtemps : il ne passe qu’à l’aube. Sa carriole n’est plus là.
+Une corne de brume, quelque part vers la Tamise.
+
+> (195) BOUTON : Fouiller les ruines    [stjohn · Dim 7 · 00 h 01]
+L’agent s’est abrité sous un porche. Vous enjambez la grille.
+[jet demandé] Trouver Objet Caché 45 %
+[dés] Trouver Objet Caché : 29/45 — Réussite
+Sous une poutre effondrée, le coffre-fort du bureau a protégé un fond de tiroir. Des factures, une photographie de Smith avec Houdini, et une lettre au papier roussi.
+[document] Très honoré Professeur, un objet est entré en ma possession, une tête de statue d’un travail très ancien, que je crois liée à vos recherches. Je préférerais ne pas la garder sous mon toit plus longtemps qu’il ne faut. Votre serviteur, M. Makryat, antiquités orientales, 3, Brophy Lane, Islington.
+[objet] Une lettre roussie, à en-tête de M. Makryat
+[indice noté dans le carnet] Dans les ruines de St John’s Wood : Makryat proposait à Smith de lui montrer « une tête de statue, d’un travail très ancien ». En-tête : 3, Brophy Lane, Islington.
+[indice noté dans le carnet] 3, Brophy Lane, à Islington. La police l’a fouillée sans rien trouver.
+[système] Nouveau lieu : la boutique de Brophy Lane, à Islington. Écrivez « aller à… » ou touchez « Où aller ? ».
+
+> (196) BOUTON : Aller ailleurs    [stjohn · Dim 7 · 00 h 06]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la gare Victoria, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (197) BOUTON : Aller : la boutique de Brophy Lane, à Islington    [islington · Dim 7 · 00 h 51]
+Vous trouvez un taxi de nuit, le chauffeur à moitié endormi. Les rues sont vides, luisantes.
+[lieu] Brophy Lane, Islington
+Une ruelle pavée d’Islington, des boutiques aux vitrines embuées. Au numéro 3, une façade de brique à deux étages et un petit écriteau « Fermé » derrière la vitre. À côté, un bureau de tabac encore ouvert.
+
+> (198) BOUTON : Examiner la vitrine    [islington · Dim 7 · 00 h 56]
+Derrière la vitre sale, des plateaux de cuivre, des lampes ajourées, des tapis roulés. L’écriteau « Fermé » pend de travers. La serrure est ancienne.
+
+> (199) BOUTON : Parler au buraliste    [islington · Dim 7 · 01 h 01]
+Rideau baissé, pancarte : « Fermé le dimanche ». Le buraliste respecte le jour du Seigneur, ou sa grasse matinée.
+
+> (200) BOUTON : Chercher une autre entrée    [islington · Dim 7 · 01 h 06]
+Une impasse longe l’arrière de la maison : un mur de brique, une fenêtre à barreaux, une porte de cave condamnée. Il faudra passer par devant.
+
+> (201) BOUTON : Entrer dans la boutique    [boutique · Dim 7 · 01 h 11]
+Vous attendez que la rue soit vide, puis vous vous approchez de la porte.
+[jet demandé] Force 40 %
+[dés] Force : 8/40 — Réussite extrême
+Le vieux bois cède dans un craquement sec. Vous entrez vite, en refermant derrière vous.
+[lieu] La boutique de Makryat
+Une odeur de poussière, de cuivre et d’encens éteint. Dans la pénombre, des lampes ajourées pendent du plafond comme des cages vides. Des tapis roulés, des aiguières, des carreaux de céramique. Un comptoir. Au fond, un escalier étroit.
+
+> (202) BOUTON : Examiner les registres    [boutique · Dim 7 · 01 h 16]
+Sous le comptoir, des registres d’achats et de ventes tenus d’une main régulière. Les marchandises viennent de Turquie, du Levant, ou des salles des ventes londoniennes.
+[jet demandé] Comptabilité 45 %
+[dés] Comptabilité : 8/45 — Réussite extrême
+Une ligne détonne au milieu des cuivres et des tapis : « Un train miniature Wrightson, commande spéciale, acquis à la succession de Randolph Alexis. » Et dans le livre des ventes, la dernière entrée : le même train, vendu une livre à un certain Henry Stanley, de Stoke Newington. Nulle part ailleurs il n’est question de jouets.
+[indice noté dans le carnet] Un train miniature fait sur commande, acheté à la succession de Randolph Alexis, revendu une livre à Henry Stanley, de Stoke Newington.
+[système] Nouveau lieu : la pension de Stoke Newington. Écrivez « aller à… » ou touchez « Où aller ? ».
+
+> (203) BOUTON : Monter à l’étage    [boutique · Dim 7 · 01 h 21]
+Un logement pour un homme seul, aux habitudes modestes : un lit étroit, une commode, une table, un réchaud. Tout est propre. Et pas un seul livre, nulle part, à part les registres d’en bas.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 82/80 — Échec
+Une chambre d’homme seul, propre, presque vide. Rien ne vous saute aux yeux.
+
+> (204) BOUTON : Examiner les marchandises    [boutique · Dim 7 · 01 h 26]
+Votre œil d’expert fait vite le tri : du cuivre égyptien, des tapis persans honnêtes, et beaucoup de reproductions vendues pour de l’ancien. La boutique d’un marchand ordinaire. Trop ordinaire, peut-être.
+
+> (205) BOUTON : Ouvrir les aiguières scellées    [boutique · Dim 7 · 01 h 36]
+Sur une étagère, trois aiguières de cuivre au bouchon scellé de cire noire. Vous faites sauter les cachets un à un.
+[jet demandé] Santé mentale 70 %
+[dés] Santé mentale : 29/70 — Réussite majeure
+De l’huile rance, des clous de girofle, et dans la troisième une petite chose sèche et recroquevillée. Une patte de singe, sans doute. Vous refermez.
+
+> (206) BOUTON : Dérouler les tapis    [boutique · Dim 7 · 02 h 01]
+Des tapis d’Anatolie, beaux et poussiéreux. Vous en déroulez cinq, à genoux, éternuant à chaque fois. Il n’y a rien dedans, sinon des mites, de la laine, et le temps qui passe.
+
+> (207) BOUTON : Aller ailleurs    [boutique · Dim 7 · 02 h 06]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, Scotland Yard, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (208) BOUTON : Aller : la pension de Stoke Newington    [boutique · Dim 7 · 02 h 11]
+À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison. Mieux vaut attendre le matin.
+
+> (209) AGIR : je relis mes notes et cherche le lien entre le train miniature, la voie qui monte et descend, et la faim évoquée par Albert    [boutique · Dim 7 · 02 h 16]
+Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.
+
+> (210) BOUTON : Aller ailleurs    [boutique · Dim 7 · 02 h 21]
+Vous insistez. Le monde, lui, ne change pas d’avis.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (211) BOUTON : Aller : la pension de Stoke Newington    [boutique · Dim 7 · 02 h 26]
+Toujours la même chose. Peut-être faut-il essayer autre chose.
+
+> (212) BOUTON : Aller ailleurs    [boutique · Dim 7 · 02 h 31]
+Même résultat qu’à l’instant.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (213) BOUTON : Aller : Scotland Yard    [yard · Dim 7 · 03 h 16]
+Londres dort sous son brouillard. Vos pas, puis le moteur du taxi, sont les seuls bruits de la ville.
+[lieu] New Scotland Yard
+Les briques rouges et blanches de New Scotland Yard, au bord de la Tamise. Un hall bruyant, des agents qui courent, des bancs où attendent des gens qui ont perdu quelque chose : un chien, un mari, une montre.
+
+> (214) BOUTON : Glaner des informations auprès des agents    [yard · Dim 7 · 03 h 21]
+Vous traînez près de la machine à thé, un mot pour l’un, une cigarette pour l’autre.
+[jet demandé] Baratin 30 %
+[dés] Baratin : 51/30 — Échec
+Les agents se méfient des curieux aujourd’hui. On vous raccompagne poliment vers la sortie. Vous pourrez retenter votre chance demain.
+
+> (215) BOUTON : Demander à parler à un inspecteur    [yard · Dim 7 · 03 h 26]
+Le planton de nuit lève à peine les yeux. « L’inspecteur Fleming ? Rentré chez lui, monsieur. Les bureaux rouvrent à huit heures. »
+
+> (216) BOUTON : Voir le sergent chargé des incendies    [yard · Dim 7 · 03 h 31]
+Le planton de nuit lève à peine les yeux. « Le sergent Rigby ? Parti depuis longtemps, monsieur. Revenez à huit heures. »
+
+> (217) BOUTON : Lire les dossiers sur un bureau vide    [yard · Dim 7 · 04 h 36]
+Un bureau sans personne, une pile de chemises cartonnées. Vous vous penchez, l’air de rien.
+[jet demandé] Discrétion 30 %
+[dés] Discrétion : 84/30 — Échec
+Un sergent vous attrape par le col. « Les dossiers de la Police métropolitaine ne sont pas une bibliothèque de prêt, monsieur. » On vous pose sur un banc, on vous fait attendre, et l’on fait savoir là-haut ce que vous avez tenté.
+
+> (218) BOUTON : Voir le sergent Rigby, aux incendies    [yard · Dim 7 · 04 h 41]
+Vous y revenez. Le planton de nuit lève à peine les yeux. « Le sergent Rigby ? Parti depuis longtemps, monsieur. Revenez à huit heures. »
+
+> (219) BOUTON : Réfléchir    [yard · Dim 7 · 04 h 42]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 44/80 — Réussite
+
+> (220) BOUTON : Consulter le registre des objets trouvés    [yard · Dim 7 · 05 h 12]
+Le registre des objets trouvés est un roman de Londres : quatre cents parapluies, un dentier en or, un perroquet, un cercueil d’enfant, vide, « oublié dans un fiacre ». Rien qui ressemble à ce que vous cherchez. Vous en ressortez une demi-heure plus tard, étrangement mélancolique.
+
+> (221) BOUTON : Aller ailleurs    [yard · Dim 7 · 05 h 17]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (222) BOUTON : Aller : votre hôtel, à Bloomsbury    [hotel · Dim 7 · 06 h 02]
+Vous trouvez un taxi de nuit, le chauffeur à moitié endormi. Les rues sont vides, luisantes.
+[lieu] Votre hôtel, à Bloomsbury
+Votre chambre vous attend, immobile, comme une salle d’attente.
+Le groom frappe : du courrier pour vous, à la réception. Il vous le monte sur un plateau.
+Parmi les réponses à votre annonce, des voyantes, un escroc, une veuve qui cherche un mari. Et une enveloppe sans timbre, apportée à la main.
+Une carte de visite du professeur Smith, scellée à la cire de sa chevalière. Au dos, d’une écriture tremblée : « Venez sans tarder. Il me reste peu de temps. Pour l’amour de Dieu, que personne ne vous suive. J. A. Smith. » Au recto, une adresse à Cheapside, un quartier où Smith n’aurait jamais mis les pieds.
+[objet] La carte de visite de Smith, au cachet de sa chevalière
+[indice noté dans le carnet] « Venez sans tarder. Il me reste peu de temps. Que personne ne vous suive. » Une adresse à Cheapside.
+[système] Nouveau lieu : la chambre de Cheapside. Écrivez « aller à… » ou touchez « Où aller ? ».
+
+> (223) BOUTON : Aller ailleurs    [hotel · Dim 7 · 06 h 07]
+Vous pouvez vous rendre à : la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (224) BOUTON : Aller : la chambre de Cheapside    [cheapside · Dim 7 · 06 h 52]
+Le taxi se faufile entre les omnibus et les charrettes. Londres n’est qu’une suite de halos jaunes dans le gris.
+[lieu] Cheapside, une chambre meublée
+Une rue sans nom, des façades noires de suie, un escalier qui sent le chou et le pétrole. Au deuxième étage, vous frappez. Un long silence, puis la porte s’entrouvre sur le visage gris de Beddows. Il vous fait entrer vite et referme à clé.
+Les rideaux sont tirés. Une seule bougie. Sur le lit, une silhouette bouge sous les draps, et une voix de soufflet crevé murmure votre nom.
+L’homme sur le lit : « Dieu merci, vous êtes venus. » La voix n’est qu’un souffle râpeux. « Je ne pourrai pas parler longtemps. Écoutez-moi, et Beddows répondra pour moi. »
+L’homme sur le lit : « Je suivais la trace d’un objet… le simulacre de Sedefkar. Une statue très ancienne, d’une puissance mauvaise. On l’a démontée à la fin du siècle des Lumières, et ses morceaux se sont dispersés à travers l’Europe. Je voulais les retrouver, et la détruire. »
+L’homme sur le lit : « Hier soir, des Turcs ont attaqué ma maison. Ils cherchent la statue, eux aussi, pour s’en servir. Nous nous sommes barricadés, ils ont mis le feu. Nous avons fui. Mes notes ont brûlé, à moins qu’ils ne les aient prises. Il faut que vous la trouviez avant eux. »
+L’homme sur le lit : Il reprend son souffle, longtemps. « Voici ce dont je me souviens. C’est à Paris qu’on l’a démembrée : elle appartenait à un comte Fenalik, qui l’a perdue juste avant la Révolution. Un morceau est peut-être resté en France. Les soldats de Bonaparte en ont emporté un à Venise, vendu à un certain Alvise de Gremanci. Un autre est parti vers Trieste à la même époque : cherchez le nom de Winckelmann, au musée de la ville. »
+L’homme sur le lit : « Il y en a peut-être un en Serbie : voyez le docteur Milovan Todorovic, conservateur du musée de Belgrade. Un autre a été caché près de Sofia, pendant la guerre de 1875, enterré peut-être. Le dernier circulait à Paris juste après la Grande Guerre, et quelqu’un de Milan l’a acheté. Je ne sais pas qui. »
+L’homme sur le lit : « Quand vous l’aurez entière… il n’y a qu’un moyen sûr. La rapporter là où elle est née, à Constantinople, dans un lieu qu’on appelle la Mosquée Maudite. Il y a des niches, où elle reposait. Le rituel qui la détruira se trouve dans des documents qu’on nomme les rouleaux de Sedefkar. Je n’ai jamais pu les consulter. » Sa voix se brise. « Je suis désolé, mes amis. Allez. Allez vite. Que Dieu vous garde. »
+Il tousse. Beddows lui tend un verre, dont il boit une gorgée, puis il retombe sur l’oreiller, les yeux fermés. Il ne parlera plus ce soir.
+[indice noté dans le carnet] Une statue démembrée, dispersée en Europe. La réunir, puis la détruire dans la Mosquée Maudite de Constantinople grâce aux rouleaux de Sedefkar.
+[indice noté dans le carnet] Paris (le comte Fenalik), Venise (Alvise de Gremanci), Trieste (Winckelmann, au musée), Belgrade (Dr Todorovic), Sofia (cachée en 1875), Milan (un acheteur d’après-guerre).
+Beddows garde les yeux baissés. Sans un mot, il ouvre un placard et en sort une valise. À l’intérieur, des liasses de billets neufs de la Banque d’Angleterre : mille livres.
+Beddows : « Mon maître vit chichement par prudence, pour échapper à ces hommes. Il tient à contribuer à votre voyage, sans rien exiger en retour. Avant cette horreur, il comptait prendre le Simplon-Orient-Express. Le plus rapide, le plus sûr, le plus confortable du continent. Et mon maître a l’habitude de son confort. »
+[objet] La valise de Beddows (1 000 £ en billets neufs)
+
+> (225) BOUTON : S’approcher du lit    [cheapside · Dim 7 · 06 h 57]
+Vous vous penchez au-dessus du lit. Le visage de Smith n’est plus qu’une plaie luisante. Les joues ont fondu et se sont reformées en plis absurdes ; les paupières ne se ferment plus tout à fait.
+[jet demandé] Santé mentale 70 %
+[dés] Santé mentale : 53/70 — Réussite
+Vous vous forcez à ne pas détourner les yeux. C’est votre ami. C’est seulement de la chair abîmée.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 99/80 — Échec
+Quelque chose vous dérange dans ce visage, sans que vous puissiez dire quoi. Les brûlures, sans doute.
+
+> (226) BOUTON : Parler à Beddows    [cheapside · Dim 7 · 07 h 02]
+Beddows : « Oui ? »
+
+> (227) BOUTON : Le voyage    [cheapside · Dim 7 · 07 h 04]
+Beddows : « Le Simplon-Orient-Express, monsieur. Monsieur ne jure que par lui. On réserve chez Cook ou à la Compagnie des wagons-lits. Avec ce que Monsieur vous a confié, vous voyagerez comme des princes. Partez vite. »
+
+> (228) DIRE : Réservez immédiatement deux places chez Cook pour le Simplon-Orient-Express, et dites-moi tout ce que vous savez sur ces hommes.    [cheapside · Dim 7 · 07 h 06]
+Beddows : « … » Il se tord les mains sans répondre.
+
+> (229) DIRE : OBSERVER BEDDOWS (PSYCHOLOGIE)    [cheapside · Dim 7 · 07 h 08]
+[jet demandé] Psychologie 35 %
+[dés] Psychologie : 52/35 — Échec
+Beddows est nerveux, mais qui ne le serait pas ?
+
+> (230) BOUTON : Le professeur    [cheapside · Dim 7 · 07 h 10]
+Beddows : « Pas de médecin, monsieur ! Ils le trouveraient. Ils trouvent tout. »
+
+> (231) DIRE : Si vous refusez un médecin, dites-moi au moins qui sont ces hommes et pourquoi ils vous traquent.    [cheapside · Dim 7 · 07 h 12]
+Beddows : « Bien, monsieur. Je ne suis pas sûr que ce soit ma place de répondre, monsieur. »
+
+> (232) BOUTON : Le menacer    [cheapside · Dim 7 · 07 h 14]
+Beddows : Il pâlit et recule jusqu’au mur. « Je n’ai rien fait. Je n’ai rien fait… »
+
+> (233) DIRE : Calmez-vous, Beddows. Je ne vous menace pas ; je veux seulement savoir qui poursuit votre maître et comment nous protéger.    [cheapside · Dim 7 · 07 h 16]
+Beddows : « Comme je disais, monsieur : James Beddows, monsieur. Au service du professeur. »
+Beddows : Beddows baisse la voix, les yeux sur le lit. « Monsieur… vous ne me demandez pas ce qui est arrivé à Monsieur. » Il attend.
+Beddows : « Je vous écoute. Continuez, si cela vous soulage. »
+Beddows : « Comme d’ordinaire, monsieur. »
+
+> (234) DIRE : Racontez-moi précisément ce qui s’est passé lors de l’attaque, et dites-moi qui étaient ces hommes.    [cheapside · Dim 7 · 07 h 18]
+Beddows : « Des Turcs, monsieur. Trois, quatre, je ne sais pas. Ils ont frappé à la porte en pleine nuit. Monsieur a compris tout de suite. Nous nous sommes barricadés dans la bibliothèque, et ils ont mis le feu. »
+
+> (235) BOUTON : Turcs    [cheapside · Dim 7 · 07 h 20]
+Beddows : « Je n’aime pas qu’on me parle des Turcs, monsieur. Pas en ce moment. »
+
+> (236) BOUTON : Bibliotheque    [cheapside · Dim 7 · 07 h 22]
+Beddows : « Monsieur y passe ses journées. Moi, j’attends dehors, sur le banc des cochers. »
+
+> (237) BOUTON : Bibliotheque    [cheapside · Dim 7 · 07 h 24]
+Beddows : « Je vous l’ai dit, monsieur : Monsieur y passe ses journées. Moi, j’attends dehors, sur le banc des cochers. »
+Beddows : « Le temps presse, monsieur. Monsieur m’a fait répéter trois fois ce que je devais vous dire. »
+
+> (238) DIRE : Parlez-moi de la boutique de Makryat et de cette lettre roussie.    [cheapside · Dim 7 · 07 h 26]
+Beddows : « Islington ? Au nord. Des marchés, des antiquaires, des gens pas toujours nets. »
+
+> (239) BOUTON : L’attaque    [cheapside · Dim 7 · 07 h 28]
+Beddows : « Nous sommes sortis par le jardin. Je… je n’ai pas vu leurs visages. »
+
+> (240) BOUTON : Prendre congé    [cheapside · Dim 7 · 07 h 30]
+Beddows : « Que Dieu vous garde, monsieur. Et faites vite. »
+
+> (241) BOUTON : Regarder autour de vous    [cheapside · Dim 7 · 07 h 35]
+Une chambre meublée minable : un lit de fer, une table, un placard, un broc fêlé. Pas un livre, pas une note, rien qui ressemble à Smith. Seulement l’odeur, une odeur de chair roussie et de pommade.
+
+> (242) BOUTON : Poser la main sur le front du malade    [cheapside · Dim 7 · 07 h 38]
+Vous tendez la main vers le front bandé. Beddows esquisse un geste, puis renonce.
+[jet demandé] Santé mentale 70 %
+[dés] Santé mentale : 76/70 — Échec
+Sous la gaze, la peau cède sous vos doigts, comme de la cire chaude, et quelque chose dessous se déplace pour suivre votre main. Vous la retirez d’un coup. « Qu’y a-t-il ? » demande la voix râpeuse. Vous ne répondez pas.
+
+> (243) BOUTON : Aller ailleurs    [cheapside · Dim 7 · 07 h 43]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (244) BOUTON : Aller : la boutique de Brophy Lane, à Islington    [islington · Dim 7 · 08 h 28]
+Vous prenez le métro, puis un omnibus. Le brouillard s’est glissé jusque dans les couloirs du souterrain.
+[lieu] Brophy Lane, Islington
+Brophy Lane, sa boutique fermée, son buraliste qui vous guette derrière ses bocaux.
+
+> (245) BOUTON : Parler au buraliste    [islington · Dim 7 · 08 h 33]
+Une fois encore. Rideau baissé, pancarte : « Fermé le dimanche ». Le buraliste respecte le jour du Seigneur, ou sa grasse matinée.
+
+> (246) BOUTON : Réfléchir    [islington · Dim 7 · 08 h 34]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 89/80 — Échec
+
+> (247) BOUTON : Insister (jet forcé)    [islington · Dim 7 · 08 h 34]
+[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 39/80 — Réussite majeure
+
+> (248) BOUTON : Entrer dans la boutique    [boutique · Dim 7 · 08 h 39]
+La porte cède sous votre main, comme vous l’avez laissée.
+[lieu] La boutique de Makryat
+La boutique, ses lampes-cages, son odeur d’encens froid.
+
+> (249) AGIR : j’examine d’abord les registres, à la recherche de toute mention du simulacre ou de ses fragments.    [boutique · Dim 7 · 08 h 44]
+Vous relisez la ligne : un train miniature Wrightson, acquis à la succession Alexis, revendu une livre à Henry Stanley, Stoke Newington.
+
+> (250) BOUTON : Examiner les marchandises    [boutique · Dim 7 · 08 h 49]
+Vous avez déjà examiné les marchandises tout à l’heure. Votre œil d’expert fait vite le tri : du cuivre égyptien, des tapis persans honnêtes, et beaucoup de reproductions vendues pour de l’ancien. Rien de neuf.
+
+> (251) BOUTON : Monter à l’étage    [boutique · Dim 7 · 08 h 54]
+La chambre d’un homme seul, sans un livre.
+
+> (252) AGIR : Je relis attentivement le catalogue de vente annoté, en particulier la mention de la succession Alexis.    [boutique · Dim 7 · 08 h 56 · non compris]
+Les livres, oui. Mais encore ? Examiner, fouiller, prendre, parler… ?
+[boutons] Examiner les registres | Aller : la salle de lecture du British Museum
+
+> (253) AGIR : je fouille méthodiquement la chambre de l’étage, en cherchant une cache ou un indice dissimulé.    [boutique · Dim 7 · 08 h 56]
+Avec la valise de Beddows dans les bras ? Elle dépasse de partout, elle cogne, elle pèse. Il faudrait d’abord vous en débarrasser.
+
+> (254) AGIR : je cache la valise de Beddows dans un endroit discret avant de fouiller méthodiquement la chambre de l’étage    [boutique · Dim 7 · 08 h 56]
+Rien de plus que la dernière fois.
+
+> (255) AGIR : je me rends à la pension de Stoke Newington pour retrouver Henry Stanley.    [stoke · Dim 7 · 09 h 41]
+Le chauffeur roule au pas : on ne voit pas à dix mètres. Quelque part, une corne de brume répond à une autre.
+[lieu] Stoke Newington
+Une rue de petites maisons ouvrières, toutes pareilles. Devant l’une d’elles, à la craie sur le trottoir : « VOYEZ LA CHAMBRE DE LA MORT — 6 PENCE ». À la fenêtre, un carton écrit à la main : « Chambre à louer ».
+
+> (256) BOUTON : Parler à la logeuse de Stanley    [stoke · Dim 7 · 09 h 43]
+Mrs Atkins : Une femme robuste, en peignoir et bigoudis en plein jour, vous ouvre avant que vous ayez frappé. « Vous venez pour la chambre de la mort ? Six pence, mon chou. Pour voir, hein, pas pour louer. Quoique, elle est à louer aussi. »
+Mrs Atkins : « Il est rentré à six heures, pour le thé, tout excité : il venait d’acheter un nouveau train ! À son âge, je vous jure. Il est monté à sept heures. Moi, j’étais dans le salon avec mon magazine, il n’aurait pas pu sortir sans passer devant moi. »
+
+> (257) DIRE : Parlez-moi de ce train miniature et de l’endroit où Henry Stanley l’a acheté.    [stoke · Dim 7 · 09 h 45]
+Mrs Atkins : « Un peu plus tard, je l’entends crier, et puis une espèce de grondement. Je frappe, rien. J’ouvre : la chambre pleine de fumée, et plus de M. Stanley. La fenêtre fermée au verrou, de l’intérieur ! »
+
+> (258) DIRE : Où est la chambre de la mort, et puis-je l’examiner avant que vous ne la louiez à quelqu’un d’autre ?    [stoke · Dim 7 · 09 h 47]
+Mrs Atkins : Elle empoche votre pièce avec un sourire radieux. « Premier étage, au fond. Et ne prenez rien, hein ! »
+
+> (259) AGIR : je monte à la chambre de la mort et j’examine soigneusement la fenêtre, la fumée et les traces laissées par le train miniature.    [stoke · Dim 7 · 09 h 52]
+Le laisser ici ? Dans ce Londres-là ? Vous resserrez votre prise. À l’hôtel, le concierge a un coffre et une réputation à tenir.
+
+> (260) BOUTON : Visiter la chambre de Stanley    [chambre_stanley · Dim 7 · 09 h 57]
+[lieu] La chambre de Henry Stanley
+Une chambre meublée à eau froide, comme il y en a des milliers à Londres pour les hommes seuls. Mais celle-ci est tapissée de trains : gravures de locomotives, plans de gares, piles de revues, horaires de 1890 reliés en cuir.
+
+> (261) BOUTON : Examiner la pièce    [chambre_stanley · Dim 7 · 10 h 02]
+En y regardant de plus près : une fine couche de suie noire sur le dessus des cadres et des piles de livres. De longues traînées sombres en travers du plafond, du coin nord-ouest au coin sud-est. Et des cloques sous le papier peint, comme si on l’avait passé à la vapeur. Mrs Atkins jure pourtant que M. Stanley ne fumait pas.
+
+> (262) BOUTON : Examiner la fenêtre    [chambre_stanley · Dim 7 · 10 h 07]
+Une fenêtre à guillotine, verrouillée de l’intérieur, le verrou encrassé de peinture. Personne ne l’a ouverte depuis des mois.
+
+> (263) BOUTON : Examiner le tapis    [chambre_stanley · Dim 7 · 10 h 12]
+[jet demandé] Trouver Objet Caché 45 %
+[dés] Trouver Objet Caché : 78/45 — Échec
+Le tapis est sombre et usé. Vous n’y voyez que des fleurs fanées.
+
+> (264) BOUTON : Examiner la pièce    [chambre_stanley · Dim 7 · 10 h 17]
+Vous avez déjà examiné la pièce tout à l’heure. En y regardant de plus près : une fine couche de suie noire sur le dessus des cadres et des piles de livres. Tout est comme tout à l’heure.
+
+> (265) AGIR : j’examine attentivement les horaires et les plans de gare, à la recherche du trajet lié au train miniature.    [chambre_stanley · Dim 7 · 10 h 22]
+Vous revenez vers la pièce. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.
+
+> (266) AGIR : je fouille les tiroirs et le dessous du lit à la recherche du train miniature ou d’un indice laissé par Stanley.    [chambre_stanley · Dim 7 · 10 h 24]
+Vous ne voyez pas l’étage ici. Ici, vous remarquez : les gravures et les livres, le plafond taché et la fenêtre verrouillée.
+[boutons] Vous allonger sur le lit de Stanley | Aller ailleurs | Examiner le tapis
+
+> (267) AGIR : j’examine les cloques du papier peint et les traînées de suie, en cherchant une ouverture ou un mécanisme dissimulé.    [chambre_stanley · Dim 7 · 10 h 24]
+Avec la valise de Beddows dans les bras ? Elle dépasse de partout, elle cogne, elle pèse. Il faudrait d’abord vous en débarrasser.
+
+> (268) BOUTON : Aller ailleurs    [chambre_stanley · Dim 7 · 10 h 29]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (269) BOUTON : Aller : la salle de lecture du British Museum    [chambre_stanley · Dim 7 · 10 h 34]
+Le dimanche, la salle de lecture du British Museum reste fermée. Les lecteurs, comme les livres, se reposent jusqu’à lundi.
+
+> (270) BOUTON : Examiner le tapis    [chambre_stanley · Dim 7 · 10 h 39]
+Vous vous mettez à quatre pattes, le nez sur les fleurs fanées.
+[jet demandé] Trouver Objet Caché 45 %
+[dés] Trouver Objet Caché : 52/45 — Échec
+Le tapis est sombre et usé. Vous n’y voyez que des fleurs fanées.
+
+> (271) BOUTON : Vous allonger sur le lit de Stanley    [chambre_stanley · Dim 7 · 10 h 49]
+[jet demandé] Santé mentale 67 %
+[dés] Santé mentale : 91/67 — Échec
+Le matelas garde la forme d’un homme, et elle est encore tiède. Au plafond, la tache de suie s’ouvre comme un tunnel, et quelque chose y roule vers vous, très loin. Vous vous retrouvez debout, adossé à la porte, sans savoir comment.
+
+> (272) BOUTON : Examiner la pièce    [chambre_stanley · Dim 7 · 10 h 54]
+La pièce, encore. Vous en connaissez chaque détail, maintenant.
+Un antiquaire qui vend un train miniature à un inconnu. L’acheteur, lui, doit bien habiter quelque part.
+[boutons] Examiner le tapis | Aller ailleurs | Examiner la pièce
+
+> (273) BOUTON : Aller ailleurs    [chambre_stanley · Dim 7 · 10 h 59]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (274) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [archives · Dim 7 · 11 h 44]
+Un taxi vous emporte à travers le brouillard. Les réverbères passent comme des lunes malades.
+[lieu] Fleet Street, les archives du Daily Courier
+La morgue du Daily Courier. Mrs Pike lève les yeux de ses fiches.
+Mrs Pike pince les lèvres. « Pas de colis entre les rayonnages. Posez ça dans l’entrée. » Vous le gardez à vos pieds.
+
+> (275) BOUTON : Chercher dans les journaux reliés    [archives · Dim 7 · 12 h 44]
+Mrs Pike, l’archiviste : « Oui ? »
+
+> (276) DIRE : Que savez-vous de l’accident de 1897 ?    [archives · Dim 7 · 12 h 46]
+Mrs Pike, l’archiviste : « Rien que je puisse vous dire. »
+
+> (277) DIRE : Je comprends votre prudence, mais cet accident pourrait être lié à plusieurs disparitions récentes ; cherchez dans les journaux de 1897 tout article mentionnant un train, une fumée noire ou le nom d’Alexis.    [archives · Dim 7 · 12 h 48]
+Mrs Pike, l’archiviste : « « prudence », « accident »… Posez une question claire, je vous répondrai. »
+Mrs Pike, l’archiviste : « Encore ? »
+
+> (278) DIRE : L’accident de 1897 : dans quel lieu s’est-il produit, et quels noms figuraient dans l’article ?    [archives · Dim 7 · 12 h 50]
+Mrs Pike, l’archiviste : « Je ne vois pas ce que je pourrais ajouter, monsieur. »
+
+> (279) BOUTON : L’accident de 1897    [archives · Dim 7 · 13 h 52]
+[document] DÉRAILLEMENT DE L’EXPRESS DE LIVERPOOL — Quarante-trois morts. Parmi eux, M. Randolph Alexis, de Hampstead, connu dans certains salons pour ses travaux d’occultisme. Fait inexpliqué : la moitié avant du convoi, locomotive comprise, n’a pas été retrouvée.
+[document] UNE PIÈCE PLEINE DE FUMÉE — M. Albert Alexis, fils du regretté Randolph Alexis, a disparu de sa bibliothèque fermée de l’intérieur. Les domestiques parlent d’une fumée âcre, sans flammes.
+[indice noté dans le carnet] Randolph Alexis, occultiste, mort dans le déraillement de 1897. Son fils Albert, disparu chez lui en 1917, dans une pièce pleine de fumée.
+
+> (280) DIRE : Que savez-vous du professeur Smith et de ses recherches sur les Alexis ?    [archives · Dim 7 · 14 h 54]
+Mrs Pike, l’archiviste : « Toujours rien de neuf sur votre professeur, monsieur. Sauf ce que vous savez déjà. »
+
+> (281) BOUTON : Les médiums démasqués par Smith    [archives · Dim 7 · 14 h 56]
+Mrs Pike, l’archiviste : Un silence épais.
+
+> (282) DIRE : À quelle date les articles sur Randolph et Albert Alexis ont-ils été publiés, et qui les a rédigés ?    [archives · Dim 7 · 15 h 58]
+[document] DÉRAILLEMENT DE L’EXPRESS DE LIVERPOOL — Quarante-trois morts. Parmi eux, M. Randolph Alexis, de Hampstead, connu dans certains salons pour ses travaux d’occultisme. Fait inexpliqué : la moitié avant du convoi, locomotive comprise, n’a pas été retrouvée.
+[document] UNE PIÈCE PLEINE DE FUMÉE — M. Albert Alexis, fils du regretté Randolph Alexis, a disparu de sa bibliothèque fermée de l’intérieur. Les domestiques parlent d’une fumée âcre, sans flammes.
+
+> (283) BOUTON : Prendre congé    [archives · Dim 7 · 16 h 00]
+Mrs Pike, l’archiviste : « Monsieur. »
+Les rotatives, au-dessus, font vibrer les rayonnages.
+
+> (284) BOUTON : Aller ailleurs    [archives · Dim 7 · 16 h 05]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (285) BOUTON : Aller : le salon de Mrs Vane, à Gordon Square    [archives · Dim 7 · 16 h 10]
+Mrs Vane ne reçoit que le soir, à partir de 19 h. Ses rideaux de velours sont tirés sur Gordon Square. Il est 16 h : revenez ce soir, ou écrivez « attendre le soir ».
+
+> (286) BOUTON : Aller ailleurs    [archives · Dim 7 · 16 h 15]
+Vous insistez. Le monde, lui, ne change pas d’avis.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (287) AGIR : j’attends le soir devant le salon de Mrs Vane.    [archives · Dim 7 · 19 h 00]
+Vous laissez filer les heures : un repas, les journaux du soir, le brouillard derrière la vitre. Londres s’allume, réverbère après réverbère. Il est 19 h.
+Un coursier dévale l’escalier avec une épreuve encore humide.
+
+> (288) BOUTON : Aller ailleurs    [archives · Dim 7 · 19 h 05]
+Toujours la même chose. Peut-être faut-il essayer autre chose.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (289) BOUTON : Aller : le salon de Mrs Vane, à Gordon Square    [vane · Dim 7 · 19 h 50]
+Le taxi se faufile entre les omnibus et les charrettes. Londres n’est qu’une suite de halos jaunes dans le gris.
+[lieu] Gordon Square, le salon de Mrs Vane
+La porte du 31, Gordon Square, s’ouvre de dix centimètres, la chaîne mise. Mrs Vane, sans fard, en robe de chambre, vous regarde à travers la fente. Derrière elle, le salon est éteint.
+
+> (290) DIRE : Mrs Vane, je cherche des informations sur la séance au cours de laquelle la voix de Smith s’est manifestée.    [vane · Dim 7 · 19 h 55]
+Mrs Hortense Vane, médium : « Pas maintenant, monsieur. »
+
+> (291) DIRE : Qui était présent à cette séance, et qu’avez-vous entendu exactement lorsque la voix de Smith s’est manifestée ?    [vane · Dim 7 · 20 h 00]
+On fait mine de ne pas vous voir.
+
+> (292) BOUTON : Regarder autour de vous    [vane · Dim 7 · 20 h 05]
+Vous ne voyez rien d’autre qu’une porte entrouverte et une femme qui a peur.
+
+> (293) DIRE : Mrs Vane, je vous paierai le double si vous me laissez entrer et me dites qui assistait à la séance.    [vane · Dim 7 · 20 h 10]
+Rien. Pour l’instant, on ne vous parlera plus.
+
+> (294) DIRE : Si vous ne me laissez pas entrer, Mrs Vane, dites-moi au moins qui vous menace et pourquoi le nom de Smith vous terrorise.    [vane · Dim 7 · 20 h 15]
+Vous recommencez, plus lentement. On fait mine de ne pas vous voir.
+
+> (295) BOUTON : Réfléchir    [vane · Dim 7 · 20 h 16]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 79/80 — Réussite
+
+> (296) DIRE : Mrs Vane, je ne vous demanderai pas d’ouvrir ; dites-moi seulement si Smith a prononcé le nom d’Alexis.    [vane · Dim 7 · 20 h 21]
+Vous regardez de nouveau mrs Vane. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.
+
+> (297) BOUTON : Regarder autour de vous    [vane · Dim 7 · 20 h 26]
+Vous avez déjà observé le salon tout à l’heure. Vous ne voyez rien d’autre qu’une porte entrouverte et une femme qui a peur. Rien n’a changé.
+
+> (298) DIRE : Mrs Vane, je sais que vous avez peur ; dites-moi seulement si la voix de Smith vous a avertie d’un danger précis.    [vane · Dim 7 · 20 h 31]
+Rien de neuf du côté de mrs Vane. Il faudrait essayer autre chose.
+Un antiquaire qui vend un train miniature à un inconnu. L’acheteur, lui, doit bien habiter quelque part.
+[boutons] Regarder autour de vous | Parler à Mrs Vane | Aller ailleurs
+
+> (299) DIRE : Mrs Vane, je peux vous protéger ; dites-moi seulement où se trouve la voix de Smith.    [vane · Dim 7 · 20 h 36]
+Vous revenez vers mrs Vane. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.
+Même résultat qu’à l’instant.
+[boutons] Regarder autour de vous | Parler à Mrs Vane | Aller ailleurs
+Le poêle ronfle. On étouffe.
+
+> (300) DIRE : Mrs Vane, la maison de Smith a brûlé et j’ai sa lettre roussie ; dites-moi où il cachait ses notes sur Alexis.    [vane · Dim 7 · 20 h 41]
+Mrs Vane, encore. Vous en connaissez chaque détail, maintenant.
+Rien de plus que la dernière fois.
+[boutons] Regarder autour de vous | Parler à Mrs Vane | Aller ailleurs
+
+> (301) BOUTON : Parler à Mrs Vane    [vane · Dim 7 · 20 h 46]
+Vous regardez de nouveau mrs Vane. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.
+Un antiquaire qui vend un train miniature à un inconnu. L’acheteur, lui, doit bien habiter quelque part.
+[boutons] Regarder autour de vous | Parler à Mrs Vane | Aller ailleurs
+
+> (302) BOUTON : Aller ailleurs    [vane · Dim 7 · 20 h 51]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street
+
+> (303) BOUTON : Aller : la boutique de Brophy Lane, à Islington    [islington · Dim 7 · 21 h 36]
+Vous prenez le métro, puis un omnibus. Le brouillard s’est glissé jusque dans les couloirs du souterrain.
+[lieu] Brophy Lane, Islington
+Brophy Lane, sa boutique fermée, son buraliste qui vous guette derrière ses bocaux.
+
+> (304) BOUTON : Parler au buraliste    [islington · Dim 7 · 21 h 41]
+Rien de neuf du côté de buraliste. Il faudrait essayer autre chose.
+
+> (305) BOUTON : Entrer dans la boutique    [boutique · Dim 7 · 21 h 46]
+Encore une fois, en détail. La porte cède sous votre main, comme vous l’avez laissée.
+[lieu] La boutique de Makryat
+La boutique, ses lampes-cages, son odeur d’encens froid.
+
+> (306) BOUTON : Examiner les registres    [boutique · Dim 7 · 21 h 51]
+Vous avez déjà examiné les registres tout à l’heure. Vous relisez la ligne : un train miniature Wrightson, acquis à la succession Alexis, revendu une livre à Henry Stanley, Stoke Newington. Rien de neuf.
+
+> (307) BOUTON : Monter à l’étage    [boutique · Dim 7 · 21 h 56]
+Vous y revenez. La chambre d’un homme seul, sans un livre.
+
+> (308) BOUTON : Examiner les marchandises    [boutique · Dim 7 · 22 h 01]
+Vous revenez vers les marchandises. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.
+
+> (309) BOUTON : Aller ailleurs    [boutique · Dim 7 · 22 h 06]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (310) BOUTON : Aller : la pension de Stoke Newington    [boutique · Dim 7 · 22 h 11]
+À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison. Il faudra y retourner demain.
+
+> (311) BOUTON : Aller ailleurs    [boutique · Dim 7 · 22 h 16]
+Vous insistez. Le monde, lui, ne change pas d’avis.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (312) BOUTON : Aller : votre hôtel, à Bloomsbury    [hotel · Dim 7 · 23 h 01]
+Londres dort sous son brouillard. Vos pas, puis le moteur du taxi, sont les seuls bruits de la ville.
+[lieu] Votre hôtel, à Bloomsbury
+Vous retrouvez votre chambre, son papier peint fané et son radiateur qui cogne.
+« Laissez, monsieur, je vous monte ça ! » Le concierge se précipite vers vous, les bras tendus.
+[boutons] Déposer la valise de Beddows à l’hôtel
+
+> (313) BOUTON : Déposer la valise de Beddows à l’hôtel    [hotel · Dim 7 · 23 h 06]
+Le concierge range la valise de Beddows dans le petit bureau derrière la réception, ferme à double tour, et vous tend un ticket de cuivre. Vous avez de nouveau les mains libres. Ça fait un bien fou.
+Vous repensez à la voix brisée de Smith : « Allez vite. » La réception peut réserver vos billets chez Cook.
+
+> (314) BOUTON : Réserver les billets pour l’Orient-Express    [hotel · Dim 7 · 23 h 11]
+Un dimanche ? Les bureaux de la Compagnie des wagons-lits et de Cook sont fermés. On réserve à partir de lundi, 9 h. Vous pouvez revenir, ou attendre l’ouverture.
+Le simulacre, les rouleaux, Fenalik, Gremanci… La salle de lecture du British Museum n’est qu’à dix minutes à pied. S’il existe une trace écrite de tout cela, c’est là.
+
+> (315) AGIR : je descends parler au concierge et lui demande s’il connaît Henry Stanley, de Stoke Newington.    [hotel · Dim 7 · 23 h 16]
+À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison. Il faudra y retourner demain.
+Une corne de brume, très loin, sur la Tamise.
+
+> (316) BOUTON : Réfléchir    [hotel · Dim 7 · 23 h 17]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 39/80 — Réussite majeure
+
+> (317) BOUTON : Aller ailleurs    [hotel · Dim 7 · 23 h 22]
+Vous pouvez vous rendre à : la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (318) BOUTON : Aller : la salle de lecture du British Museum    [hotel · Dim 7 · 23 h 27]
+Le dimanche, la salle de lecture du British Museum reste fermée. Les lecteurs, comme les livres, se reposent jusqu’à lundi.
+
+> (319) BOUTON : Lire les journaux    [hotel · Dim 7 · 23 h 32]
+[document] ST JOHN’S WOOD : LA MAISON D’UN SAVANT EN FLAMMES — La villa du professeur Julius Arthur Smith a été détruite par le feu dans la nuit de samedi. Le professeur demeure introuvable, de même que son domestique, James Beddows, qu’un voisin dit avoir vu s’éloigner de la maison peu avant le sinistre, chargé d’un lourd fardeau. Le sergent Rigby, de la brigade des incendies de Scotland Yard, prie toute personne informée de se manifester.
+Le radiateur cogne trois fois, puis se tait.
+
+> (320) BOUTON : Descendre parler au concierge    [hotel · Dim 7 · 23 h 37]
+Mr Pratt, le concierge : « Oui ? »
+
+> (321) BOUTON : Du courrier ?    [hotel · Dim 7 · 23 h 39]
+Mr Pratt, le concierge : Pas de réponse. Un regard vers la porte.
+
+> (322) BOUTON : Le professeur Smith    [hotel · Dim 7 · 23 h 41]
+Mr Pratt, le concierge : « Quelle tragédie, monsieur, la maison de St John’s Wood. On dit dans les cuisines que le domestique a filé juste avant le feu. Moi, je ne dis rien. Je n’ai jamais aimé les domestiques qui filent. »
+
+> (323) DIRE : Connaissez-vous un certain Henry Stanley, qui habiterait à Stoke Newington ?    [hotel · Dim 7 · 23 h 43]
+Mr Pratt, le concierge : « Henry Stanley ? Je crains de ne rien savoir à ce sujet, monsieur. »
+
+> (324) DIRE : Où se trouve exactement la pension de Henry Stanley, et connaissez-vous sa logeuse ?    [hotel · Dim 7 · 23 h 45]
+Mr Pratt, le concierge : « Stoke Newington ? Loin au nord. Des petites maisons toutes pareilles. Rien n’y arrive jamais. »
+
+> (325) DIRE : Mr Pratt, avez-vous vu passer ce soir un homme chargé d’une lourde valise, ou reçu un message pour moi ?    [hotel · Dim 7 · 23 h 47]
+Mr Pratt, le concierge : Un silence épais.
+Mr Pratt, le concierge : « Si vous voulez bien m’excuser, monsieur. » La conversation est terminée.
+
+> (326) BOUTON : Prendre un remontant au bar de l’hôtel    [hotel · Lun 8 · 00 h 32]
+Un whisky, puis un second. Le barman parle de cricket, de l’Australie, d’un neveu qui joue pour le Surrey. Il est très agréable. Il ne sait rien. Vous remontez avec une chaleur dans la poitrine et une heure de moins.
+
+> (327) BOUTON : Aller ailleurs    [hotel · Lun 8 · 00 h 37]
+Vous pouvez vous rendre à : la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+Dans le couloir, une valise roule sur le tapis.
+
+> (328) AGIR : je sors dans le couloir pour suivre discrètement la valise qui roule sur le tapis    [hotel · Lun 8 · 00 h 42]
+Vous entrouvrez la porte. Le couloir est vide, et le tapis rouge avale les bruits. Au bout, l’ascenseur descend en grinçant : un groom, une valise, un client qui part. Rien de plus.
+
+> (329) BOUTON : Descendre parler au concierge    [hotel · Lun 8 · 00 h 47]
+Mr Pratt, le concierge : « Oui ? »
+
+> (330) BOUTON : Envoyer un télégramme    [hotel · Lun 8 · 00 h 49]
+Mr Pratt, le concierge : « Encore ? »
+[boutons] Au musée de Topkapı, à Constantinople
+
+> (331) BOUTON : Au musée de Topkapı, à Constantinople    [hotel · Lun 8 · 00 h 51]
+Mr Pratt, le concierge : « Constantinople… » Il écrit lentement, en tirant la langue. « Deux livres, monsieur. Avec la situation là-bas, je ne promets rien. »
+
+> (332) BOUTON : Passer une petite annonce    [hotel · Lun 8 · 00 h 53]
+Mr Pratt, le concierge : « Je ne vois pas ce que je pourrais ajouter, monsieur. »
+[boutons] Un train miniature, vendu à Islington
+
+> (333) BOUTON : Où trouver des renseignements ?    [hotel · Lun 8 · 00 h 55]
+Mr Pratt, le concierge : Un soupir, à peine poli.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria
+
+> (334) BOUTON : Aller : la pension de Stoke Newington    [hotel · Lun 8 · 01 h 00]
+À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison. Mieux vaut attendre le matin.
+
+> (335) BOUTON : Aller ailleurs    [hotel · Lun 8 · 01 h 05]
+Vous pouvez vous rendre à : la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+Une corne de brume, très loin, sur la Tamise.
+
+> (336) BOUTON : Aller : la maison de Smith, à St John’s Wood    [stjohn · Lun 8 · 01 h 50]
+Vous trouvez un taxi de nuit, le chauffeur à moitié endormi. Les rues sont vides, luisantes.
+[lieu] St John’s Wood, la maison de Smith
+Les ruines de la maison de Smith. L’agent vous reconnaît d’un hochement de tête.
+Au coin de la rue, un gamin aux genoux nus agite une liasse de journaux : « Triple meurtre au Chelsea Arms ! Trois morts, un seul nom ! »
+[boutons] Acheter un journal
+
+> (337) BOUTON : Acheter un journal    [stjohn · Lun 8 · 01 h 55]
+À cette heure, plus un crieur dans les rues. Les éditions du matin ne sortiront des presses qu’à l’aube.
+
+> (338) BOUTON : Écouter le laitier    [stjohn · Lun 8 · 02 h 00]
+Vous avez déjà écouté le laitier tout à l’heure. Le laitier a fini sa tournée depuis longtemps : il ne passe qu’à l’aube. Sa carriole n’est plus là. Tout est comme tout à l’heure.
+
+> (339) BOUTON : Aller ailleurs    [stjohn · Lun 8 · 02 h 05]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+Un merle se pose sur la grille, puis repart.
+
+> (340) BOUTON : Aller : votre hôtel, à Bloomsbury    [hotel · Lun 8 · 02 h 50]
+Londres dort sous son brouillard. Vos pas, puis le moteur du taxi, sont les seuls bruits de la ville.
+[lieu] Votre hôtel, à Bloomsbury
+L’hôtel. Le portier vous salue d’un « Sale temps, monsieur » qui ne demande pas de réponse.
+La valise de Beddows est toujours là, où vous l’avez laissée.
+
+> (341) BOUTON : Réfléchir    [hotel · Lun 8 · 02 h 51]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 63/80 — Réussite
+
+> (342) BOUTON : Lire les journaux    [hotel · Lun 8 · 02 h 56]
+Ce sont encore les journaux d’hier. L’édition du matin ne sortira des presses qu’à l’aube.
+
+> (343) BOUTON : Aller ailleurs    [hotel · Lun 8 · 03 h 01]
+Vous pouvez vous rendre à : la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+Le radiateur cogne trois fois, puis se tait.
+
+> (344) BOUTON : Aller : Scotland Yard    [yard · Lun 8 · 03 h 46]
+Vous trouvez un taxi de nuit, le chauffeur à moitié endormi. Les rues sont vides, luisantes.
+[lieu] New Scotland Yard
+Scotland Yard, de nouveau. Le planton vous reconnaît et soupire.
+
+> (345) BOUTON : Voir le sergent Rigby, aux incendies    [yard · Lun 8 · 03 h 51]
+Le sergent Rigby, aux incendies, encore. Vous en connaissez chaque détail, maintenant.
+
+> (346) BOUTON : Glaner des informations auprès des agents    [yard · Lun 8 · 03 h 56]
+Vous traînez près de la machine à thé, un mot pour l’un, une cigarette pour l’autre.
+[jet demandé] Baratin 30 %
+[dés] Baratin : 19/30 — Réussite
+Un jeune agent, flatté qu’on l’écoute, baisse la voix : chacun des trois morts avait dans sa poche le même télégramme, envoyé de Paris. « Venez à Londres immédiatement. Urgent. » Signé d’une seule lettre : M.
+[indice noté dans le carnet] Chacun des trois morts avait reçu le même télégramme : « Venez à Londres immédiatement. Urgent. M. »
+
+> (347) BOUTON : Demander à voir l’inspecteur Fleming    [yard · Lun 8 · 04 h 01]
+Une fois encore. Le planton de nuit lève à peine les yeux. « L’inspecteur Fleming ? Rentré chez lui, monsieur. Les bureaux rouvrent à huit heures. »
+
+> (348) BOUTON : Aller ailleurs    [yard · Lun 8 · 04 h 06]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (349) BOUTON : Aller : votre hôtel, à Bloomsbury    [hotel · Lun 8 · 04 h 51]
+Londres dort sous son brouillard. Vos pas, puis le moteur du taxi, sont les seuls bruits de la ville.
+[lieu] Votre hôtel, à Bloomsbury
+Votre chambre vous attend, immobile, comme une salle d’attente.
+La valise de Beddows est toujours là, où vous l’avez laissée.
+
+> (350) BOUTON : Aller ailleurs    [hotel · Lun 8 · 04 h 56]
+Vous pouvez vous rendre à : la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (351) BOUTON : Aller : la chambre de Cheapside    [cheapside · Lun 8 · 05 h 41]
+Vous trouvez un taxi de nuit, le chauffeur à moitié endormi. Les rues sont vides, luisantes.
+[lieu] Cheapside, une chambre meublée
+La bougie crépite. Sur le lit, la respiration siffle.
+
+> (352) BOUTON : Parler à Beddows    [cheapside · Lun 8 · 05 h 46]
+Beddows : « Monsieur ? »
+
+> (353) DIRE : Que savez-vous de la disparition du professeur Smith et de l’incendie de sa maison ?    [cheapside · Lun 8 · 05 h 48]
+Beddows : Il ne répond plus. Il regarde le lit, et vous, et la porte.
+Beddows : « Je ne peux plus rien vous dire, monsieur. Partez, maintenant. Pour lui. » Il vous tourne le dos et s’affaire près du lit.
+
+> (354) BOUTON : Aller chercher un médecin dans le quartier    [cheapside · Lun 8 · 06 h 48]
+Le seul médecin de la rue est parti pour un accouchement à Shoreditch ; sa bonne ne sait pas quand il rentrera. Quand vous remontez l’escalier qui sent le chou, Beddows met longtemps à vous rouvrir. « Il ne veut pas de médecin, monsieur. Il ne l’a jamais voulu. »
+
+> (355) BOUTON : S’approcher du lit    [cheapside · Lun 8 · 06 h 53]
+Il respire avec peine. Ses yeux suivent vos mouvements, sans un mot.
+Quelque part dans l’immeuble, un enfant pleure, puis se tait.
+
+> (356) DIRE : Professeur Smith, que s’est-il passé dans cette maison et qui est M ?    [cheapside · Lun 8 · 06 h 53]
+À qui parlez-vous ?
+[boutons] Parler à Beddows
+
+> (357) BOUTON : S’approcher du lit    [cheapside · Lun 8 · 06 h 58]
+Une main bandée remue sur le drap, puis retombe. La chevalière de Smith brille à son doigt.
+
+> (358) BOUTON : Parler à Beddows    [cheapside · Lun 8 · 07 h 03]
+Beddows : « Oui ? »
+
+> (359) DIRE : Pourquoi le professeur Smith refuse-t-il de voir un médecin ?    [cheapside · Lun 8 · 07 h 05]
+Beddows : « Je vous en supplie, monsieur, chaque minute compte. »
+
+> (360) BOUTON : Plaques    [cheapside · Lun 8 · 07 h 07]
+Beddows : « Comme je disais, monsieur : les plaques de Monsieur ? Je les ai portées moi-même, monsieur. Monsieur ne laisse personne d’autre y toucher. »
+
+> (361) BOUTON : Lui demander combien le professeur le paie    [cheapside · Lun 8 · 07 h 09]
+Beddows : Beddows blêmit. « Je sers le professeur depuis vingt-deux ans, monsieur. » Il ne vous adressera plus la parole de la journée.
+
+> (362) BOUTON : Aller ailleurs    [cheapside · Lun 8 · 07 h 14]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (363) BOUTON : Aller : la pension de Stoke Newington    [stoke · Lun 8 · 07 h 59]
+Le taxi se faufile entre les omnibus et les charrettes. Londres n’est qu’une suite de halos jaunes dans le gris.
+[lieu] Stoke Newington
+Stoke Newington. L’inscription à la craie a été repassée pour mieux se voir.
+
+> (364) BOUTON : Questionner les voisins de Mrs Atkins    [stoke · Lun 8 · 08 h 34]
+Porte après porte, la même rue, les mêmes rideaux qui bougent. Tout le monde a une histoire sur Mr Stanley, et chacune contredit la précédente : il était communiste, il était prêtre, il était fou, il était charmant. Une dame vous offre du thé. Vous ressortez riche de rumeurs.
+
+> (365) BOUTON : Visiter la chambre de Stanley    [chambre_stanley · Lun 8 · 08 h 39]
+[lieu] La chambre de Henry Stanley
+La chambre aux trains. Elle sent encore la fumée.
+
+> (366) BOUTON : Examiner la pièce    [chambre_stanley · Lun 8 · 08 h 44]
+Vous regardez de nouveau la pièce. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.
+Un antiquaire qui vend un train miniature à un inconnu. L’acheteur, lui, doit bien habiter quelque part.
+[boutons] Examiner la pièce | Examiner le tapis | Aller ailleurs
+
+> (367) BOUTON : Examiner le tapis    [chambre_stanley · Lun 8 · 08 h 49]
+Un tapis sombre et usé.
+
+> (368) AGIR : j’examine minutieusement la pièce, surtout les rails et les traces laissées par le train miniature.    [chambre_stanley · Lun 8 · 08 h 54]
+Rien de neuf du côté de la pièce. Il faudrait essayer autre chose.
+Toujours la même chose. Peut-être faut-il essayer autre chose.
+[boutons] Examiner la pièce | Examiner le tapis | Aller ailleurs
+
+> (369) BOUTON : Aller ailleurs    [chambre_stanley · Lun 8 · 08 h 59]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (370) BOUTON : Aller : la boutique de Brophy Lane, à Islington    [islington · Lun 8 · 09 h 44]
+Vous prenez le métro, puis un omnibus. Le brouillard s’est glissé jusque dans les couloirs du souterrain.
+[lieu] Brophy Lane, Islington
+Brophy Lane, sa boutique fermée, son buraliste qui vous guette derrière ses bocaux.
+
+> (371) BOUTON : Parler au buraliste    [islington · Lun 8 · 09 h 49]
+Le buraliste : Le buraliste d’à côté, un petit homme en gilet de laine, vous dévisage derrière ses bocaux de tabac. « Vous êtes de la police, vous aussi ? »
+
+> (372) BOUTON : Parler du tombeau de Toutankhamon    [islington · Lun 8 · 09 h 51]
+Le buraliste : « Le pharaon en or ? Ma belle-sœur s’est acheté un chapeau égyptien. Un chapeau ! »
+
+> (373) BOUTON : Parler de la TSF    [islington · Lun 8 · 09 h 53]
+Le buraliste : « La TSF ? Mon beau-frère s’est fabriqué un poste. On entend de la musique qui vient de nulle part. »
+
+> (374) DIRE : Connaissez-vous un certain Brophy, ou un homme nommé Makryat, qui fréquentait cette boutique ?    [islington · Lun 8 · 09 h 55]
+Le buraliste : « Le Turc… Un vieux, voûté, avec une barbe blanche. Il ne disait jamais plus de trois mots. Bonjour, merci, au revoir. Il a fermé boutique il y a quatre ou cinq jours, et on ne l’a plus revu. »
+
+> (375) BOUTON : Le vieux Turc    [islington · Lun 8 · 09 h 57]
+Le buraliste : « Il recevait parfois des visites le soir. Des hommes bruns, plus jeunes. Je n’ai pas demandé. »
+
+> (376) BOUTON : Prendre congé    [islington · Lun 8 · 09 h 59]
+Le buraliste : « Bonne journée. Et fermez la porte, ça fait du froid. »
+
+> (377) BOUTON : Réfléchir    [islington · Lun 8 · 10 h 00]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 85/80 — Échec
+
+> (378) BOUTON : Insister (jet forcé)    [islington · Lun 8 · 10 h 00]
+[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 49/80 — Réussite
+
+> (379) BOUTON : Briser la vitre de la boutique    [islington · Lun 8 · 10 h 05]
+Vous enveloppez votre poing dans votre écharpe et frappez la vitre, d’un coup sec.
+[jet demandé] Chance 45 %
+[dés] Chance : 18/45 — Réussite majeure
+Le verre cède avec un bruit de fin du monde. Derrière, un grillage de fer, solidement vissé : on ne passe pas. Vous vous êtes ouvert la main pour rien, et vous filez avant que la rue ne se réveille.
+
+> (380) BOUTON : Entrer dans la boutique    [boutique · Lun 8 · 10 h 10]
+Vous revenez vers la porte de la boutique. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.
+[lieu] La boutique de Makryat
+
+> (381) BOUTON : Examiner les registres    [boutique · Lun 8 · 10 h 15]
+Les registres, encore. Vous en connaissez chaque détail, maintenant.
+
+> (382) BOUTON : Monter à l’étage    [boutique · Lun 8 · 10 h 20]
+Vous regardez de nouveau l’étage. Les mêmes détails, et cette impression tenace que quelque chose vous échappe.
+
+> (383) BOUTON : Monter à l’étage    [boutique · Lun 8 · 10 h 25]
+Rien de neuf du côté de l’étage. Il faudrait essayer autre chose.
+Un antiquaire qui vend un train miniature à un inconnu. L’acheteur, lui, doit bien habiter quelque part.
+[boutons] Examiner les registres | Acheter un calmant à la pharmacie | Aller ailleurs
+
+> (384) BOUTON : Aller ailleurs    [boutique · Lun 8 · 10 h 30]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (385) BOUTON : Examiner les registres    [boutique · Lun 8 · 10 h 35]
+Vous revenez vers les registres. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.
+Même résultat qu’à l’instant.
+[boutons] Examiner les registres | Acheter un calmant à la pharmacie | Aller ailleurs
+
+> (386) BOUTON : Aller ailleurs    [boutique · Lun 8 · 10 h 40]
+Rien de plus que la dernière fois.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (387) BOUTON : Aller : les archives du Daily Courier, à Fleet Street    [archives · Lun 8 · 11 h 25]
+Le chauffeur roule au pas : on ne voit pas à dix mètres. Quelque part, une corne de brume répond à une autre.
+[lieu] Fleet Street, les archives du Daily Courier
+Retour parmi les journaux reliés. Les rotatives font trembler le plafond.
+
+> (388) BOUTON : Chercher dans les journaux reliés    [archives · Lun 8 · 12 h 25]
+Mrs Pike, l’archiviste : « Oui ? »
+
+> (389) BOUTON : Le professeur Smith    [archives · Lun 8 · 13 h 27]
+Mrs Pike, l’archiviste : « Le professeur Smith ? Nous avons un dossier gros comme ça. » Des médiums démasqués, des procès gagnés, un portrait avec Houdini. Rien qui explique un incendie.
+
+> (390) BOUTON : L’accident de 1897    [archives · Lun 8 · 14 h 29]
+[document] DÉRAILLEMENT DE L’EXPRESS DE LIVERPOOL — Quarante-trois morts. Parmi eux, M. Randolph Alexis, de Hampstead, connu dans certains salons pour ses travaux d’occultisme. Fait inexpliqué : la moitié avant du convoi, locomotive comprise, n’a pas été retrouvée.
+[document] UNE PIÈCE PLEINE DE FUMÉE — M. Albert Alexis, fils du regretté Randolph Alexis, a disparu de sa bibliothèque fermée de l’intérieur. Les domestiques parlent d’une fumée âcre, sans flammes.
+
+> (391) BOUTON : Lui demander depuis combien de temps elle est là    [archives · Lun 8 · 14 h 31]
+Mrs Pike, l’archiviste : Mrs Pike pince les lèvres. « Depuis le jubilé de diamant, monsieur. Et je compte bien vous survivre. » Elle retourne à ses registres, et vous n’existez plus.
+
+> (392) BOUTON : Découper un article au canif    [archives · Lun 8 · 14 h 41]
+[jet demandé] Discrétion 30 %
+[dés] Discrétion : 72/30 — Échec
+Le canif crisse sur le papier. Mrs Pike est derrière vous, sans que vous l’ayez entendue venir. « Trente-quatre ans, monsieur, que personne n’a découpé un journal dans cette salle. » Vous êtes prié de partir, et de ne pas revenir de sitôt.
+
+> (393) BOUTON : Aller ailleurs    [archives · Lun 8 · 14 h 46]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+
+> (394) BOUTON : Réfléchir    [archives · Lun 8 · 14 h 47]
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 97/80 — Échec
+
+> (395) BOUTON : Insister (jet forcé)    [archives · Lun 8 · 14 h 47]
+[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.
+[jet demandé] Idée (INT) 80 %
+[dés] Idée (INT) : 37/80 — Réussite majeure
+
+> (396) BOUTON : Chercher dans les journaux reliés    [archives · Lun 8 · 15 h 47]
+On fait mine de ne pas vous voir.
+
+> (397) BOUTON : Aller ailleurs    [archives · Lun 8 · 15 h 52]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, la maison de Smith, à St John’s Wood, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : la maison de Smith, à St John’s Wood | Aller : le salon de Mrs Vane, à Gordon Square
+Mrs Pike tamponne une fiche. Clac.
+
+> (398) BOUTON : Aller : la maison de Smith, à St John’s Wood    [stjohn · Lun 8 · 16 h 37]
+Un taxi vous emporte à travers le brouillard. Les réverbères passent comme des lunes malades.
+[lieu] St John’s Wood, la maison de Smith
+Le brouillard a fini d’éteindre la maison de Smith. Il n’en reste que l’odeur, tenace.
+
+> (399) BOUTON : Écouter le laitier    [stjohn · Lun 8 · 16 h 42]
+Le laitier, encore. Vous en connaissez chaque détail, maintenant.
+
+> (400) BOUTON : Aller ailleurs    [stjohn · Lun 8 · 16 h 47]
+Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, la boutique de Brophy Lane, à Islington, la salle de lecture du British Museum, la pension de Stoke Newington, la gare Victoria, les archives du Daily Courier, à Fleet Street, le salon de Mrs Vane, à Gordon Square.
+[boutons] Aller : votre hôtel, à Bloomsbury | Aller : la chambre de Cheapside | Aller : Scotland Yard | Aller : la boutique de Brophy Lane, à Islington | Aller : la salle de lecture du British Museum | Aller : la pension de Stoke Newington | Aller : la gare Victoria | Aller : les archives du Daily Courier, à Fleet Street | Aller : le salon de Mrs Vane, à Gordon Square
