@@ -1,0 +1,1126 @@
+{
+ "modele": "gpt-5.6-luna",
+ "simulation": false,
+ "depart": "paris",
+ "depense": 0.7968515999999992,
+ "parties": [
+  {
+   "nom": "partie_01_pemberton_methodique",
+   "perso": "pemberton",
+   "profil": "methodique",
+   "tours": 400,
+   "chapitres": [
+    {
+     "ch": "paris",
+     "debut": 1,
+     "tours": 400,
+     "indices": 5,
+     "fin": "inachevé"
+    }
+   ],
+   "nonCompris": 2,
+   "fermees": 8,
+   "problemes": [
+    {
+     "tour": 4,
+     "commande": "j’ouvre mon carnet relié et y recopie soigneusement la liste de Smith, en notant tout ce que je sais sur le comte Fenalik.",
+     "reponse": "Ça ne s’ouvre pas, ou pas de cette façon.",
+     "probleme": "L’action est raisonnable, mais la réponse prétend que le carnet ne s’ouvre pas sans fournir de raison ni tenir compte de l’action demandée.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 12,
+     "commande": "BOUTON : Incendie ?",
+     "reponse": "M. Blain, le gérant : « Les journaux anglais, docteur, que lisent nos clients. Une maison brûlée, un domestique en fuite. Monsieur Smith méritait mieux. »",
+     "probleme": "même réponse 17 fois (tours 12, 14, 58, 66, 79, 105, 107, 109)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 13,
+     "commande": "Où se trouvait cette maison incendiée, et quand cela s’est-il produit ?",
+     "reponse": "Je crains de ne pas saisir où vous voulez en venir.",
+     "probleme": "La question est claire et reprend directement les informations données par Blain ; le personnage fait semblant de ne pas la comprendre.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 15,
+     "commande": "BOUTON : La 12 ?",
+     "reponse": "M. Blain, le gérant : « Elle donne sur la cour, au calme. Il disait qu’on y entendait l’horloge du Palais-Royal compter ses nuits blanches. »",
+     "probleme": "même réponse 12 fois (tours 15, 59, 78, 110, 123, 132, 174, 176)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 16,
+     "commande": "Avant de partir, pourriez-vous me dire où se trouvait cette maison incendiée et à quelle date ?",
+     "reponse": "Je crains de ne pas saisir où vous voulez en venir.",
+     "probleme": "Le jeu refuse à nouveau une question parfaitement explicite sur la maison incendiée, sans justification.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 26,
+     "commande": "BOUTON : Quels titres ?",
+     "reponse": "M. Gaudry, au secrétariat : « Docteur, professeur, membre d’une société savante. Les titres ouvrent les portes, ici. C’est une maison républicaine, mais elle a ",
+     "probleme": "même réponse 7 fois (tours 26, 84, 86, 100, 144, 147, 149)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 28,
+     "commande": "BOUTON : Consul ?",
+     "reponse": "M. Gaudry, au secrétariat : « Comptez une semaine. Deux, avec les fêtes. Les consulats ne se pressent pas pour la science, docteur. »",
+     "probleme": "même réponse 5 fois (tours 28, 83, 99, 145, 148)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 39,
+     "commande": "Je cherche surtout des traces oubliées du comte Fenalik : dans quels pamphlets ou catalogues devrais-je poursuivre mes recherches ?",
+     "reponse": "Je vous l’ai déjà dit, docteur.",
+     "probleme": "Réponse hors sujet : Rémi n’a pas indiqué dans quels pamphlets ou catalogues poursuivre la recherche.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 43,
+     "commande": "Commencez par rechercher toute mention du comte Fenalik dans les pamphlets, catalogues et archives de la Révolution.",
+     "reponse": "Ouais, bon. Comme je vous le disais…",
+     "probleme": "Rémi vient d’être engagé précisément pour effectuer cette recherche, mais ne donne aucune suite à la demande et répète une formule inadaptée.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 51,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : votre hôtel, rue de Richelieu.",
+     "probleme": "même réponse 3 fois (tours 51, 159, 196)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 55,
+     "commande": "BOUTON : Lire les journaux",
+     "reponse": "La Ruhr, toujours la Ruhr. Le franc baisse. Rien qui vous regarde.",
+     "probleme": "même réponse 7 fois (tours 55, 112, 121, 184, 260, 332, 384)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 56,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : la Bibliothèque nationale.",
+     "probleme": "même réponse 6 fois (tours 56, 93, 117, 139, 185, 225)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 57,
+     "commande": "Après l’incendie, Smith avait-il reçu des lettres, des visiteurs ou laissé des affaires à l’hôtel ?",
+     "reponse": "Je vous l’ai déjà dit, docteur.",
+     "probleme": "La réponse ne traite aucun des trois éléments demandés et renvoie à des propos qui ne les avaient pas abordés.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 65,
+     "commande": "Vous avez parlé d’une maison brûlée et d’un domestique en fuite ; où ces faits se sont-ils produits exactement ?",
+     "reponse": "Beddows ? Je crains de ne rien savoir à ce sujet, docteur.",
+     "probleme": "Le joueur ne parle pas de Beddows ; la réponse introduit soudain un nom absent de sa question et évite encore la demande de localisation.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 71,
+     "commande": "BOUTON : Lire les journaux",
+     "reponse": "Un feuilleton, des réclames, le prix du charbon. Vous repliez le journal.",
+     "probleme": "même réponse 6 fois (tours 71, 135, 198, 325, 377, 386)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 76,
+     "commande": "Pouvez-vous me dire tout ce que vous savez sur M. Smith, notamment ses habitudes, ses visiteurs et les personnes qui l’accompagnaient ?",
+     "reponse": "Vous m’avez déjà posé la question, docteur.",
+     "probleme": "La demande précise les habitudes, visiteurs et accompagnateurs, mais le jeu la bloque sans fournir d’information ni d’issue.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 82,
+     "commande": "Je suis médecin et je poursuis une recherche historique sur le comte Fenalik ; pouvez-vous exceptionnellement me délivrer une carte de lecteur ?",
+     "reponse": "Medecin ? Je vois.",
+     "probleme": "Le titre de médecin est déjà clairement déclaré, mais Gaudry ne répond pas à la demande et se contente d’une réaction incohérente.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 85,
+     "commande": "BOUTON : Lui rappeler qui vous êtes",
+     "reponse": "M. Gaudry, au secrétariat : M. Gaudry lève les yeux, enfin. « Un lecteur, docteur. Comme les trois cent quarante autres. Asseyez-vous, je vous appellerai. » Il ",
+     "probleme": "même réponse 5 fois (tours 85, 146, 228, 290, 319)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 87,
+     "commande": "Je suis médecin diplômé et membre d’une société savante ; quel justificatif vous faut-il exactement ?",
+     "reponse": "« justificatif », « faut »… Posez une question claire, je vous répondrai.",
+     "probleme": "La question est claire et grammaticalement correcte ; Gaudry feint de ne pas la comprendre au lieu d’indiquer les justificatifs requis.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 88,
+     "commande": "Quel document dois-je vous présenter pour prouver mon diplôme de médecin et mon appartenance à une société savante ?",
+     "reponse": "Je ne vois pas en quoi ça vous regarde, docteur.",
+     "probleme": "La réponse est absurde dans le contexte : le joueur demande précisément quel document l’administration exige pour sa carte.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 101,
+     "commande": "Lui rappeler qui vous êtes",
+     "reponse": "M. Gaudry, au secrétariat :",
+     "probleme": "Le tour est étiqueté à l’hôtel alors que la scène se déroule à la Bibliothèque nationale et que Gaudry y est présent ; le déplacement et le lieu sont incohérents.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 104,
+     "commande": "Monsieur Blain, avez-vous conservé une lettre de recommandation ou un document laissé par M. Smith ?",
+     "reponse": "Je vous réponds, puisque vous y tenez. Un soupir, à peine poli.",
+     "probleme": "Blain ne répond pas à la question et la conversation enchaîne sur une option sans fournir d’information.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 108,
+     "commande": "BOUTON : Lui demander une chambre moins chère",
+     "reponse": "M. Blain, le gérant : M. Blain consulte son registre avec une lenteur ostentatoire. « Sous les toits, il y a la chambre de la bonne, docteur. Mais la bonne y es",
+     "probleme": "même réponse 5 fois (tours 108, 210, 219, 334, 375)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 111,
+     "commande": "AGIR : je prends congé de M. Blain et retourne à la Bibliothèque nationale pour demander ma carte de lecteur.",
+     "reponse": "Le dimanche, la Bibliothèque nationale est fermée. Paris lit ses journaux au café.",
+     "probleme": "même réponse 4 fois (tours 111, 120, 136, 340)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 115,
+     "commande": "Monsieur Blain, savez-vous si M. Smith a laissé des bagages ou des effets personnels à l’hôtel ?",
+     "reponse": "Pas de réponse. Un regard vers la porte.",
+     "probleme": "Une question concrète et pertinente est brutalement close sans raison ni possibilité de poursuivre autrement.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 116,
+     "commande": "je regarde attentivement autour de moi, en examinant le registre de l’hôtel et les alentours du comptoir de M. Blain",
+     "reponse": "La chambre, encore. Vous en connaissez chaque détail, maintenant.",
+     "probleme": "La réponse décrit une nouvelle fouille de la chambre et ignore l’examen du registre et du comptoir demandé par le joueur.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 122,
+     "commande": "Monsieur Blain, pourriez-vous me parler des habitudes de M. Smith et de ses fréquentations à l’hôtel ?",
+     "reponse": "Une idée vous vient. À la Nationale, sans carte de lecteur, on ne vous apportera pas un seul volume.",
+     "probleme": "Insertion hors sujet d’un rappel sur la Bibliothèque nationale, puis absence de réponse à la question adressée à Blain.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 122,
+     "commande": "BOUTON : Lire les journaux / BOUTON : Aller ailleurs / BOUTON : Aller : la Bibliothèque nationale / BOUTON : Lire les journaux / DIRE : Monsieur Blain, pourriez-vous me parler des habitudes de M. Smith et de ses fréquentations à l’hôtel ?",
+     "reponse": "40 tours sans progrès à hotel (Dim 14 · 09 h 39), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 125,
+     "commande": "je prends congé de M. Blain et attends l’ouverture de la Bibliothèque nationale lundi matin en relisant mon carnet.",
+     "reponse": "M. Blain, le gérant : « Docteur. »",
+     "probleme": "L’action demande d’attendre jusqu’au lundi matin, mais le jeu ne fait pas avancer le temps et laisse la scène bloquée.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 136,
+     "commande": "je retourne dans ma chambre et attends patiemment l’ouverture de la Bibliothèque nationale lundi matin en relisant mon carnet.",
+     "reponse": "Le dimanche, la Bibliothèque nationale est fermée. Paris lit ses journaux au café.",
+     "probleme": "Le joueur demande explicitement d’attendre jusqu’au lundi, mais la réponse reste au dimanche sans faire progresser le temps.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 137,
+     "commande": "je retourne dans ma chambre et dors jusqu’à lundi matin.",
+     "reponse": "Vous vous allongez dix minutes, sans fermer l’œil.",
+     "probleme": "Le jeu refuse sans raison une action ordinaire et ne propose qu’une option qui ne permet pas réellement d’atteindre lundi matin.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 140,
+     "commande": "Aller : la Bibliothèque nationale",
+     "reponse": "Trop tôt.",
+     "probleme": "Le secrétariat a été accessible à partir de 9 h 10 les jours précédents et Blain indique une ouverture à 9 heures ; à 9 h 05, le refus comme étant « trop tôt » est incohérent avec les horaires établis.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 142,
+     "commande": "Je viens remplir la demande de carte de lecteur pour une recherche historique sur le comte Fenalik ; voici mon diplôme de médecin et mes références de société savante.",
+     "reponse": "La lettre de votre consul est arrivée. Il a l’air déçu. Voici votre carte.",
+     "probleme": "Une lettre du consul apparaît sans avoir été demandée ni envoyée, alors que Gaudry exigeait auparavant de la fournir et annonçait un délai d’une semaine ou deux.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 153,
+     "commande": "je me rends à la salle de travail et consulte méthodiquement le catalogue sous le nom de Fenalik.",
+     "reponse": "Pour aller où ? Vous connaissez : votre hôtel, rue de Richelieu.",
+     "probleme": "La destination est explicitement indiquée : la salle de travail de la Bibliothèque nationale. La réponse prétend ne pas savoir où aller et propose à tort l’hôtel.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 155,
+     "commande": "BOUTON : Réfléchir",
+     "reponse": "Une idée vous vient. Les histoires de la cour ont effacé le comte. Ceux qui l’ont approché ont pu écrire, eux : une dame de la cour, un médecin de la reine. Leu",
+     "probleme": "même réponse 12 fois (tours 155, 157, 168, 171, 195, 224, 257, 272)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 193,
+     "commande": "Je cherche les papiers d’une dame de la cour ou d’un médecin de la reine, au XVIIe siècle ; pourriez-vous m’indiquer leurs noms ?",
+     "reponse": "« Des rois ? Nous avons réglé la question il y a un moment. »",
+     "probleme": "La demande concernant des papiers du XVIIe siècle est mal comprise, puis la conversation se termine sans fournir de nom ni de piste.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 223,
+     "commande": "BOUTON : Lui demander une chambre moins chère / BOUTON : S’impatienter / BOUTON : La 12 ? / BOUTON : Parler de la pluie / BOUTON : Parler des Russes de Paris",
+     "reponse": "40 tours sans progrès à hotel (Jeu 18 · 08 h 54), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 248,
+     "commande": "Racontez-moi exactement ce qui s’est passé la nuit de la mort du docteur Delplace.",
+     "reponse": "[indice noté dans le carnet] ... « C’est à ma portée, Mandrin. »",
+     "probleme": "Le carnet révèle déjà la phrase prononcée par Delplace, alors qu’elle n’est rapportée qu’au tour suivant, en réponse à la question du joueur.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 250,
+     "commande": "Que savez-vous de la machine de Delplace et de son patient dans l’aile privée ?",
+     "reponse": "« Et le malade qu’il soignait, cette nuit-là ? Personne n’en parle. Le lit était vide. »",
+     "probleme": "La question porte à la fois sur la machine et sur le patient, mais la réponse élude entièrement la machine sans raison.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 269,
+     "commande": "BOUTON : S’adresser au secrétariat",
+     "reponse": "Mme Rogniat, secrétaire du directeur : « Oui ? »",
+     "probleme": "même réponse 4 fois (tours 269, 348, 392, 396)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 270,
+     "commande": "DIRE : Je voudrais consulter les anciens registres, notamment celui de 1789.",
+     "reponse": "« Un confrère ? » Son ton change d’un demi-ton. « Les registres anciens sont aux archives, sous les combles. U",
+     "probleme": "écho maladroit de la phrase du joueur (« Un confrère  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 302,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : la Bibliothèque nationale, la maison de santé de Charenton.",
+     "probleme": "même réponse 3 fois (tours 302, 382, 388)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 313,
+     "commande": "Vingt francs, pour traduire seulement",
+     "reponse": "",
+     "probleme": "La même commande est répétée trois fois aux tours 312 à 314, sans réponse ni progression de la scène.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 323,
+     "commande": "Rémi, accepteriez-vous finalement de traduire cet in-folio allemand sur Fenalik ?",
+     "reponse": "« Je ne vois pas ce que je pourrais ajouter, docteur. »",
+     "probleme": "La réponse ne traite pas la demande de traduction et laisse cette piste sans issue.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 324,
+     "commande": "S’impatienter",
+     "reponse": "Rémi Vangeim, étudiant : « Oh là, doucement. Je vous ai rien fait, moi. »",
+     "probleme": "Le tour est situé à l’hôtel, mais la réponse fait intervenir Rémi, encore à la Bibliothèque nationale, puis déclenche sa fermeture et le retour à l’hôtel.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 338,
+     "commande": "Insister (jet forcé)",
+     "reponse": "Une idée vous vient. Les histoires de la cour ont effacé le comte. Ceux qui l’ont approché ont pu écrire, eux : une dame de la cour, un médecin de la reine. Leurs papiers dorment à la Nationale.",
+     "probleme": "Réponse répétée mot pour mot après le même indice déjà obtenu au tour 329, malgré un jet forcé réussi.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 344,
+     "commande": "BOUTON : Aller : la Bibliothèque nationale / BOUTON : Regarder autour de vous / BOUTON : Aller ailleurs / BOUTON : Aller : la maison de santé de Charenton / BOUTON : S’adresser au secrétariat",
+     "reponse": "40 tours sans progrès à charenton (Dim 21 · 09 h 10), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 355,
+     "commande": "Réfléchir",
+     "reponse": "Une idée vous vient. Les histoires de la cour ont effacé le comte. Ceux qui l’ont approché ont pu écrire, eux : une dame de la cour, un médecin de la reine. Leurs papiers dorment à la Nationale.",
+     "probleme": "Le résultat est répété mot pour mot aux tours 329 et 338 au lieu de fournir une nouvelle piste.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 361,
+     "commande": "j’examine le cahier bleu du docteur Delplace et compare ses notes avec celles de mon carnet",
+     "reponse": "Le cahier bleu ? Que voulez-vous en faire, exactement ?",
+     "probleme": "L’action est explicite : le joueur veut relire et comparer deux ensembles de notes. La réponse feint de ne pas comprendre et empêche l’examen d’un indice existant.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 365,
+     "commande": "je relis attentivement le cahier bleu du docteur Delplace, page par page, en notant les noms, dates et lieux inhabituels",
+     "reponse": "Le cahier bleu, oui. Mais encore ? Examiner, fouiller, prendre, parler… ?",
+     "probleme": "La demande de lecture et de relevé des informations est suffisamment précise, mais le jeu la traite comme une intention ambiguë et n’autorise pas l’action.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 368,
+     "commande": "Monsieur Blain, le docteur Delplace est-il déjà venu séjourner dans cet hôtel ?",
+     "reponse": "M. Blain, le gérant : « Charenton ? » Il se signe presque.",
+     "probleme": "Le joueur demande si Delplace a séjourné dans l’hôtel, mais Blain répond comme si la question portait sur Charenton.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 379,
+     "commande": "j’examine le cahier bleu du docteur Delplace et en inspecte soigneusement la couverture, les pages et les éventuelles annotations marginales",
+     "reponse": "Votre phrase peut vouloir dire plusieurs choses, et un seul mot m’y accroche. Que faites-vous, au juste ?",
+     "probleme": "L’action décrit précisément un examen matériel et une recherche d’annotations ; la réponse demande inutilement une clarification et bloque l’accès à l’indice.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 381,
+     "commande": "je lis le cahier bleu du docteur Delplace page par page, en relevant les noms, dates et lieux qui semblent importants",
+     "reponse": "Vous plaidez votre cause devant personne.",
+     "probleme": "Réponse sans rapport avec une demande de lecture clairement formulée ; l’action est refusée sans raison et la piste du cahier reste bloquée.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 387,
+     "commande": "Réfléchir",
+     "reponse": "Une idée vous vient. Les histoires de la cour ont effacé le comte. Ceux qui l’ont approché ont pu écrire, eux : une dame de la cour, un médecin de la reine. Leurs papiers dorment à la Nationale.",
+     "probleme": "Le même résultat est répété mot pour mot aux tours 329, 338 et 355, sans progression.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 387,
+     "commande": "BOUTON : Aller : la Bibliothèque nationale / BOUTON : Lire les journaux / BOUTON : Aller ailleurs / BOUTON : Lire les journaux / BOUTON : Réfléchir",
+     "reponse": "40 tours sans progrès à hotel (Dim 21 · 14 h 40), dont 2 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    }
+   ]
+  },
+  {
+   "nom": "partie_02_doyle_bavard",
+   "perso": "doyle",
+   "profil": "bavard",
+   "tours": 400,
+   "chapitres": [
+    {
+     "ch": "paris",
+     "debut": 1,
+     "tours": 400,
+     "indices": 12,
+     "fin": "inachevé"
+    }
+   ],
+   "nonCompris": 11,
+   "fermees": 10,
+   "problemes": [
+    {
+     "tour": 1,
+     "commande": "Suivre l’homme au chapeau qui vous a regardé descendre",
+     "reponse": "[système] Vous avez perdu 0 £ 10 shillings.",
+     "probleme": "Le système annonce la perte de 0 £ alors que le récit indique qu’un billet de 10 shillings a été volé.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 7,
+     "commande": "Tranquille, dites-vous ? Et cette belle-sœur aurait-elle entendu parler d’un comte Fenalik, d’un ancien château ou d’objets étranges venus de Paris ?",
+     "reponse": "« Une sous-préfecture, docteur. Le marché, l’église, la Seine. »",
+     "probleme": "La réponse n’aborde aucune des questions posées et répète ensuite mot pour mot la réponse du tour 6.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 8,
+     "commande": "Vous connaissiez bien le professeur Smith, monsieur Blain ? Que venait-il consulter à Paris, et vous a-t-il jamais parlé de ses recherches sur Fenalik ou d’un objet ancien qu’il aurait retrouvé ici ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "Blain prétend avoir déjà répondu alors que ces questions précises n’ont pas été posées auparavant.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 9,
+     "commande": "Pardonnez-moi d’insister, monsieur Blain, mais cet incendie concernait-il la chambre de Smith, et savez-vous qui l’avait découvert ou s’il avait laissé des papiers derrière lui ?",
+     "reponse": "« Comme je vous le disais… »",
+     "probleme": "La réponse reste inachevée et ne fournit aucune information ni piste sur l’incendie, le témoin ou les papiers.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 10,
+     "commande": "La chambre 12 ? Pourriez-vous me dire ce qu’elle est devenue après l’incendie, et si quelqu’un y a retrouvé les notes du professeur Smith ?",
+     "reponse": "« L’ascenseur est de 1898. Il gémit, mais il monte. »",
+     "probleme": "La réponse est sans rapport avec la chambre 12, l’incendie ou les notes de Smith.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 11,
+     "commande": "Cet incendie, monsieur Blain… quand a-t-il eu lieu exactement, et que savez-vous de ce domestique en fuite ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "Blain refuse la question en affirmant à tort qu’il y a déjà répondu, sans donner la date ni d’information sur le domestique.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 13,
+     "commande": "Monsieur Blain, je vais prendre congé, mais avant cela, pourriez-vous me donner l’adresse de votre belle-sœur à Poissy ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "L’adresse n’a jamais été donnée ; cette réponse ferme une piste explicitement introduite par le jeu.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 26,
+     "commande": "Je comprends ; quels titres précis pourraient me dispenser de la lettre consulaire, et où pourrais-je faire authentifier mes travaux ou ma qualité de chercheuse ?",
+     "reponse": "« Ce n’est pas de mon ressort. »",
+     "probleme": "La question est claire, mais la réponse ne traite ni des titres précis ni d’une personne ou d’un lieu où les faire authentifier, tandis que la réponse suivante répète une information déjà donnée.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 27,
+     "commande": "Merci, monsieur Gaudry ; je vais prendre congé, mais pourriez-vous m’indiquer où trouver un traducteur agréé qui puisse m’aider à consulter les catalogues et les documents anciens ?",
+     "reponse": "« Gardez ça pour quelqu’un que ça impressionne. »",
+     "probleme": "La réplique ne répond pas à la demande d’indication d’un traducteur et paraît hostile sans raison, alors que le jet de charme est réussi.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 36,
+     "commande": "Votre thèse sur les pamphlets de 1789 pourrait-elle vous avoir mené à des documents sur Fenalik, et que savez-vous exactement de cette statue dispersée ?",
+     "reponse": "« Les libelles contre la reine, 1789. Des centaines. »",
+     "probleme": "Rémi parle des libelles mais ne répond ni à la question sur Fenalik ni à celle sur la statue.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 39,
+     "commande": "Ces princes et ces colonels russes fréquentent-ils certains salons, marchands d’art ou cafés où l’on pourrait entendre parler d’une statue ancienne ?",
+     "reponse": "« Les Soviets ? Demandez aux petits épargnants ce qu’ils pensent de l’emprunt russe. »",
+     "probleme": "La réponse est hors sujet et ne fournit aucun lieu, contact ou piste concernant les Russes et les antiquités.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 41,
+     "commande": "Pardonnez-moi, monsieur Vangeim, je me suis égarée dans mes questions ; revenons au fait essentiel : quel catalogue ou quelle cote consulteriez-vous en premier pour retrouver Fenalik et sa statue ?",
+     "reponse": "« Vangeim, Rémi. Un nom du Nord. »",
+     "probleme": "Rémi ne répond pas à la demande précise de catalogue ou de cote, laissant la recherche sans piste malgré son offre de chercher avec la joueuse.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 52,
+     "commande": "Avant de prendre congé, docteur, qui a découvert le corps de Delplace, où l’appareil électrique se trouve-t-il aujourd’hui, et quels registres puis-je consulter au sujet de cet accident ?",
+     "reponse": "« Mme Rogniat vous raccompagne. »",
+     "probleme": "Leroux élude les trois questions sans fournir d’alternative ni d’accès aux registres.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 59,
+     "commande": "Ce bouillon vous paraissait-il normal, ou y avez-vous remarqué une odeur, une couleur ou des traces inhabituelles ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "Mandrin n’a jamais répondu à cette question sensorielle ; la réponse bloque une piste pertinente sur le pensionnaire mystérieux.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 60,
+     "commande": "Pardonnez-moi, Mandrin, je ne veux pas vous faire répéter ; dites-moi seulement qui apportait ces bouillons et comment accéder à l’aile privée ou à la chambre 13.",
+     "reponse": "« Mandrin, Paul. Comme le bandit, oui. »",
+     "probleme": "La réponse ne donne ni le nom de la personne qui apportait les bouillons ni le moyen d’accéder à l’aile privée ou à la chambre 13.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 61,
+     "commande": "Le lit était vide après la mort de Delplace : qui l’occupait, et quand l’avez-vous vu pour la dernière fois ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "Mandrin n’a pas indiqué qui occupait le lit ni quand cette personne a été vue pour la dernière fois.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 64,
+     "commande": "Puisque vous m’y autorisez, dites-moi franchement ce que vous savez de Guimart : qu’a-t-il trouvé dans les caves, et pourquoi Delplace le surveillait-il ?",
+     "reponse": "« Pour vous, je veux bien. Comme je vous le disais… »",
+     "probleme": "La réponse s’interrompt sans apporter l’information demandée, malgré l’autorisation explicite donnée au tour précédent.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 69,
+     "commande": "BOUTON : Insister (jet forcé)",
+     "reponse": "[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.",
+     "probleme": "même réponse 3 fois (tours 69, 189, 232)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 72,
+     "commande": "AGIR : j’attends la tombée de la nuit pour escalader discrètement le mur du quartier des agités.",
+     "reponse": "Mandrin vous a dit ce qu’il savait. Les autres pressent le pas en vous voyant.",
+     "probleme": "même réponse 4 fois (tours 72, 147, 192, 212)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 78,
+     "commande": "Madame Rogniat, je voudrais consulter les registres concernant l’accident du docteur Delplace et le pensionnaire Guimart.",
+     "reponse": "« « registres », « concernant »… Posez une question claire, je vous répondrai. »",
+     "probleme": "La demande est déjà claire ; Rogniat la traite à tort comme une formulation incompréhensible et n’indique pas la procédure d’accès.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 80,
+     "commande": "Je vous remercie, mais je cherche plutôt les registres récents concernant le docteur Delplace et le pensionnaire Guimart : où sont-ils conservés, et qui peut m’y donner accès ?",
+     "reponse": "« Je vous en prie. »",
+     "probleme": "La réponse élude entièrement la demande sur les registres récents et leur accès.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 89,
+     "commande": "je me rends aux archives municipales de Charenton pour rechercher les dossiers publics concernant l’affaire Guimart et la mort du docteur Delplace.",
+     "reponse": "Vous voulez dire :",
+     "probleme": "L’action est claire, mais le jeu ne permet pas de se rendre aux archives municipales et ne propose aucune issue ou information sur leur existence.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 95,
+     "commande": "je relis attentivement le cahier bleu et compare les noms Marosh, Gorgynia et Sofia avec l’entrée de Fenalik dans le registre.",
+     "reponse": "Le cahier bleu ? Que voulez-vous en faire, exactement ?",
+     "probleme": "L’action décrit précisément quoi faire avec le cahier bleu, mais elle est déclarée non comprise et aucune comparaison ni résultat n’est produit.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 114,
+     "commande": "L’engager pour la journée (cinquante francs)",
+     "reponse": "Pas de réponse. Un regard vers la porte. « Si vous voulez bien m’excuser, mademoiselle. » La conversation est terminée.",
+     "probleme": "Le joueur accepte exactement le tarif proposé, mais Rémi refuse sans raison ni réaction cohérente à cette acceptation.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 126,
+     "commande": "Chercher le comte Fenalik",
+     "reponse": "Rémi remplit les bulletins plus vite que vous ne les lisez. Il plaisante à voix basse avec un bibliothécaire, revient avec une cote que personne ne vous aurait donnée. [...] Échec [...] Rien, cette fois.",
+     "probleme": "La réponse annonce que Rémi a trouvé une cote, puis conclut qu’il n’y a rien, ce qui se contredit.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 134,
+     "commande": "je m’approche des soupiraux murés pour examiner les murs et chercher une entrée vers les anciennes caves.",
+     "reponse": "Plus précisément ?",
+     "probleme": "L’action est suffisamment précise, mais elle est rejetée comme incompréhensible et aucune résolution n’est proposée.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 135,
+     "commande": "j’examine les soupiraux un à un, en inspectant le mortier, les pierres et les traces de passage autour des grilles.",
+     "reponse": "Vous avez déjà observé la maison de santé tout à l’heure. [...] Rien n’a changé.",
+     "probleme": "L’examen détaillé des soupiraux est traité comme une simple répétition d’observation, sans répondre à la recherche d’indices.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 136,
+     "commande": "Madame Rogniat, je voudrais interroger l’infirmier Guimart au sujet de l’homme retrouvé dans les caves et comprendre pourquoi cette affaire n’apparaît dans aucun registre.",
+     "reponse": "M. Mandrin est un infirmier de cette maison. Il n’a pas qualité pour vous répondre.",
+     "probleme": "La réponse remplace l’infirmier Guimart par Mandrin sans explication, alors que les deux noms désignent potentiellement des personnages distincts.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 138,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : votre hôtel, rue de Richelieu, la Bibliothèque nationale.",
+     "probleme": "même réponse 3 fois (tours 138, 144, 213)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 143,
+     "commande": "BOUTON : Réfléchir / DIRE : Madame Rogniat, où puis-je trouver exactement l’infirmier Mandrin, et à quelles heures prend-il son service ? / AGIR : 3. Regarder autour de vous / BOUTON : Regarder autour de vous / DIRE : Madame Rogniat, le cahier du docteur Delplace mentionne l’infirmier Mandrin et l’homme des caves ; je souhaite simplement déposer ces éléments auprès du directeur, à qui dois-je les remettre ?",
+     "reponse": "40 tours sans progrès à charenton (Mar 16 · 11 h 05), dont 1 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 147,
+     "commande": "je suis discrètement l’infirmier jusqu’à sa destination, en observant les portes qu’il ouvre et sans me faire remarquer.",
+     "reponse": "Mandrin vous a dit ce qu’il savait. Les autres pressent le pas en vous voyant.",
+     "probleme": "La réponse ne décrit pas le filage demandé et affirme que Mandrin a déjà parlé, alors qu’aucune conversation avec lui n’est établie ici.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 152,
+     "commande": "Vous qui connaissez Paris, monsieur Blain, avez-vous entendu parler d’un ancien passage souterrain ou de caves oubliées sous Charenton, et savez-vous si quelqu’un s’y rend encore en secret ?",
+     "reponse": "Les journaux ont parlé du directeur, la semaine dernière. Un accident.",
+     "probleme": "La réponse ne traite ni des passages souterrains, ni des caves, ni des personnes qui pourraient s’y rendre.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 154,
+     "commande": "Quel accident, exactement ? La presse a-t-elle mentionné une chute, une maladie ou un acte de violence, et à quelle date le docteur Delplace est-il mort ?",
+     "reponse": "On a écrit “un tragique accident”, docteur, et rien d’autre. [...] « Encore ? »",
+     "probleme": "La réponse répète mot pour mot celle du tour précédent et ne répond toujours pas à la question sur la date.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 157,
+     "commande": "J’ai déjà une carte, monsieur Blain ; dites-moi plutôt si le décès du docteur Delplace a fait jaser quelqu’un dans le quartier, un journaliste, un employé de Charenton ou un ancien pensionnaire.",
+     "reponse": "Le secrétariat, au premier, à gauche du grand escalier. Une lettre de recommandation fait des miracles, docteur.",
+     "probleme": "La réponse revient à la Bibliothèque nationale et ignore entièrement la question sur les témoins ou les rumeurs concernant Delplace.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 161,
+     "commande": "Monsieur Gaudry, je cherche les journaux de la semaine dernière concernant le tragique accident du docteur Delplace à Charenton ; pourriez-vous m’indiquer leur cote ou la salle où les consulter ?",
+     "reponse": "« dernière », « tragique »… Posez une question claire [...] « cote », « salle »… Posez une question claire.",
+     "probleme": "La demande est claire et précise, mais Gaudry feint de ne pas la comprendre et ne fournit aucune piste.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 165,
+     "commande": "Monsieur Gaudry, dans quelle salle puis-je consulter les journaux parisiens du 15 janvier 1923 ?",
+     "reponse": "Vous verrez, mademoiselle. On peste contre Paris toute l’année, et on ne peut pas vivre ailleurs.",
+     "probleme": "Une question directe sur la salle de consultation reçoit une remarque sans rapport.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 166,
+     "commande": "Je vous demande uniquement la salle de consultation des périodiques, monsieur Gaudry ; pouvez-vous me l’indiquer ?",
+     "reponse": "« uniquement », « salle »… Posez une question claire, je vous répondrai. » [...] « Non. »",
+     "probleme": "La question est parfaitement claire, mais le jeu maintient un refus arbitraire et ferme la piste attendue.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 167,
+     "commande": "je prends congé de M. Gaudry et me rends à la bibliothèque de l’Arsenal pour consulter les journaux du 15 janvier.",
+     "reponse": "Vous ne savez pas encore où aller pour ça. Il vous faudrait d’abord une adresse, ou une raison.",
+     "probleme": "L’action indique explicitement une destination et une raison, mais la réponse affirme le contraire et empêche le déplacement sans justification.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 170,
+     "commande": "Étudiant roux, excusez-moi ; je cherche les journaux parisiens du 15 janvier au sujet de la mort du docteur Delplace à Charenton, sauriez-vous où les consulter ou ce qu’on en a dit ?",
+     "reponse": "À qui parlez-vous ?",
+     "probleme": "Le joueur désigne explicitement l’étudiant roux, mais le système ne reconnaît pas la cible déjà proposée par le bouton.",
+     "type": "incomprehension",
+     "gravite": "faible"
+    },
+    {
+     "tour": 175,
+     "commande": "Les registres de Charenton, Rémi ? Où sont-ils conservés exactement, et que pourraient-ils révéler sur les anciens pensionnaires ou les caves de l’établissement ?",
+     "reponse": "Sous les combles, à ce qu’on dit. [...] « Par là-bas, quelque part. »",
+     "probleme": "La réponse donne une indication vague et ne permet ni de localiser précisément les registres, ni d’avancer sur les caves.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 177,
+     "commande": "Si ces registres sont accessibles aux médecins, Rémi, pourriez-vous m’indiquer à qui je dois m’adresser à Charenton et ce que vous savez de ces caves ?",
+     "reponse": "« Comme je vous le disais… »",
+     "probleme": "La réponse ne fournit aucune des informations demandées et ferme la conversation sans raison.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 186,
+     "commande": "je me dirige discrètement vers la voix qui chante, en essayant d’identifier la phrase répétée et la personne qui la prononce.",
+     "reponse": "Vous chantonnez un air de music-hall. À travers la cloison, quelqu’un reprend le refrain, faux.",
+     "probleme": "Le jeu fait chanter le personnage au lieu de le faire se diriger vers la voix et d’identifier le chanteur.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 187,
+     "commande": "je m’approche de la cloison et écoute attentivement le refrain pour localiser la personne qui chante.",
+     "reponse": "Vous ne voyez pas le jardin ici. Ici, vous remarquez : les arcades.",
+     "probleme": "La réponse parle de ce qui est visible et ignore complètement l’écoute et la localisation demandées.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 192,
+     "commande": "je suis discrètement l’infirmier au trousseau de clés, en restant dans l’ombre pour voir où il se rend.",
+     "reponse": "Mandrin vous a dit ce qu’il savait. Les autres pressent le pas en vous voyant.",
+     "probleme": "Le jeu répète une réponse sans rapport avec l’action de suivre l’infirmier et ne résout pas cette piste.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 212,
+     "commande": "je me dirige vers la personne qui chante et lui demande doucement pourquoi elle répète toujours la même phrase.",
+     "reponse": "Mandrin vous a dit ce qu’il savait. Les autres pressent le pas en vous voyant.",
+     "probleme": "La réponse confond la personne qui chante avec Mandrin et ignore la demande de dialogue.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 215,
+     "commande": "Monsieur Gaudry, je souhaite consulter les journaux parisiens du 15 janvier 1923 ; pouvez-vous m’indiquer précisément la salle des périodiques et la cote à demander ?",
+     "reponse": "« Oui ? » [...] Un silence épais. [...] On vous regarde comme on regarde la pluie.",
+     "probleme": "Après plusieurs demandes claires sur le même sujet, le jeu refuse encore de donner la salle ou la cote et bloque la piste documentaire.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 219,
+     "commande": "Rémi, vos idées m’intéressent ; accepteriez-vous de m’aider à retrouver dans les registres ce qu’on a fait du comte Fenalik, et de vérifier le blanc de 1789 à Charenton ?",
+     "reponse": "« Euh… J’ai pas compris, là. »",
+     "probleme": "La proposition d’aide est compréhensible, mais Rémi prétend ne pas la comprendre et n’offre aucune reformulation utile.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 255,
+     "commande": "DIRE : Je vous remercie, docteur ; je resterai dîner, et j’aimerais ensuite examiner le jardin avec vos outils, surtout l’endroit où les rosiers sont les plus anciens.",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "La réponse ne réagit ni au dîner ni à la demande d’examiner le jardin et semble reprendre une objection sans rapport.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 256,
+     "commande": "DIRE : Vous dites qu’au printemps les rosiers deviennent un mur de fleurs : leur floraison a-t-elle toujours été aussi abondante, même avant que vous n’achetiez cette maison ?",
+     "reponse": "« Des roses grosses comme le poing, d’un rouge presque noir. »",
+     "probleme": "Cette réponse est répétée mot pour mot au tour 262.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 260,
+     "commande": "DIRE : Docteur, avant le dîner, permettez-moi de vous demander depuis combien de temps vivez-vous ici, et si votre femme connaissait l’histoire du clos du Diable avant votre installation ?",
+     "reponse": "« Comme je vous le disais… »",
+     "probleme": "La réponse n’apporte aucune information et ne traite aucune des deux questions.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 262,
+     "commande": "BOUTON : Printemps ?",
+     "reponse": "« Des roses grosses comme le poing, d’un rouge presque noir. »",
+     "probleme": "Réponse répétée mot pour mot au tour 256.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 270,
+     "commande": "AGIR : je m’approche de l’alignement de pierres et de la butte, puis je sonde prudemment le sol avec le pied-de-biche à la recherche d’une dalle ou d’un accès dissimulé.",
+     "reponse": "« Les traces ? Pas ici. Ici, vous remarquez : le gros chêne et les rosiers. »",
+     "probleme": "L’action précise de sonder l’alignement de pierres et la butte n’est pas comprise et le jeu renvoie vers des éléments déjà examinés.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 276,
+     "commande": "AGIR : j’éclaire le pied du vieux mur près de l’ancienne entrée et je sonde la terre avec le pied-de-biche, là où les rosiers sont les plus épais.",
+     "reponse": "« Vous réfléchissez à son âge, sans avancer. Il faudrait poser la question à quelqu’un. »",
+     "probleme": "Une action concrète d’examen et de sondage est transformée en demande de renseignements, sans exécution ni piste alternative.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 278,
+     "commande": "AGIR : je retourne près du vieux mur, j’éclaire les racines des rosiers et j’examine soigneusement le chêne ainsi que l’alignement de pierres.",
+     "reponse": "« Pour aller où ? »",
+     "probleme": "Le jeu interprète à tort une action locale dans le jardin comme une demande de déplacement entre lieux.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 280,
+     "commande": "AGIR : j’observe attentivement Quitterie à la fenêtre, puis je retourne examiner le jardin en comparant l’alignement des pierres, le chêne et les rosiers.",
+     "reponse": "« Vous ne voyez pas Quitterie ici. »",
+     "probleme": "La réponse contredit directement le tour précédent, qui indique que Quitterie colle son nez à la fenêtre et regarde le personnage.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 281,
+     "commande": "BOUTON : Repérer l’escalier",
+     "reponse": "« Il fait nuit. Vous ne trouverez rien à la lanterne, sous les fenêtres d’une enfant qui dort mal. Demain matin. »",
+     "probleme": "Le jeu bloque la recherche nocturne sans raison cohérente alors que le personnage dispose d’une lanterne et vient précisément d’examiner le jardin de nuit.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 283,
+     "commande": "DIRE : Bonsoir, madame ; pourriez-vous me louer une chambre, et me dire depuis quand vous tenez cette auberge, qui fréquente habituellement le Lion d’or et si quelqu’un a récemment parlé du clos du Diable ou de la maison Lorien",
+     "reponse": "« Le docteur ? Un brave homme. Il m’a sauvé mon garçon d’une pneumonie, et il a pas voulu d’argent. » Elle bai",
+     "probleme": "écho maladroit de la phrase du joueur (« Le docteur  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 287,
+     "commande": "DIRE : Madame Arnoult, connaissez-vous l’histoire du clos du Diable et de la maison qui s’y trouvait avant celle du docteur, ou avez-vous entendu parler de caves sous le jardin ?",
+     "reponse": "« Le comte ? Ma mère disait qu’il y avait des souterrains jusqu’à la Seine, et que les soirs de brouillard on ",
+     "probleme": "écho maladroit de la phrase du joueur (« Le comte  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 290,
+     "commande": "BOUTON : Des souterrains ?",
+     "reponse": "« Jusqu’à la Seine, qu’elle disait, pour faire passer les gens qui ne devaient pas être vus. »",
+     "probleme": "Réponse répétée mot pour mot au tour 288.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 300,
+     "commande": "BOUTON : Facteur ?",
+     "reponse": "Mme Arnoult, patronne du Lion d’or : « Le père Dubreuil, qui fait la route de Saint-Germain. Il a voulu cueillir une rose pour sa femme. Douze points, et la mai",
+     "probleme": "même réponse 3 fois (tours 300, 357, 359)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 301,
+     "commande": "DIRE : Quand vous dites que la petite crie la nuit, madame Arnoult, que raconte-t-elle exactement, et depuis quand les voisins l’entendent-ils ?",
+     "reponse": "Mme Arnoult, patronne du Lion d’or : « Toutes les nuits vers deux heures. Les Chéron, d’à côté, ont mis du coton dans leurs oreilles. »",
+     "probleme": "même réponse 3 fois (tours 301, 303, 360)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 303,
+     "commande": "BOUTON : Crie la nuit ?",
+     "reponse": "« Toutes les nuits vers deux heures. Les Chéron, d’à côté, ont mis du coton dans leurs oreilles. »",
+     "probleme": "Réponse répétée mot pour mot au tour 301.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 306,
+     "commande": "AGIR : je monte dans ma chambre, règle ma montre pour deux heures et me couche tout habillée, le carnet et l’appareil photo à portée de main.",
+     "reponse": "« Pour aller où ? »",
+     "probleme": "Le jeu ne comprend pas que le personnage se rend dans la chambre déjà louée et propose des déplacements extérieurs.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 309,
+     "commande": "DIRE : Bonjour, docteur ; les frères Pruvost vont arriver pour sonder le jardin près de l’ancienne entrée : m’autorisez-vous à faire creuser, et pourriez-vous me raconter ce que vous savez des blessures du facteur et du début d",
+     "reponse": "« Vous parlez, oui. Mais à qui ? »",
+     "probleme": "Le docteur vient d’ouvrir la porte au tour précédent, mais le jeu ne reconnaît pas sa présence comme interlocuteur.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 316,
+     "commande": "DIRE : Commencez par dégager les rosiers et creuser au pied du mur, exactement près de l’ancienne entrée ; si vous trouvez de la brique brûlée ou une voûte, arrêtez-vous et appelez-moi.",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "La consigne est claire, mais la réponse ne la traite pas et ne fait pas réellement progresser le creusement.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 343,
+     "commande": "BOUTON : Quels cauchemars ?",
+     "reponse": "« Elle dit qu’un monsieur la regarde, la nuit. »",
+     "probleme": "Réponse répétée mot pour mot au tour 249.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 353,
+     "commande": "DIRE : Bonjour, brigadier ; je mène quelques recherches sur les récents incidents autour du clos du Diable : avez-vous remarqué des allées et venues suspectes, notamment près de la maison du docteur Lorien ou de l’ancienne entr",
+     "reponse": "« Votre voix se perd. Il n’y a personne. »",
+     "probleme": "Le tour précédent décrit explicitement un gendarme à bicyclette qui suit le personnage des yeux ; sa présence est ensuite niée.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 356,
+     "commande": "DIRE : Bonjour madame, je cherche à comprendre ce qui se passe autour du clos du Diable ; avez-vous remarqué récemment des étrangers, des visites nocturnes ou des clients parlant du docteur Lorien et de sa famille ?",
+     "reponse": "« Remarquez, la religion ? Chacun la sienne… »",
+     "probleme": "La réponse part sur la religion, qui n’a aucun rapport avec la question sur les étrangers, les visites nocturnes ou les clients.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 361,
+     "commande": "DIRE : Vers deux heures, ces cris ressemblent-ils à ceux d’une personne humaine, et les Chéron ont-ils vu ou entendu quelque chose d’autre près du clos ?",
+     "reponse": "« Attendez, j’ai pas tout suivi. »",
+     "probleme": "La question est claire et porte directement sur les cris déjà évoqués, mais le personnage prétend ne pas la comprendre.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 362,
+     "commande": "DIRE : Je veux savoir si ces cris vous paraissent humains, et si les Chéron ont aperçu quelqu’un ou quelque chose près du clos du Diable.",
+     "reponse": "« Parlons d’autre chose, voulez-vous ? »",
+     "probleme": "La conversation se ferme sans raison après une reformulation explicite d’une piste importante.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 362,
+     "commande": "BOUTON : Facteur ? / BOUTON : Facteur ? / BOUTON : Crie la nuit ? / DIRE : Vers deux heures, ces cris ressemblent-ils à ceux d’une personne humaine, et les Chéron ont-ils vu ou entendu quelque chose d’autre près du clos ? / DIRE : Je veux savoir si ces cris vous paraissent humains, et si les Chéron ont aperçu quelqu’un ou quelque chose près du clos du Diable.",
+     "reponse": "40 tours sans progrès à po_auberge (Jeu 18 · 16 h 45), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 367,
+     "commande": "DIRE : Docteur, vous m’attendiez-vous, ou y a-t-il une raison particulière pour laquelle vous avez ouvert avant que je frappe ?",
+     "reponse": "« Je crains de ne pas saisir où vous voulez en venir. »",
+     "probleme": "Le docteur feint de ne pas comprendre une question simple et naturelle, ce qui rompt la cohérence de son rôle et sert à bloquer l’échange.",
+     "type": "role",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 370,
+     "commande": "BOUTON : Calmant ?",
+     "reponse": "« Du véronal, une demi-dose. Elle dort mal, elle aussi. »",
+     "probleme": "Réponse répétée mot pour mot au tour 253.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 377,
+     "commande": "je profite du silence pour examiner discrètement les fenêtres et les rosiers, puis je cherche une entrée dissimulée vers les caves.",
+     "reponse": "Vous consultez votre carnet. Le fil est là, quelque part entre deux pages.",
+     "probleme": "La réponse ne traite ni de l’examen des fenêtres et des rosiers ni de la recherche d’une entrée vers les caves, et l’action est marquée comme non comprise.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 378,
+     "commande": "je cherche méthodiquement l’entrée des caves autour de la maison, en inspectant les murs, les fondations et les rosiers avec la lanterne et le pied-de-biche.",
+     "reponse": "Vous cherchez les journaux récents des yeux, en vain. Ici, vous remarquez : le gros chêne et les rosiers.",
+     "probleme": "La réponse remplace la recherche d’une entrée de caves par une recherche de journaux et ne tient pas compte de la lanterne ni du pied-de-biche.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 380,
+     "commande": "Quitterie, n’aie pas peur ; que regardes-tu par ta fenêtre chaque nuit, et pourquoi le monsieur te fait-il si peur ?",
+     "reponse": "Plusieurs têtes se tournent. À qui vous adressez-vous ?",
+     "probleme": "La réponse ne comprend pas que la réplique s’adresse explicitement à Quitterie, pourtant mentionnée dans la scène précédente, puis ne propose aucune continuation avec elle.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 384,
+     "commande": "Vous creusez ici depuis quand, messieurs, et avez-vous découvert des pierres, des os ou un ancien passage sous le jardin ?",
+     "reponse": "Les frères Pruvost : « Comme je vous le disais… »",
+     "probleme": "Les frères Pruvost n’avaient pas donné ces informations auparavant ; la réponse répétée ne répond à aucune des deux questions.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 386,
+     "commande": "Émile et Gustave, en déplaçant la terre, avez-vous remarqué une odeur étrange, des racines mortes ou des traces de pas autour des rosiers ?",
+     "reponse": "Les frères Pruvost : « Pruvost ? Connais pas, mademoiselle. »",
+     "probleme": "Les ouvriers viennent de se présenter comme Émile et Gustave Pruvost au tour précédent ; prétendre ne pas connaître « Pruvost » contredit immédiatement l’échange.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 389,
+     "commande": "Je vous demande simplement qui vous a engagés, depuis quand vous creusez ici et si vous avez découvert quelque chose d’inhabituel sous les rosiers.",
+     "reponse": "Pas de réponse. Un regard vers la porte.",
+     "probleme": "Après avoir demandé une clarification, les ouvriers refusent encore de répondre à une question simple sans que cela ouvre une autre piste ni permette de poursuivre l’enquête.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 393,
+     "commande": "je note soigneusement dans mon carnet les noms d’Émile et Gustave Pruvost, leur refus de répondre et le chantier, puis je me rends à la mairie pour consulter les registres concernant les travaux du jardin Lorien.",
+     "reponse": "Les frères Pruvost : « Pas maintenant, mademoiselle. »",
+     "probleme": "Une réplique des frères Pruvost est injectée alors que le personnage a quitté le chantier et se rend à la mairie ; elle est sans rapport avec l’action en cours.",
+     "type": "incoherence",
+     "gravite": "forte"
+    }
+   ]
+  }
+ ]
+}
