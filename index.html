@@ -692,6 +692,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     // « je prends un taxi pour St John's Wood » : on y va ; « en taxi » ne change rien
     [/\b(?:je |nous )?(?:prends|prendre|prenons|hele|heler|appelle|appeler|siffle|siffler|attrape|attraper|saute dans|monte dans) (?:un |le |mon |dans un )?(?:taxi|fiacre|omnibus|metro|bus|tramway|tram|cab)\s+(?:pour|jusqu a|jusqu au|jusqu aux|vers|direction|en direction de|en direction du|et (?:je )?(?:vais|file|fonce|rentre|retourne))\s+/g, ' aller a '],
     [/\ben (taxi|fiacre|omnibus|metro|bus|tram|tramway)\b/g, ' '],
+    // « je profite d'un moment d'inattention pour monter… », « j'attends qu'il ait le dos tourné pour… » : le geste est après « pour »
+    [/^\s*(?:je |j |alors |bon )*(?:profite\w*|attends? qu\w*[^,]*?) (?:de |d |du |des )?[^,]*? (?:pour|afin de|afin d) (?=[a-z])/, ' je '],
     // « je vais au British Museum pour chercher les rouleaux » : le but ne change pas le geste
     // … sauf quand le geste n'est qu'un déplacement sans destination (« je sors pour trouver l'homme ») : le but est le geste
     [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)([a-z]+(?:er|ir|re|oir))\b(.*)$/g, function (m, pour, inf, reste, off, tout) {
@@ -703,6 +705,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     // « je vais ailleurs », « allons autre part » : on change de lieu, sans dire lequel (et « ailleurs » n'est pas « l'allure »)
     [/\b(vais|va|allons|allez|aller|vas|pars|partir|partons|file|filer|passe|passer)\s+(?:ailleurs|autre part|dans un autre endroit|vers un autre endroit)\b/g, ' aller destinations '],
     [/\b(ailleurs|autre part)\b/g, ' destinations '],
+    // « je me glisse dans le couloir », « je me faufile » : un mouvement, pas un don
+    [/\b(me|m|se|s|nous|te|t)\s+(glisse\w*|faufile\w*|coule\w*)\b/g, ' aller '],
     // « je m'approche d'elle » : on y va
     [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
     // « je vais le voir », « je vais la trouver » : on va lui parler
@@ -907,7 +911,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     L.add('ECOUTER', 'v', 'ecouter, entendre, espionner, epier, ouie, bruit, bruits, son, sons');
     L.add('PARLER', 'v', 'parler, discuter, interroger, questionner, demander, aborder, saluer, causer, adresser, interpeller, appeler, bonjour, bonsoir, salut, hello, excuser, converser, dire, raconter, repondre, apostropher, hey, he, ho, hep, psst');
     L.add('VISITER', 'v', 'visiter, rendre visite');
-    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons, franchir, franchis, franchit, franchissons, franchissez, enjamber, enjambe');
+    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, regagner, regagne, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons, franchir, franchis, franchit, franchissons, franchissez, enjamber, enjambe');
     L.add('ALLURE', 'x', 'allure', { label: 'l’allure' });
     L.add('OUVRIR', 'v', 'ouvrir, ouvre, pousser, tirer, forcer, actionner, entrouvrir, crocheter, defoncer, enfoncer, deverrouiller, tourner, poignee');
     L.add('FRAPPER', 'v', 'frapper, toquer, cogner, tambouriner');
@@ -1211,6 +1215,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         for (var q = s.log.length - 1, seenN = 0; q >= 0 && seenN < 6; q--) {
           var prev = s.log[q];
           if (prev.t === 'player' || prev.t === 'ask' || prev.t === 'chips') continue;
+          if (prev.t === 'loc') break; // on a changé de lieu depuis : un trajet qui ressemble au précédent n'est pas « le même résultat »
           seenN++;
           if ((prev.t === 'narr' || prev.t === 'event') && prev.src === e.x) { e.x = fresh('dup', scene.generic.dup); break; }
         }
@@ -1492,6 +1497,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       money: function (n) { return money(n === undefined ? s.money : n); },
       lastTopic: function (npcId) { return npcState(npcId).last; },
       end: function () { s.ended = true; log({ t: 'end' }); },
+      _jetResolve: function (kind, sk, r) { return jetResolve(kind, sk, r); },
       exec: function (actionId) { var a = findAction(actionId); if (a) exec(a, parse(lex, a.label || '', scene.phrases)); }
     };
 
@@ -1574,7 +1580,11 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       if (!sc) return 0;
       // un lieu où se rendre, nommé avec un verbe de mouvement : le reste de la phrase dit pourquoi on y va
       // (« je me rends au Chelsea Arms, décidé à découvrir qui occupe la chambre 14 ») et ne retire rien au déplacement
-      if (/^go_/.test(a.id) && vs && ns >= 0.9 && nounMatched && nounMatched.id === a.nouns[0]) return sc + (a.boost || 0);
+      if (/^go_/.test(a.id) && vs && ns >= 0.9 && nounMatched && nounMatched.id === a.nouns[0]) {
+        // « l'hôtel Chelsea Arms » : un nom de lieu suivi aussitôt d'un autre, c'est le second qu'on désigne
+        var D0 = destinations(), suivi = nIn.some(function (n) { return n !== nounMatched && D0[n.id] && n.pos > nounMatched.pos && n.pos <= nounMatched.pos + 2; });
+        return sc + (a.boost || 0) - (suivi ? 0.6 : 0);
+      }
       var handledN = (a.nouns || []).concat(a.also || [], a.extra || []);
       var extraN = nIn.filter(function (n) { return handledN.indexOf(n.id) < 0; }).length;
       if (extraN) sc -= 0.45 + 0.15 * (extraN - 1);
@@ -2247,7 +2257,12 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       try {
         if (typeof rep === 'function') rep(api, p);
         else if (rep && rep.sujet) { talkMode = null; runTopic(npc, rep.sujet, p); return; }
-        else { var l = [].concat(rep), n = st.asked[cle] || 0; st.asked[cle] = n + 1; api.npc(npc.id, l[Math.min(n, l.length - 1)]); }
+        else {
+          var l = [].concat(rep), n = st.asked[cle] || 0; st.asked[cle] = n + 1;
+          // tout a été dit : le personnage ne récite pas deux fois la même réplique, il le fait remarquer (comme pour un sujet)
+          if (n >= l.length) talkMode = null;
+          api.npc(npc.id, l[Math.min(n, l.length - 1)]);
+        }
       } finally { talkMode = null; }
     }
     function jouerTable(npc, st, lu, p) {
@@ -2271,6 +2286,8 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       if (!rep) return false;
       direSuite(npc, st, 'table:' + tb.sujet + ':' + k + ':' + lu.intent, rep, p);
       if (lu.intent === 'prendre') tb.pris[k] = true;
+      // une question dont on a eu toutes les réponses quitte les suggestions
+      if (typeof rep !== 'function' && !(rep && rep.sujet) && (st.asked['table:' + tb.sujet + ':' + k + ':' + lu.intent] || 0) >= [].concat(rep).length) tb.pris[k] = true;
       tb.turn = s.turn;
       if (e.suites) st.table = { sujet: tb.sujet + '.' + k, suites: e.suites, turn: s.turn, pris: {} };
       else if (lu.intent === 'refuser') delete S[k];
@@ -2751,7 +2768,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     function defJet(id, why) {
       var m = /^jet:([a-z]+):(.+)$/.exec(id || ''); if (!m) return null;
       var kind = m[1], sk = m[2];
-      if (!scene.checks[id]) scene.checks[id] = { skill: sk, why: why || '', push: kind === 'lieu' ? 'Fouiller encore, plus à fond (jet forcé)' : kind === 'social' ? 'Insister (jet forcé)' : kind === 'idee' ? 'Se concentrer encore (jet forcé)' : null, resolve: function (api2, r) { jetResolve(kind, sk, r); } };
+      if (!scene.checks[id]) scene.checks[id] = { skill: sk, why: why || '', push: kind === 'lieu' ? 'Fouiller encore, plus à fond (jet forcé)' : kind === 'social' ? 'Insister (jet forcé)' : kind === 'idee' ? 'Se concentrer encore (jet forcé)' : null, resolve: function (api2, r) { ((api2 && api2._jetResolve) || jetResolve)(kind, sk, r); } };
+      // (les scènes sont partagées entre les parties : « Rejouer le chapitre », le chapitre suivant, les tests en parallèle.
+      //  Le jet improvisé se résout dans la partie qui le lance, jamais dans celle qui l'a défini la première.)
       return scene.checks[id];
     }
     function jetCheck(sk, why, kind, extra) {
@@ -2857,6 +2876,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       if (!m) return false;
       if (/\b(vos|votre|ses|son|sa|leurs?|ces|ce|un|une)\s+(notes|carnet|indices|bilan)\b|\b(notes|carnet)\s+(de|du|d)\s/.test(p.text)) return false;
       if (p.nouns.length > 1 || p.verbs.some(function (v) { return v.id !== 'EXAMINER' && v.id !== 'FOUILLER'; })) return false;
+      if (p.nouns.some(function (n) { return destinations()[n.id]; })) return false; // « je regagne mon hôtel et relis mon carnet » : d'abord le déplacement
       // le libellé d'une action d'ici (« Consulter le registre des objets trouvés ») passe avant le mot « objets »
       var lb = rankActions(p)[0]; if (lb && scoreLibelle(lb.a, p) >= THRESHOLD) return false;
       if (m.id === 'AIDE') scene.help(api);
@@ -3055,7 +3075,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     // « …, puis je… », « … et ensuite … » : une suite de gestes
     function suites(raw) {
       // « je vais au Chelsea Arms et je demande la chambre 14 » : on s'y rend, puis on fait le reste, là-bas
-      var dep = !s.talk && String(raw).match(/^(.*?\b(?:vais|va|allons|aller|me rends|me rendre|nous rendons|retourne|retourner|retournons|rentre|rentrer|file|filer|pars|partir|monte|monter|descends|descendre|cours|gagne|rejoins|rejoindre|passe|passer)\b.*?)\s+et\s+((?:je|j[’']|me|m[’']|nous|on)\s*\S.*)$/i);
+      var dep = !s.talk && String(raw).match(/^(.*?\b(?:vais|va|allons|aller|me rends|me rendre|nous rendons|retourne|retourner|retournons|rentre|rentrer|file|filer|pars|partir|monte|monter|descends|descendre|cours|gagne|regagne|regagner|rejoins|rejoindre|passe|passer)\b.*?)\s+et\s+((?:je|j[’']|me|m[’']|nous|on)\s*\S.*)$/i);
       if (dep && dep[1].split(/\s+/).length >= 3 && dep[2].split(/\s+/).length >= 3) return [dep[1], dep[2]];
       var parts = String(raw).split(/\s*[,;]\s*(?:et\s+)?(?:puis|ensuite|apr[eè]s quoi)\s+|\s+et\s+(?:puis|ensuite)\s+|\s+puis\s+(?=(?:je|j[’']|nous|on|vais|me|m[’']|retourne|rentre|prends|pars|sors|file|monte|descends|reviens|repars|aller|retourner|rentrer)\b)/i)
         .map(function (x) { return x.trim(); }).filter(Boolean);
@@ -5532,7 +5552,14 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         T('femme', ['FLATTER', 'ARGENT', 'PERSUADER'], function (api, n) {
           if (n > 0) { api.npc('chelseaclerk', '« Je vous ai déjà trop dit, {m}. »'); return; }
           api.npc('chelseaclerk', 'Il baisse la voix. « La petite Mary, celle qui les a trouvés, dit que ça sentait la boucherie. Pas le sang, {m}. La boucherie. Elle n’a pas voulu remonter depuis. »');
-        })
+        }),
+        // la plaque de clé que l'homme à la moustache a laissé tomber : la clé qui manquait
+        T('cle', [['CLE', 1.3], ['PROJECTEUR', 0.6], ['CHAMBRE', 0.5]], function (api, n) {
+          var aLaCle = (api.s.inv || []).some(function (x) { return /Chelsea Arms, 14/.test(x); });
+          if (!aLaCle) { api.npc('chelseaclerk', '« La clé de la 14 ? La police en a une. L’autre est partie avec le locataire, et personne ne l’a revue. »'); return; }
+          if (n > 0) { api.npc('chelseaclerk', '« Rangez ça, {m}. Je ne l’ai pas vue. »'); return; }
+          api.npc('chelseaclerk', 'Il regarde la plaque de cuivre, puis vous, et son col dur a l’air soudain trop serré. « Où avez-vous trouvé ça ? C’est la nôtre. Celle qui manquait. » Il jette un œil vers l’agent, au pied de l’escalier. « Rangez-la, {m}. S’il la voit, il vous la prend, et vous avec. »');
+        }, { chip: 'Lui montrer la clé', cond: function (api) { return (api.s.inv || []).some(function (x) { return /Chelsea Arms, 14/.test(x); }); } })
       ] }),
 
     mustapha: npc({ id: 'mustapha', name: 'Mustapha Köprülü', patience: 6, cooldown: 60, selfKeys: ['MUSTAPHA'],
@@ -5741,7 +5768,9 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         if (p.hours && h < p.hours[0] - 1) {
           // un lieu qui n'ouvre que le soir : on attend le soir, si c'est ce qu'on a dit
           if (p.hours[0] >= 17 && h >= 6) {
-            var soir = pa && /\b(soir|soiree|attend\w*|tard|nuit|\d+ ?h|heures?)\b/.test(G.RPG.normalize(pa.raw || ''));
+            // la phrase telle qu'elle a été tapée : la lecture normalisée retire le but (« … pour attendre l'ouverture »)
+            var brutV = String((pa && pa.raw) || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            var soir = pa && (/\b(soir|soiree|attend\w*|tard|nuit|\d+ ?h|heures?|ouverture|seance)\b/.test(brutV) || pa.jusqua);
             if (!soir) { api.say(p.closed + ' Il est ' + h + ' h : revenez ce soir, ou écrivez « attendre le soir ».'); return; }
             api.say(api.fresh('tuerTemps', ['Vous tuez le temps jusqu’au soir : un thé, les journaux, une promenade dans le brouillard qui s’épaissit avec la nuit.', 'L’après-midi s’étire. Vous dînez tôt, seul{e} à une table, en regardant les réverbères s’allumer un à un.']));
             api.s.min = day(api.s.min) * D + p.hours[0] * 60 - 40;
@@ -8257,6 +8286,10 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     var cx = null; CLAIMX.some(function (c) { if (c[0].test(t)) { cx = c[1]; return true; } return false; });
     var m = t.match(RX.jesuis); a.claim = cx || (m && !/^(desole|navre|perdu|fatigue|fatiguee|sur|sure|pret|prete|venu|venue|ici|la|en|de|pas|tres|bien|malade|curieux|curieuse|seul|seule|ami|amie|presse|pressee|inquiet|inquiete|content|contente|au|pour|avec|du|des|une|un|le|desolee|navree|occupe|occupee|perdue|ravi|ravie|enchante|enchantee)$/.test(m[2]) ? m[2] : null);
     if (a.claim && HU && HU.RX.claimAbsurde.test(N(a.claim))) { a.absurde = true; a.claim = null; }
+    // le mot tel qu'il a été tapé, avec ses accents (« Médecin ? Je vois. », pas « Medecin »)
+    if (a.claim && !cx) { var origC = String(raw || '').split(/[\s’'?!.,;:«»"()]+/).filter(function (x) { return N(x) === a.claim; })[0]; if (origC) a.claim = origC.toLowerCase(); }
+    // « je suis chargé d’enquêter », « je suis venu pour… », « je suis passé chez… » : un participe, pas un métier
+    if (a.claim && !cx && m && /(e|es|ee|ees|i|is|u|us)$/.test(m[2]) && new RegExp('\\bje suis (?:un |une |le |la |l )?' + m[2] + ' (de|d|a|pour|par|chez|dans|en|sur|avec|ici|la|hier|ce)\\b').test(t)) a.claim = null;
     m = t.match(RX.jemappelle); a.nom = m ? cap(m[1] || m[2]) : null;
     a.quisuisje = RX.quisuisje.test(t);
     a.suite = a.words <= 5 && /^(et )?(pourquoi|comment ca|comment cela|c est a dire|racontez|racontez moi|expliquez|expliquez vous|et alors|et puis|et ensuite|ensuite|vraiment|ah bon|precisez|dites m en plus|dites moi en plus|en quoi|continuez|c est tout|quoi d autre|et apres)\b/.test(tt) && !a.ents.length;
@@ -8780,7 +8813,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     if (f.tics && f.tics.length && w1 && isLow(w1) && api.rand() < 0.22) {
       var tic = api.fresh('tic:' + id, f.tics), core = tic.replace(/[,:.!]\s*$/, '').replace(/\{m\}/g, '');
       var ADDR = /(\{m\}|monsieur|madame|mon ami|mon cher|signore|docteur|mon petit)/i;
-      if (out.toLowerCase().indexOf(core.toLowerCase()) < 0 && !(ADDR.test(tic) && ADDR.test(out))) out = '« ' + tic + ' ' + out.charAt(2).toLowerCase() + out.slice(3);
+      // après « Voyons. » la phrase repart avec sa majuscule ; après « Remarquez, » elle continue en minuscule
+      if (out.toLowerCase().indexOf(core.toLowerCase()) < 0 && !(ADDR.test(tic) && ADDR.test(out))) out = '« ' + tic + ' ' + (/[.!?…]\s*$/.test(tic) ? out.charAt(2) : out.charAt(2).toLowerCase()) + out.slice(3);
     }
     if (offTopic && f.dada && f.dada.length && api.rand() < 0.2) { var dd = api.fresh('dada:' + id, f.dada); out = / »$/.test(out) ? out.replace(/ »$/, ' ' + dd + ' »') : out + ' « ' + dd + ' »'; }
     return out;
@@ -10003,7 +10037,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
       seance(api); return true;
     }
     // ---- attendre une heure précise
-    if (ATTENTE.test(t.trim()) && raw.indexOf('?') < 0) {
+    // (« attendre le soir devant le salon de Mrs Vane » : on s'y rend d'abord, c'est le déplacement qui fera attendre)
+    if (ATTENTE.test(t.trim()) && raw.indexOf('?') < 0 && !(p && p.c && p.c.ALLER !== undefined && /\b(devant|chez|pres d|en face d|a la porte d)/.test(t))) {
       var cible = heureVoulue(t);
       if (loc(api) === 'vane' && !api.flag('seanceFaite') && (cible === null ? /\bseance\b/.test(t) : cible >= 20 && cible <= 22) && seanceOuverte(api)) { api.endTalk(false); seance(api); return true; }
       if (cible !== null && !/^(wagon|retour|campagne|cave)/.test(loc(api))) {
@@ -10481,7 +10516,9 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   L.globalActions.push(
     { id: 'obj_valise', label: 'Ouvrir la valise de Beddows', repeatable: true, verbs: ['EXAMINER', 'FOUILLER', 'OUVRIR'], nouns: ['VALISE', 'ARGENT'],
       cond: function (api) { return api.s.inv.some(function (n) { return /valise de Beddows/i.test(n) && ou(api, n) === 'sur vous'; }); },
-      run: function (api) {
+      run: function (api, p) {
+        // l'examiner sans l'ouvrir : le dehors seulement
+        if (p && p.c && p.c.OUVRIR === undefined && /\bsans (l |la |le )?ouvr/.test(G.RPG.normalize(p.raw || ''))) { api.say(api.fresh('valiseDehors', ['Une valise de cuir fauve, coins renforcés, deux serrures de laiton sans clé. Pas d’étiquette, pas d’initiales : rien qui dise à qui elle était. Elle est lourde, d’un poids de papier.', 'Le cuir est neuf, à peine griffé au fond, comme si elle n’avait fait qu’un seul voyage. Les serrures ne sont pas fermées à clé.'])); return; }
         if (api.s.loc === 'yard') { api.say('Vous entrouvrez la valise sur vos genoux, à l’abri d’un pilier. Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Un agent passe ; vous refermez d’un coup sec. Mieux vaut ne pas expliquer ça ici.'); return; }
         api.say(api.fresh('valiseVue', ['Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Une fortune, donnée sans un reçu. Vous refermez la valise sans trop savoir quoi penser.', 'Les liasses sont toujours là, serrées par des bandes de papier de la Banque d’Angleterre. Elles sentent l’encre neuve. Vous refermez.']));
       } },
@@ -10644,7 +10681,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     passeports: { mots: 'passeports, faux, des faux, les passeports', demander: ['« De bons faux, docteur. Trop bons. Même papier, même encre, mêmes tampons que les vrais. Les Turcs disent qu’ils n’y sont pour rien. Je les crois à moitié. »'] }
   }, null]);
   suites('chelseaclerk', 'meurtres', [{
-    chambre: { chip: 'Quelle chambre ?', mots: 'chambre, quelle chambre, la chambre, reservee pour un seul, pour un seul', demander: ['« Au deuxième, docteur. La police a gardé la clé. Enfin, l’une des deux : l’autre est partie avec le locataire, et personne ne l’a revue. »'] },
+    chambre: { chip: 'Quelle chambre ?', mots: 'chambre, quelle chambre, la chambre, reservee pour un seul, pour un seul', demander: ['« Au troisième, docteur. La police a gardé la clé. Enfin, l’une des deux : l’autre est partie avec le locataire, et personne ne l’a revue. »'] },
     rien: { mots: 'rien entendu, vous n avez rien entendu, rien, pas un bruit', demander: ['« Rien, docteur. Pas un cri. Trois hommes, et pas un cri. La femme de chambre dit que c’est ça le pire. »'] }
   }, null]);
   suites('chelseaclerk', 'femme', [{
@@ -11513,7 +11550,19 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
       moi: { nom: '« Blain, Octave. Gérant, {m}, pas propriétaire. La nuance me coûte cher. »', age: '« Cinquante-huit ans, dont trente derrière ce comptoir. »', origine: '« D’Auxerre. On en garde l’accent, paraît-il. »', famille: '« Une épouse, à la lingerie. Deux fils. Un seul est revenu de Verdun. »', metier: '« Je tiens la maison. On ne me remarque que lorsque quelque chose manque. »', loisirs: '« Les dominos, le dimanche, au café de la Bourse. »' },
       sait: { SMITH: '« Un grand monsieur. Il parlait français comme un livre, avec un accent de théâtre. »', BN: '« La Nationale est notre voisine. La moitié de nos clients y passent leurs journées, et rentrent avec les yeux rouges. »', POISSY: '« Poissy ? Une demi-heure de train, par Saint-Lazare. Un marché aux bestiaux, une vieille église. »', CHARENTON: '« On n’y va pas pour son plaisir, {m}. »', TRAIN: '« Le Simplon-Orient, gare de Lyon. Vos places sont retenues. »' },
       relances: [{ q: '« Vous êtes à Paris pour vos études, {m}, ou pour votre plaisir ? »', oui: '« L’un n’empêche pas l’autre, ici. »', non: '« Alors pour des affaires. Je ne demande rien. »' }] },
+    // « Docteur, professeur, membre d'une société savante : les titres ouvrent les portes, ici. » Un vrai titre, dit au guichet, vaut recommandation.
     gaudry: { groupe: 'savant', reg: 'sec', pa: true, mefiant: 0.6, tics: ['Voyons.', 'Soit.'],
+      roles: (function () {
+        function titre(nom) {
+          return function (api) {
+            // (la réplique peut être lue deux fois dans le même tour : la carte n'est donnée qu'une fois, la phrase reste la même)
+            if (api.flag('carteBN') && api.flag('carteTitre') !== api.s.turn) return '« Je sais, ' + nom + '. Vous avez votre carte. »';
+            if (!api.flag('carteBN')) { api.flag('carteBN', true); api.flag('carteTitre', api.s.turn); api.take('Une carte de lecteur de la Bibliothèque nationale'); }
+            return 'M. Gaudry repose sa plume. « ' + nom.charAt(0).toUpperCase() + nom.slice(1) + '. Il fallait le dire. » Il tamponne un carton vert, deux fois. « Carte de lecteur. Salle de travail, au fond de la cour. Un bulletin par ouvrage, et l’on ne communique plus rien dans la dernière heure. »';
+          };
+        }
+        return { medecin: titre('docteur'), savant: titre('professeur'), avocat: titre('maître'), clerge: titre('mon père'), militaire: titre('mon commandant'), diplomate: titre('monsieur le consul') };
+      })(),
       dada: ['Le règlement est de 1858. Il a été fait pour durer.', 'Un lecteur a tenté de sortir avec un Elzévir sous sa veste, mardi. Il est fiché.'],
       moi: { nom: '« Gaudry. Secrétariat. »', age: '« Cela ne figure sur aucun bulletin de demande. »', origine: '« De Paris. Du sixième. »', famille: '« Je suis marié à cette maison. »', metier: '« Je délivre les cartes. C’est moi qui décide qui lit. »', loisirs: '« Je classe ma propre bibliothèque. Par format. »' },
       sait: { BN: '« Quatre millions de volumes. Trois cent quarante places. Faites le calcul. »', REMI: '« Vangeim. Il a sa carte depuis six ans, et pas un retard. Je n’en dirai pas autant de ses opinions. »', ARSENAL: '« L’Arsenal dépend de nous, quoi qu’ils en disent. »' } },
