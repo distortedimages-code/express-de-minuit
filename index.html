@@ -2083,7 +2083,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
         else if (S._choix && restants.length > 1) { direSuite(npc, st, 'table:' + tb.sujet + ':_choix', S._choix, p); tb.turn = s.turn; s.tick = scene.talkTick || 1; return true; }
         else return false;
       }
-      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null);
+      var e = S[k], rep = e[lu.intent] || (lu.intent === 'demander' ? e.parler : null) || (lu.intent === 'refuser' ? (S._refus || e.prendre) : null);
       if (!rep) return false;
       direSuite(npc, st, 'table:' + tb.sujet + ':' + k + ':' + lu.intent, rep, p);
       if (lu.intent === 'prendre') tb.pris[k] = true;
@@ -4379,6 +4379,223 @@ form.line input { min-width: 0; flex: 1 1 auto; }
   };
   G.CHAPTERS = G.CHAPTERS || {};
   G.CHAPTERS.prologue = SCENE;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+// =============================================================================
+// Les suites des répliques du prologue : ce que chaque réplique met sur la table (voir « ce qui est sur la table »
+// dans le moteur). Chaque suite a ses mots et ses réponses : prendre, demander, refuser.
+// =============================================================================
+(function (G) {
+  'use strict';
+  var S = G.SCENE; if (!S) return;
+  function suites(npc, id, x) {
+    var t = ((S.npcs[npc] || {}).topics || []).filter(function (y) { return y.id === id; })[0];
+    if (t) t.suites = x; else if (G.console) G.console.warn('suites sans sujet', npc, id);
+  }
+  function sujet(id) { return { sujet: id }; }
+  function dit(who, x) { return function (api) { api.npc(who, x); }; }
+
+  // ---------------------------------------------------------------- Bastien, le serveur
+  suites('serveur', 'etat', function (api) { return api.sanState() >= 2 ? null : {
+    cognac: { chip: 'Un cognac, finalement', mots: 'cognac, un cognac, un verre, a boire, boire, quelque chose de fort', prendre: sujet('commande'),
+      demander: ['« Du Martell, monsieur. Le seul qui ne prenne pas le goût du wagon. »'] },
+    _refus: ['« Monsieur a raison. Il faut garder les idées claires, cette nuit. »'] }; });
+  suites('serveur', 'passagers', {
+    eveque: { chip: 'L’évêque', mots: 'eveque, l eveque, un eveque, monseigneur, le pretre, l abbe',
+      demander: ['« Monseigneur Duroc, du diocèse de Sion. Il a dîné d’un bouillon et il est remonté lire. Il lit toute la nuit, paraît-il. Les évêques dorment mal, monsieur. Ils savent des choses. »'] },
+    medecin: { mots: 'medecin, le medecin, medecin allemand, l allemand, docteur', demander: sujet('docteur') },
+    suisses: { mots: 'suisses, les suisses, des suisses', demander: ['« Des horlogers de Bienne, qui rentrent d’un salon. Ils ont commandé de l’eau minérale et ils ont vérifié l’addition deux fois. »'] },
+    anglais: { mots: 'anglais, les anglais, des anglais', demander: ['« Trois messieurs qui vont skier à Montreux. Ils ont bu tout le whisky de la Compagnie. Ils dorment au 1, ou ils chantent. »'] },
+    ravel: { mots: 'ravel, monsieur ravel, m ravel', demander: sujet('ravel') }
+  });
+  suites('serveur', 'guerre', {
+    verdun: { mots: 'verdun, les tranchees, tranchees, les cuisines, la guerre',
+      demander: ['« On faisait la soupe dans des lessiveuses, à deux cents mètres des lignes. Quand l’eau montait, on la faisait avec l’eau. Je ne sais toujours pas ce qu’il y avait dedans. »'] },
+    eau: { chip: 'Ce que l’eau peut faire', mots: 'l eau, eau, ce que l eau, le pire, pire',
+      demander: ['« Ce soir, monsieur, l’eau est partout dans ce wagon. Sur les vitres, sous le tapis, dans les verres qu’on n’a pas remplis. Et il ne pleut pas à l’intérieur. »'] }
+  });
+  suites('serveur', 'docteur', {
+    reveiller: { chip: 'Le faire réveiller', mots: 'reveiller, le reveiller, allez le chercher, appelez le, faites le venir, chercher le medecin',
+      prendre: ['« Moi, réveiller un Allemand à minuit ? Le conducteur s’en chargera, monsieur. C’est son métier, de réveiller les gens. Enfin, ce serait son métier, s’il était réveillé. »'] },
+    allemand: { mots: 'allemand, l allemand, comment s appelle t il, son nom, qui est ce', demander: ['« Le docteur Kessler, de Bâle. Une tisane, une chambre seule, et pas de pourboire. Les nerfs, sa spécialité, à ce qu’il paraît. »'] }
+  });
+  suites('serveur', 'police', {
+    vallorbe: { mots: 'vallorbe, gendarme, le gendarme, la frontiere, douane, les douaniers',
+      demander: ['« Vallorbe, la frontière, vers une heure. Les douaniers montent, un gendarme parfois. Ils regardent les passeports, monsieur. Pas les flaques. »'] },
+    croire: { mots: 'croire, me croire, vous me croyez, pas sur de me croire, pourquoi', demander: ['« Parce que monsieur a l’air de quelqu’un qui a vu quelque chose. Les gendarmes n’aiment pas les choses qu’on voit. Moi non plus, d’ailleurs. »'] }
+  });
+  suites('serveur', 'ours', [{
+    archiduc: { mots: 'archiduc, l archiduc, son eau, il ne buvait que de l eau', demander: sujet('ours') },
+    kirsch: { chip: 'Un kirsch, alors', mots: 'kirsch, un kirsch, du kirsch',
+      demander: ['« Un kirsch de Bâle, monsieur. Il en reste une bouteille. L’ours en buvait un dé à coudre avant le spectacle. »'],
+      prendre: function (api) { if (!api.pay(3)) { api.npc('serveur', '« Monsieur n’a plus de quoi, je crains. »'); return; } api.npc('serveur', 'Il vous sert un petit verre de kirsch, très froid. « À la santé de Nicolas, monsieur. » Ça brûle. Ça fait du bien.'); } },
+    dompteur: { mots: 'dompteur, hongrois, le dompteur', demander: ['« Un Hongrois avec une moustache comme deux queues de rat. Il parlait à l’ours en latin. L’ours répondait. Enfin, il grognait au bon moment. »'] }
+  }, null, null]);
+  suites('serveur', 'toimeme', [{
+    ours: { chip: 'Un ours savant ?', mots: 'ours, un ours, ours savant, l ours', demander: sujet('ours') },
+    archiduc: { mots: 'archiduc, l archiduc', demander: sujet('ours') },
+    ministres: { mots: 'ministres, deux ministres, ministre', demander: ['« Deux ministres de la République, en 1912. Ils ont parlé de la guerre toute la nuit, et ils n’ont rien laissé. La République est pauvre, monsieur. Ou alors elle oublie. »'] },
+    pourboire: { mots: 'pourboire, pourboires, les meilleurs pourboires', demander: ['« Une pièce d’or, dans sa patte, monsieur. Le dompteur l’avait dressé à ça. Il la tendait avec une révérence. Je n’ai jamais été salué comme ça depuis. »'], prendre: sujet('argent') }
+  }, null]);
+  suites('serveur', 'lits', {
+    conducteur: { chip: 'Le conducteur ?', mots: 'conducteur, le conducteur, paolo, il dort, reveille', demander: ['« Paolo, de Domodossola. Il dort debout, monsieur, comme les chevaux. Frappez fort à sa cabine, au bout du couloir. »'] },
+    soufflet: { mots: 'soufflet, le soufflet, apres le soufflet', demander: ['« La porte au fond, monsieur. Ça claque à chaque courbe. Et ça sent l’étang, ce soir, je ne sais pas pourquoi. »'] }
+  });
+  suites('serveur', 'cuisine', {
+    chef: { chip: 'Le chef ?', mots: 'chef, le chef, cuisinier, gaston', demander: ['« Gaston. Il a fait la guerre dans les cuisines de l’état-major. Il ne parle qu’aux casseroles. Ce soir, il ne leur parle plus : il dit qu’elles répondent. »'] }
+  });
+  suites('serveur', 'train', {
+    tunnel: { chip: 'Le tunnel ?', mots: 'tunnel, le tunnel, mont d or, le mont d or, minuit', demander: ['« Six kilomètres de roche, monsieur. Six minutes dans le noir, si les lampes lâchent. Elles lâchent toujours un peu. On entend l’eau couler dans la montagne, de l’autre côté des parois. »'] },
+    lampes: { mots: 'lampes, les lampes, vacillent, le noir, peur, avoir peur', demander: ['« Elles vacillent, c’est tout. La dynamo n’aime pas le tunnel. Moi non plus, monsieur. Mais on ne me demande pas mon avis. »'] },
+    neige: { mots: 'neige, la neige, pluie, la pluie, le temps', demander: ['« Il neige sur le Jura depuis mardi. À Vallorbe, les aiguilleurs dégagent les voies à la pelle. On sera en retard. On est toujours en retard, l’hiver. »'] }
+  });
+  suites('serveur', 'heure', {
+    dole: { mots: 'dole, a dole, l arret', demander: ['« Dole, monsieur. Un arrêt de quatre minutes. Personne n’est monté. Personne que j’aie vu, en tout cas. Et pourtant, après Dole, il y avait de l’eau sur le tapis. »'] }
+  });
+  suites('serveur', 'veuve', {
+    tarot: { chip: 'Le tarot ?', mots: 'tarot, les cartes, cartes, tirer les cartes, lit le tarot', demander: ['« Elle vous retourne trois cartes et elle vous dit votre avenir. Le pire, monsieur, c’est qu’elle a souvent raison. Un général, en 1919. Elle lui avait dit : l’eau. Il s’est noyé dans son bain. »'] },
+    lausanne: { mots: 'lausanne, pourquoi lausanne, chaque mois, tous les mois', demander: ['« Sa sœur vit là-bas, à Ouchy. Elles se disputent depuis trente ans. Madame dit que c’est ce qui les garde en vie. »'] }
+  });
+  suites('serveur', 'ravel', {
+    porte: { mots: 'la porte, regardait la porte, il attendait, attendait quelqu un, nerveux', demander: ['« Il attendait quelqu’un, monsieur. Ou il le craignait. Chaque fois que le soufflet claquait, il sursautait. À la fin, il ne sursautait plus. Il regardait, c’est tout. »'] },
+    parti: { mots: 'parti, il est parti, voitures lits, ou est il, ou est il alle, vers les voitures lits', demander: sujet('lits') },
+    diner: { mots: 'diner, il a dine, il a mange, qu a t il mange, seul, tres peu', demander: ['« Une truite au bleu, qu’il n’a pas touchée. Il l’a regardée, monsieur. Longtemps. Comme si elle allait lui dire quelque chose. »'] }
+  });
+  suites('serveur', 'traces', {
+    fuite: { chip: 'Ce n’est pas une fuite', mots: 'une fuite, fuite, ce n est pas une fuite, ca ne seche pas, vraiment',
+      demander: ['« La tache ne sèche pas, c’est vrai. Elle s’agrandit, même. Vers le soufflet. » Il se tait, et repasse son torchon sur un verre propre.'] }
+  });
+  suites('serveur', 'manchette', {
+    soufflet: { chip: 'Dans le soufflet', mots: 'soufflet, dans le soufflet, entre les voitures, dans le couloir, par terre',
+      prendre: ['« Dans le soufflet ? » Il regarde la porte, puis vous. « Alors il n’y est pas allé de son plein gré, monsieur. M. Ravel ne perdait jamais rien. Il pliait même sa serviette. »'] },
+    ici: { mots: 'ici, sous la table, dans le wagon, sur le tapis', prendre: ['« Ici ? Non, monsieur. J’ai balayé à dix heures. Il n’y avait rien. Monsieur se trompe, ou monsieur me fait marcher. »'] },
+    refuser: { mots: 'ca ne vous regarde pas, peu importe, je ne dirai pas', prendre: ['« Bien, monsieur. » Il n’insiste pas. Il a l’air d’un homme soulagé de ne pas savoir.'] }
+  });
+  suites('serveur', 'symbole', {
+    pourquoi: { chip: 'Vous l’avez déjà vu ?', mots: 'pourquoi, vous l avez deja vu, vous connaissez, ca vous fait peur, qu est ce que c est',
+      demander: ['« Je l’ai vu ce soir, monsieur. Sur la buée des vitres. Plusieurs fois. Je l’efface, et il revient. Rangez ça, je vous en prie. »'] }
+  });
+  ['insister', 'argent'].forEach(function (id) {
+    suites('serveur', id, function (api) { return !api.flag('serveurParle') ? null : {
+      visage: { chip: 'Son visage ?', mots: 'visage, son visage, noye, la peau, sa peau, a quoi il ressemblait', demander: ['« Gris, monsieur. Gonflé, comme une main qu’on a laissée trop longtemps dans l’eau. Et les yeux… Il n’y avait plus de blanc. »'] },
+      billet: { chip: 'Le billet ?', mots: 'billet, le billet, papier, un message, le message', demander: ['« Un papier plié, mouillé. M. Ravel l’a lu deux fois. La deuxième fois, il a souri. Puis il l’a brûlé dans le cendrier. »'] },
+      cent: { mots: 'cent francs, les cent francs, l argent, combien, vous les avez', demander: ['« Un billet de cent francs, trempé. Je l’ai mis à sécher sur le percolateur. Il n’a jamais séché, monsieur. Il goutte encore, dans mon gilet. »'] },
+      sept: { mots: 'compartiment 7, le 7, sept, le compartiment', demander: sujet('lits') }
+    }; });
+  });
+
+  // ---------------------------------------------------------------- Mme Vasseur
+  suites('veuve', 'ravel', [{
+    langue: { chip: 'Quelle langue ?', mots: 'langue, quelle langue, sons mouilles, mouille, il parlait', demander: ['« Je vous l’ai dit : une langue mouillée. Comme si les mots devaient remonter de très loin, à travers de l’eau. J’ai entendu la même chose à Venise, une fois, dans un puits. »'] },
+    autre: { chip: 'Quel autre ?', mots: 'l autre, quel autre, qui est venu, qui ca, venu le chercher', demander: sujet('hommegris') }
+  }, null]);
+  suites('veuve', 'hommegris', [{
+    lune: { chip: 'La Lune ?', mots: 'la lune, lune, la carte, cette carte, carte mouillee',
+      demander: ['« La Lune, jeune homme : ce qui remonte des eaux, les chiens qui hurlent, le chemin qui mène entre deux tours. Ce qui ment, aussi. Gardez-la. Moi, je n’en veux plus. »'],
+      prendre: ['Vous prenez la carte. Elle est froide comme une pierre de rivière, et elle ne sèche pas dans votre poche. « Ne la perdez pas, dit-elle. Ou perdez-la très loin. »'] },
+    etangs: { mots: 'etangs, le fond des etangs, l odeur, il sentait', demander: ['« La vase, jeune homme. Les feuilles pourries, les choses qui dorment au fond. Mon mari sentait ça, les dernières semaines. »'] }
+  }, null]);
+  suites('veuve', 'cartes', [{
+    lune: { mots: 'la lune, lune', demander: ['« L’eau et la nuit. Ce qui remonte. »'] },
+    pendu: { mots: 'le pendu, pendu', demander: ['« Le Pendu ? Quelqu’un qui attend, la tête en bas, que le monde se retourne. Pas forcément vous. »'] },
+    maisondieu: { mots: 'la maison dieu, maison dieu, la tour, tete en bas', demander: ['« La Maison-Dieu, c’est la tour qui s’écroule. À l’envers, c’est pire : elle s’écroule dedans. Sur ceux qui y sont enfermés. »'] },
+    betise: { chip: 'Quelle bêtise ?', mots: 'betise, quelle betise, laquelle, avant minuit', demander: ['« Si je vous le disais, vous ne la feriez pas, et les cartes auraient menti. Elles détestent mentir, jeune homme. Presque autant que moi. »'] }
+  }, null]);
+  suites('veuve', 'serveur', {
+    patte: { mots: 'qui, qui lui a fait peur, qui l a paye, graisse la patte, graisser la patte, peur', demander: ['« Celui qui est venu chercher le petit monsieur, pardi. Le grand, le gris. Demandez donc à Bastien combien il lui a donné. Regardez ses mains quand il répondra. »'] }
+  });
+  suites('veuve', 'symbole', [{
+    sept: { chip: 'Pourquoi sept ?', mots: 'sept, le chiffre sept, le 7, compartiment 7, pourquoi sept, les sept portes, sept portes',
+      demander: ['« Sept portes, jeune homme, entre ce monde et celui d’en dessous. Mon mari en a coulé les cloches, pour le lac. Ne me demandez pas d’en dire plus ici : les murs de ce wagon sont humides. »'] },
+    bruler: { chip: 'La brûler', mots: 'bruler, la bruler, je la brule, la jeter, m en debarrasser',
+      prendre: ['« Pas ici, malheureux ! Dans le poêle du fourgon, ou par la fenêtre, dans la neige. Ou gardez-la, et ne venez pas me dire que je ne vous avais pas prévenu. »'] }
+  }, null]);
+  suites('veuve', 'toimeme', [{
+    mari: { chip: 'Votre mari ?', mots: 'mari, votre mari, fonderies, les fonderies, prudence', demander: ['« Les Fonderies Vasseur, à Vevey. Des cloches, jeune homme. Toutes les églises du lac. Il est mort de prudence, je vous dis : il avait peur de l’eau, et il est mort dans son lit, sec comme un sarment. Les médecins ne comprenaient pas. »'] }
+  }, null]);
+  suites('veuve', 'lac', {
+    chillon: { chip: 'Les cloches ?', mots: 'cloches, les cloches, chillon, sonnent toutes seules, sonner', demander: sujet('cloche') },
+    soeur: { mots: 'soeur, votre soeur, ma soeur', demander: ['« Agathe. Elle vit à Ouchy, au bord de l’eau, et elle n’en sort jamais. Elle dit que le lac lui parle. Je lui réponds que c’est la vieillesse. Elle a deux ans de moins que moi. »'] }
+  });
+  suites('veuve', 'train', {
+    soeur: { mots: 'soeur, votre soeur, refuse de mourir', demander: ['« Agathe. Elle a eu trois maladies mortelles et elle les a toutes enterrées. Nous nous écrivons des lettres très aimables, pleines de poison. »'] },
+    heritage: { mots: 'heritage, l heritage, votre mere, trente ans', demander: ['« Une maison à Ouchy et une cloche. Ma mère a légué la maison à Agathe et la cloche à moi. Personne ne sait où est la cloche. Moi, si. »'] }
+  });
+  suites('veuve', 'jouer', {
+    jouer: { chip: 'Jouer une partie', mots: 'jouer, une partie, une bataille, on joue, allons y, d accord',
+      prendre: function (api) { api.time(10); api.npc('veuve', 'Vous jouez. Elle gagne toutes les batailles, sans regarder ses cartes. À la fin, elle ramasse le jeu. « Le Pendu était dans votre tas depuis le début, jeune homme. Vous ne l’avez jamais retourné. Réfléchissez à ça. »'); } },
+    _refus: ['« Lâcheur. »']
+  });
+  suites('veuve', 'cloche', [{
+    pourquoi: { chip: 'Pourquoi ?', mots: 'pourquoi, demander, la refondre, refondre, elle sonnait', demander: sujet('cloche') }
+  }, null]);
+  suites('veuve', 'manger', {
+    terrine: { chip: 'La terrine, alors', mots: 'terrine, la terrine', prendre: ['« Bastien ! Une terrine pour le jeune homme. » Le serveur obéit sans un mot. La terrine est bonne. Elle avait raison.'] },
+    tarte: { mots: 'tarte, la tarte', prendre: ['« Têtu. » Elle fait signe à Bastien. La tarte a un goût de vase. Elle ne dit rien, mais elle sourit.'] },
+    rien: { mots: 'rien, ne rien prendre, je ne prends rien', prendre: ['« Sage. On a les idées plus claires le ventre vide. Les moines le savent, et les assassins. »'] },
+    _refus: ['« Sage. On a les idées plus claires le ventre vide. Les moines le savent, et les assassins. »']
+  });
+  suites('veuve', 'etat', {
+    boire: { mots: 'boire, un verre, cognac, je bois, buvons', prendre: ['« Bastien ! Un cognac pour le jeune homme, sur ma note. » Il vous l’apporte sans un mot. Elle trinque avec sa tasse de thé froid.'] }
+  });
+  suites('veuve', 'passagers', {
+    eveque: { mots: 'eveque, l eveque', demander: ['« Il lit les psaumes à voix basse depuis Dole. Les psaumes de l’eau, ceux des profondeurs. Je l’entends à travers la cloison du 4. »'] },
+    interessant: { mots: 'interessant, le plus interessant, moi, pourquoi moi', demander: ['« Parce que vous avez peur et que vous restez. Les autres ont peur et ils dorment. »'] }
+  });
+  suites('veuve', 'guerre', {
+    peur: { chip: 'Ce qui me fait peur', mots: 'peur, ce qui me fait peur, l eau, ravel, l homme en gris', prendre: ['« Voilà. Dites-le à voix haute, jeune homme. Ça le rend plus petit. Pas beaucoup. Un peu. »'], demander: ['« Ce qui vous fait peur ce soir, jeune homme : vous le savez mieux que moi. »'] },
+    neveu: { mots: 'neveu, votre neveu, chemin des dames', demander: ['« Louis. Vingt ans, des lunettes, des poèmes dans sa vareuse. On ne l’a pas retrouvé. Il est quelque part sous la boue, avec ses poèmes. »'] }
+  });
+  suites('veuve', 'docteur', {
+    nerfs: { mots: 'nerfs, les nerfs, sa specialite, allemand', demander: ['« Les nerfs des autres, jeune homme. Les siens tiennent bien : il dort comme une souche. Pour vous, il prescrirait du bromure et une semaine au lit. Vous n’avez pas une semaine. »'] }
+  });
+  suites('veuve', 'mescartes', {
+    nageoires: { chip: 'Des nageoires ?', mots: 'nageoires, le squelette, la carte, treizieme, l arcane sans nom, la mort', demander: ['« Je n’ai jamais vu cette carte-là, jeune homme. Jamais, en quarante ans. Ce n’est pas mon jeu qui a changé. » Elle range le tarot. Ses mains tremblent.'] }
+  });
+
+  // ---------------------------------------------------------------- Paolo, le conducteur
+  suites('conducteur', 'ravel', [{
+    eau: { mots: 'l eau, eau, l eau sur le tapis, le tapis, ils ont repondu', demander: ['« De l’eau partout, signore, depuis Dole. Sur le tapis, sur les poignées. Elle sent l’étang. Le 7 en est plein, sous la porte. »'] },
+    ami: { chip: 'Son ami ?', mots: 'ami, son ami, un grand, le grand, avec qui', demander: sujet('hommegris') }
+  }, null]);
+  suites('conducteur', 'hommegris', {
+    poumons: { mots: 'poumons, poumons pleins, comment il marchait, il marchait', demander: ['« Lourd, signore. Lent. Chaque pas faisait floc, comme des bottes pleines. Et il respirait par à-coups, comme quelqu’un qui remonte du fond. »'] }
+  });
+  suites('conducteur', 'cle', {
+    insister: { chip: 'C’est urgent', mots: 'urgent, c est urgent, il le faut, ouvrez, je vous en prie, s il vous plait', prendre: ['« Urgent, urgent… » Il regarde le 7, la flaque sous la porte. « Non, signore. Je vous donne pas la clé. Mais si la porte s’ouvre toute seule, c’est pas moi. »'] }
+  });
+  suites('conducteur', 'traces', {
+    rapport: { mots: 'rapport, un rapport, demain, la compagnie', demander: ['« Un papier pour la Compagnie, signore. « Fuite, voiture 3, après Dole. » Ils vont m’envoyer un plombier à Milan. Les plombiers, ça répare pas ce genre de fuite. »'] }
+  });
+  suites('conducteur', 'toimeme', {
+    unefois: { chip: 'Une fois ?', mots: 'une fois, quelle fois, en parler, si une fois, racontez', demander: ['« 1917, signore. Le train de la Croix-Rouge, sous le Simplon. Un soldat est monté à Brigue, trempé, sans papiers. Il est descendu à Domodossola. Le train était dans le tunnel quand il est descendu. » Il se signe.'] },
+    domodossola: { mots: 'domodossola', demander: ['« Juste après le tunnel du Simplon. Ma mamma y allume un cierge chaque fois que je passe. Vingt ans de cierges, signore. »'] }
+  });
+  suites('conducteur', 'train', {
+    vallorbe: { mots: 'vallorbe, la suisse, frontiere', demander: ['« Vallorbe, la frontière. Les douaniers suisses, ils fouillent tout, signore. Sauf le 7. Personne fouille le 7, ce soir. »'] },
+    froid: { mots: 'froid, il fait froid, oui il fait froid, j ai froid', demander: ['« Froid comme dans une cave, signore. Le chauffage marche, pourtant. Je l’ai vérifié deux fois. »'], prendre: ['« Vous voyez. C’est pas le chauffage. »'] }
+  });
+  suites('conducteur', 'passagers', {
+    manque: { chip: 'Il en manque un ?', mots: 'il en manque un, manque, il en manque, qui manque, recommencez', demander: ['« Neuf places, signore, et huit sur ma liste. Je compte, je recompte. Et chaque nuit sur cette ligne, j’entends quelqu’un se coucher dans la place qui manque. »'] },
+    eveque: { mots: 'eveque, le 4, l eveque', demander: ['« Il lit, signore. Toute la nuit. Il m’a demandé à quelle heure on passait le tunnel. Il a dit qu’il prierait à ce moment-là. »'] },
+    docteur: { mots: 'docteur, le 3, l allemand, medecin', demander: ['« Le docteur Kessler. Il dort avec des boules de cire dans les oreilles. Pour le réveiller, faut frapper fort, signore. Et il crie en allemand. »'] },
+    couple: { mots: 'couple, le 5, pas marie', demander: ['« Ils ont deux noms de famille et une seule valise, signore. Moi, je pose pas de questions. Je fais les lits. »'] },
+    bebe: { mots: 'bebe, le 2, une dame et son bebe, la dame', demander: ['« Le bébé pleure pas, signore. Depuis Paris, pas une fois. Sa mère dit qu’il est sage. Moi, je trouve ça pas normal. »'] },
+    ronfleur: { mots: 'le 8, ronfle, qui ronfle, un monsieur qui ronfle', demander: ['« Il ronfle, signore, je vous jure. On l’entend jusqu’au soufflet. Sauf ce soir. Ce soir, il ronfle pas. »'] }
+  });
+  suites('conducteur', 'guerre', {
+    isonzo: { mots: 'isonzo, douze batailles, la boue, l eau', demander: ['« La boue jusqu’aux genoux, signore. Et quand elle gelait, on était dedans. Après ça, un wagon-lit, c’est le paradis. D’habitude. »'] }
+  });
+  suites('conducteur', 'police', {
+    rapport: { mots: 'rapport, votre rapport, pas fait votre rapport, faites le', demander: ['« Je le ferai, signore. Après Vallorbe. Après la Suisse. Après le tunnel. Quand il fera jour, surtout. »'] }
+  });
+  suites('conducteur', 'manger', {
+    pain: { chip: 'Prendre le pain', mots: 'pain, le pain, merci, je prends, je le prends, la moitie', prendre: ['Vous mordez dans le pain. Il est sec, il sent la poche et le tabac. C’est la meilleure chose que vous ayez mangée de la nuit. « Ça éponge, signore. La peur, ça éponge pas, mais le reste oui. »'] },
+    _refus: ['« Comme vous voulez. » Il le remet dans sa poche. « Je le garde pour le tunnel. »']
+  });
+  suites('conducteur', 'etat', {
+    froid: { mots: 'froid, tout le monde a froid, pourquoi', demander: ['« Depuis Dole, signore. Depuis que la fuite a commencé. Le froid vient du 7, je crois. » Il remonte son col.'] }
+  });
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
