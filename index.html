@@ -207,8 +207,7 @@ body[data-san="2"] .sanstate, body[data-san="3"] .sanstate { background: var(--r
 .e-san { align-self: flex-start; color: var(--text); text-shadow: 2px 0 var(--red); }
 .e-san.none { color: var(--muted); text-shadow: none; }
 .e-san.gain { color: var(--ink); background: var(--text); padding: 2px 8px; text-shadow: none; transform: skewX(-10deg); }
-.e-intrusion { color: var(--text); font-style: italic; text-shadow: 2px 0 rgba(227, 32, 45, .75), -1px 0 rgba(243, 239, 230, .3); animation: intrude 1.2s steps(8) both; }
-@keyframes intrude { 0% { opacity: 0; transform: translateX(-10px) skewX(-8deg); } 30% { opacity: 1; clip-path: inset(0 0 60% 0); } 55% { transform: translateX(6px); clip-path: inset(40% 0 0 0); } 100% { transform: none; clip-path: none; } }
+.e-intrusion { color: var(--text); font-style: italic; animation: fadein .8s ease both; }
 .hallu { color: var(--red-hi); text-decoration: line-through; text-decoration-thickness: 2px; opacity: .85; }
 .real { color: var(--text); }
 
@@ -315,13 +314,7 @@ form.line:focus-within { border-color: var(--red); box-shadow: 5px 5px 0 var(--r
 .title-screen .fine { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: #6a6670; text-transform: uppercase; }
 
 /* ---------- la santé mentale déborde sur l'interface ---------- */
-body[data-san="2"] .e-narr, body[data-san="2"] .e-npc { text-shadow: 1px 0 rgba(227, 32, 45, .45); }
 body[data-san="3"] { --text: #fff4f6; }
-body[data-san="3"] .e-narr { text-shadow: 2px 0 rgba(227, 32, 45, .6), -1px 0 rgba(255, 255, 255, .25); }
-body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
-@keyframes drift { 48% { transform: none; } 50% { transform: translateX(2px) skewX(-1deg); } 52% { transform: none; } }
-.app.shudder { animation: shudder .6s steps(6) 1; }
-@keyframes shudder { 15% { transform: translate(-4px, 1px); } 30% { transform: translate(4px, -1px); } 45% { transform: translate(-3px, 0) skewX(2deg); } 60% { transform: translate(2px, 1px); } 75% { transform: translate(-1px, 0); } }
 
 @media (max-width: 700px) { .stage { width: calc(100% - 6px); aspect-ratio: 2 / 1; max-height: 42vh; } }
 @media (max-width: 520px) {
@@ -14368,32 +14361,15 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     else (this[this.scene] || this.restaurant).call(this, g, t, st);
     if (this.on('flicker') && this.rnd() < 0.35) D.rect(g, 0, 0, CWd, H, 'rgba(10,10,11,0.72)');
     if (this.on('blackout')) this.noirTunnel(g, t, CWd);
-    // la folie : tout rougit, et parfois s'inverse
+    // la folie : tout rougit
     var m = [0, 0, 0.14, 0.28][san] || 0; if (this.on('madness')) m = 0.55;
     if (m) { g.globalCompositeOperation = 'multiply'; D.rect(g, 0, 0, CWd, H, 'rgba(227,32,45,' + m + ')'); g.globalCompositeOperation = 'source-over'; }
-    if ((san >= 3 && this.rnd() < 0.012) || (this.on('madness') && this.rnd() < 0.18)) { g.globalCompositeOperation = 'difference'; D.rect(g, 0, 0, CWd, H, C); g.globalCompositeOperation = 'source-over'; }
     if (ph) g.globalAlpha = 0.55;
     g.drawImage(this.lay('vign', vign), 0, 0, CWd, H); g.globalAlpha = 1;
-    // tirage à l'écran, avec la houle de la santé mentale
+    // tirage à l'écran : net, sans houle, sans secousse ni parasites (la folie passe par les visions en plein écran)
     var o = this.o, pw = this.buf.width, ph = this.buf.height;
     o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1;
-    var shake = this.on('shudder') ? 3 * RS : 0, sx = shake ? (this.rnd() - 0.5) * shake * 2 : 0, sy = shake ? (this.rnd() - 0.5) * shake : 0;
-    var amp = ([0, 0.5, 1.5, 3][san] || 0) + (this.on('madness') ? 7 : 0);
-    if (!amp) { if (shake) { o.fillStyle = K; o.fillRect(0, 0, pw, ph); } o.drawImage(this.buf, sx, sy); }
-    else {
-      o.fillStyle = K; o.fillRect(0, 0, pw, ph);
-      var band = Math.max(2, Math.round(3 * RS));
-      for (var y = 0; y < ph; y += band) o.drawImage(this.buf, 0, y, pw, band, Math.round(Math.sin(y / RS * 0.07 + t * 2.4) * amp * RS + sx), y + sy, pw, band);
-    }
-    // parasites : des bandes qui glissent, un trait rouge
-    var gl = san >= 2 ? 0.035 * (san - 1) : 0; if (this.on('madness')) gl = 0.5; if (this.on('shudder')) gl = Math.max(gl, 0.3);
-    if (gl && this.rnd() < gl) {
-      for (var k = 0; k < 3 + san; k++) {
-        var gy = Math.floor(this.rnd() * ph), gh = Math.floor((6 + this.rnd() * 26) * RS / 2), off = Math.round((this.rnd() - 0.5) * (14 + san * 10) * RS);
-        o.drawImage(this.out, 0, gy, pw, gh, off, gy, pw, gh);
-        if (k % 2 === 0) { o.fillStyle = 'rgba(227,32,45,0.6)'; o.fillRect(0, gy, pw, Math.max(1, Math.round(RS))); }
-      }
-    }
+    o.drawImage(this.buf, 0, 0);
     // changement de plan : l'iris se ferme sur l'ancien décor, s'ouvre sur le nouveau
     if (this.trans < 1) {
       // l'iris attend, fermé, que l'image du nouveau décor soit arrivée (deux secondes au plus)
@@ -16839,7 +16815,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   function doFx(name) {
     if (instant && queue.length > 30) return;
     var app = $('app');
-    if (name === 'shudder') { app.classList.remove('shudder'); void app.offsetWidth; app.classList.add('shudder'); art.trigger('shudder', 0.8); setTimeout(function () { app.classList.remove('shudder'); }, 800); }
+    // le frisson ne secoue plus l'écran : la peur passe par les visions (un éclair blanc, puis les images), sans tremblement ni parasite
+    if (name === 'shudder') { /* rien à l'écran */ }
     // la folie passagère : une grande rafale de visions (l'ancien écran inversé et penché est retiré)
     else if (name === 'madness') { setTimeout(function () { vision(5); }, 200); }
     else if (name === 'flicker') art.trigger('flicker', 1.6);
