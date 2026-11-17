@@ -1,0 +1,1657 @@
+{
+ "modele": "gpt-5.6-luna",
+ "simulation": false,
+ "depart": "londres",
+ "depense": 1.158104,
+ "parties": [
+  {
+   "nom": "partie_01_pemberton_methodique",
+   "perso": "pemberton",
+   "profil": "methodique",
+   "tours": 400,
+   "chapitres": [
+    {
+     "ch": "londres",
+     "debut": 1,
+     "tours": 400,
+     "indices": 16,
+     "fin": "inachevé"
+    }
+   ],
+   "nonCompris": 1,
+   "fermees": 13,
+   "problemes": [
+    {
+     "tour": 12,
+     "commande": "DIRE : Et le fiacre de Londres, professeur ?",
+     "reponse": "« Professeur, chasseur de médiums, et depuis ce soir, prophète malgré moi. »",
+     "probleme": "La réponse ne concerne pas le fiacre et reprend une présentation déjà donnée, puis enchaîne sur une question sans rapport.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 17,
+     "commande": "DIRE : Et le fiacre de Londres, professeur ?",
+     "reponse": "« Je vous l’ai dit : Professeur, chasseur de médiums, et depuis ce soir, prophète malgré moi. »",
+     "probleme": "La question sur le fiacre reçoit à nouveau une réponse hors sujet et répétée.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 24,
+     "commande": "AGIR : je vais au Chelsea Arms, à la chambre 14",
+     "reponse": "Pas d’ici, pas maintenant. Il faudra d’abord raccompagner Smith et Beddows, ou rentrer à l’hôtel.",
+     "probleme": "Le jeu bloque un déplacement vers un lieu pourtant explicitement découvert et disponible, sans justification suffisante.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 26,
+     "commande": "BOUTON : Réfléchir",
+     "reponse": "Une idée vous vient : ici même, il reste des choses à tenter.",
+     "probleme": "même réponse 5 fois (tours 26, 119, 164, 191, 381)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 32,
+     "commande": "DIRE : Que pouvez-vous me dire exactement sur les trois hommes trouvés dans la chambre 14 ?",
+     "reponse": "« Au deuxième, docteur. La police a gardé la clé. Enfin, l’une des deux : l’autre est partie avec le locataire, et personne ne l’a revue. »",
+     "probleme": "La réponse ne donne aucune information sur les trois hommes et répond à une autre question, apparemment celle de l’étage ou des clés.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 33,
+     "commande": "DIRE : Quelle chambre exactement, et quand les trois hommes ont-ils été découverts ?",
+     "reponse": "« Je vous l’ai déjà dit, docteur. »",
+     "probleme": "Le réceptionniste refuse de répondre alors que ces précisions n’ont pas été données.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 35,
+     "commande": "DIRE : Je voudrais savoir à quel étage se trouve exactement la chambre 14 et quand les trois hommes ont été découverts.",
+     "reponse": "« Le troisième ? N’y montez pas. Y a rien à voir. Enfin… y a trois taches. »",
+     "probleme": "La chambre 14 était annoncée au deuxième étage ; la réponse introduit contradictoirement un troisième étage et ne donne toujours pas la date de découverte.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 37,
+     "commande": "DIRE : Les trois taches, au troisième étage : s’agit-il de sang, et où se trouve exactement la chambre 14 ?",
+     "reponse": "« Comme je vous le disais… »",
+     "probleme": "La réponse n'éclaircit ni la nature des taches ni la contradiction entre le deuxième et le troisième étage.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 39,
+     "commande": "DIRE : Quels étaient les noms et l’apparence des trois hommes retrouvés dans la chambre 14 ?",
+     "reponse": "« Vous m’avez déjà posé la question, docteur. »",
+     "probleme": "La question n’a pas reçu de réponse auparavant ; le réceptionniste ferme la conversation à tort.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 46,
+     "commande": "DIRE : Ces trois hommes avaient-ils le même visage, ou pouvez-vous me décrire leurs vêtements et leurs traits ?",
+     "reponse": "« « trois », « visage »… Posez une question claire, je vous répondrai. »",
+     "probleme": "La demande est claire : elle porte sur les visages, vêtements et traits des trois hommes. La réponse feint une ambiguïté inexistante.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 47,
+     "commande": "DIRE : Pouvez-vous me décrire précisément l’apparence et les vêtements de chacun des trois hommes retrouvés dans la chambre 14 ?",
+     "reponse": "« La logeuse de Stoke Newington ? Elle fait payer six pence pour voir la chambre. »",
+     "probleme": "La réponse est totalement hors sujet et introduit la logeuse de Stoke Newington sans lien avec la question.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 48,
+     "commande": "DIRE : Pourquoi me parlez-vous de la logeuse de Stoke Newington, inspecteur ?",
+     "reponse": "« Je vous l’ai déjà dit, docteur. »",
+     "probleme": "L’inspecteur n’a pas expliqué ce sujet ; il refuse donc à tort de clarifier une digression qu’il vient lui-même d’introduire.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 50,
+     "commande": "DIRE : Que savez-vous exactement de l’homme qui serait parti en fumée à Stoke Newington ?",
+     "reponse": "« Je vous l’ai déjà dit : Stoke Newington. Des petites gens, des petites maisons. Et un homme qui part en fumée. »",
+     "probleme": "La réponse répète l’information vague sans fournir le moindre détail demandé sur cet homme.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 56,
+     "commande": "DIRE : Vous êtes certain qu’aucun corps n’a été retrouvé, et qu’est-ce qui a précisément brûlé dans la bibliothèque ?",
+     "reponse": "« Le British Museum ? Tout le monde connaît. »",
+     "probleme": "La réponse est sans rapport avec l’absence de corps et les dégâts de l’incendie.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 57,
+     "commande": "DIRE : Où se trouvait exactement le foyer de l’incendie, et quels objets ou documents ont été détruits dans la bibliothèque ?",
+     "reponse": "« Les ouvriers étaient partis à six heures. À onze heures, la maison flambait. »",
+     "probleme": "La réponse ne précise ni le foyer ni les objets détruits, et fournit seulement une chronologie partielle.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 73,
+     "commande": "DIRE : Qui a découvert l’incendie, et à quelle heure les pompiers sont-ils arrivés ?",
+     "reponse": "« Le sergent Rigby, de la brigade des incendies, s’en occupe. À Scotland Yard. »",
+     "probleme": "La réponse ne dit ni qui a découvert l’incendie ni à quelle heure les pompiers sont arrivés.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 76,
+     "commande": "BOUTON : Où puis-je retrouver le laitier, et que vous a-t-il dit au sujet de l’incendie ?",
+     "reponse": "« Je vous l’ai déjà dit, docteur. »",
+     "probleme": "Ces informations n’ont pas été données ; le jeu bloque une piste explicitement présentée comme importante.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 92,
+     "commande": "AGIR : je prends congé de Mrs Pike et me rends au salon de Mrs Vane, à Gordon Square, pour enquêter sur la médium démasquée par Smith",
+     "reponse": "Mrs Vane ne reçoit que le soir, à partir de 19 h. ... Il est 17 h",
+     "probleme": "Le tour précédent était à 17 h 55, mais la réponse revient à 17 h, contradiction de chronologie.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 93,
+     "commande": "AGIR : j’attends le soir devant le salon de Mrs Vane afin d’assister à sa séance de neuf heures",
+     "reponse": "Vous patientez. Une heure, puis une autre, à tourner les mêmes questions. Il est 19 h. Les rotatives, au-dessus, font vibrer les rayonnages.",
+     "probleme": "L’attente est mal comprise : après avoir attendu jusqu’à la séance de neuf heures, le jeu indique encore 19 h et décrit les archives du journal, pas le salon de Mrs Vane.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 101,
+     "commande": "DIRE : Connaissez-vous un homme nommé Makryat, ou les trois hommes morts qui avaient reçu un télégramme signé M ?",
+     "reponse": "« La mort est un sujet sérieux. Les journaux la traitent comme un feuilleton. »",
+     "probleme": "Mrs Vane ne répond pas à la question sur Makryat ou les télégrammes et lance une action sans rapport.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 120,
+     "commande": "AGIR : je demande au réceptionniste l’autorisation de visiter la chambre 14 en lui montrant la plaque de clé en cuivre.",
+     "reponse": "Le réceptionniste du Chelsea Arms : « Je vous l’ai déjà dit, docteur. »",
+     "probleme": "Le réceptionniste ignore la plaque de clé et ne répond pas à la demande d’accès, alors que l’action fournit un élément nouveau et pertinent.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 121,
+     "commande": "AGIR : je pose la plaque de clé en cuivre sur le comptoir et demande calmement à monter dans la chambre 14.",
+     "reponse": "Passé minuit, l’agent a disparu...",
+     "probleme": "Le tour est horodaté 23 h 54, mais la réponse affirme que minuit est déjà passé.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 125,
+     "commande": "AGIR : je regagne mon hôtel et relis attentivement mon carnet pour organiser les indices avant l’aube",
+     "reponse": "",
+     "probleme": "L’action de retour à l’hôtel ne produit aucune réponse ni changement de lieu ; le tour suivant place encore le personnage dans le hall du Chelsea Arms.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 137,
+     "commande": "je me couche quelques heures et me rends aux archives du Daily Courier dès leur ouverture à huit heures",
+     "reponse": "Rien de plus que la dernière fois.",
+     "probleme": "L’action de dormir puis d’attendre l’ouverture n’est pas prise en compte et ne fait pas avancer l’heure.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 149,
+     "commande": "Aller : les archives du Daily Courier, à Fleet Street",
+     "reponse": "Un antiquaire, ça a une boutique, et une boutique, ça a une adresse…",
+     "probleme": "L’arrivée aux archives ne donne aucune interaction avec le lieu ni avec l’archiviste et répète une réflexion antérieure.",
+     "type": "incomprehension",
+     "gravite": "faible"
+    },
+    {
+     "tour": 160,
+     "commande": "Que savez-vous du tombeau de Toutankhamon et des hommes qui venaient voir Makryat ?",
+     "reponse": "Je vous l’ai déjà dit, docteur.",
+     "probleme": "La réponse élude les deux questions, notamment le tombeau de Toutankhamon, qui n’a pas encore été évoqué par le buraliste.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 167,
+     "commande": "Que savez-vous des pratiques spirites de Makryat et des hommes qui le visitaient ?",
+     "reponse": "Comme je vous le disais…",
+     "probleme": "La question sur les pratiques spirites reste sans réponse et la réplique est une amorce vide.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 181,
+     "commande": "Je voudrais consulter le rapport sur la perquisition de la boutique de Makryat et les meurtres du Chelsea Arms.",
+     "reponse": "Pas de réponse. Un regard vers la porte.",
+     "probleme": "La piste attendue — consulter les rapports de Scotland Yard — se ferme sans explication ni solution de remplacement.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 186,
+     "commande": "Que pouvez-vous me dire sur les trois hommes morts, la chambre 14 et les visites qu’ils ont reçues ?",
+     "reponse": "Un soupir, à peine poli.",
+     "probleme": "Le réceptionniste ne répond à aucune des questions précises et la conversation n’offre aucune autre issue.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 187,
+     "commande": "Parler du spiritisme",
+     "reponse": "Les séances ? Ma voisine y va le jeudi. Elle parle à son fils mort à la guerre.",
+     "probleme": "La réponse est hors sujet et reprend mot pour mot une réponse déjà donnée au buraliste.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 188,
+     "commande": "Parler du tombeau de Toutankhamon",
+     "reponse": "Le pharaon en or ? Ma belle-sœur s’est acheté un chapeau égyptien. Un chapeau !",
+     "probleme": "La réponse est hors sujet et reprend mot pour mot une réponse déjà donnée au buraliste.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 189,
+     "commande": "j’attends jusqu’à 19 heures avant de me rendre au salon de Mrs Vane, à Gordon Square.",
+     "reponse": "Quelque part en ville, à cette heure, vous ne le savez pas encore, quelqu’un glisse une enveloppe sous la porte de votre chambre d’hôtel.",
+     "probleme": "Le personnage est à l’hôtel Chelsea Arms, mais l’événement est placé dans sa chambre d’hôtel de Bloomsbury sans expliquer comment ni pourquoi.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 197,
+     "commande": "Idée : Assister à la séance",
+     "reponse": "À neuf heures précises, Mrs Vane éteint les lampes une à une.",
+     "probleme": "La séance annoncée pour 21 h est résolue à 22 h sans que l’attente d’une heure supplémentaire soit expliquée.",
+     "type": "incoherence",
+     "gravite": "faible"
+    },
+    {
+     "tour": 200,
+     "commande": "Vous dites avoir rencontré cet esprit cette semaine : où, exactement, et qui était présent ?",
+     "reponse": "Cet esprit ? Ma foi, non. Je ne fréquente pas.",
+     "probleme": "La réponse nie ou évite directement ce que Mrs Vane vient d’affirmer sur sa rencontre avec l’esprit cette semaine.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 209,
+     "commande": "Somme ?",
+     "reponse": "Les veuves veulent des fils qui pardonnent, très cher. Je leur en donne.",
+     "probleme": "La réponse ne correspond pas à la commande « Somme ? », qui ne constitue pas une question compréhensible dans ce contexte.",
+     "type": "incomprehension",
+     "gravite": "faible"
+    },
+    {
+     "tour": 210,
+     "commande": "Somme ?",
+     "reponse": "Je vous l’ai déjà dit, docteur.",
+     "probleme": "La commande est de nouveau traitée comme une question déjà posée et ne reçoit aucune réponse exploitable.",
+     "type": "blocage",
+     "gravite": "faible"
+    },
+    {
+     "tour": 211,
+     "commande": "Somme ?",
+     "reponse": "Les veuves veulent des fils qui pardonnent, très cher. Je leur en donne.",
+     "probleme": "La même commande reçoit une réponse répétée mot pour mot sans clarification ni progression.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 224,
+     "commande": "Le voyage",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "La réponse répète mot pour mot une réflexion déjà donnée et ne répond pas au sujet du voyage.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 228,
+     "commande": "Réfléchir",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "Le texte est répété mot pour mot et n’apporte aucun élément nouveau après la réussite critique.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 228,
+     "commande": "BOUTON : Réfléchir",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "même réponse 5 fois (tours 228, 255, 267, 300, 316)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 231,
+     "commande": "Briser la vitre de la boutique",
+     "reponse": "Le verre cède, et derrière il y a un grillage de fer.",
+     "probleme": "Le jet de Chance est annoncé comme un échec alors que l’action demandée réussit explicitement, sans que cela soit présenté comme une conséquence partielle ou un succès aggravé.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 233,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, l’hôtel Chelsea Arms, Scotland Yard, l’ambassade de Turquie, la salle de lecture",
+     "probleme": "même réponse 4 fois (tours 233, 245, 288, 304)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 235,
+     "commande": "BOUTON : Parler au réceptionniste",
+     "reponse": "Le réceptionniste du Chelsea Arms : « Oui ? »",
+     "probleme": "même réponse 3 fois (tours 235, 257, 306)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 236,
+     "commande": "Parler du tombeau de Toutankhamon",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "La réflexion est hors sujet par rapport au tombeau de Toutankhamon et répétée mot pour mot depuis plusieurs tours.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 238,
+     "commande": "je monte à la chambre 14 et j’essaie la clé de Smith dans la serrure.",
+     "reponse": "[lieu] Cheapside, une chambre meublée",
+     "probleme": "L’action vise la chambre 14 du Chelsea Arms, mais le jeu transporte le personnage à Cheapside, sans justification.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 242,
+     "commande": "Insister (jet forcé)",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "La réussite extrême produit exactement la même réflexion que plusieurs tours précédents, sans nouvelle piste ni effet.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 244,
+     "commande": "Aller : la boutique de Brophy Lane, à Islington",
+     "reponse": "Une plainte contre vous, déposée par le buraliste. Insultes, esclandre.",
+     "probleme": "Aucun tour précédent ne montre des insultes ou un esclandre envers le buraliste ; la plainte contredit les actions jouées.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 249,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, Scotland Yard, l’ambassade de Turquie, la boutique de Brophy Lane, à Islington, ",
+     "probleme": "même réponse 5 fois (tours 249, 256, 260, 310, 313)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 251,
+     "commande": "Aller ailleurs",
+     "reponse": "Vous insistez. Le monde, lui, ne change pas d’avis.",
+     "probleme": "Le jeu décrit une insistance alors que le joueur a demandé à partir et affiche simplement les destinations.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 253,
+     "commande": "Aller ailleurs",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "La réflexion est répétée mot pour mot et n’a aucun rapport avec la commande consistant à afficher les destinations.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 255,
+     "commande": "Réfléchir",
+     "reponse": "Une idée vous vient. La boutique de Brophy Lane vous revient en mémoire. Un antiquaire tient des comptes. Qui a acheté quoi, avant qu’il ne disparaisse ?",
+     "probleme": "Le texte répète mot pour mot la même réflexion déjà servie de nombreuses fois, sans progression.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 265,
+     "commande": "Chercher dans les journaux reliés",
+     "reponse": "Mrs Pike, l’archiviste : « Pas maintenant, docteur. »",
+     "probleme": "Après avoir été prié de partir et de ne pas revenir au tour 264, le jeu laisse le personnage continuer à chercher dans les archives sans expliquer son retour ni faire respecter l’exclusion.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 266,
+     "commande": "Chercher dans les journaux reliés",
+     "reponse": "On fait mine de ne pas vous voir.",
+     "probleme": "Le personnage, déjà expulsé des archives, peut encore y rester et répéter la même action sans conséquence ni issue.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 275,
+     "commande": "Que savez-vous de Brophy et de ses clients, notamment de Smith ou de Makryat ?",
+     "reponse": "Le buraliste : « Ouais, le professeur des fantômes ? Celui des journaux ? »",
+     "probleme": "La question porte sur Brophy, ses clients, Smith et Makryat, mais la réponse ne fournit aucun renseignement exploitable et semble mal comprendre la demande.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 276,
+     "commande": "Qui achetait des antiquités chez Brophy, et avez-vous vu Smith ou Makryat entrer dans sa boutique ?",
+     "reponse": "Un soupir, à peine poli. Un sourire, avec beaucoup trop de dents.",
+     "probleme": "La réponse ne traite pas la question précise et ne donne aucune raison au refus de répondre.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 278,
+     "commande": "Avez-vous vu Makryat ou Smith acheter quelque chose chez Brophy ?",
+     "reponse": "« Je vous l’ai déjà dit, docteur : le professeur des fantômes ? Celui des journaux ? »",
+     "probleme": "Le buraliste répète une formule vague au lieu de répondre à la question factuelle, ce qui laisse la piste sans issue malgré les relances.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 291,
+     "commande": "Aller ailleurs",
+     "reponse": "Même résultat qu’à l’instant.",
+     "probleme": "Après l’attente jusqu’à 19 h, le jeu ne met pas à jour les destinations ni la possibilité de rendre visite à Mrs Vane, alors que celle-ci ne recevait qu’à partir de 19 h.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 303,
+     "commande": "BOUTON : Lui dire en face que c’est une escroquerie / BOUTON : Réfléchir / BOUTON : Aller ailleurs / BOUTON : Aller : la boutique de Brophy Lane, à Islington / BOUTON : Parler au buraliste",
+     "reponse": "40 tours sans progrès à islington (Mar 9 · 21 h 03), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 329,
+     "commande": "je dors jusqu’à l’aube, puis me rends à la pension de Stoke Newington dès son ouverture",
+     "reponse": "Vous ne voyez pas Stoke Newington ici. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt, à la réception.",
+     "probleme": "L’action demande explicitement de dormir jusqu’à l’aube et de se rendre à Stoke Newington, mais le temps reste bloqué à 01 h 44 et le déplacement est refusé sans raison.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 342,
+     "commande": "je prends congé de Mrs Atkins et monte examiner soigneusement la chambre de Stanley.",
+     "reponse": "Mrs Atkins : « Un peu plus tard, je l’entends crier, et puis une espèce de grondement. [...] »",
+     "probleme": "L’action d’examiner la chambre n’est pas exécutée : la réponse répète seulement le témoignage de Mrs Atkins et ne décrit ni l’accès à la pièce ni ses découvertes.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 350,
+     "commande": "Où Henry Stanley a-t-il acheté ce train, et que savez-vous de la boutique de Mehmet Makryat ?",
+     "reponse": "« Je vous l’ai dit, mon chou, et je vous le redirai, j’aime bien raconter. Mais quand même. »",
+     "probleme": "Mrs Atkins ne répond à aucune des deux questions et affirme les avoir déjà traitées alors qu’elle n’a pas indiqué le lieu d’achat ni expliqué ce qu’elle sait de Makryat.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 357,
+     "commande": "Que savez-vous de Mehmet Makryat, de sa boutique et des objets que Stanley lui a achetés ?",
+     "reponse": "Arthur Butter : « Je vous l’ai déjà dit, docteur. »",
+     "probleme": "Arthur Butter n’a encore rien dit de précis sur Makryat ou les objets achetés par Stanley ; la réponse bloque une question directement pertinente.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 370,
+     "commande": "Prendre congé",
+     "reponse": "Mrs Pike, l’archiviste : Un signe de ⟦coquille|tête⟧.",
+     "probleme": "Le texte contient une marque de programme non résolue (« ⟦coquille|tête⟧ ») au lieu d’un mot français.",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 380,
+     "commande": "je retourne à mon hôtel de Bloomsbury, relis mon carnet et dors jusqu’à l’ouverture du British Museum.",
+     "reponse": "Votre chambre vous attend, immobile, comme une salle d’attente.",
+     "probleme": "Le retour à l’hôtel est décrit, mais ni la relecture du carnet ni le sommeil jusqu’au matin ne sont exécutés ; le temps reste à 20 h 15.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 391,
+     "commande": "Chercher tout ce qu’on a écrit sur Makryat",
+     "reponse": "« Votre carte n’est pas encore prête. Chut. »",
+     "probleme": "La réponse parle de la carte de lecteur au lieu de traiter la recherche d’informations sur Makryat.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 392,
+     "commande": "Se documenter sur l’Orient-Express",
+     "reponse": "Le conservateur secoue la tête et tapote son registre : pas encore.",
+     "probleme": "La réponse renvoie encore à la carte de lecteur et ne répond pas à la demande de documentation sur l’Orient-Express.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 397,
+     "commande": "Que savez-vous de la boutique de Mehmet Makryat et de ses clients ?",
+     "reponse": "Le buraliste : « Oui ? »\nLe buraliste : « Encore ? »",
+     "probleme": "Le buraliste ne répond pas à la question et la conversation n’offre aucune piste ni explication permettant de poursuivre.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    }
+   ]
+  },
+  {
+   "nom": "partie_02_doyle_bavard",
+   "perso": "doyle",
+   "profil": "bavard",
+   "tours": 400,
+   "chapitres": [
+    {
+     "ch": "londres",
+     "debut": 1,
+     "tours": 400,
+     "indices": 15,
+     "fin": "inachevé"
+    }
+   ],
+   "nonCompris": 3,
+   "fermees": 13,
+   "problemes": [
+    {
+     "tour": 1,
+     "commande": "Parler au professeur Smith",
+     "reponse": "Mon cher amie !",
+     "probleme": "Erreur d’accord : Smith s’adresse à Margaret avec « mon cher amie » au lieu de « ma chère amie ».",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 4,
+     "commande": "Les hantises, dites-vous ? Avez-vous découvert quelque chose qui vous a convaincu, ou parlez-vous seulement d’une théorie destinée à secouer ces messieurs ?",
+     "reponse": "les hantises sont des tentatives de retour, j’en suis convaincu. Quelque chose cherche à revenir, et se trompe de porte.",
+     "probleme": "La réponse répète mot pour mot une explication déjà donnée, puis la répète encore deux fois dans le même tour, sans répondre à la question sur une découverte précise ou une théorie.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 6,
+     "commande": "Vous éludez ma question, Julius ; regardez-moi et dites-moi si quelqu’un vous menace ou si cette histoire de portes est liée à ce que vous annoncerez ce soir.",
+     "reponse": "Julius Arthur Smith. Vous le savez bien, voyons.",
+     "probleme": "Réponse à côté : Smith ne répond ni à la menace éventuelle ni au lien avec sa conférence.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 9,
+     "commande": "Ces lettres m’intriguent, Julius : qui vous écrit, et pourquoi Beddows juge-t-il nécessaire de vous épargner leurs mauvaises nouvelles ?",
+     "reponse": "Je crois vous l’avoir dit, mon amie.",
+     "probleme": "La réponse prétend que l’information a déjà été donnée, alors que Smith n’a jamais indiqué qui lui écrivait.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 11,
+     "commande": "Revenons aux hantises : quelle manifestation précise vous a convaincu qu’une présence cherchait à revenir, et pourquoi se tromperait-elle de porte ?",
+     "reponse": "Mon cher, je me répète : les hantises sont des tentatives de retour, j’en suis convaincu.",
+     "probleme": "Smith reconnaît se répéter mais ne fournit toujours aucun exemple précis ni explication, ce qui bloque la piste des hantises.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 14,
+     "commande": "Vous avez raison de vous moquer, Julius, mais puisque vous m’avez appris à regarder les mains, dites-moi donc ce que les vôtres ont récemment touché ou découvert.",
+     "reponse": "« raison », « Julius »… Reformulez, mon cher, je ne vois pas le lien.",
+     "probleme": "Smith comprend de travers une question claire et refuse de répondre sur ce que ses mains ont touché ou découvert.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 17,
+     "commande": "Un antiquaire, dites-vous ? Qui était-il, que vous proposait-il, et pourquoi pensez-vous aujourd’hui que vous auriez dû lui répondre ?",
+     "reponse": "Je crois vous l’avoir dit, mon amie.",
+     "probleme": "L’information sur l’antiquaire vient d’être révélée au tour précédent ; Smith affirme à tort l’avoir déjà donnée et n’apporte aucun détail.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 19,
+     "commande": "Vous vous répétez, Julius, alors parlons précisément de cet antiquaire : quel était son nom et que contenait sa lettre ?",
+     "reponse": "Ma maison de St John’s Wood… Éventrée ! Les ouvriers agrandissent ma bibliothèque.",
+     "probleme": "La réponse abandonne complètement la question sur le nom de l’antiquaire et le contenu de sa lettre.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 19,
+     "commande": "DIRE : Vous vous répétez, Julius, alors parlons précisément de cet antiquaire : quel était son nom et que contenait sa lettre ?",
+     "reponse": "« Ma maison de St John’s Wood ? Éventrée ! Les ouvriers agrandissent ma bibliothèque. D’où votre hôtel, et tou",
+     "probleme": "écho maladroit de la phrase du joueur (« Ma maison de St John’s Wood  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 20,
+     "commande": "J’accepte volontiers le dîner, Julius, mais avant cela, dites-moi le nom de cet antiquaire et ce que sa lettre vous voulait exactement.",
+     "reponse": "Beddows vous écrira. Il écrit mieux que moi, et il se souvient des dates.",
+     "probleme": "Smith esquive encore la question et ne donne ni le nom de l’antiquaire ni le contenu de la lettre, sans laisser de moyen d’obtenir ces informations.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 21,
+     "commande": "Votre bibliothèque éventrée m’inquiète davantage que votre pâté : qu’est-ce que les ouvriers ont découvert dans ses murs, et pourquoi avez-vous dû quitter St John’s Wood ?",
+     "reponse": "Une recette de sa mère, à Leeds.",
+     "probleme": "Réponse sans rapport avec la découverte dans les murs ou le départ de St John’s Wood.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 23,
+     "commande": "Vous plaisantez sur vos trente mille volumes, Julius, mais qu’ont découvert exactement les ouvriers dans les murs de la bibliothèque, et l’antiquaire était-il au courant ?",
+     "reponse": "Je crois vous l’avoir dit, mon amie.",
+     "probleme": "Smith prétend avoir répondu alors qu’il n’a jamais décrit la trouvaille ni établi de lien avec l’antiquaire.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 26,
+     "commande": "Les hantises",
+     "reponse": "Un bateau de pêche breton, une Norvégienne dans son escalier, un fiacre de Londres.",
+     "probleme": "Cette réponse introduit les trois apparitions sans préciser qu’il s’agit des plaques préparées pour la conférence, alors que les échanges précédents laissaient entendre que leur nature et leur origine étaient encore inconnues.",
+     "type": "incoherence",
+     "gravite": "faible"
+    },
+    {
+     "tour": 29,
+     "commande": "Ces douze plaques sont-elles toutes celles du bateau breton, et pourquoi en avoir brûlé six plutôt que de les conserver comme preuves ?",
+     "reponse": "Un thonier de Douarnenez, perdu corps et biens en 1904.",
+     "probleme": "Réponse répétée mot pour mot du tour 27, qui ne répond ni au nombre de plaques ni à leur destruction.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 31,
+     "commande": "Et cette institutrice de Bergen, Julius, qui a photographié son apparition et comment expliquez-vous qu’elle descende un escalier démoli depuis vingt ans ?",
+     "reponse": "Vieillissez-vous plus vite que moi ?",
+     "probleme": "Réponse à côté, sans aucun élément sur les photographes ni sur l’escalier démoli.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 37,
+     "commande": "je me rends au Chelsea Arms et demande la chambre 14.",
+     "reponse": "Pas d’ici, pas maintenant.",
+     "probleme": "L’action est cohérente avec l’indice et le nouveau lieu annoncé, mais elle est refusée sans justification diégétique claire ni possibilité d’expliquer l’indice ou de convaincre l’interlocuteur.",
+     "type": "blocage",
+     "gravite": "faible"
+    },
+    {
+     "tour": 39,
+     "commande": "Veuillez m’excuser, monsieur, je cherchais simplement mon manteau ; pourriez-vous me montrer où se trouve le mien ?",
+     "reponse": "À qui parlez-vous ?",
+     "probleme": "Le contexte désigne clairement le préposé du vestiaire, qui vient de l’interpeller ; la réponse ne comprend pas la réplique et force un choix artificiel.",
+     "type": "incomprehension",
+     "gravite": "faible"
+    },
+    {
+     "tour": 44,
+     "commande": "Beddows, ces plaques qu’il a refaites deux fois, qu’ont-elles de particulier, et pourquoi leur présentation exige-t-elle mon aide avant ce soir ?",
+     "reponse": "Ses plaques de verre, docteur, les photographies des revenants.",
+     "probleme": "Beddows appelle Margaret « docteur », contrairement à son identité établie de reporter, et répond de façon incomplète à la question.",
+     "type": "role",
+     "gravite": "faible"
+    },
+    {
+     "tour": 44,
+     "commande": "DIRE : Beddows, ces plaques qu’il a refaites deux fois, qu’ont-elles de particulier, et pourquoi leur présentation exige-t-elle mon aide avant ce soir ?",
+     "reponse": "Beddows : « Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce",
+     "probleme": "même réponse 5 fois (tours 44, 297, 306, 308, 310)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 52,
+     "commande": "DIRE : Ma chambre est acceptable, Pratt, mais dites-moi : connaissez-vous le Chelsea Arms, et avez-vous remarqué récemment un homme brun à grosse moustache qui y logerait ?",
+     "reponse": "« Des ragots, {m} ? Le brouillard, surtout. Et une dame du deuxième qui prétend entendre des pas au plafond. I",
+     "probleme": "écho maladroit de la phrase du joueur (« Des ragots, {m}  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 63,
+     "commande": "Quelle chambre occupaient les trois hommes, et qui avait réservé la chambre 14 ?",
+     "reponse": "Au deuxième, docteur.",
+     "probleme": "La réponse est incohérente avec les indications ultérieures du réceptionniste, qui situe ensuite les trois morts au troisième étage ; elle appelle aussi Margaret « docteur ».",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 66,
+     "commande": "Je comprends votre crainte, mais trois morts sans un cri exigent des réponses : pouvez-vous me donner leurs noms et l’heure exacte où on les a découverts ?",
+     "reponse": "Du troisième étage. Depuis la semaine dernière.",
+     "probleme": "La réponse ne donne ni les noms ni l’heure demandés et contredit l’étage indiqué au tour 63.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 67,
+     "commande": "Vous venez de dire deuxième étage, puis troisième : lequel est-ce exactement, et pourquoi changez-vous de version ?",
+     "reponse": "Né à Battersea, de l’autre côté du fleuve.",
+     "probleme": "Réponse totalement hors sujet à une demande de clarification factuelle.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 72,
+     "commande": "je glisse discrètement un billet à l’agent de l’escalier et lui demande si je peux voir la chambre 14.",
+     "reponse": "Vous ne voyez pas les billets ici.",
+     "probleme": "La réponse nie l’action tentée alors qu’un agent et un escalier gardé sont bien présents ; le même geste devient ensuite possible au tour 73.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 83,
+     "commande": "AGIR : je me rends aux archives du Daily Courier, à Fleet Street, pour rechercher l’affaire des trois morts du Chelsea Arms.",
+     "reponse": "Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.",
+     "probleme": "même réponse 3 fois (tours 83, 96, 171)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 96,
+     "commande": "j’attends l’ouverture des archives du Daily Courier à Fleet Street.",
+     "reponse": "Les archives du Daily Courier ferment à 23 h et rouvrent à 8 h. Mieux vaut attendre le matin.",
+     "probleme": "Le personnage est à Chelsea et demande explicitement à attendre ; la réponse répète seulement les horaires sans faire progresser le temps ni proposer une manière d’attendre.",
+     "type": "blocage",
+     "gravite": "faible"
+    },
+    {
+     "tour": 100,
+     "commande": "BOUTON : Aller : les archives du Daily Courier, à Fleet Street",
+     "reponse": "Vous insistez. Le monde, lui, ne change pas d’avis.",
+     "probleme": "même réponse 3 fois (tours 100, 250, 348)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 101,
+     "commande": "je m’installe dans un fauteuil du hall et j’attends patiemment l’ouverture des archives à huit heures.",
+     "reponse": "Vous cherchez la table des yeux, en vain. Ici, vous remarquez : l’escalier gardé.",
+     "probleme": "La réponse ne tient pas compte de l’attente dans le fauteuil et renvoie à une action sans rapport ; elle empêche de faire passer le temps jusqu’à l’ouverture.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 116,
+     "commande": "je prends mon carnet et je demande à Mrs Pike de me montrer le dossier V-31 sur Hortense Vane, puis je cherche dans les articles de 1921 toute mention de Smith, de ses clients ou d’un objet lié à ses séances.",
+     "reponse": "Vous n’allez pas emporter ça.",
+     "probleme": "L’action consiste à consulter un dossier et des articles, pas à les emporter ; la réponse comprend mal l’intention et bloque la recherche sans raison.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 126,
+     "commande": "Parlons de la séance de ce soir : qui espérez-vous contacter, et Smith ou l’un des morts du Chelsea Arms vous a-t-il récemment envoyé un message ?",
+     "reponse": "« Et maintenant, d’après les journaux, il croit aux revenants. »",
+     "probleme": "La réponse ne traite ni de la séance de ce soir ni d’un éventuel message reçu ; elle revient seulement sur l’attitude générale de Smith.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 127,
+     "commande": "Que pouvez-vous me dire de la séance de ce soir, et pourquoi affirmez-vous que Smith n’est peut-être plus tout à fait lui-même ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "La médium n’a pas expliqué pourquoi Smith aurait changé et ne répond pas à la question sur la séance. La conversation commence à tourner en rond sans nouvelle piste.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 129,
+     "commande": "Parlons de la séance de ce soir : qui doit venir, comment procédez-vous, et acceptez-vous que j’y assiste discrètement jusqu’au bout ?",
+     "reponse": "« À neuf heures, une guinée. Je fournis le frisson, les clients fournissent les larmes. »",
+     "probleme": "La réponse ne précise ni les invités ni le procédé et ne répond pas clairement à la demande d’assister discrètement à la séance.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 144,
+     "commande": "AGIR : j’examine attentivement le guéridon, la bougie, le globe rouge et les rideaux afin de découvrir le mécanisme de la séance.",
+     "reponse": "[indice noté dans le carnet] Le guéridon de Mrs Vane est truqué : une sonnette à fil, de la gaze dans un tiroir, un neveu derrière le rideau. Mais le froid et l",
+     "probleme": "phrase qui sort du monde du jeu (filtre automatique)",
+     "type": "role",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 145,
+     "commande": "Petit, n’ayez pas peur : je ne vous dénoncerai pas, mais dites-moi qui vous a demandé de vous cacher ici et si vous avez entendu parler d’Albert ou du professeur Smith.",
+     "reponse": "Mrs Hortense Vane, médium : « Encore vous. »",
+     "probleme": "Le joueur s’adresse explicitement au garçon découvert derrière le rideau, mais la réponse fait parler Mrs Vane et ne donne aucune réaction ni possibilité d’interroger le garçon.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 153,
+     "commande": "je monte à la chambre 14 avec la plaque de clé, en observant soigneusement le couloir et la serrure avant d’entrer.",
+     "reponse": "Passé minuit, l’agent a disparu et le veilleur ronfle.",
+     "probleme": "L’action est horodatée à 23 h 56, mais la narration affirme qu’il est passé minuit, ce qui contredit la chronologie affichée.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 154,
+     "commande": "je note que les trois victimes ont été attirées de Paris par le même télégramme et je cherche un moyen de retrouver l’expéditeur, M.",
+     "reponse": "Ce n’est pas le moment de jouer.",
+     "probleme": "Une démarche d’enquête raisonnable est rejetée sans justification et sans fournir de piste ou d’action alternative pertinente.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 168,
+     "commande": "Voir le sergent Rigby, aux incendies",
+     "reponse": "Vous revenez vers le sergent Rigby, aux incendies. Rien n’a changé depuis tout à l’heure. Sauf peut-être vous.",
+     "probleme": "Le bouton prétend permettre de voir le sergent Rigby, mais la réponse ne donne ni accès au personnage ni nouvelle option pour l’interroger, alors que le joueur cherche précisément à le rencontrer.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 170,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, l’hôtel Chelsea Arms, la salle de lecture du British Museum, la gare Victoria, la maison de Smith, à St J",
+     "probleme": "même réponse 3 fois (tours 170, 186, 226)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 201,
+     "commande": "j’attends le soir devant le salon de Mrs Vane, en relisant mes notes sur la séance, la voix et les Alexis.",
+     "reponse": "Le temps passe lentement, comme toujours quand on l’attend. Vous comptez les coups des horloges de Londres. Il est 19 h.",
+     "probleme": "Le joueur attend devant le salon de Mrs Vane, mais le lieu courant reste les archives du Daily Courier ; cette incohérence de lieu provoque ensuite l’échec de l’action au tour 202.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 202,
+     "commande": "je frappe à la porte du salon de Mrs Vane et demande à être reçue pour parler de la séance, de la voix et du nom d’Alexis.",
+     "reponse": "Vous ne voyez pas la porte ici. Ici, vous remarquez : Mrs Pike, l’archiviste et les volumes reliés.",
+     "probleme": "Après avoir indiqué que le joueur attendait devant le salon à 19 h, le jeu le replace sans explication dans les archives et refuse l’action au lieu de le laisser changer de lieu.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 204,
+     "commande": "Mrs Vane, je voudrais vous parler en privé de la séance, de la voix que j’ai entendue et du nom d’Alexis ; je vous assure que je ne cherche pas à vous nuire.",
+     "reponse": "« Pardon ? Je n’ai pas compris un traître mot. »",
+     "probleme": "La réplique est claire et directement liée à la situation, mais Mrs Vane prétend ne pas en comprendre un traître mot sans raison apparente.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 212,
+     "commande": "je me rends à l’hôtel Chelsea Arms avec la clé de la chambre 14, afin d’examiner la pièce et d’y chercher un lien avec les trois morts.",
+     "reponse": "[lieu] Votre hôtel, à Bloomsbury",
+     "probleme": "Le joueur demande explicitement à se rendre au Chelsea Arms, mais la scène le fait arriver à son propre hôtel.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 218,
+     "commande": "je monte à la chambre 14 avec ma clé en cuivre et examine soigneusement la serrure, la porte et l’intérieur de la pièce.",
+     "reponse": "L’agent vous barre l’escalier. « Personne ne monte, mademoiselle. Ordre de l’inspecteur Fleming. »",
+     "probleme": "Le jeu avait déjà permis au joueur d’entrer dans la chambre 14 avec cette clé et de l’examiner. Le nouvel ordre d’interdiction n’est pas expliqué et contredit cette continuité sans événement intermédiaire.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 229,
+     "commande": "je fouille méthodiquement ma chambre, en examinant mes notes, la clé en cuivre et tout ce qui pourrait révéler qui m’a suivi jusqu’à l’hôtel.",
+     "reponse": "Ce qui est fait est fait. Reste à savoir ce que vous faites maintenant.",
+     "probleme": "Une fouille précise et raisonnable est refusée sans examen, indice ni alternative, ce qui bloque une piste potentiellement importante.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 252,
+     "commande": "je monte dans ma chambre, je relis méthodiquement mes notes sur Smith, les Alexis et la chambre 14, puis je tente de dormir jusqu’à l’ouverture des archives.",
+     "reponse": "[lieu] St John’s Wood, la maison de Smith\nLe brouillard a fini d’éteindre la maison de Smith.",
+     "probleme": "L’action se déroule à l’hôtel, mais la réponse place le personnage dans la maison de Smith et lui demande de rentrer à l’hôtel.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 257,
+     "commande": "Mrs Pike, je ne vous demande pas d’ajouter quoi que ce soit : pourriez-vous simplement me conduire aux numéros du Daily Courier qui parlent de Smith, des Alexis ou de l’incendie de St John’s Wood ?",
+     "reponse": "On vous regarde comme on regarde la pluie.",
+     "probleme": "Une demande claire et directement liée au métier de l’archiviste est ignorée, sans fournir de piste ni d’explication.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 267,
+     "commande": "Bonjour, monsieur ; je cherche des renseignements sur la chambre 14, notamment sur ses derniers occupants et sur les trois morts dont parlait un crieur cette nuit : pourriez-vous me dire qui y séjournait, quand ils sont",
+     "reponse": "« Bonjour, mademoiselle ! »\n[boutons] Prendre congé",
+     "probleme": "La réponse ne traite aucun élément de la demande et ferme presque immédiatement une conversation raisonnable.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 274,
+     "commande": "je m’approche discrètement de l’escalier gardé et j’examine qui le surveille, ainsi que les portes et les couloirs qu’il pourrait dissimuler.",
+     "reponse": "Pour aller où ? Vous connaissez : votre hôtel, à Bloomsbury, Scotland Yard, la salle de lecture du British Museum…",
+     "probleme": "L’action d’observer l’escalier est interprétée comme une demande de déplacement et n’est pas exécutée.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 283,
+     "commande": "Beddows, je vous en prie, racontez-moi tout ce que vous savez sur les Turcs qui ont attaqué la maison de votre maître, sur les frères Alexis et sur les morceaux du simulacre : qui les dirige, comment les reconnaître et o",
+     "reponse": "« Oui ? »\n« Une sœur, à Margate. Elle tient une pension. Je ne l’ai pas vue depuis la guerre. »",
+     "probleme": "Beddows répond à côté de la demande, sans rapport avec l’attaque, les Alexis ou le simulacre.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 285,
+     "commande": "Beddows, commençons par l’attaque : combien étaient-ils, que portaient-ils, parlaient-ils turc, et avez-vous reconnu parmi eux les frères Alexis ou l’homme à la moustache ?",
+     "reponse": "« Comme je disais, mademoiselle : une sœur, à Margate. Elle tient une pension. Je ne l’ai pas vue depuis la guerre. »",
+     "probleme": "La réponse reste sans rapport avec la question sur les assaillants et répète l’information sur la sœur.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 295,
+     "commande": "Beddows, je dois comprendre : qui est réellement l’homme dans ce lit, et depuis quand votre maître est-il ainsi défiguré ?",
+     "reponse": "« Stoke Newington ? Loin au nord. Des petites maisons toutes pareilles. Rien n’y arrive jamais. »",
+     "probleme": "La réponse ne concerne ni l’identité de l’homme ni son état physique.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 304,
+     "commande": "Beddows, je ne vous menacerai pas ; dites-moi seulement qui est réellement dans ce lit et ce que vous avez vu sous ses bandages.",
+     "reponse": "« James Beddows, mademoiselle. Au service du professeur. »\n« Si mademoiselle le dit. » Il se tord les mains sans répondre.",
+     "probleme": "Beddows répond à la question sur sa propre identité au lieu de répondre à celle sur l’homme dans le lit et les bandages.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 308,
+     "commande": "Beddows, cessez de répéter vos réponses : où sont les plaques de verre, et pourquoi refusez-vous de me dire ce qu’elles montraient ?",
+     "reponse": "« Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce qu’elles étaient floues. »",
+     "probleme": "La réponse est répétée mot pour mot depuis le tour 306 et ne répond toujours pas à la question sur l’emplacement des plaques.",
+     "type": "repetition",
+     "gravite": "forte"
+    },
+    {
+     "tour": 310,
+     "commande": "Plaques ?",
+     "reponse": "« Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce qu’elles étaient floues. »",
+     "probleme": "Le même texte est répété mot pour mot aux tours 306, 308 et 310.",
+     "type": "repetition",
+     "gravite": "forte"
+    },
+    {
+     "tour": 314,
+     "commande": "j’ouvre les rideaux, puis je pars immédiatement sans quitter Beddows et l’homme du lit des yeux.",
+     "reponse": "Beddows vous saisit le poignet, avec une force surprenante. « Non ! La lumière lui fait mal, mademoiselle. Je vous en prie. »\nJe ne suis pas sûr de vous suivre. Dites-le plus simplement, ou choisissez :\n[boutons] Partir",
+     "probleme": "L’action est pourtant explicite, mais le jeu prétend ne pas la comprendre et ne laisse que l’option de partir.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 319,
+     "commande": "Bonsoir, je suis un proche de M. Makryat ; pourriez-vous me dire qui a occupé la chambre 14, quand les trois hommes sont arrivés et si quelqu’un les a accompagnés ?",
+     "reponse": "« Proche ? Je ne l’aurais pas deviné. »",
+     "probleme": "Malgré un jet de Baratin réussi, le réceptionniste ne répond à aucune des questions factuelles.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 326,
+     "commande": "je profite d’un moment d’inattention pour monter discrètement vers la chambre 14 avec la plaque de clé en cuivre.",
+     "reponse": "[hotel · Mar 9 · 00 h 44 · non compris]\nVous réfléchissez à l’heure, sans avancer.",
+     "probleme": "L’action d’infiltration et d’utilisation de la plaque de clé est claire, mais elle est déclarée incomprise sans justification.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 337,
+     "commande": "je retourne à mon hôtel déposer la valise de Beddows dans le coffre du concierge, puis je reviendrai examiner la boutique de Makryat à l’aube.",
+     "reponse": "Vous avez déjà examiné la vitrine tout à l’heure. Derrière la vitre sale, des plateaux de cuivre, des lampes ajourées, des tapis roulés.",
+     "probleme": "Le jeu n’exécute pas le déplacement demandé vers l’hôtel et ramène arbitrairement l’action à l’examen de la vitrine.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 338,
+     "commande": "je retourne à l’hôtel déposer la valise de Beddows dans le coffre du concierge, puis je reviens à l’aube devant la boutique pour interroger le buraliste dès son ouverture.",
+     "reponse": "Vous attendez que la rue soit vide, puis vous vous approchez de la porte.\n[jet demandé] Crochetage 30 %",
+     "probleme": "Le jeu ignore à nouveau le retour à l’hôtel et fait crocheter la boutique, contrairement à l’action annoncée.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 341,
+     "commande": "je fouille le comptoir et les pièces à l’étage, à la recherche de correspondances, de factures ou de documents liés à Smith.",
+     "reponse": "Vous voulez dire :\n[boutons] Ouvrir la valise de Beddows | Examiner les registres | Monter à l’étage",
+     "probleme": "Une fouille claire de plusieurs zones est déclarée incomprise et réduite à des actions qui ne correspondent pas exactement à la demande.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 354,
+     "commande": "je me glisse dans le couloir pour observer discrètement qui pousse la valise et où elle se dirige.",
+     "reponse": "Donner quoi, et à qui ?",
+     "probleme": "La réponse interprète l’observation d’une valise comme une action de remise d’objet et ne traite pas la scène décrite.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 355,
+     "commande": "je reste dans l’ombre et observe attentivement qui pousse la valise, d’où il vient et vers quelle chambre il se dirige.",
+     "reponse": "Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Une fortune, donnée sans un reçu.",
+     "probleme": "La réponse décrit le contenu de la valise au lieu de dire qui la pousse, d’où elle vient ou où elle va.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 357,
+     "commande": "Monsieur Pratt, qui a apporté cette valise dans le couloir, et à quelle chambre devait-elle être livrée ?",
+     "reponse": "« Comme je vous le disais : votre chambre, mademoiselle ? Le troisième, sur cour. Douze shillings la nuit, petit déjeuner compris. »",
+     "probleme": "Le concierge répond par les conditions de la chambre et ne répond pas à la question sur la valise.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 359,
+     "commande": "Monsieur Pratt, je vous demande encore une fois qui a remis cette valise et pourquoi vous prétendez qu’elle était destinée à ma chambre ; avez-vous reçu un courrier ou un message à ce sujet ?",
+     "reponse": "« Naturellement, je vous l’ai dit tout à l’heure, mademoiselle : votre chambre, mademoiselle ? Le troisième, sur cour. Douze shillings la nuit, petit déjeuner compris. »",
+     "probleme": "Le concierge répète presque mot pour mot une réponse hors sujet et ne fournit aucune information sur la valise.",
+     "type": "repetition",
+     "gravite": "forte"
+    },
+    {
+     "tour": 363,
+     "commande": "je retourne dans ma chambre, pose la valise sur le lit et l’examine soigneusement sans toucher aux billets.",
+     "reponse": "Le concierge range la valise de Beddows dans le petit bureau derrière la réception",
+     "probleme": "L’action du joueur est ignorée et la valise est déplacée par le concierge sans explication. Le nom « Beddows » n’a pas été établi dans cet extrait.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 369,
+     "commande": "Bonsoir ; je cherche le locataire de la chambre 14, un homme moustachu lié au professeur Smith : pouvez-vous me dire qui l’a réservée et quand il est arrivé ?",
+     "reponse": "« Encore Bonjour ? Vous êtes poli, vous. »",
+     "probleme": "La réplique « Bonsoir » est comprise comme « Bonjour », puis la conversation est fermée sans répondre à la demande raisonnable concernant la chambre 14.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 371,
+     "commande": "j’examine discrètement la porte de la chambre 14, la serrure et le couloir, à la recherche de traces de passage ou d’effraction.",
+     "reponse": "L’agent ne bouge pas d’un pouce. « Scotland Yard, mademoiselle. Voyez l’inspecteur Fleming. »",
+     "probleme": "Un agent apparaît sans avoir été introduit et empêche l’examen sans expliquer sa présence ni le lien avec la chambre 14.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 376,
+     "commande": "Voir le sergent Rigby, aux incendies",
+     "reponse": "Rien de neuf du côté du sergent Rigby, aux incendies. Il faudrait essayer autre chose. Toujours la même chose. Peut-être faut-il essayer autre chose.",
+     "probleme": "Le même message est répété immédiatement sous deux formulations quasi identiques.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 380,
+     "commande": "Mrs Pike, je cherche tout ce que le Daily Courier a publié sur le professeur Smith, Fenalik, le simulacre de Sedefkar et les antiquités venues de Constantinople ; pourriez-vous m’aider à retrouver ces articles ?",
+     "reponse": "On fait mine de ne pas vous voir.",
+     "probleme": "Une demande précise et directement liée aux archives est ignorée sans raison ni possibilité de recherche alternative.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 386,
+     "commande": "Demander une carte de lecteur",
+     "reponse": "[dés] Crédit : 71/30 — Échec",
+     "probleme": "Le résultat du jet est supérieur au seuil annoncé (71 contre 30), mais il est pourtant indiqué comme un échec.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 390,
+     "commande": "DIRE : Bonjour, monsieur ; je cherche la boutique de Makryat et tout renseignement sur son propriétaire, ses clients ou les marchandises qu’il vendait.",
+     "reponse": "« Le Turc ? Un vieux, voûté, avec une barbe blanche. Il ne disait jamais plus de trois mots. Bonjour, merci, a",
+     "probleme": "écho maladroit de la phrase du joueur (« Le Turc  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 393,
+     "commande": "Et le dernier client du vieux Turc, vous souvenez-vous de son visage, de son accent ou de l’heure à laquelle il est venu ?",
+     "reponse": "« Je vous l’ai déjà dit, mademoiselle. »",
+     "probleme": "Le buraliste n’a pas encore donné ces informations sur le dernier client ; il prétend donc avoir déjà répondu alors que ce n’est pas le cas.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 394,
+     "commande": "Je ne suis pas de la police, monsieur ; mais ce dernier client pourrait être en danger : quand l’avez-vous vu, et qu’est-ce qu’il venait chercher ?",
+     "reponse": "« Comme je disais : les flics ? Ils sont passés, ils ont rien vu, ils sont repartis. Comme d’habitude. »",
+     "probleme": "La même réponse est répétée mot pour mot après avoir déjà été donnée juste avant, sans traiter la question sur le dernier client.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    }
+   ]
+  },
+  {
+   "nom": "partie_03_ashby_absurde",
+   "perso": "ashby",
+   "profil": "absurde",
+   "tours": 400,
+   "chapitres": [
+    {
+     "ch": "londres",
+     "debut": 1,
+     "tours": 400,
+     "indices": 11,
+     "fin": "inachevé"
+    }
+   ],
+   "nonCompris": 2,
+   "fermees": 3,
+   "problemes": [
+    {
+     "tour": 4,
+     "commande": "DIRE : Tu crois vraiment que ces choses choisissent simplement la mauvaise porte, ou quelqu’un les attire ici ?",
+     "reponse": "« Un homme à moustache ? » Il balaie la salle d’un geste. « Mon {ami}, ce soir, c’est la moitié de l’Empire. M",
+     "probleme": "écho maladroit de la phrase du joueur (« Un homme à moustache  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 15,
+     "commande": "Et le bateau breton m’intrigue : où et quand cette photographie a-t-elle été prise ?",
+     "reponse": "Un thonier de Douarnenez, perdu corps et biens en 1904. On le revoit chaque année, à la même date, au large de Sein.",
+     "probleme": "Réponse répétée mot pour mot au tour 18.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 16,
+     "commande": "Et la Norvégienne, Julius ?",
+     "reponse": "Une institutrice de Bergen. Elle descend son escalier tous les soirs à dix heures. Elle est morte en 1888. L’escalier, lui, a été démoli en 1902.",
+     "probleme": "Réponse répétée mot pour mot au tour 19.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 18,
+     "commande": "Bateau ?",
+     "reponse": "Un thonier de Douarnenez, perdu corps et biens en 1904. On le revoit chaque année, à la même date, au large de Sein. Trois photographes, trois plaques, trois fois le même bateau.",
+     "probleme": "Réponse répétée mot pour mot au tour 15.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 19,
+     "commande": "Et la Norvégienne, Julius ?",
+     "reponse": "Une institutrice de Bergen. Elle descend son escalier tous les soirs à dix heures. Elle est morte en 1888. L’escalier, lui, a été démoli en 1902.",
+     "probleme": "Réponse répétée mot pour mot au tour 16.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 24,
+     "commande": "Pardonnez-moi, monsieur Beddows, je cherchais simplement ma canne ; ce brouillard me fait perdre la tête.",
+     "reponse": "Vous parlez, oui. Mais à qui ?",
+     "probleme": "Le joueur s’adresse explicitement à Beddows, mais le jeu prétend ne pas comprendre le destinataire.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 27,
+     "commande": "DIRE : Que pouvez-vous me dire des plaques photographiques, Beddows ?",
+     "reponse": "Beddows : « Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois, parce que sur les premières… » Il s’arrête net. « Parce",
+     "probleme": "même réponse 4 fois (tours 27, 125, 126, 128)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 32,
+     "commande": "Je prends une coupe de champagne et observe Smith par-dessus le bord du verre.",
+     "reponse": "Vous voulez dire : Prendre une coupe de champagne | Écouter la conférence",
+     "probleme": "Une action claire et raisonnable est déclarée non comprise, alors que le bouton correspondant existe et que l’observation de Smith pouvait être résolue directement.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 34,
+     "commande": "Je fais honneur au buffet en empilant dans mon assiette tout ce qui ressemble à un canapé, puis j’observe discrètement les invités.",
+     "reponse": "Vous restez un moment sans bouger. Londres continue autour de vous, indifférente.",
+     "probleme": "L’action détaillée est ignorée et remplacée par une absence d’action, sans raison.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 36,
+     "commande": "Je note l’adresse de Smith dans mon carnet et décide de le suivre jusqu’à St John’s Wood.",
+     "reponse": "Vous rattrapez Beddows au vestiaire. Il aide le professeur à enfiler son pardessus, et vous arrête d’un regard très poli.",
+     "probleme": "Le jeu ne laisse pas suivre le fiacre malgré la décision explicite du joueur et propose seulement de rentrer à l’hôtel.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 49,
+     "commande": "Aller : la maison de Smith, à St John’s Wood",
+     "reponse": "La villa est noire. Les ouvriers sont partis. Une odeur flotte dans le jardin, que vous n’arrivez pas à nommer tout de suite : de l’essence, peut-être, ou de la térébenthine des peintres.",
+     "probleme": "Description répétée mot pour mot au tour 116, alors que la scène du tour 116 devrait être transformée par l’incendie et l’évolution de la situation.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 58,
+     "commande": "Insister (jet forcé)",
+     "reponse": "Idée (INT) : 70/80 — Réussite",
+     "probleme": "La réussite du jet forcé ne produit aucune idée ni conséquence exploitable ; le jeu renvoie ensuite à l’observation déjà effectuée.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 58,
+     "commande": "BOUTON : Insister (jet forcé)",
+     "reponse": "[système] Vous insistez. Un jet forcé ne pardonne pas : en cas d’échec, les conséquences seront pires.",
+     "probleme": "même réponse 3 fois (tours 58, 225, 300)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 59,
+     "commande": "Regarder autour de vous",
+     "reponse": "Vous avez déjà observé la maison tout à l’heure. Une maison de savant : des rayonnages jusqu’au plafond, que l’on devine derrière les vitres du bas. Sur le perron, deux bouteilles de lait que personne n’a rentrées. Rien n’a changé.",
+     "probleme": "Réponse quasi identique au tour 50, sans fournir l’indice attendu après la réussite du jet d’idée forcé.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 76,
+     "commande": "DIRE : La voyante de Lady Ashworth ?",
+     "reponse": "« Une médium, {m} ? Mrs Vane, au 31, Gordon Square, à deux pas. Tous les soirs à neuf heures, sauf le dimanche",
+     "probleme": "écho maladroit de la phrase du joueur (« Une médium, {m}  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 79,
+     "commande": "Aller : le salon de Mrs Vane, à Gordon Square",
+     "reponse": "Ses rideaux de velours sont tirés sur Gordon Square. Il est 6 h : revenez ce soir, ou écrivez « attendre le soir ».",
+     "probleme": "Incohérence horaire : le tour est horodaté 07 h 02, mais la réponse affirme qu’il est 6 h.",
+     "type": "incoherence",
+     "gravite": "faible"
+    },
+    {
+     "tour": 90,
+     "commande": "BOUTON : Chercher dans les journaux reliés",
+     "reponse": "Rien. Pour l’instant, on ne vous parlera plus.",
+     "probleme": "même réponse 4 fois (tours 90, 144, 230, 309)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 91,
+     "commande": "Je quitte les archives et me rends au salon de Mrs Vane pour attendre l’ouverture.",
+     "reponse": "Mrs Vane ne reçoit que le soir, à partir de 19 h. Ses rideaux de velours sont tirés sur Gordon Square.",
+     "probleme": "Le joueur quitte les archives pour Gordon Square, mais le lieu indiqué et la réponse restent ceux des archives.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 93,
+     "commande": "Je sonne chez Mrs Vane et demande à assister à sa séance.",
+     "reponse": "Vous ne voyez pas Mrs Vane ici. Ici, vous remarquez : Mrs Pike, l’archiviste et les volumes reliés.",
+     "probleme": "Le joueur est censé être chez Mrs Vane, mais le jeu le replace dans les archives du Daily Courier.",
+     "type": "incoherence",
+     "gravite": "forte"
+    },
+    {
+     "tour": 107,
+     "commande": "Où puis-je trouver votre neveu Cyril ?",
+     "reponse": "Très cher, je vous l’ai dit, mon ami : mon neveu Cyril. Il m’aide. Il ne parle pas beaucoup, c’est une qualité.",
+     "probleme": "La question demande où trouver Cyril, mais la réponse répète seulement son identité et ne fournit aucune piste.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 108,
+     "commande": "Où puis-je trouver Cyril, exactement ?",
+     "reponse": "Vous radotez, ou c’est moi ? mon neveu Cyril. Il m’aide. Il ne parle pas beaucoup, c’est une qualité.",
+     "probleme": "La demande précise est à nouveau éludée, fermant sans justification la piste introduite par Mrs Vane.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 112,
+     "commande": "Décrivez-moi ce dessin et dites-moi où se trouvait ce vieil homme.",
+     "reponse": "Je fais semblant de n’avoir rien entendu. Vous parlez trop vite, mon ami. « dessin », « vieil »… et alors ?",
+     "probleme": "Mrs Vane vient de révéler spontanément le dessin et le vieil homme, puis ignore une demande directe de précision sans réaction cohérente.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 126,
+     "commande": "Que montrent exactement ces plaques de verre, et où sont-elles maintenant ?",
+     "reponse": "« Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois… »",
+     "probleme": "La réponse répète celle du tour précédent et ne répond ni à ce que montrent les plaques ni à l’endroit où elles se trouvent.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 128,
+     "commande": "Plaques ?",
+     "reponse": "« Ses plaques de verre, docteur, les photographies des revenants. Il les a refaites deux fois… »",
+     "probleme": "Réponse répétée mot pour mot aux tours 125 et 126, sans progression de la conversation.",
+     "type": "repetition",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 131,
+     "commande": "Qui est réellement votre maître, et pourquoi m’avez-vous appelé docteur ?",
+     "reponse": "« J’ai un plan pour le mettre à l’abri, monsieur. Moins vous en saurez, mieux cela vaudra. »",
+     "probleme": "Beddows n’identifie pas son maître et n’explique pas pourquoi il appelle le joueur docteur.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 135,
+     "commande": "Qu’est-il arrivé à votre maître ?",
+     "reponse": "« Bien, monsieur. Non, monsieur. »",
+     "probleme": "La réponse est incohérente et ne répond pas à la question posée.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 143,
+     "commande": "Je vais vous aider, mais dites-moi au moins où vous comptez conduire votre maître.",
+     "reponse": "On fait mine de ne pas vous voir.",
+     "probleme": "La conversation se ferme sans raison alors que le joueur propose son aide et demande une information directement liée à l’intrigue.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 144,
+     "commande": "Je vais réserver le Simplon-Orient-Express chez Cook et commencer par Paris.",
+     "reponse": "Rien. Pour l’instant, on ne vous parlera plus.",
+     "probleme": "La déclaration du joueur ne reçoit aucune réaction et ne permet aucune progression.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 156,
+     "commande": "Envoyer un télégramme",
+     "reponse": "Mr Pratt, le concierge : « Comme je vous le disais… »",
+     "probleme": "La réponse ne traite pas l’action d’envoyer un télégramme et attribue au concierge une phrase sans contexte, avant d’afficher seulement les destinataires.",
+     "type": "incomprehension",
+     "gravite": "faible"
+    },
+    {
+     "tour": 157,
+     "commande": "Où trouver des renseignements ?",
+     "reponse": "Mr Pratt, le concierge : « Vous m’avez déjà posé la question, monsieur. »",
+     "probleme": "Le jeu ne répond pas à la demande et renvoie à une prétendue réponse antérieure qui n’a pas fourni de renseignements exploitables.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 174,
+     "commande": "Puis-je examiner les passeports, ou savoir où ils ont été fabriqués ?",
+     "reponse": "« De bons faux, docteur. Trop bons. Même papier, même encre, mêmes tampons que les vrais. »",
+     "probleme": "Réponse répétée au tour 173, sans dire si les passeports peuvent être examinés ni où ils ont été fabriqués.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 175,
+     "commande": "DIRE : Inspecteur, ces trois morts avaient-ils des blessures ou des signes particuliers qui permettraient de les relier aux affaires du professeur Smith ?",
+     "reponse": "« L’incendie de St John’s Wood ? Pas mon affaire. Voyez le sergent Rigby, aux incendies, deuxième étage. »",
+     "probleme": "écho maladroit de la phrase du joueur (« L’incendie de St John’s Wood  »)",
+     "type": "langue",
+     "gravite": "faible"
+    },
+    {
+     "tour": 177,
+     "commande": "Je voudrais parler au sergent Rigby au sujet de l’incendie de St John’s Wood.",
+     "reponse": "« Je vous l’ai déjà dit : Rigby ? Bon sergent. Trop de fumée dans les poumons… »",
+     "probleme": "La demande de parler à Rigby n’est pas traitée et la réponse répète seulement sa description.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 178,
+     "commande": "Inspecteur, je voudrais parler au sergent Rigby directement, ou savoir quand je peux le trouver.",
+     "reponse": "« Deuxième fois : Rigby ? Bon sergent. Trop de fumée dans les poumons… »",
+     "probleme": "Même réponse répétée, sans donner accès à Rigby ni indiquer où ou quand le trouver.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 182,
+     "commande": "Quels objets ou documents avez-vous retrouvés dans la bibliothèque après l’incendie ?",
+     "reponse": "« Le British Museum ? Tout le monde connaît. Des momies, des statues, et une bibliothèque où il faut chuchoter. »",
+     "probleme": "La réponse est complètement à côté de la question et ne concerne pas les objets retrouvés après l’incendie.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 225,
+     "commande": "Insister (jet forcé)",
+     "reponse": "[dés] Idée (INT) : 43/80 — Réussite",
+     "probleme": "La réussite du jet forcé n’entraîne aucun résultat ni nouvelle information ; les tours suivants ferment au contraire la conversation, ce qui rend l’action sans effet.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 229,
+     "commande": "Regarder autour de vous",
+     "reponse": "Vous avez déjà observé le salon tout à l’heure. Vous ne voyez rien d’autre qu’une porte entrouverte et une femme qui a peur. Rien de neuf.",
+     "probleme": "Le texte répète presque mot pour mot la réponse du tour 228 au lieu de fournir une nouvelle réaction ou de gérer autrement l’observation répétée.",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 245,
+     "commande": "je descends parler au concierge et lui demande qui a livré le courrier et la valise de Beddows.",
+     "reponse": "Mr Pratt, le concierge : « Je vous l’ai déjà dit, monsieur. »",
+     "probleme": "Le concierge n’a pas précédemment indiqué qui avait livré le courrier ou la valise ; la réponse bloque donc une question nouvelle en prétendant qu’elle a déjà été traitée.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 253,
+     "commande": "BOUTON : Insister (jet forcé)",
+     "reponse": "Une ligne détonne au milieu des cuivres et des tapis : « Un train miniature Wrightson, commande spéciale, acquis à la succession de Randolph Alexis. » Et dans l",
+     "probleme": "phrase qui sort du monde du jeu (filtre automatique)",
+     "type": "role",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 253,
+     "commande": "BOUTON : Insister (jet forcé)",
+     "reponse": "[indice noté dans le carnet] Un train miniature fait sur commande, acheté à la succession de Randolph Alexis, revendu une livre à Henry Stanley, de Stoke Newing",
+     "probleme": "phrase qui sort du monde du jeu (filtre automatique)",
+     "type": "role",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 254,
+     "commande": "je quitte la boutique et prends un taxi pour la pension de Stoke Newington, à la recherche d’Henry Stanley.",
+     "reponse": "À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison. Mieux vaut attendre le matin.",
+     "probleme": "La réponse décrit correctement l’arrivée, mais le lieu indiqué dans l’en-tête reste « boutique » au lieu de la pension de Stoke Newington.",
+     "type": "incoherence",
+     "gravite": "faible"
+    },
+    {
+     "tour": 254,
+     "commande": "AGIR : je quitte la boutique et prends un taxi pour la pension de Stoke Newington, à la recherche d’Henry Stanley.",
+     "reponse": "À cette heure, la pension de Stoke Newington dort, volets clos. On ne tire pas une logeuse de son lit sans une très bonne raison. Mieux vaut attendre le matin.",
+     "probleme": "même réponse 4 fois (tours 254, 261, 268, 274)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 271,
+     "commande": "je compte mes pas jusqu’à un nombre pair, puis je monte dormir jusqu’à l’aube.",
+     "reponse": "Vous cherchez les registres des yeux, en vain. Ici, vous remarquez : les journaux, la fenêtre, le téléphone de la réception et Mr Pratt, à la réception.",
+     "probleme": "L’action de compter ses pas puis de dormir est ignorée ; la réponse décrit une recherche de registres et répète deux fois le même bloc avant d’ajouter un événement sans rapport.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 283,
+     "commande": "Du courrier pour moi, monsieur Pratt ?",
+     "reponse": "« Pratt ? Je crains de ne rien savoir à ce sujet, monsieur. »",
+     "probleme": "La question porte sur un éventuel courrier, mais la réponse semble comprendre « Pratt » comme le sujet de la question et enchaîne sur une information sans rapport.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 289,
+     "commande": "Parler à la logeuse de Stanley",
+     "reponse": "Votre prénom passe au milieu de la phrase, sans raison.",
+     "probleme": "Mrs Atkins connaît le prénom du personnage sans qu’il lui ait été communiqué ni qu’une explication soit donnée.",
+     "type": "incoherence",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 297,
+     "commande": "BOUTON : Aller ailleurs",
+     "reponse": "Vous pouvez vous rendre à : votre hôtel, à Bloomsbury, la chambre de Cheapside, l’hôtel Chelsea Arms, Scotland Yard, l’ambassade de Turquie, la boutique de Brop",
+     "probleme": "même réponse 3 fois (tours 297, 301, 361)",
+     "type": "repetition",
+     "gravite": "faible"
+    },
+    {
+     "tour": 305,
+     "commande": "Vous m’avez déjà parlé de Makryat, mais je veux savoir ce que vous savez de sa boutique et de cette vente incongrue.",
+     "reponse": "Vous insistez. Le monde, lui, ne change pas d’avis.",
+     "probleme": "La demande précise sur la boutique et la vente est refusée sans raison, alors que l’archiviste vient de fournir des informations sur Makryat ; aucune autre piste n’est proposée.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 332,
+     "commande": "Pourquoi le cocher a-t-il déposé Lord dans une ruelle derrière Cheapside, et que contenait exactement son ballot ?",
+     "reponse": "« Avant toute chose : on a reçu une plainte contre vous. »",
+     "probleme": "La question factuelle sur le cocher et le ballot est ignorée au profit d’une accusation sans rapport.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 338,
+     "commande": "BOUTON : Glaner des informations auprès des agents / BOUTON : Aller ailleurs / BOUTON : Aller : la pension de Stoke Newington / BOUTON : Questionner les voisins de Mrs Atkins / BOUTON : Parler à Mrs Atkins",
+     "reponse": "40 tours sans progrès à stoke (Mar 9 · 20 h 42), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 341,
+     "commande": "Avez-vous prévenu la police, et quelqu’un a-t-il vu qui entra chez Stanley ce soir-là ?",
+     "reponse": "« Je vous l’ai dit, mon chou, et je vous le redirai, j’aime bien raconter. Mais quand même. »",
+     "probleme": "La réponse n’indique ni si la police a été prévenue ni si quelqu’un a vu entrer Stanley ou un visiteur ; la conversation est fermée sans répondre.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 347,
+     "commande": "Qu’avez-vous entendu exactement avant le grondement, et avez-vous remarqué une odeur particulière dans la chambre ?",
+     "reponse": "« Je vais vous répondre, mais faut pas pousser. Vous avez déjà payé, mon chou, montez donc. »",
+     "probleme": "La logeuse promet de répondre mais ne donne aucun détail et renvoie le joueur vers la chambre, sans issue pour obtenir les informations demandées.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 352,
+     "commande": "Vous avez mentionné une séance de spiritisme : votre voisine y a-t-elle vu ou entendu quelqu’un qui ressemblait à M. Stanley ?",
+     "reponse": "« Ouais, bon. Comme je disais… »",
+     "probleme": "La question précise sur Stanley est éludée sans explication ni possibilité de relance utile.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 356,
+     "commande": "Je vais monter voir la chambre de Stanley : sa fenêtre est-elle toujours verrouillée de l’intérieur ?",
+     "reponse": "« À la revoyure, mon chou ! »",
+     "probleme": "La réponse ne confirme ni n’infirme l’état du verrou, alors que cette information avait été demandée explicitement.",
+     "type": "incomprehension",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 369,
+     "commande": "Qui se trouve derrière ce rideau, madame Vane ?",
+     "reponse": "Une fois encore. On fait mine de ne pas vous voir.",
+     "probleme": "La question sur la personne derrière le rideau est ignorée et aucune action ne permet d’obtenir une réponse ou de progresser.",
+     "type": "blocage",
+     "gravite": "forte"
+    },
+    {
+     "tour": 370,
+     "commande": "Madame Vane, je vous donne une dernière chance : faites sortir la personne derrière ce rideau, ou j’appelle la police.",
+     "reponse": "Vous regardez encore mrs Vane. Était-ce déjà comme ça la première fois ? Vous n’en êtes plus sûr{e}.",
+     "probleme": "La menace et la demande d’intervention sont ignorées ; la réponse repart dans une description incohérente de la scène au lieu de faire réagir Mrs Vane ou la personne cachée.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 378,
+     "commande": "Ces trois morts avaient-elles un lien avec une séance de spiritisme ou avec Mrs Vane ?",
+     "reponse": "« Les séances ? Ma voisine y va le jeudi. Elle parle à son fils mort à la guerre. »",
+     "probleme": "Le réceptionniste répond au sujet d’une voisine et de ses séances, sans répondre au lien éventuel entre les trois morts et Mrs Vane.",
+     "type": "incomprehension",
+     "gravite": "forte"
+    },
+    {
+     "tour": 379,
+     "commande": "BOUTON : Aller : l’hôtel Chelsea Arms / BOUTON : Parler au réceptionniste / DIRE : Que pouvez-vous me dire sur les trois morts survenues récemment au Chelsea Arms ? / DIRE : Ces trois morts avaient-elles un lien avec une séance de spiritisme ou avec Mrs Vane ? / BOUTON : Prendre congé",
+     "reponse": "40 tours sans progrès à chelsea (Mer 10 · 00 h 11), dont 0 non compris",
+     "probleme": "le joueur tourne en rond (filtre automatique)",
+     "type": "blocage",
+     "gravite": "moyenne"
+    },
+    {
+     "tour": 397,
+     "commande": "Voir le sergent Rigby, aux incendies",
+     "reponse": "Le sergent Rigby : « Pas maintenant, monsieur. »",
+     "probleme": "La réponse ferme la conversation sans fournir de raison, d'alternative ou de piste, alors que le joueur cherche à voir un personnage précis.",
+     "type": "blocage",
+     "gravite": "faible"
+    },
+    {
+     "tour": 398,
+     "commande": "Voir le sergent Rigby, aux incendies",
+     "reponse": "On fait mine de ne pas vous voir.",
+     "probleme": "La nouvelle tentative reçoit un refus implicite sans indication permettant de débloquer la rencontre avec Rigby ; la piste tourne en rond.",
+     "type": "blocage",
+     "gravite": "moyenne"
+    }
+   ]
+  }
+ ]
+}
