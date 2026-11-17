@@ -12,8 +12,9 @@
   // bourdon : « Gothic Drone », les salles de lecture et les archives
   // gothique : « Gothic Shadows », l'église, le salon de Mrs Vane, la maison de Smith
   // abysse : « Abyssal Static », le train fantôme, et l'investigateur au bord du gouffre
+  // salon : « 1920 Wagon », la voiture-salon du Simplon-Orient, la fête autour de la Cavollaro (bouclé sans couture)
   // cave : « Cave Field Recording », la cave sourde : les caves du comte et la salle des roses, à Poissy (bouclé sans couture)
-  var TRACKS = { cave: 'audio/cave_field_recording.mp3', haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3', deep: 'audio/the_deep_ones_sing.mp3',
+  var TRACKS = { cave: 'audio/cave_field_recording.mp3', salon: 'audio/voiture_salon.mp3', haze: 'audio/rumble_in_the_haze.mp3', train: 'audio/midnight_train_whispers.mp3', dissolve: 'audio/mechanical_dissolve.mp3', house: 'audio/the_house_that_breathes.mp3', deep: 'audio/the_deep_ones_sing.mp3',
     eau: ['audio/something_in_the_water.mp3', 'audio/something_in_the_water_2.mp3'],
     attente: ['audio/stillness_before_the_surge.mp3', 'audio/stillness_before_the_surge_2.mp3'],
     appel: ['audio/the_call_from_the_deep.mp3', 'audio/the_call_from_the_deep_2.mp3', 'audio/the_call_from_the_deep_3.mp3'],
@@ -21,7 +22,7 @@
     statique: ['audio/static_in_the_dark.mp3', 'audio/static_in_the_dark_2.mp3'],
     abysse: ['audio/abyssal_static.mp3', 'audio/abyssal_static_2.mp3'],
     bourdon: ['audio/gothic_drone.mp3', 'audio/gothic_drone_2.mp3'] };
-  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48, deep: 0.6, eau: 0.56, attente: 0.42, appel: 0.5, gothique: 0.44, statique: 0.5, abysse: 0.5, bourdon: 0.46, cave: 0.68 };
+  var TVOL = { haze: 0.5, train: 0.46, dissolve: 0.56, house: 0.48, deep: 0.6, eau: 0.56, attente: 0.42, appel: 0.5, gothique: 0.44, statique: 0.5, abysse: 0.5, bourdon: 0.46, cave: 0.68, salon: 0.5 };
   // une liste de morceaux : on en tire un en arrivant, et l'on s'y tient tant qu'on reste
   // (l'écran d'accueil reste sans musique : le morceau démarre avec la partie)
   var MUSIC = { title: null, restaurant: 'train', couloir: 'eau', lits: 'eau', compartiment: 'dissolve', victoria: 'train', gare: 'train',
@@ -30,9 +31,9 @@
     musee: 'bourdon', archives: 'bourdon', bn: 'bourdon', arsenal: 'bourdon',
     eglise: 'gothique', vane: 'gothique', stjohn: 'gothique',
     wagon1: 'abysse', wagon2: 'abysse', retour: 'appel', cave: 'dissolve', charenton: 'house', quais: ['eau', 'deep'],
-    // Poissy : la campagne d'hiver et le train de nuit attendent leurs propres sons ; les caves ont la leur
+    // Poissy : la campagne d'hiver attend son propre son ; les caves et la voiture-salon ont le leur
     po_gare: 'attente', po_ville: 'attente', po_auberge: 'attente', po_mairie: 'bourdon', po_eglise: 'gothique',
-    po_lorien: 'house', po_jardin: 'house', po_caves: 'cave', po_salle: 'cave', p_lyon: 'train', oe_compartiment: 'dissolve', oe_salon: 'train' };
+    po_lorien: 'house', po_jardin: 'house', po_caves: 'cave', po_salle: 'cave', p_lyon: 'train', oe_compartiment: 'dissolve', oe_salon: 'salon' };
   function tirer(l) { return Array.isArray(l) ? l[Math.floor(Math.random() * l.length)] : l; }
   // un lieu qui a sa musique la garde ; ailleurs, la musique suit la raison : la brume, puis le chant des profondeurs
   // quand l'investigateur devient fragile, puis l'abîme quand il est au bord du gouffre
