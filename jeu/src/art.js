@@ -650,32 +650,15 @@
     else (this[this.scene] || this.restaurant).call(this, g, t, st);
     if (this.on('flicker') && this.rnd() < 0.35) D.rect(g, 0, 0, CWd, H, 'rgba(10,10,11,0.72)');
     if (this.on('blackout')) this.noirTunnel(g, t, CWd);
-    // la folie : tout rougit, et parfois s'inverse
+    // la folie : tout rougit
     var m = [0, 0, 0.14, 0.28][san] || 0; if (this.on('madness')) m = 0.55;
     if (m) { g.globalCompositeOperation = 'multiply'; D.rect(g, 0, 0, CWd, H, 'rgba(227,32,45,' + m + ')'); g.globalCompositeOperation = 'source-over'; }
-    if ((san >= 3 && this.rnd() < 0.012) || (this.on('madness') && this.rnd() < 0.18)) { g.globalCompositeOperation = 'difference'; D.rect(g, 0, 0, CWd, H, C); g.globalCompositeOperation = 'source-over'; }
     if (ph) g.globalAlpha = 0.55;
     g.drawImage(this.lay('vign', vign), 0, 0, CWd, H); g.globalAlpha = 1;
-    // tirage à l'écran, avec la houle de la santé mentale
+    // tirage à l'écran : net, sans houle, sans secousse ni parasites (la folie passe par les visions en plein écran)
     var o = this.o, pw = this.buf.width, ph = this.buf.height;
     o.setTransform(1, 0, 0, 1, 0, 0); o.globalAlpha = 1;
-    var shake = this.on('shudder') ? 3 * RS : 0, sx = shake ? (this.rnd() - 0.5) * shake * 2 : 0, sy = shake ? (this.rnd() - 0.5) * shake : 0;
-    var amp = ([0, 0.5, 1.5, 3][san] || 0) + (this.on('madness') ? 7 : 0);
-    if (!amp) { if (shake) { o.fillStyle = K; o.fillRect(0, 0, pw, ph); } o.drawImage(this.buf, sx, sy); }
-    else {
-      o.fillStyle = K; o.fillRect(0, 0, pw, ph);
-      var band = Math.max(2, Math.round(3 * RS));
-      for (var y = 0; y < ph; y += band) o.drawImage(this.buf, 0, y, pw, band, Math.round(Math.sin(y / RS * 0.07 + t * 2.4) * amp * RS + sx), y + sy, pw, band);
-    }
-    // parasites : des bandes qui glissent, un trait rouge
-    var gl = san >= 2 ? 0.035 * (san - 1) : 0; if (this.on('madness')) gl = 0.5; if (this.on('shudder')) gl = Math.max(gl, 0.3);
-    if (gl && this.rnd() < gl) {
-      for (var k = 0; k < 3 + san; k++) {
-        var gy = Math.floor(this.rnd() * ph), gh = Math.floor((6 + this.rnd() * 26) * RS / 2), off = Math.round((this.rnd() - 0.5) * (14 + san * 10) * RS);
-        o.drawImage(this.out, 0, gy, pw, gh, off, gy, pw, gh);
-        if (k % 2 === 0) { o.fillStyle = 'rgba(227,32,45,0.6)'; o.fillRect(0, gy, pw, Math.max(1, Math.round(RS))); }
-      }
-    }
+    o.drawImage(this.buf, 0, 0);
     // changement de plan : l'iris se ferme sur l'ancien décor, s'ouvre sur le nouveau
     if (this.trans < 1) {
       // l'iris attend, fermé, que l'image du nouveau décor soit arrivée (deux secondes au plus)

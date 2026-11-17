@@ -189,8 +189,7 @@ body[data-san="2"] .sanstate, body[data-san="3"] .sanstate { background: var(--r
 .e-san { align-self: flex-start; color: var(--text); text-shadow: 2px 0 var(--red); }
 .e-san.none { color: var(--muted); text-shadow: none; }
 .e-san.gain { color: var(--ink); background: var(--text); padding: 2px 8px; text-shadow: none; transform: skewX(-10deg); }
-.e-intrusion { color: var(--text); font-style: italic; text-shadow: 2px 0 rgba(227, 32, 45, .75), -1px 0 rgba(243, 239, 230, .3); animation: intrude 1.2s steps(8) both; }
-@keyframes intrude { 0% { opacity: 0; transform: translateX(-10px) skewX(-8deg); } 30% { opacity: 1; clip-path: inset(0 0 60% 0); } 55% { transform: translateX(6px); clip-path: inset(40% 0 0 0); } 100% { transform: none; clip-path: none; } }
+.e-intrusion { color: var(--text); font-style: italic; animation: fadein .8s ease both; }
 .hallu { color: var(--red-hi); text-decoration: line-through; text-decoration-thickness: 2px; opacity: .85; }
 .real { color: var(--text); }
 
@@ -297,13 +296,7 @@ form.line:focus-within { border-color: var(--red); box-shadow: 5px 5px 0 var(--r
 .title-screen .fine { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: #6a6670; text-transform: uppercase; }
 
 /* ---------- la santé mentale déborde sur l'interface ---------- */
-body[data-san="2"] .e-narr, body[data-san="2"] .e-npc { text-shadow: 1px 0 rgba(227, 32, 45, .45); }
 body[data-san="3"] { --text: #fff4f6; }
-body[data-san="3"] .e-narr { text-shadow: 2px 0 rgba(227, 32, 45, .6), -1px 0 rgba(255, 255, 255, .25); }
-body[data-san="3"] .log { animation: drift 7s steps(14) infinite; }
-@keyframes drift { 48% { transform: none; } 50% { transform: translateX(2px) skewX(-1deg); } 52% { transform: none; } }
-.app.shudder { animation: shudder .6s steps(6) 1; }
-@keyframes shudder { 15% { transform: translate(-4px, 1px); } 30% { transform: translate(4px, -1px); } 45% { transform: translate(-3px, 0) skewX(2deg); } 60% { transform: translate(2px, 1px); } 75% { transform: translate(-1px, 0); } }
 
 @media (max-width: 700px) { .stage { width: calc(100% - 6px); aspect-ratio: 2 / 1; max-height: 42vh; } }
 @media (max-width: 520px) {

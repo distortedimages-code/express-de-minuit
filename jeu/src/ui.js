@@ -413,7 +413,8 @@
   function doFx(name) {
     if (instant && queue.length > 30) return;
     var app = $('app');
-    if (name === 'shudder') { app.classList.remove('shudder'); void app.offsetWidth; app.classList.add('shudder'); art.trigger('shudder', 0.8); setTimeout(function () { app.classList.remove('shudder'); }, 800); }
+    // le frisson ne secoue plus l'écran : la peur passe par les visions (un éclair blanc, puis les images), sans tremblement ni parasite
+    if (name === 'shudder') { /* rien à l'écran */ }
     // la folie passagère : une grande rafale de visions (l'ancien écran inversé et penché est retiré)
     else if (name === 'madness') { setTimeout(function () { vision(5); }, 200); }
     else if (name === 'flicker') art.trigger('flicker', 1.6);
