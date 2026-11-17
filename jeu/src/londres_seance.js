@@ -232,7 +232,8 @@
       seance(api); return true;
     }
     // ---- attendre une heure précise
-    if (ATTENTE.test(t.trim()) && raw.indexOf('?') < 0) {
+    // (« attendre le soir devant le salon de Mrs Vane » : on s'y rend d'abord, c'est le déplacement qui fera attendre)
+    if (ATTENTE.test(t.trim()) && raw.indexOf('?') < 0 && !(p && p.c && p.c.ALLER !== undefined && /\b(devant|chez|pres d|en face d|a la porte d)/.test(t))) {
       var cible = heureVoulue(t);
       if (loc(api) === 'vane' && !api.flag('seanceFaite') && (cible === null ? /\bseance\b/.test(t) : cible >= 20 && cible <= 22) && seanceOuverte(api)) { api.endTalk(false); seance(api); return true; }
       if (cible !== null && !/^(wagon|retour|campagne|cave)/.test(loc(api))) {

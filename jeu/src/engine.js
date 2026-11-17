@@ -28,6 +28,8 @@
     // « je prends un taxi pour St John's Wood » : on y va ; « en taxi » ne change rien
     [/\b(?:je |nous )?(?:prends|prendre|prenons|hele|heler|appelle|appeler|siffle|siffler|attrape|attraper|saute dans|monte dans) (?:un |le |mon |dans un )?(?:taxi|fiacre|omnibus|metro|bus|tramway|tram|cab)\s+(?:pour|jusqu a|jusqu au|jusqu aux|vers|direction|en direction de|en direction du|et (?:je )?(?:vais|file|fonce|rentre|retourne))\s+/g, ' aller a '],
     [/\ben (taxi|fiacre|omnibus|metro|bus|tram|tramway)\b/g, ' '],
+    // « je profite d'un moment d'inattention pour monter… », « j'attends qu'il ait le dos tourné pour… » : le geste est après « pour »
+    [/^\s*(?:je |j |alors |bon )*(?:profite\w*|attends? qu\w*[^,]*?) (?:de |d |du |des )?[^,]*? (?:pour|afin de|afin d) (?=[a-z])/, ' je '],
     // « je vais au British Museum pour chercher les rouleaux » : le but ne change pas le geste
     // … sauf quand le geste n'est qu'un déplacement sans destination (« je sors pour trouver l'homme ») : le but est le geste
     [/\b(pour|afin de|afin d)\s+(?!aller|rejoindre|rentrer|retourner|rendre|gagner)([a-z]+(?:er|ir|re|oir))\b(.*)$/g, function (m, pour, inf, reste, off, tout) {
@@ -39,6 +41,8 @@
     // « je vais ailleurs », « allons autre part » : on change de lieu, sans dire lequel (et « ailleurs » n'est pas « l'allure »)
     [/\b(vais|va|allons|allez|aller|vas|pars|partir|partons|file|filer|passe|passer)\s+(?:ailleurs|autre part|dans un autre endroit|vers un autre endroit)\b/g, ' aller destinations '],
     [/\b(ailleurs|autre part)\b/g, ' destinations '],
+    // « je me glisse dans le couloir », « je me faufile » : un mouvement, pas un don
+    [/\b(me|m|se|s|nous|te|t)\s+(glisse\w*|faufile\w*|coule\w*)\b/g, ' aller '],
     // « je m'approche d'elle » : on y va
     [/\b(m|nous|s|t)\s+approch\w*\b/g, ' aller '],
     // « je vais le voir », « je vais la trouver » : on va lui parler
@@ -243,7 +247,7 @@
     L.add('ECOUTER', 'v', 'ecouter, entendre, espionner, epier, ouie, bruit, bruits, son, sons');
     L.add('PARLER', 'v', 'parler, discuter, interroger, questionner, demander, aborder, saluer, causer, adresser, interpeller, appeler, bonjour, bonsoir, salut, hello, excuser, converser, dire, raconter, repondre, apostropher, hey, he, ho, hep, psst');
     L.add('VISITER', 'v', 'visiter, rendre visite');
-    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons, franchir, franchis, franchit, franchissons, franchissez, enjamber, enjambe');
+    L.add('ALLER', 'v', 'aller, entrer, sortir, rejoindre, marcher, avancer, file, filez, filons, retourner, traverser, passer, partir, quitter, monter, rendre, diriger, filer, revenir, rentrer, suivre, courir, continuer, gagner, regagner, regagne, poursuivre, deplacer, direction, go, avance, recule, reculer, foncer, precipiter, pars, partons, partez, sors, sortons, sortez, quitte, quittons, allons, allez, rentre, rentrons, descendre, descends, redescendre, redescends, remonter, remonte, ressortir, ressors, retourne, retournons, franchir, franchis, franchit, franchissons, franchissez, enjamber, enjambe');
     L.add('ALLURE', 'x', 'allure', { label: 'l’allure' });
     L.add('OUVRIR', 'v', 'ouvrir, ouvre, pousser, tirer, forcer, actionner, entrouvrir, crocheter, defoncer, enfoncer, deverrouiller, tourner, poignee');
     L.add('FRAPPER', 'v', 'frapper, toquer, cogner, tambouriner');
@@ -547,6 +551,7 @@
         for (var q = s.log.length - 1, seenN = 0; q >= 0 && seenN < 6; q--) {
           var prev = s.log[q];
           if (prev.t === 'player' || prev.t === 'ask' || prev.t === 'chips') continue;
+          if (prev.t === 'loc') break; // on a changé de lieu depuis : un trajet qui ressemble au précédent n'est pas « le même résultat »
           seenN++;
           if ((prev.t === 'narr' || prev.t === 'event') && prev.src === e.x) { e.x = fresh('dup', scene.generic.dup); break; }
         }
@@ -828,6 +833,7 @@
       money: function (n) { return money(n === undefined ? s.money : n); },
       lastTopic: function (npcId) { return npcState(npcId).last; },
       end: function () { s.ended = true; log({ t: 'end' }); },
+      _jetResolve: function (kind, sk, r) { return jetResolve(kind, sk, r); },
       exec: function (actionId) { var a = findAction(actionId); if (a) exec(a, parse(lex, a.label || '', scene.phrases)); }
     };
 
@@ -910,7 +916,11 @@
       if (!sc) return 0;
       // un lieu où se rendre, nommé avec un verbe de mouvement : le reste de la phrase dit pourquoi on y va
       // (« je me rends au Chelsea Arms, décidé à découvrir qui occupe la chambre 14 ») et ne retire rien au déplacement
-      if (/^go_/.test(a.id) && vs && ns >= 0.9 && nounMatched && nounMatched.id === a.nouns[0]) return sc + (a.boost || 0);
+      if (/^go_/.test(a.id) && vs && ns >= 0.9 && nounMatched && nounMatched.id === a.nouns[0]) {
+        // « l'hôtel Chelsea Arms » : un nom de lieu suivi aussitôt d'un autre, c'est le second qu'on désigne
+        var D0 = destinations(), suivi = nIn.some(function (n) { return n !== nounMatched && D0[n.id] && n.pos > nounMatched.pos && n.pos <= nounMatched.pos + 2; });
+        return sc + (a.boost || 0) - (suivi ? 0.6 : 0);
+      }
       var handledN = (a.nouns || []).concat(a.also || [], a.extra || []);
       var extraN = nIn.filter(function (n) { return handledN.indexOf(n.id) < 0; }).length;
       if (extraN) sc -= 0.45 + 0.15 * (extraN - 1);
@@ -1583,7 +1593,12 @@
       try {
         if (typeof rep === 'function') rep(api, p);
         else if (rep && rep.sujet) { talkMode = null; runTopic(npc, rep.sujet, p); return; }
-        else { var l = [].concat(rep), n = st.asked[cle] || 0; st.asked[cle] = n + 1; api.npc(npc.id, l[Math.min(n, l.length - 1)]); }
+        else {
+          var l = [].concat(rep), n = st.asked[cle] || 0; st.asked[cle] = n + 1;
+          // tout a été dit : le personnage ne récite pas deux fois la même réplique, il le fait remarquer (comme pour un sujet)
+          if (n >= l.length) talkMode = null;
+          api.npc(npc.id, l[Math.min(n, l.length - 1)]);
+        }
       } finally { talkMode = null; }
     }
     function jouerTable(npc, st, lu, p) {
@@ -1607,6 +1622,8 @@
       if (!rep) return false;
       direSuite(npc, st, 'table:' + tb.sujet + ':' + k + ':' + lu.intent, rep, p);
       if (lu.intent === 'prendre') tb.pris[k] = true;
+      // une question dont on a eu toutes les réponses quitte les suggestions
+      if (typeof rep !== 'function' && !(rep && rep.sujet) && (st.asked['table:' + tb.sujet + ':' + k + ':' + lu.intent] || 0) >= [].concat(rep).length) tb.pris[k] = true;
       tb.turn = s.turn;
       if (e.suites) st.table = { sujet: tb.sujet + '.' + k, suites: e.suites, turn: s.turn, pris: {} };
       else if (lu.intent === 'refuser') delete S[k];
@@ -2087,7 +2104,9 @@
     function defJet(id, why) {
       var m = /^jet:([a-z]+):(.+)$/.exec(id || ''); if (!m) return null;
       var kind = m[1], sk = m[2];
-      if (!scene.checks[id]) scene.checks[id] = { skill: sk, why: why || '', push: kind === 'lieu' ? 'Fouiller encore, plus à fond (jet forcé)' : kind === 'social' ? 'Insister (jet forcé)' : kind === 'idee' ? 'Se concentrer encore (jet forcé)' : null, resolve: function (api2, r) { jetResolve(kind, sk, r); } };
+      if (!scene.checks[id]) scene.checks[id] = { skill: sk, why: why || '', push: kind === 'lieu' ? 'Fouiller encore, plus à fond (jet forcé)' : kind === 'social' ? 'Insister (jet forcé)' : kind === 'idee' ? 'Se concentrer encore (jet forcé)' : null, resolve: function (api2, r) { ((api2 && api2._jetResolve) || jetResolve)(kind, sk, r); } };
+      // (les scènes sont partagées entre les parties : « Rejouer le chapitre », le chapitre suivant, les tests en parallèle.
+      //  Le jet improvisé se résout dans la partie qui le lance, jamais dans celle qui l'a défini la première.)
       return scene.checks[id];
     }
     function jetCheck(sk, why, kind, extra) {
@@ -2193,6 +2212,7 @@
       if (!m) return false;
       if (/\b(vos|votre|ses|son|sa|leurs?|ces|ce|un|une)\s+(notes|carnet|indices|bilan)\b|\b(notes|carnet)\s+(de|du|d)\s/.test(p.text)) return false;
       if (p.nouns.length > 1 || p.verbs.some(function (v) { return v.id !== 'EXAMINER' && v.id !== 'FOUILLER'; })) return false;
+      if (p.nouns.some(function (n) { return destinations()[n.id]; })) return false; // « je regagne mon hôtel et relis mon carnet » : d'abord le déplacement
       // le libellé d'une action d'ici (« Consulter le registre des objets trouvés ») passe avant le mot « objets »
       var lb = rankActions(p)[0]; if (lb && scoreLibelle(lb.a, p) >= THRESHOLD) return false;
       if (m.id === 'AIDE') scene.help(api);
@@ -2391,7 +2411,7 @@
     // « …, puis je… », « … et ensuite … » : une suite de gestes
     function suites(raw) {
       // « je vais au Chelsea Arms et je demande la chambre 14 » : on s'y rend, puis on fait le reste, là-bas
-      var dep = !s.talk && String(raw).match(/^(.*?\b(?:vais|va|allons|aller|me rends|me rendre|nous rendons|retourne|retourner|retournons|rentre|rentrer|file|filer|pars|partir|monte|monter|descends|descendre|cours|gagne|rejoins|rejoindre|passe|passer)\b.*?)\s+et\s+((?:je|j[’']|me|m[’']|nous|on)\s*\S.*)$/i);
+      var dep = !s.talk && String(raw).match(/^(.*?\b(?:vais|va|allons|aller|me rends|me rendre|nous rendons|retourne|retourner|retournons|rentre|rentrer|file|filer|pars|partir|monte|monter|descends|descendre|cours|gagne|regagne|regagner|rejoins|rejoindre|passe|passer)\b.*?)\s+et\s+((?:je|j[’']|me|m[’']|nous|on)\s*\S.*)$/i);
       if (dep && dep[1].split(/\s+/).length >= 3 && dep[2].split(/\s+/).length >= 3) return [dep[1], dep[2]];
       var parts = String(raw).split(/\s*[,;]\s*(?:et\s+)?(?:puis|ensuite|apr[eè]s quoi)\s+|\s+et\s+(?:puis|ensuite)\s+|\s+puis\s+(?=(?:je|j[’']|nous|on|vais|me|m[’']|retourne|rentre|prends|pars|sors|file|monte|descends|reviens|repars|aller|retourner|rentrer)\b)/i)
         .map(function (x) { return x.trim(); }).filter(Boolean);

@@ -785,7 +785,19 @@
       moi: { nom: '« Blain, Octave. Gérant, {m}, pas propriétaire. La nuance me coûte cher. »', age: '« Cinquante-huit ans, dont trente derrière ce comptoir. »', origine: '« D’Auxerre. On en garde l’accent, paraît-il. »', famille: '« Une épouse, à la lingerie. Deux fils. Un seul est revenu de Verdun. »', metier: '« Je tiens la maison. On ne me remarque que lorsque quelque chose manque. »', loisirs: '« Les dominos, le dimanche, au café de la Bourse. »' },
       sait: { SMITH: '« Un grand monsieur. Il parlait français comme un livre, avec un accent de théâtre. »', BN: '« La Nationale est notre voisine. La moitié de nos clients y passent leurs journées, et rentrent avec les yeux rouges. »', POISSY: '« Poissy ? Une demi-heure de train, par Saint-Lazare. Un marché aux bestiaux, une vieille église. »', CHARENTON: '« On n’y va pas pour son plaisir, {m}. »', TRAIN: '« Le Simplon-Orient, gare de Lyon. Vos places sont retenues. »' },
       relances: [{ q: '« Vous êtes à Paris pour vos études, {m}, ou pour votre plaisir ? »', oui: '« L’un n’empêche pas l’autre, ici. »', non: '« Alors pour des affaires. Je ne demande rien. »' }] },
+    // « Docteur, professeur, membre d'une société savante : les titres ouvrent les portes, ici. » Un vrai titre, dit au guichet, vaut recommandation.
     gaudry: { groupe: 'savant', reg: 'sec', pa: true, mefiant: 0.6, tics: ['Voyons.', 'Soit.'],
+      roles: (function () {
+        function titre(nom) {
+          return function (api) {
+            // (la réplique peut être lue deux fois dans le même tour : la carte n'est donnée qu'une fois, la phrase reste la même)
+            if (api.flag('carteBN') && api.flag('carteTitre') !== api.s.turn) return '« Je sais, ' + nom + '. Vous avez votre carte. »';
+            if (!api.flag('carteBN')) { api.flag('carteBN', true); api.flag('carteTitre', api.s.turn); api.take('Une carte de lecteur de la Bibliothèque nationale'); }
+            return 'M. Gaudry repose sa plume. « ' + nom.charAt(0).toUpperCase() + nom.slice(1) + '. Il fallait le dire. » Il tamponne un carton vert, deux fois. « Carte de lecteur. Salle de travail, au fond de la cour. Un bulletin par ouvrage, et l’on ne communique plus rien dans la dernière heure. »';
+          };
+        }
+        return { medecin: titre('docteur'), savant: titre('professeur'), avocat: titre('maître'), clerge: titre('mon père'), militaire: titre('mon commandant'), diplomate: titre('monsieur le consul') };
+      })(),
       dada: ['Le règlement est de 1858. Il a été fait pour durer.', 'Un lecteur a tenté de sortir avec un Elzévir sous sa veste, mardi. Il est fiché.'],
       moi: { nom: '« Gaudry. Secrétariat. »', age: '« Cela ne figure sur aucun bulletin de demande. »', origine: '« De Paris. Du sixième. »', famille: '« Je suis marié à cette maison. »', metier: '« Je délivre les cartes. C’est moi qui décide qui lit. »', loisirs: '« Je classe ma propre bibliothèque. Par format. »' },
       sait: { BN: '« Quatre millions de volumes. Trois cent quarante places. Faites le calcul. »', REMI: '« Vangeim. Il a sa carte depuis six ans, et pas un retard. Je n’en dirai pas autant de ses opinions. »', ARSENAL: '« L’Arsenal dépend de nous, quoi qu’ils en disent. »' } },

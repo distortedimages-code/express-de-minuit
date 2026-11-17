@@ -687,7 +687,14 @@
         T('femme', ['FLATTER', 'ARGENT', 'PERSUADER'], function (api, n) {
           if (n > 0) { api.npc('chelseaclerk', '« Je vous ai déjà trop dit, {m}. »'); return; }
           api.npc('chelseaclerk', 'Il baisse la voix. « La petite Mary, celle qui les a trouvés, dit que ça sentait la boucherie. Pas le sang, {m}. La boucherie. Elle n’a pas voulu remonter depuis. »');
-        })
+        }),
+        // la plaque de clé que l'homme à la moustache a laissé tomber : la clé qui manquait
+        T('cle', [['CLE', 1.3], ['PROJECTEUR', 0.6], ['CHAMBRE', 0.5]], function (api, n) {
+          var aLaCle = (api.s.inv || []).some(function (x) { return /Chelsea Arms, 14/.test(x); });
+          if (!aLaCle) { api.npc('chelseaclerk', '« La clé de la 14 ? La police en a une. L’autre est partie avec le locataire, et personne ne l’a revue. »'); return; }
+          if (n > 0) { api.npc('chelseaclerk', '« Rangez ça, {m}. Je ne l’ai pas vue. »'); return; }
+          api.npc('chelseaclerk', 'Il regarde la plaque de cuivre, puis vous, et son col dur a l’air soudain trop serré. « Où avez-vous trouvé ça ? C’est la nôtre. Celle qui manquait. » Il jette un œil vers l’agent, au pied de l’escalier. « Rangez-la, {m}. S’il la voit, il vous la prend, et vous avec. »');
+        }, { chip: 'Lui montrer la clé', cond: function (api) { return (api.s.inv || []).some(function (x) { return /Chelsea Arms, 14/.test(x); }); } })
       ] }),
 
     mustapha: npc({ id: 'mustapha', name: 'Mustapha Köprülü', patience: 6, cooldown: 60, selfKeys: ['MUSTAPHA'],
@@ -896,7 +903,9 @@
         if (p.hours && h < p.hours[0] - 1) {
           // un lieu qui n'ouvre que le soir : on attend le soir, si c'est ce qu'on a dit
           if (p.hours[0] >= 17 && h >= 6) {
-            var soir = pa && /\b(soir|soiree|attend\w*|tard|nuit|\d+ ?h|heures?)\b/.test(G.RPG.normalize(pa.raw || ''));
+            // la phrase telle qu'elle a été tapée : la lecture normalisée retire le but (« … pour attendre l'ouverture »)
+            var brutV = String((pa && pa.raw) || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            var soir = pa && (/\b(soir|soiree|attend\w*|tard|nuit|\d+ ?h|heures?|ouverture|seance)\b/.test(brutV) || pa.jusqua);
             if (!soir) { api.say(p.closed + ' Il est ' + h + ' h : revenez ce soir, ou écrivez « attendre le soir ».'); return; }
             api.say(api.fresh('tuerTemps', ['Vous tuez le temps jusqu’au soir : un thé, les journaux, une promenade dans le brouillard qui s’épaissit avec la nuit.', 'L’après-midi s’étire. Vous dînez tôt, seul{e} à une table, en regardant les réverbères s’allumer un à un.']));
             api.s.min = day(api.s.min) * D + p.hours[0] * 60 - 40;

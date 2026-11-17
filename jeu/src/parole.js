@@ -126,6 +126,10 @@
     var cx = null; CLAIMX.some(function (c) { if (c[0].test(t)) { cx = c[1]; return true; } return false; });
     var m = t.match(RX.jesuis); a.claim = cx || (m && !/^(desole|navre|perdu|fatigue|fatiguee|sur|sure|pret|prete|venu|venue|ici|la|en|de|pas|tres|bien|malade|curieux|curieuse|seul|seule|ami|amie|presse|pressee|inquiet|inquiete|content|contente|au|pour|avec|du|des|une|un|le|desolee|navree|occupe|occupee|perdue|ravi|ravie|enchante|enchantee)$/.test(m[2]) ? m[2] : null);
     if (a.claim && HU && HU.RX.claimAbsurde.test(N(a.claim))) { a.absurde = true; a.claim = null; }
+    // le mot tel qu'il a été tapé, avec ses accents (« Médecin ? Je vois. », pas « Medecin »)
+    if (a.claim && !cx) { var origC = String(raw || '').split(/[\s’'?!.,;:«»"()]+/).filter(function (x) { return N(x) === a.claim; })[0]; if (origC) a.claim = origC.toLowerCase(); }
+    // « je suis chargé d’enquêter », « je suis venu pour… », « je suis passé chez… » : un participe, pas un métier
+    if (a.claim && !cx && m && /(e|es|ee|ees|i|is|u|us)$/.test(m[2]) && new RegExp('\\bje suis (?:un |une |le |la |l )?' + m[2] + ' (de|d|a|pour|par|chez|dans|en|sur|avec|ici|la|hier|ce)\\b').test(t)) a.claim = null;
     m = t.match(RX.jemappelle); a.nom = m ? cap(m[1] || m[2]) : null;
     a.quisuisje = RX.quisuisje.test(t);
     a.suite = a.words <= 5 && /^(et )?(pourquoi|comment ca|comment cela|c est a dire|racontez|racontez moi|expliquez|expliquez vous|et alors|et puis|et ensuite|ensuite|vraiment|ah bon|precisez|dites m en plus|dites moi en plus|en quoi|continuez|c est tout|quoi d autre|et apres)\b/.test(tt) && !a.ents.length;
@@ -649,7 +653,8 @@
     if (f.tics && f.tics.length && w1 && isLow(w1) && api.rand() < 0.22) {
       var tic = api.fresh('tic:' + id, f.tics), core = tic.replace(/[,:.!]\s*$/, '').replace(/\{m\}/g, '');
       var ADDR = /(\{m\}|monsieur|madame|mon ami|mon cher|signore|docteur|mon petit)/i;
-      if (out.toLowerCase().indexOf(core.toLowerCase()) < 0 && !(ADDR.test(tic) && ADDR.test(out))) out = '« ' + tic + ' ' + out.charAt(2).toLowerCase() + out.slice(3);
+      // après « Voyons. » la phrase repart avec sa majuscule ; après « Remarquez, » elle continue en minuscule
+      if (out.toLowerCase().indexOf(core.toLowerCase()) < 0 && !(ADDR.test(tic) && ADDR.test(out))) out = '« ' + tic + ' ' + (/[.!?…]\s*$/.test(tic) ? out.charAt(2) : out.charAt(2).toLowerCase()) + out.slice(3);
     }
     if (offTopic && f.dada && f.dada.length && api.rand() < 0.2) { var dd = api.fresh('dada:' + id, f.dada); out = / »$/.test(out) ? out.replace(/ »$/, ' ' + dd + ' »') : out + ' « ' + dd + ' »'; }
     return out;

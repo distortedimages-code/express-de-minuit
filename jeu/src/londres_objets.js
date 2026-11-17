@@ -74,7 +74,9 @@
   L.globalActions.push(
     { id: 'obj_valise', label: 'Ouvrir la valise de Beddows', repeatable: true, verbs: ['EXAMINER', 'FOUILLER', 'OUVRIR'], nouns: ['VALISE', 'ARGENT'],
       cond: function (api) { return api.s.inv.some(function (n) { return /valise de Beddows/i.test(n) && ou(api, n) === 'sur vous'; }); },
-      run: function (api) {
+      run: function (api, p) {
+        // l'examiner sans l'ouvrir : le dehors seulement
+        if (p && p.c && p.c.OUVRIR === undefined && /\bsans (l |la |le )?ouvr/.test(G.RPG.normalize(p.raw || ''))) { api.say(api.fresh('valiseDehors', ['Une valise de cuir fauve, coins renforcés, deux serrures de laiton sans clé. Pas d’étiquette, pas d’initiales : rien qui dise à qui elle était. Elle est lourde, d’un poids de papier.', 'Le cuir est neuf, à peine griffé au fond, comme si elle n’avait fait qu’un seul voyage. Les serrures ne sont pas fermées à clé.'])); return; }
         if (api.s.loc === 'yard') { api.say('Vous entrouvrez la valise sur vos genoux, à l’abri d’un pilier. Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Un agent passe ; vous refermez d’un coup sec. Mieux vaut ne pas expliquer ça ici.'); return; }
         api.say(api.fresh('valiseVue', ['Deux cents billets de cinq livres, neufs, aux numéros qui se suivent. Une fortune, donnée sans un reçu. Vous refermez la valise sans trop savoir quoi penser.', 'Les liasses sont toujours là, serrées par des bandes de papier de la Banque d’Angleterre. Elles sentent l’encre neuve. Vous refermez.']));
       } },
@@ -237,7 +239,7 @@
     passeports: { mots: 'passeports, faux, des faux, les passeports', demander: ['« De bons faux, docteur. Trop bons. Même papier, même encre, mêmes tampons que les vrais. Les Turcs disent qu’ils n’y sont pour rien. Je les crois à moitié. »'] }
   }, null]);
   suites('chelseaclerk', 'meurtres', [{
-    chambre: { chip: 'Quelle chambre ?', mots: 'chambre, quelle chambre, la chambre, reservee pour un seul, pour un seul', demander: ['« Au deuxième, docteur. La police a gardé la clé. Enfin, l’une des deux : l’autre est partie avec le locataire, et personne ne l’a revue. »'] },
+    chambre: { chip: 'Quelle chambre ?', mots: 'chambre, quelle chambre, la chambre, reservee pour un seul, pour un seul', demander: ['« Au troisième, docteur. La police a gardé la clé. Enfin, l’une des deux : l’autre est partie avec le locataire, et personne ne l’a revue. »'] },
     rien: { mots: 'rien entendu, vous n avez rien entendu, rien, pas un bruit', demander: ['« Rien, docteur. Pas un cri. Trois hommes, et pas un cri. La femme de chambre dit que c’est ça le pire. »'] }
   }, null]);
   suites('chelseaclerk', 'femme', [{

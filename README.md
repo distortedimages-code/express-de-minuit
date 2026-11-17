@@ -304,6 +304,16 @@ Trois parties depuis Londres et deux depuis Paris, 400 tours chacune, pour 1,95 
 - **Cohérence** : un personnage ne nie pas connaître ce qu'il vient lui-même de dire ; un nom commun n'est pas un nom propre inconnu (« Paierai ? Connais pas ») ; « Bonne journée » devient « Bonne soirée » le soir ; quelqu'un qu'on ne peut pas aborder maintenant (le buraliste, rideau baissé) n'est pas listé parmi ce qu'on voit, et on dit pourquoi au lieu de « Vous parlez dans le vide ». « Sans l'ouvrir » n'ouvre pas.
 - **Réfléchir à Paris et à Poissy** souffle maintenant une piste concrète à chaque étape, comme à Londres (et « je réfléchis », tapé, fait le jet). Vérification : `node jeu/tools/test_conseils.js`.
 
+Deuxième batterie, même format (1,96 $). Le début de Paris est passé de 175 tours sans indice à 45 dans une partie ; une autre partie de Paris est allée jusqu'aux fouilles de Poissy. Ce qu'elle a encore appris :
+
+- **Un vrai bug de moteur** : les jets improvisés (Réfléchir, Écouter, Trouver Objet Caché sur place, jets sociaux) se résolvaient dans la première partie qui les avait lancés. Cela touchait le testeur, qui joue plusieurs parties à la fois, mais aussi un joueur après « Rejouer le chapitre » ou au chapitre suivant. Ils se résolvent maintenant dans la partie qui les lance. Vérification : `node jeu/tools/test_parties_paralleles.js`.
+- « Regagner son hôtel », « se glisser dans le couloir », « l’hôtel Chelsea Arms » (le Chelsea Arms, pas son propre hôtel), « profiter d’un moment d’inattention pour monter… », « attendre le soir devant le salon de Mrs Vane » (on s’y rend d’abord).
+- Un trajet qui ressemble au précédent n’est plus remplacé par « Même résultat qu’à l’instant ».
+- Une suite de la table dont on a eu toutes les réponses n’est plus récitée une deuxième fois, et quitte les suggestions.
+- « Je suis chargé d’enquêter » n’est pas un métier qu’on prétend ; « Médecin ? » garde ses accents ; après « Voyons. », la phrase garde sa majuscule.
+- Au guichet de la Nationale, un vrai titre (« je suis médecin ») vaut recommandation : « les titres ouvrent les portes, ici ».
+- Le réceptionniste du Chelsea Arms reconnaît la clé de la chambre 14 ; la chambre est au troisième, partout.
+
 ## Les horaires
 
 Les lieux et les gens ont des heures (`PLACES` et `DISPO`, dans `jeu/src/londres.js`) : le British Museum ferme à 20 h et le dimanche, l'ambassade le week-end, la pension de Stoke Newington dort la nuit ; les inspecteurs rentrent chez eux à 20 h, le buraliste ferme à 20 h et le dimanche, le laitier ne passe qu'à l'aube. Les boutiques sont ouvertes de 8 h à 20 h, sauf le dimanche ; les crieurs de journaux se taisent la nuit ; les billets se réservent de 9 h à 19 h (si l'on insiste, on attend l'ouverture). Vérification : `node jeu/tools/test_horaires.js`.
