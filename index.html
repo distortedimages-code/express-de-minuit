@@ -14708,8 +14708,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   // audio/sfx/*.wav : lot « RPG Audio » de Kenney (kenney.nl, CC0). Sans fichier, le son synthétisé de blip() reste.
   var BRUITS = {
     door: { f: ['porte1', 'porte2', 'porte3'], vol: 0.4 },   // on change de lieu : une porte se referme
-    clue: { f: ['page1', 'page2', 'page3'], vol: 0.7 }       // un indice au carnet : une page qu'on tourne
-    // à venir : dice (les dés), dès que les enregistrements seront là ; d'ici là, blip() les synthétise
+    clue: { f: ['page1', 'page2', 'page3'], vol: 0.7 },      // un indice au carnet : une page qu'on tourne
+    dice: { f: ['des1', 'des2', 'des3'], vol: 0.6 }          // un jet : des dés secs sur une table (fournis par Yoann)
   };
   Sound.BRUITS = BRUITS;
   Sound.prototype.chargerBruits = function () {
