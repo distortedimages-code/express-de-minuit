@@ -1359,6 +1359,46 @@
       "taille": "1024x1024"
     },
     {
+      "image": "portraits/46_jeanclaude",
+      "prompt": "prompts/portraits/46_jeanclaude.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/47_edgar",
+      "prompt": "prompts/portraits/47_edgar.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/48_william",
+      "prompt": "prompts/portraits/48_william.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/49_duc",
+      "prompt": "prompts/portraits/49_duc.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/50_max",
+      "prompt": "prompts/portraits/50_max.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/51_guet",
+      "prompt": "prompts/portraits/51_guet.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/52_chappuis",
+      "prompt": "prompts/portraits/52_chappuis.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/53_rochat",
+      "prompt": "prompts/portraits/53_rochat.txt",
+      "references": []
+    },
+    {
       "image": "lausanne/01_gare-de-lausanne_brouillard",
       "prompt": "prompts/lausanne/01_gare-de-lausanne_brouillard.txt",
       "references": []
@@ -1468,46 +1508,6 @@
         "portraits/49_duc",
         "portraits/47_edgar"
       ]
-    },
-    {
-      "image": "portraits/46_jeanclaude",
-      "prompt": "prompts/portraits/46_jeanclaude.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/47_edgar",
-      "prompt": "prompts/portraits/47_edgar.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/48_william",
-      "prompt": "prompts/portraits/48_william.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/49_duc",
-      "prompt": "prompts/portraits/49_duc.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/50_max",
-      "prompt": "prompts/portraits/50_max.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/51_guet",
-      "prompt": "prompts/portraits/51_guet.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/52_chappuis",
-      "prompt": "prompts/portraits/52_chappuis.txt",
-      "references": []
-    },
-    {
-      "image": "portraits/53_rochat",
-      "prompt": "prompts/portraits/53_rochat.txt",
-      "references": []
     }
   ],
   "version": 2
