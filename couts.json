@@ -1,0 +1,3481 @@
+{
+  "total": 13.351966,
+  "appels": [
+    {
+      "image": "portraits/01_smith_institut",
+      "cout": 0.05263,
+      "jetons": {
+        "texte": 362,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 00:51 UTC"
+    },
+    {
+      "image": "portraits/03_beddows_institut",
+      "cout": 0.05255,
+      "jetons": {
+        "texte": 346,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 00:52 UTC"
+    },
+    {
+      "image": "portraits/05_brule",
+      "cout": 0.05248,
+      "jetons": {
+        "texte": 332,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 00:52 UTC"
+    },
+    {
+      "image": "portraits/06_fleming",
+      "cout": 0.05253,
+      "jetons": {
+        "texte": 342,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 00:53 UTC"
+    },
+    {
+      "image": "portraits/08_chelseaclerk",
+      "cout": 0.05243,
+      "jetons": {
+        "texte": 322,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 00:54 UTC"
+    },
+    {
+      "image": "portraits/09_mustapha",
+      "cout": 0.05246,
+      "jetons": {
+        "texte": 328,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:01 UTC"
+    },
+    {
+      "image": "portraits/12_sergent",
+      "cout": 0.05245,
+      "jetons": {
+        "texte": 326,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:02 UTC"
+    },
+    {
+      "image": "portraits/13_butter",
+      "cout": 0.05241,
+      "jetons": {
+        "texte": 318,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:03 UTC"
+    },
+    {
+      "image": "portraits/14_alexis",
+      "cout": 0.052445,
+      "jetons": {
+        "texte": 325,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:03 UTC"
+    },
+    {
+      "image": "portraits/15_stanley",
+      "cout": 0.05239,
+      "jetons": {
+        "texte": 314,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:04 UTC"
+    },
+    {
+      "image": "portraits/16_bibliothecaire",
+      "cout": 0.05237,
+      "jetons": {
+        "texte": 310,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:04 UTC"
+    },
+    {
+      "image": "portraits/19_agentsj",
+      "cout": 0.052395,
+      "jetons": {
+        "texte": 315,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:05 UTC"
+    },
+    {
+      "image": "portraits/20_laitier",
+      "cout": 0.05241,
+      "jetons": {
+        "texte": 318,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:05 UTC"
+    },
+    {
+      "image": "portraits/21_pike",
+      "cout": 0.052385,
+      "jetons": {
+        "texte": 313,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:06 UTC"
+    },
+    {
+      "image": "portraits/22_serveur",
+      "cout": 0.05248,
+      "jetons": {
+        "texte": 332,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:06 UTC"
+    },
+    {
+      "image": "portraits/23_veuve",
+      "cout": 0.052415,
+      "jetons": {
+        "texte": 319,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:07 UTC"
+    },
+    {
+      "image": "portraits/24_conducteur",
+      "cout": 0.05244,
+      "jetons": {
+        "texte": 324,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:07 UTC"
+    },
+    {
+      "image": "portraits/07_rigby",
+      "cout": 0.052515,
+      "jetons": {
+        "texte": 339,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:08 UTC"
+    },
+    {
+      "image": "portraits/10_voisin",
+      "cout": 0.0524,
+      "jetons": {
+        "texte": 316,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:09 UTC"
+    },
+    {
+      "image": "portraits/11_atkins",
+      "cout": 0.052465,
+      "jetons": {
+        "texte": 329,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:09 UTC"
+    },
+    {
+      "image": "portraits/17_planton",
+      "cout": 0.05238,
+      "jetons": {
+        "texte": 312,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:10 UTC"
+    },
+    {
+      "image": "portraits/18_concierge",
+      "cout": 0.05239,
+      "jetons": {
+        "texte": 314,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:10 UTC"
+    },
+    {
+      "image": "portraits/25_mort",
+      "cout": 0.052485,
+      "jetons": {
+        "texte": 333,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:11 UTC"
+    },
+    {
+      "image": "portraits/02_smith_cheapside",
+      "cout": 0.064396,
+      "jetons": {
+        "texte": 392,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:11 UTC"
+    },
+    {
+      "image": "portraits/04_beddows_cheapside",
+      "cout": 0.064346,
+      "jetons": {
+        "texte": 382,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:12 UTC"
+    },
+    {
+      "image": "ecran-titre/titre",
+      "cout": 0.052515,
+      "jetons": {
+        "texte": 339,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:12 UTC"
+    },
+    {
+      "image": "londres/01_institut-imperial",
+      "cout": 0.076412,
+      "jetons": {
+        "texte": 472,
+        "image_entree": 2904,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:13 UTC"
+    },
+    {
+      "image": "londres/02_hotel-chambre_nuit",
+      "cout": 0.052505,
+      "jetons": {
+        "texte": 337,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:14 UTC"
+    },
+    {
+      "image": "londres/03_hotel-chambre_jour",
+      "cout": 0.052465,
+      "jetons": {
+        "texte": 329,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:14 UTC"
+    },
+    {
+      "image": "londres/04_cheapside-chambre-meublee",
+      "cout": 0.076172,
+      "jetons": {
+        "texte": 424,
+        "image_entree": 2904,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:15 UTC"
+    },
+    {
+      "image": "londres/05_scotland-yard_bureau-fleming",
+      "cout": 0.064401,
+      "jetons": {
+        "texte": 393,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:15 UTC"
+    },
+    {
+      "image": "londres/06_ambassade-de-turquie",
+      "cout": 0.064451,
+      "jetons": {
+        "texte": 403,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:16 UTC"
+    },
+    {
+      "image": "londres/07_chelsea-arms_reception",
+      "cout": 0.064451,
+      "jetons": {
+        "texte": 403,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:16 UTC"
+    },
+    {
+      "image": "londres/08_camberwell_salon-butter",
+      "cout": 0.064371,
+      "jetons": {
+        "texte": 387,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:17 UTC"
+    },
+    {
+      "image": "londres/09_fleet-street_archives",
+      "cout": 0.064351,
+      "jetons": {
+        "texte": 383,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:18 UTC"
+    },
+    {
+      "image": "londres/10_st-johns-wood_villa_jour",
+      "cout": 0.05244,
+      "jetons": {
+        "texte": 324,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:18 UTC"
+    },
+    {
+      "image": "londres/11_st-johns-wood_villa_nuit",
+      "cout": 0.052445,
+      "jetons": {
+        "texte": 325,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:19 UTC"
+    },
+    {
+      "image": "londres/12_st-johns-wood_ruines",
+      "cout": 0.064361,
+      "jetons": {
+        "texte": 385,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:19 UTC"
+    },
+    {
+      "image": "londres/13_islington_brophy-lane_jour",
+      "cout": 0.052465,
+      "jetons": {
+        "texte": 329,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:20 UTC"
+    },
+    {
+      "image": "londres/14_islington_brophy-lane_nuit",
+      "cout": 0.052535,
+      "jetons": {
+        "texte": 343,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:20 UTC"
+    },
+    {
+      "image": "londres/15_stoke-newington_jour",
+      "cout": 0.064341,
+      "jetons": {
+        "texte": 381,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:21 UTC"
+    },
+    {
+      "image": "londres/16_stoke-newington_nuit",
+      "cout": 0.064366,
+      "jetons": {
+        "texte": 386,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:22 UTC"
+    },
+    {
+      "image": "londres/17_boutique-makryat",
+      "cout": 0.05247,
+      "jetons": {
+        "texte": 330,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:22 UTC"
+    },
+    {
+      "image": "londres/18_british-museum_salle-de-lecture",
+      "cout": 0.064351,
+      "jetons": {
+        "texte": 383,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:23 UTC"
+    },
+    {
+      "image": "londres/19_chambre-henry-stanley",
+      "cout": 0.05248,
+      "jetons": {
+        "texte": 332,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:23 UTC"
+    },
+    {
+      "image": "londres/20_cave-butter_maquette",
+      "cout": 0.052495,
+      "jetons": {
+        "texte": 335,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:24 UTC"
+    },
+    {
+      "image": "londres/21_train-fantome_voiture-1",
+      "cout": 0.05248,
+      "jetons": {
+        "texte": 332,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:24 UTC"
+    },
+    {
+      "image": "londres/22_train-fantome_voiture-2",
+      "cout": 0.076107,
+      "jetons": {
+        "texte": 411,
+        "image_entree": 2904,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:25 UTC"
+    },
+    {
+      "image": "londres/23_train-fantome_retour",
+      "cout": 0.05232,
+      "jetons": {
+        "texte": 300,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:25 UTC"
+    },
+    {
+      "image": "londres/24_campagne_au-petit-matin",
+      "cout": 0.05241,
+      "jetons": {
+        "texte": 318,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:26 UTC"
+    },
+    {
+      "image": "londres/25_gare-victoria",
+      "cout": 0.052385,
+      "jetons": {
+        "texte": 313,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:27 UTC"
+    },
+    {
+      "image": "londres/26_brouillard_trajet",
+      "cout": 0.05234,
+      "jetons": {
+        "texte": 304,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:27 UTC"
+    },
+    {
+      "image": "prologue/01_wagon-restaurant",
+      "cout": 0.076287,
+      "jetons": {
+        "texte": 447,
+        "image_entree": 2904,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:28 UTC"
+    },
+    {
+      "image": "prologue/02_soufflet",
+      "cout": 0.05253,
+      "jetons": {
+        "texte": 342,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:28 UTC"
+    },
+    {
+      "image": "prologue/03_voitures-lits",
+      "cout": 0.064441,
+      "jetons": {
+        "texte": 401,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:29 UTC"
+    },
+    {
+      "image": "prologue/04_compartiment-7",
+      "cout": 0.05255,
+      "jetons": {
+        "texte": 346,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 01:29 UTC"
+    },
+    {
+      "image": "portraits/26_vane",
+      "cout": 0.05262,
+      "jetons": {
+        "texte": 360,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:39 UTC"
+    },
+    {
+      "image": "londres/27_gordon-square_seance",
+      "cout": 0.064766,
+      "jetons": {
+        "texte": 466,
+        "image_entree": 1452,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:40 UTC"
+    },
+    {
+      "image": "documents/01_coupure-journal",
+      "cout": 0.05231,
+      "jetons": {
+        "texte": 298,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:40 UTC"
+    },
+    {
+      "image": "documents/02_page-reliee",
+      "cout": 0.05229,
+      "jetons": {
+        "texte": 294,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:41 UTC"
+    },
+    {
+      "image": "documents/03_telegramme",
+      "cout": 0.052235,
+      "jetons": {
+        "texte": 283,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:41 UTC"
+    },
+    {
+      "image": "documents/04_lettre",
+      "cout": 0.052195,
+      "jetons": {
+        "texte": 275,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:42 UTC"
+    },
+    {
+      "image": "documents/05_lettre-roussie",
+      "cout": 0.052245,
+      "jetons": {
+        "texte": 285,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:42 UTC"
+    },
+    {
+      "image": "documents/06_carte-de-visite",
+      "cout": 0.052265,
+      "jetons": {
+        "texte": 289,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:43 UTC"
+    },
+    {
+      "image": "documents/07_billet",
+      "cout": 0.052185,
+      "jetons": {
+        "texte": 273,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:43 UTC"
+    },
+    {
+      "image": "portraits/pj_arnaud",
+      "cout": 0.052715,
+      "jetons": {
+        "texte": 379,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:44 UTC"
+    },
+    {
+      "image": "portraits/pj_pemberton",
+      "cout": 0.052775,
+      "jetons": {
+        "texte": 391,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:44 UTC"
+    },
+    {
+      "image": "portraits/pj_doyle",
+      "cout": 0.052795,
+      "jetons": {
+        "texte": 395,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:45 UTC"
+    },
+    {
+      "image": "portraits/pj_ashby",
+      "cout": 0.052775,
+      "jetons": {
+        "texte": 391,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 08:46 UTC"
+    },
+    {
+      "image": "portraits/01_smith_institut",
+      "cout": 0.032375,
+      "jetons": {
+        "texte": 409,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:17 UTC"
+    },
+    {
+      "image": "portraits/03_beddows_institut",
+      "cout": 0.032295,
+      "jetons": {
+        "texte": 393,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:17 UTC"
+    },
+    {
+      "image": "portraits/05_brule",
+      "cout": 0.032225,
+      "jetons": {
+        "texte": 379,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:18 UTC"
+    },
+    {
+      "image": "portraits/06_fleming",
+      "cout": 0.032275,
+      "jetons": {
+        "texte": 389,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:18 UTC"
+    },
+    {
+      "image": "portraits/08_chelseaclerk",
+      "cout": 0.032175,
+      "jetons": {
+        "texte": 369,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:18 UTC"
+    },
+    {
+      "image": "portraits/09_mustapha",
+      "cout": 0.032205,
+      "jetons": {
+        "texte": 375,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:19 UTC"
+    },
+    {
+      "image": "portraits/12_sergent",
+      "cout": 0.032195,
+      "jetons": {
+        "texte": 373,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:19 UTC"
+    },
+    {
+      "image": "portraits/13_butter",
+      "cout": 0.032155,
+      "jetons": {
+        "texte": 365,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:20 UTC"
+    },
+    {
+      "image": "portraits/14_alexis",
+      "cout": 0.03219,
+      "jetons": {
+        "texte": 372,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:20 UTC"
+    },
+    {
+      "image": "portraits/15_stanley",
+      "cout": 0.032135,
+      "jetons": {
+        "texte": 361,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:20 UTC"
+    },
+    {
+      "image": "portraits/16_bibliothecaire",
+      "cout": 0.032115,
+      "jetons": {
+        "texte": 357,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:21 UTC"
+    },
+    {
+      "image": "portraits/19_agentsj",
+      "cout": 0.03214,
+      "jetons": {
+        "texte": 362,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:21 UTC"
+    },
+    {
+      "image": "portraits/20_laitier",
+      "cout": 0.032155,
+      "jetons": {
+        "texte": 365,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:22 UTC"
+    },
+    {
+      "image": "portraits/21_pike",
+      "cout": 0.03213,
+      "jetons": {
+        "texte": 360,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:22 UTC"
+    },
+    {
+      "image": "portraits/22_serveur",
+      "cout": 0.032225,
+      "jetons": {
+        "texte": 379,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:22 UTC"
+    },
+    {
+      "image": "portraits/23_veuve",
+      "cout": 0.03216,
+      "jetons": {
+        "texte": 366,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:23 UTC"
+    },
+    {
+      "image": "portraits/24_conducteur",
+      "cout": 0.032185,
+      "jetons": {
+        "texte": 371,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:23 UTC"
+    },
+    {
+      "image": "portraits/07_rigby",
+      "cout": 0.03226,
+      "jetons": {
+        "texte": 386,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:24 UTC"
+    },
+    {
+      "image": "portraits/10_voisin",
+      "cout": 0.032145,
+      "jetons": {
+        "texte": 363,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:24 UTC"
+    },
+    {
+      "image": "portraits/11_atkins",
+      "cout": 0.03221,
+      "jetons": {
+        "texte": 376,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:25 UTC"
+    },
+    {
+      "image": "portraits/17_planton",
+      "cout": 0.032125,
+      "jetons": {
+        "texte": 359,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:25 UTC"
+    },
+    {
+      "image": "portraits/18_concierge",
+      "cout": 0.032135,
+      "jetons": {
+        "texte": 361,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:25 UTC"
+    },
+    {
+      "image": "portraits/25_mort",
+      "cout": 0.03223,
+      "jetons": {
+        "texte": 380,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:26 UTC"
+    },
+    {
+      "image": "portraits/02_smith_cheapside",
+      "cout": 0.044525,
+      "jetons": {
+        "texte": 439,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:26 UTC"
+    },
+    {
+      "image": "portraits/04_beddows_cheapside",
+      "cout": 0.044475,
+      "jetons": {
+        "texte": 429,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:27 UTC"
+    },
+    {
+      "image": "ecran-titre/titre",
+      "cout": 0.03226,
+      "jetons": {
+        "texte": 386,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:27 UTC"
+    },
+    {
+      "image": "londres/01_institut-imperial",
+      "cout": 0.056925,
+      "jetons": {
+        "texte": 519,
+        "image_entree": 3000,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:28 UTC"
+    },
+    {
+      "image": "londres/02_hotel-chambre_nuit",
+      "cout": 0.03225,
+      "jetons": {
+        "texte": 384,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:28 UTC"
+    },
+    {
+      "image": "londres/03_hotel-chambre_jour",
+      "cout": 0.03221,
+      "jetons": {
+        "texte": 376,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:28 UTC"
+    },
+    {
+      "image": "londres/04_cheapside-chambre-meublee",
+      "cout": 0.056685,
+      "jetons": {
+        "texte": 471,
+        "image_entree": 3000,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:29 UTC"
+    },
+    {
+      "image": "londres/05_scotland-yard_bureau-fleming",
+      "cout": 0.04453,
+      "jetons": {
+        "texte": 440,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:29 UTC"
+    },
+    {
+      "image": "londres/06_ambassade-de-turquie",
+      "cout": 0.04458,
+      "jetons": {
+        "texte": 450,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:30 UTC"
+    },
+    {
+      "image": "londres/07_chelsea-arms_reception",
+      "cout": 0.04458,
+      "jetons": {
+        "texte": 450,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:30 UTC"
+    },
+    {
+      "image": "londres/08_camberwell_salon-butter",
+      "cout": 0.0445,
+      "jetons": {
+        "texte": 434,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:31 UTC"
+    },
+    {
+      "image": "londres/09_fleet-street_archives",
+      "cout": 0.04448,
+      "jetons": {
+        "texte": 430,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:31 UTC"
+    },
+    {
+      "image": "londres/10_st-johns-wood_villa_jour",
+      "cout": 0.032185,
+      "jetons": {
+        "texte": 371,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:32 UTC"
+    },
+    {
+      "image": "londres/11_st-johns-wood_villa_nuit",
+      "cout": 0.03219,
+      "jetons": {
+        "texte": 372,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:32 UTC"
+    },
+    {
+      "image": "londres/12_st-johns-wood_ruines",
+      "cout": 0.04449,
+      "jetons": {
+        "texte": 432,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:33 UTC"
+    },
+    {
+      "image": "londres/13_islington_brophy-lane_jour",
+      "cout": 0.03221,
+      "jetons": {
+        "texte": 376,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:33 UTC"
+    },
+    {
+      "image": "londres/14_islington_brophy-lane_nuit",
+      "cout": 0.03228,
+      "jetons": {
+        "texte": 390,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:33 UTC"
+    },
+    {
+      "image": "londres/15_stoke-newington_jour",
+      "cout": 0.04447,
+      "jetons": {
+        "texte": 428,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:34 UTC"
+    },
+    {
+      "image": "londres/16_stoke-newington_nuit",
+      "cout": 0.044495,
+      "jetons": {
+        "texte": 433,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:34 UTC"
+    },
+    {
+      "image": "londres/17_boutique-makryat",
+      "cout": 0.032215,
+      "jetons": {
+        "texte": 377,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:35 UTC"
+    },
+    {
+      "image": "londres/18_british-museum_salle-de-lecture",
+      "cout": 0.04448,
+      "jetons": {
+        "texte": 430,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:35 UTC"
+    },
+    {
+      "image": "londres/19_chambre-henry-stanley",
+      "cout": 0.032225,
+      "jetons": {
+        "texte": 379,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:36 UTC"
+    },
+    {
+      "image": "londres/20_cave-butter_maquette",
+      "cout": 0.03224,
+      "jetons": {
+        "texte": 382,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:36 UTC"
+    },
+    {
+      "image": "londres/21_train-fantome_voiture-1",
+      "cout": 0.032225,
+      "jetons": {
+        "texte": 379,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:36 UTC"
+    },
+    {
+      "image": "londres/22_train-fantome_voiture-2",
+      "cout": 0.05662,
+      "jetons": {
+        "texte": 458,
+        "image_entree": 3000,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:37 UTC"
+    },
+    {
+      "image": "londres/23_train-fantome_retour",
+      "cout": 0.032065,
+      "jetons": {
+        "texte": 347,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:37 UTC"
+    },
+    {
+      "image": "londres/24_campagne_au-petit-matin",
+      "cout": 0.032155,
+      "jetons": {
+        "texte": 365,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:38 UTC"
+    },
+    {
+      "image": "londres/25_gare-victoria",
+      "cout": 0.03213,
+      "jetons": {
+        "texte": 360,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:38 UTC"
+    },
+    {
+      "image": "londres/26_brouillard_trajet",
+      "cout": 0.032085,
+      "jetons": {
+        "texte": 351,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:39 UTC"
+    },
+    {
+      "image": "prologue/01_wagon-restaurant",
+      "cout": 0.0568,
+      "jetons": {
+        "texte": 494,
+        "image_entree": 3000,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:39 UTC"
+    },
+    {
+      "image": "prologue/02_soufflet",
+      "cout": 0.032275,
+      "jetons": {
+        "texte": 389,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:39 UTC"
+    },
+    {
+      "image": "prologue/03_voitures-lits",
+      "cout": 0.04457,
+      "jetons": {
+        "texte": 448,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:40 UTC"
+    },
+    {
+      "image": "prologue/04_compartiment-7",
+      "cout": 0.032295,
+      "jetons": {
+        "texte": 393,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:40 UTC"
+    },
+    {
+      "image": "portraits/26_vane",
+      "cout": 0.032365,
+      "jetons": {
+        "texte": 407,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:41 UTC"
+    },
+    {
+      "image": "londres/27_gordon-square_seance",
+      "cout": 0.044895,
+      "jetons": {
+        "texte": 513,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:41 UTC"
+    },
+    {
+      "image": "documents/01_coupure-journal",
+      "cout": 0.05231,
+      "jetons": {
+        "texte": 298,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:42 UTC"
+    },
+    {
+      "image": "documents/02_page-reliee",
+      "cout": 0.05229,
+      "jetons": {
+        "texte": 294,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:42 UTC"
+    },
+    {
+      "image": "documents/03_telegramme",
+      "cout": 0.052235,
+      "jetons": {
+        "texte": 283,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:43 UTC"
+    },
+    {
+      "image": "documents/04_lettre",
+      "cout": 0.052195,
+      "jetons": {
+        "texte": 275,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:44 UTC"
+    },
+    {
+      "image": "documents/05_lettre-roussie",
+      "cout": 0.052245,
+      "jetons": {
+        "texte": 285,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:44 UTC"
+    },
+    {
+      "image": "documents/06_carte-de-visite",
+      "cout": 0.052265,
+      "jetons": {
+        "texte": 289,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:45 UTC"
+    },
+    {
+      "image": "documents/07_billet",
+      "cout": 0.052185,
+      "jetons": {
+        "texte": 273,
+        "image_entree": 0,
+        "sortie": 1694
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:45 UTC"
+    },
+    {
+      "image": "portraits/pj_arnaud",
+      "cout": 0.03246,
+      "jetons": {
+        "texte": 426,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:46 UTC"
+    },
+    {
+      "image": "portraits/pj_pemberton",
+      "cout": 0.03252,
+      "jetons": {
+        "texte": 438,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:46 UTC"
+    },
+    {
+      "image": "portraits/pj_doyle",
+      "cout": 0.03254,
+      "jetons": {
+        "texte": 442,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:46 UTC"
+    },
+    {
+      "image": "portraits/pj_ashby",
+      "cout": 0.03252,
+      "jetons": {
+        "texte": 438,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 09:47 UTC"
+    },
+    {
+      "image": "londres/02_hotel-chambre_nuit",
+      "cout": 0.03279,
+      "jetons": {
+        "texte": 492,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 14:47 UTC"
+    },
+    {
+      "image": "londres/03_hotel-chambre_jour",
+      "cout": 0.03275,
+      "jetons": {
+        "texte": 484,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 14:47 UTC"
+    },
+    {
+      "image": "prologue/01_wagon-restaurant",
+      "cout": 0.05765,
+      "jetons": {
+        "texte": 664,
+        "image_entree": 3000,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 14:48 UTC"
+    },
+    {
+      "image": "prologue/03_voitures-lits",
+      "cout": 0.04533,
+      "jetons": {
+        "texte": 600,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 14:48 UTC"
+    },
+    {
+      "image": "portraits/27_blain",
+      "cout": 0.03292,
+      "jetons": {
+        "texte": 518,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:28 UTC"
+    },
+    {
+      "image": "portraits/28_gaudry",
+      "cout": 0.032985,
+      "jetons": {
+        "texte": 531,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:28 UTC"
+    },
+    {
+      "image": "portraits/29_remi",
+      "cout": 0.032915,
+      "jetons": {
+        "texte": 517,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:28 UTC"
+    },
+    {
+      "image": "portraits/30_brevin",
+      "cout": 0.032895,
+      "jetons": {
+        "texte": 513,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:29 UTC"
+    },
+    {
+      "image": "portraits/31_rogniat",
+      "cout": 0.032925,
+      "jetons": {
+        "texte": 519,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:29 UTC"
+    },
+    {
+      "image": "portraits/32_leroux",
+      "cout": 0.03295,
+      "jetons": {
+        "texte": 524,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:30 UTC"
+    },
+    {
+      "image": "portraits/33_mandrin",
+      "cout": 0.03293,
+      "jetons": {
+        "texte": 520,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:30 UTC"
+    },
+    {
+      "image": "portraits/34_guetteur",
+      "cout": 0.03301,
+      "jetons": {
+        "texte": 536,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:31 UTC"
+    },
+    {
+      "image": "paris/01_gare-du-nord",
+      "cout": 0.03276,
+      "jetons": {
+        "texte": 486,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:31 UTC"
+    },
+    {
+      "image": "paris/02_hotel-du-cygne_chambre_jour",
+      "cout": 0.032715,
+      "jetons": {
+        "texte": 477,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:31 UTC"
+    },
+    {
+      "image": "paris/03_hotel-du-cygne_chambre_nuit",
+      "cout": 0.032755,
+      "jetons": {
+        "texte": 485,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:32 UTC"
+    },
+    {
+      "image": "paris/04_hotel-du-cygne_guetteur",
+      "cout": 0.045135,
+      "jetons": {
+        "texte": 561,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:32 UTC"
+    },
+    {
+      "image": "paris/05_bibliotheque-nationale_salle-de-travail",
+      "cout": 0.032895,
+      "jetons": {
+        "texte": 513,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:33 UTC"
+    },
+    {
+      "image": "paris/06_bibliotheque-de-l-arsenal",
+      "cout": 0.045105,
+      "jetons": {
+        "texte": 555,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:33 UTC"
+    },
+    {
+      "image": "paris/07_charenton_arcades",
+      "cout": 0.032775,
+      "jetons": {
+        "texte": 489,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:34 UTC"
+    },
+    {
+      "image": "paris/08_charenton_secretariat",
+      "cout": 0.045145,
+      "jetons": {
+        "texte": 563,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:34 UTC"
+    },
+    {
+      "image": "paris/09_charenton_registres",
+      "cout": 0.032715,
+      "jetons": {
+        "texte": 477,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:35 UTC"
+    },
+    {
+      "image": "paris/10_cafe-de-charenton",
+      "cout": 0.04522,
+      "jetons": {
+        "texte": 578,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:35 UTC"
+    },
+    {
+      "image": "paris/11_saint-lazare_train-de-banlieue",
+      "cout": 0.032615,
+      "jetons": {
+        "texte": 457,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-15 21:35 UTC"
+    },
+    {
+      "image": "creation/antiquaire_h_charme",
+      "cout": 0.03299,
+      "jetons": {
+        "texte": 532,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:15 UTC"
+    },
+    {
+      "image": "creation/antiquaire_h_terne",
+      "cout": 0.033105,
+      "jetons": {
+        "texte": 555,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:16 UTC"
+    },
+    {
+      "image": "creation/antiquaire_f_charme",
+      "cout": 0.033,
+      "jetons": {
+        "texte": 534,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:16 UTC"
+    },
+    {
+      "image": "creation/antiquaire_f_terne",
+      "cout": 0.033115,
+      "jetons": {
+        "texte": 557,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:17 UTC"
+    },
+    {
+      "image": "creation/archeologue_h_charme",
+      "cout": 0.033025,
+      "jetons": {
+        "texte": 539,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:17 UTC"
+    },
+    {
+      "image": "creation/archeologue_h_terne",
+      "cout": 0.03314,
+      "jetons": {
+        "texte": 562,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:18 UTC"
+    },
+    {
+      "image": "creation/archeologue_f_charme",
+      "cout": 0.03302,
+      "jetons": {
+        "texte": 538,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:18 UTC"
+    },
+    {
+      "image": "creation/archeologue_f_terne",
+      "cout": 0.033135,
+      "jetons": {
+        "texte": 561,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:19 UTC"
+    },
+    {
+      "image": "creation/avocat_h_charme",
+      "cout": 0.032925,
+      "jetons": {
+        "texte": 519,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:19 UTC"
+    },
+    {
+      "image": "creation/avocat_h_terne",
+      "cout": 0.03304,
+      "jetons": {
+        "texte": 542,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:20 UTC"
+    },
+    {
+      "image": "creation/avocat_f_charme",
+      "cout": 0.032945,
+      "jetons": {
+        "texte": 523,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:20 UTC"
+    },
+    {
+      "image": "creation/avocat_f_terne",
+      "cout": 0.03306,
+      "jetons": {
+        "texte": 546,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:21 UTC"
+    },
+    {
+      "image": "creation/detective_h_charme",
+      "cout": 0.032995,
+      "jetons": {
+        "texte": 533,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:21 UTC"
+    },
+    {
+      "image": "creation/detective_h_terne",
+      "cout": 0.03311,
+      "jetons": {
+        "texte": 556,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:22 UTC"
+    },
+    {
+      "image": "creation/detective_f_charme",
+      "cout": 0.032985,
+      "jetons": {
+        "texte": 531,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:22 UTC"
+    },
+    {
+      "image": "creation/detective_f_terne",
+      "cout": 0.0331,
+      "jetons": {
+        "texte": 554,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:23 UTC"
+    },
+    {
+      "image": "creation/dilettante_h_charme",
+      "cout": 0.03293,
+      "jetons": {
+        "texte": 520,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:23 UTC"
+    },
+    {
+      "image": "creation/dilettante_h_terne",
+      "cout": 0.033045,
+      "jetons": {
+        "texte": 543,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:24 UTC"
+    },
+    {
+      "image": "creation/dilettante_f_charme",
+      "cout": 0.032985,
+      "jetons": {
+        "texte": 531,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:24 UTC"
+    },
+    {
+      "image": "creation/dilettante_f_terne",
+      "cout": 0.0331,
+      "jetons": {
+        "texte": 554,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:25 UTC"
+    },
+    {
+      "image": "creation/ecrivain_h_charme",
+      "cout": 0.032925,
+      "jetons": {
+        "texte": 519,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:25 UTC"
+    },
+    {
+      "image": "creation/ecrivain_h_terne",
+      "cout": 0.03304,
+      "jetons": {
+        "texte": 542,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:26 UTC"
+    },
+    {
+      "image": "creation/ecrivain_f_charme",
+      "cout": 0.032945,
+      "jetons": {
+        "texte": 523,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:26 UTC"
+    },
+    {
+      "image": "creation/ecrivain_f_terne",
+      "cout": 0.03306,
+      "jetons": {
+        "texte": 546,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:27 UTC"
+    },
+    {
+      "image": "creation/journaliste_h_charme",
+      "cout": 0.03295,
+      "jetons": {
+        "texte": 524,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:27 UTC"
+    },
+    {
+      "image": "creation/journaliste_h_terne",
+      "cout": 0.033065,
+      "jetons": {
+        "texte": 547,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:28 UTC"
+    },
+    {
+      "image": "creation/journaliste_f_charme",
+      "cout": 0.03295,
+      "jetons": {
+        "texte": 524,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:28 UTC"
+    },
+    {
+      "image": "creation/journaliste_f_terne",
+      "cout": 0.033065,
+      "jetons": {
+        "texte": 547,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:29 UTC"
+    },
+    {
+      "image": "creation/medecin_h_charme",
+      "cout": 0.03291,
+      "jetons": {
+        "texte": 516,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:29 UTC"
+    },
+    {
+      "image": "creation/medecin_h_terne",
+      "cout": 0.033025,
+      "jetons": {
+        "texte": 539,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:30 UTC"
+    },
+    {
+      "image": "creation/medecin_f_charme",
+      "cout": 0.03298,
+      "jetons": {
+        "texte": 530,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:30 UTC"
+    },
+    {
+      "image": "creation/medecin_f_terne",
+      "cout": 0.033095,
+      "jetons": {
+        "texte": 553,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:31 UTC"
+    },
+    {
+      "image": "creation/parapsychologue_h_charme",
+      "cout": 0.032975,
+      "jetons": {
+        "texte": 529,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:31 UTC"
+    },
+    {
+      "image": "creation/parapsychologue_h_terne",
+      "cout": 0.03309,
+      "jetons": {
+        "texte": 552,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:32 UTC"
+    },
+    {
+      "image": "creation/parapsychologue_f_charme",
+      "cout": 0.033,
+      "jetons": {
+        "texte": 534,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:32 UTC"
+    },
+    {
+      "image": "creation/parapsychologue_f_terne",
+      "cout": 0.033115,
+      "jetons": {
+        "texte": 557,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:33 UTC"
+    },
+    {
+      "image": "creation/professeur_h_charme",
+      "cout": 0.032905,
+      "jetons": {
+        "texte": 515,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:33 UTC"
+    },
+    {
+      "image": "creation/professeur_h_terne",
+      "cout": 0.03302,
+      "jetons": {
+        "texte": 538,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:34 UTC"
+    },
+    {
+      "image": "creation/professeur_f_charme",
+      "cout": 0.0329,
+      "jetons": {
+        "texte": 514,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:34 UTC"
+    },
+    {
+      "image": "creation/professeur_f_terne",
+      "cout": 0.033015,
+      "jetons": {
+        "texte": 537,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:35 UTC"
+    },
+    {
+      "image": "paranoia/pj_pemberton",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:53 UTC"
+    },
+    {
+      "image": "paranoia/pj_doyle",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:54 UTC"
+    },
+    {
+      "image": "paranoia/pj_ashby",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:55 UTC"
+    },
+    {
+      "image": "paranoia/pj_arnaud",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:55 UTC"
+    },
+    {
+      "image": "paranoia/antiquaire_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:56 UTC"
+    },
+    {
+      "image": "paranoia/antiquaire_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:56 UTC"
+    },
+    {
+      "image": "paranoia/antiquaire_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:57 UTC"
+    },
+    {
+      "image": "paranoia/antiquaire_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:57 UTC"
+    },
+    {
+      "image": "paranoia/archeologue_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:58 UTC"
+    },
+    {
+      "image": "paranoia/archeologue_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 09:59 UTC"
+    },
+    {
+      "image": "paranoia/archeologue_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:19 UTC"
+    },
+    {
+      "image": "paranoia/archeologue_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:19 UTC"
+    },
+    {
+      "image": "paranoia/avocat_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:20 UTC"
+    },
+    {
+      "image": "paranoia/avocat_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:20 UTC"
+    },
+    {
+      "image": "paranoia/avocat_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:21 UTC"
+    },
+    {
+      "image": "paranoia/avocat_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:21 UTC"
+    },
+    {
+      "image": "paranoia/detective_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:22 UTC"
+    },
+    {
+      "image": "paranoia/detective_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:22 UTC"
+    },
+    {
+      "image": "paranoia/detective_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:23 UTC"
+    },
+    {
+      "image": "paranoia/detective_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:23 UTC"
+    },
+    {
+      "image": "paranoia/dilettante_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:24 UTC"
+    },
+    {
+      "image": "paranoia/dilettante_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:24 UTC"
+    },
+    {
+      "image": "paranoia/dilettante_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:25 UTC"
+    },
+    {
+      "image": "paranoia/dilettante_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:25 UTC"
+    },
+    {
+      "image": "paranoia/ecrivain_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:26 UTC"
+    },
+    {
+      "image": "paranoia/ecrivain_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:26 UTC"
+    },
+    {
+      "image": "paranoia/ecrivain_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:27 UTC"
+    },
+    {
+      "image": "paranoia/ecrivain_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:27 UTC"
+    },
+    {
+      "image": "paranoia/journaliste_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:28 UTC"
+    },
+    {
+      "image": "paranoia/journaliste_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:29 UTC"
+    },
+    {
+      "image": "paranoia/journaliste_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:29 UTC"
+    },
+    {
+      "image": "paranoia/journaliste_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:30 UTC"
+    },
+    {
+      "image": "paranoia/medecin_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:30 UTC"
+    },
+    {
+      "image": "paranoia/medecin_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:31 UTC"
+    },
+    {
+      "image": "paranoia/medecin_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:31 UTC"
+    },
+    {
+      "image": "paranoia/medecin_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:32 UTC"
+    },
+    {
+      "image": "paranoia/parapsychologue_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:32 UTC"
+    },
+    {
+      "image": "paranoia/parapsychologue_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:33 UTC"
+    },
+    {
+      "image": "paranoia/parapsychologue_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:33 UTC"
+    },
+    {
+      "image": "paranoia/parapsychologue_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:34 UTC"
+    },
+    {
+      "image": "paranoia/professeur_h_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:34 UTC"
+    },
+    {
+      "image": "paranoia/professeur_h_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:35 UTC"
+    },
+    {
+      "image": "paranoia/professeur_f_charme",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:35 UTC"
+    },
+    {
+      "image": "paranoia/professeur_f_terne",
+      "cout": 0.04544,
+      "jetons": {
+        "texte": 622,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:36 UTC"
+    },
+    {
+      "image": "londres/28_museum-tavern",
+      "cout": 0.032715,
+      "jetons": {
+        "texte": 477,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:37 UTC"
+    },
+    {
+      "image": "londres/29_eglise-st-george",
+      "cout": 0.03267,
+      "jetons": {
+        "texte": 468,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:37 UTC"
+    },
+    {
+      "image": "londres/30_quais-de-la-tamise",
+      "cout": 0.03261,
+      "jetons": {
+        "texte": 456,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:37 UTC"
+    },
+    {
+      "image": "portraits/35_patron",
+      "cout": 0.032795,
+      "jetons": {
+        "texte": 493,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:38 UTC"
+    },
+    {
+      "image": "portraits/36_hollis",
+      "cout": 0.032725,
+      "jetons": {
+        "texte": 479,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:38 UTC"
+    },
+    {
+      "image": "portraits/37_ramasseur",
+      "cout": 0.032735,
+      "jetons": {
+        "texte": 481,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:39 UTC"
+    },
+    {
+      "image": "situations/01_poste-de-bow-street",
+      "cout": 0.03274,
+      "jetons": {
+        "texte": 482,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:39 UTC"
+    },
+    {
+      "image": "situations/02_poste-de-la-rue-de-la-banque",
+      "cout": 0.032655,
+      "jetons": {
+        "texte": 465,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:40 UTC"
+    },
+    {
+      "image": "visions/01_dents-a-la-place-des-yeux",
+      "cout": 0.032535,
+      "jetons": {
+        "texte": 441,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:40 UTC"
+    },
+    {
+      "image": "visions/02_dents-qui-transpirent",
+      "cout": 0.032455,
+      "jetons": {
+        "texte": 425,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:41 UTC"
+    },
+    {
+      "image": "visions/03_spirale-dans-la-buee",
+      "cout": 0.032515,
+      "jetons": {
+        "texte": 437,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:41 UTC"
+    },
+    {
+      "image": "visions/04_fideles-noyes",
+      "cout": 0.032505,
+      "jetons": {
+        "texte": 435,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:42 UTC"
+    },
+    {
+      "image": "visions/05_cite-engloutie",
+      "cout": 0.03255,
+      "jetons": {
+        "texte": 444,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:42 UTC"
+    },
+    {
+      "image": "visions/06_forme-sur-la-mer",
+      "cout": 0.032565,
+      "jetons": {
+        "texte": 447,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:43 UTC"
+    },
+    {
+      "image": "visions/07_yeux-dans-le-papier-peint",
+      "cout": 0.03245,
+      "jetons": {
+        "texte": 424,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:43 UTC"
+    },
+    {
+      "image": "visions/08_main-trop-articulee",
+      "cout": 0.03247,
+      "jetons": {
+        "texte": 428,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:44 UTC"
+    },
+    {
+      "image": "visions/09_visage-de-poisson",
+      "cout": 0.03257,
+      "jetons": {
+        "texte": 448,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:44 UTC"
+    },
+    {
+      "image": "visions/10_bouche-dans-la-paume",
+      "cout": 0.03244,
+      "jetons": {
+        "texte": 422,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:45 UTC"
+    },
+    {
+      "image": "visions/11_peau-sur-un-cintre",
+      "cout": 0.03252,
+      "jetons": {
+        "texte": 438,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:45 UTC"
+    },
+    {
+      "image": "visions/12_voiture-des-morts",
+      "cout": 0.032485,
+      "jetons": {
+        "texte": 431,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:46 UTC"
+    },
+    {
+      "image": "visions/13_statue-qui-ouvre-l-oeil",
+      "cout": 0.032505,
+      "jetons": {
+        "texte": 435,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:46 UTC"
+    },
+    {
+      "image": "visions/14_foule-sans-visage",
+      "cout": 0.032495,
+      "jetons": {
+        "texte": 433,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:46 UTC"
+    },
+    {
+      "image": "visions/15_visage-dans-l-eau-noire",
+      "cout": 0.032455,
+      "jetons": {
+        "texte": 425,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:47 UTC"
+    },
+    {
+      "image": "visions/16_sigle-grave",
+      "cout": 0.032515,
+      "jetons": {
+        "texte": 437,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:47 UTC"
+    },
+    {
+      "image": "visions/17_etoile-et-oeil",
+      "cout": 0.03246,
+      "jetons": {
+        "texte": 426,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:48 UTC"
+    },
+    {
+      "image": "visions/18_sous-la-porte",
+      "cout": 0.032505,
+      "jetons": {
+        "texte": 435,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:48 UTC"
+    },
+    {
+      "image": "visions/19_reflet-qui-sourit",
+      "cout": 0.032495,
+      "jetons": {
+        "texte": 433,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:49 UTC"
+    },
+    {
+      "image": "visions/20_etoiles-en-oeil",
+      "cout": 0.032475,
+      "jetons": {
+        "texte": 429,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 10:49 UTC"
+    },
+    {
+      "image": "portraits/38_fauvel",
+      "cout": 0.03282,
+      "jetons": {
+        "texte": 498,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 20:58 UTC"
+    },
+    {
+      "image": "portraits/39_thibierge",
+      "cout": 0.03274,
+      "jetons": {
+        "texte": 482,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 20:59 UTC"
+    },
+    {
+      "image": "portraits/40_arnoult",
+      "cout": 0.032705,
+      "jetons": {
+        "texte": 475,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 20:59 UTC"
+    },
+    {
+      "image": "portraits/41_lorien",
+      "cout": 0.032825,
+      "jetons": {
+        "texte": 499,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 20:59 UTC"
+    },
+    {
+      "image": "portraits/42_veronique",
+      "cout": 0.03275,
+      "jetons": {
+        "texte": 484,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:00 UTC"
+    },
+    {
+      "image": "portraits/43_caterina",
+      "cout": 0.03272,
+      "jetons": {
+        "texte": 478,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:00 UTC"
+    },
+    {
+      "image": "portraits/44_bertin",
+      "cout": 0.03265,
+      "jetons": {
+        "texte": 464,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:01 UTC"
+    },
+    {
+      "image": "portraits/45_pruvost",
+      "cout": 0.032845,
+      "jetons": {
+        "texte": 503,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:01 UTC"
+    },
+    {
+      "image": "poissy/01_gare-de-poissy",
+      "cout": 0.0329,
+      "jetons": {
+        "texte": 514,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:02 UTC"
+    },
+    {
+      "image": "poissy/02_grand-rue_eglise",
+      "cout": 0.03283,
+      "jetons": {
+        "texte": 500,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:02 UTC"
+    },
+    {
+      "image": "poissy/03_mairie_archives",
+      "cout": 0.032795,
+      "jetons": {
+        "texte": 493,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:03 UTC"
+    },
+    {
+      "image": "poissy/04_eglise_fonts",
+      "cout": 0.03278,
+      "jetons": {
+        "texte": 490,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:03 UTC"
+    },
+    {
+      "image": "poissy/05_auberge-du-lion-d-or",
+      "cout": 0.032795,
+      "jetons": {
+        "texte": 493,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:04 UTC"
+    },
+    {
+      "image": "poissy/06_maison-lorien_rosiers",
+      "cout": 0.03289,
+      "jetons": {
+        "texte": 512,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:04 UTC"
+    },
+    {
+      "image": "poissy/07_cuisine-des-lorien",
+      "cout": 0.032715,
+      "jetons": {
+        "texte": 477,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:05 UTC"
+    },
+    {
+      "image": "poissy/08_chambre-d-enfant_nuit",
+      "cout": 0.032815,
+      "jetons": {
+        "texte": 497,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:05 UTC"
+    },
+    {
+      "image": "poissy/09_fouille_porte-d-acier",
+      "cout": 0.032805,
+      "jetons": {
+        "texte": 495,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:06 UTC"
+    },
+    {
+      "image": "poissy/10_caves_cellules",
+      "cout": 0.03282,
+      "jetons": {
+        "texte": 498,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:06 UTC"
+    },
+    {
+      "image": "poissy/11_salle-du-bras",
+      "cout": 0.0328,
+      "jetons": {
+        "texte": 494,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:07 UTC"
+    },
+    {
+      "image": "poissy/12_gare-de-lyon_nuit",
+      "cout": 0.03293,
+      "jetons": {
+        "texte": 520,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:07 UTC"
+    },
+    {
+      "image": "poissy/13_compartiment",
+      "cout": 0.032665,
+      "jetons": {
+        "texte": 467,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:07 UTC"
+    },
+    {
+      "image": "poissy/14_voiture-salon",
+      "cout": 0.04507,
+      "jetons": {
+        "texte": 548,
+        "image_entree": 1500,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-16 21:08 UTC"
+    },
+    {
+      "image": "objets/01_serviette-de-ravel",
+      "cout": 0.054325,
+      "jetons": {
+        "texte": 329,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:32 UTC"
+    },
+    {
+      "image": "objets/02_billet-brule",
+      "cout": 0.054185,
+      "jetons": {
+        "texte": 301,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:33 UTC"
+    },
+    {
+      "image": "objets/03_bouton-de-manchette",
+      "cout": 0.05423,
+      "jetons": {
+        "texte": 310,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:34 UTC"
+    },
+    {
+      "image": "objets/04_carte-de-smith",
+      "cout": 0.05421,
+      "jetons": {
+        "texte": 306,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:35 UTC"
+    },
+    {
+      "image": "objets/05_valise-de-beddows",
+      "cout": 0.054135,
+      "jetons": {
+        "texte": 291,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:36 UTC"
+    },
+    {
+      "image": "objets/06_plaque-de-cle",
+      "cout": 0.054145,
+      "jetons": {
+        "texte": 293,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:37 UTC"
+    },
+    {
+      "image": "objets/07_lettre-roussie",
+      "cout": 0.05417,
+      "jetons": {
+        "texte": 298,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:38 UTC"
+    },
+    {
+      "image": "objets/08_message-sur-la-peau",
+      "cout": 0.054215,
+      "jetons": {
+        "texte": 307,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:39 UTC"
+    },
+    {
+      "image": "objets/09_maquette-des-alexis",
+      "cout": 0.05431,
+      "jetons": {
+        "texte": 326,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:40 UTC"
+    },
+    {
+      "image": "objets/10_gueridon-truque",
+      "cout": 0.05418,
+      "jetons": {
+        "texte": 300,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:41 UTC"
+    },
+    {
+      "image": "objets/11_cahier-de-delplace",
+      "cout": 0.05419,
+      "jetons": {
+        "texte": 302,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:42 UTC"
+    },
+    {
+      "image": "objets/12_registre-de-charenton",
+      "cout": 0.0542,
+      "jetons": {
+        "texte": 304,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:43 UTC"
+    },
+    {
+      "image": "objets/13_plans-de-la-villa",
+      "cout": 0.05425,
+      "jetons": {
+        "texte": 314,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:44 UTC"
+    },
+    {
+      "image": "objets/14_actes-de-1789",
+      "cout": 0.054235,
+      "jetons": {
+        "texte": 311,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:45 UTC"
+    },
+    {
+      "image": "objets/15_lettre-de-wellington",
+      "cout": 0.054175,
+      "jetons": {
+        "texte": 299,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:46 UTC"
+    },
+    {
+      "image": "objets/16_bras-gauche",
+      "cout": 0.05429,
+      "jetons": {
+        "texte": 322,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:47 UTC"
+    },
+    {
+      "image": "objets/17_places-pour-aida",
+      "cout": 0.054135,
+      "jetons": {
+        "texte": 291,
+        "image_entree": 0,
+        "sortie": 1756
+      },
+      "simulation": false,
+      "date": "2026-11-17 09:48 UTC"
+    },
+    {
+      "image": "portraits/46_jeanclaude",
+      "cout": 0.032695,
+      "jetons": {
+        "texte": 473,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-24 20:19 UTC"
+    },
+    {
+      "image": "portraits/47_edgar",
+      "cout": 0.032745,
+      "jetons": {
+        "texte": 483,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-24 20:20 UTC"
+    },
+    {
+      "image": "portraits/48_william",
+      "cout": 0.032735,
+      "jetons": {
+        "texte": 481,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-24 20:20 UTC"
+    },
+    {
+      "image": "portraits/49_duc",
+      "cout": 0.032835,
+      "jetons": {
+        "texte": 501,
+        "image_entree": 0,
+        "sortie": 1011
+      },
+      "simulation": false,
+      "date": "2026-11-24 20:21 UTC"
+    }
+  ]
+}

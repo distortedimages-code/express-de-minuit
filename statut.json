@@ -1,0 +1,3793 @@
+{
+  "portraits/01_smith_institut": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d5244b6a0a9b0ae8b983a7ef1bcbe89a80c62ab282a442a0b7db63d9f8d8a822",
+    "cout": 0.0324,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 10.6,
+      "rouge": 0.0001
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:17 UTC"
+  },
+  "portraits/03_beddows_institut": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f7573332436bf32b620f1db5847613542c1a23c642c683096e7f327547712d04",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.8,
+      "rouge": 0.0116
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:17 UTC"
+  },
+  "portraits/05_brule": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "c5c499667a7751b3dcfec75d88dfcf7a2876a218b4badf531af411a977c6f317",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 34.1,
+      "rouge": 0.0003
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:18 UTC"
+  },
+  "portraits/06_fleming": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "28290cd9469c8a78a3d6ea332202e98c94da731233d32209ecd9b3cba324d679",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.0,
+      "rouge": 0.0031
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:18 UTC"
+  },
+  "portraits/08_chelseaclerk": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "a8ba5dc0f5fd8273fb4ab56e32f0257a77f2ddd7fef2100aa892d2863ae756f5",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.3,
+      "rouge": 0.0005
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:18 UTC"
+  },
+  "portraits/09_mustapha": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ea7a8d411047da1272327c501e013353bc5c87b9ce669ce06f814a68692abe67",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 40.0,
+      "rouge": 0.0155
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:19 UTC"
+  },
+  "portraits/12_sergent": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "5c9cab6a28ff04f43914d386290daa34be1f0337da672bbb7e657fcf057c15fb",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 15.8,
+      "rouge": 0.0024
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:19 UTC"
+  },
+  "portraits/13_butter": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ba88714873d538404776759671db97ad35978ae9b05a83e7e2ea2d2165e60cb8",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.7,
+      "rouge": 0.0017
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:20 UTC"
+  },
+  "portraits/14_alexis": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ec50b3775cdcd407b0931f90905b1f3084e3667c4dc63e6c5dab914ecd76cd8a",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.3,
+      "rouge": 0.0011
+    },
+    "secondes": 23,
+    "date": "2026-11-15 09:20 UTC"
+  },
+  "portraits/15_stanley": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "63683ebe4e7c4ef973e6ed33376cc1af8d6c5562668a05289f459ac2f0931880",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.4,
+      "rouge": 0.0006
+    },
+    "secondes": 22,
+    "date": "2026-11-15 09:20 UTC"
+  },
+  "portraits/16_bibliothecaire": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "03ca5aa6082d3d40b9cf8bed2411275e77b8b56b854e0f227e08a7f49e918d6e",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.6,
+      "rouge": 0.0007
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:21 UTC"
+  },
+  "portraits/19_agentsj": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "c2dc18b2942ecf1f0d2eabcd3aaeb1109e551b823fe40c88e81b0fc42e84dfaa",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.0,
+      "rouge": 0.0017
+    },
+    "secondes": 27,
+    "date": "2026-11-15 09:21 UTC"
+  },
+  "portraits/20_laitier": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1e92df21b2ff01e1df96aa7861b7d3fd1a91526ef89244ab2457fb4912c4faed",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.5,
+      "rouge": 0.0055
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:22 UTC"
+  },
+  "portraits/21_pike": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b4025ef54c0c4d0ac2c4c32e229d6291c722d7800a5a26629457016d413d374f",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.7,
+      "rouge": 0.0041
+    },
+    "secondes": 27,
+    "date": "2026-11-15 09:22 UTC"
+  },
+  "portraits/22_serveur": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "229cc6c5753baf29986dd251ed432ff7538fcc25456438d5f0cbe7f11c65223d",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.1,
+      "rouge": 0.0052
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:23 UTC"
+  },
+  "portraits/23_veuve": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "51e7fc3d836ce9a63b54046dfa67771864cc9800d35c4b0d0ff95a14e6893608",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.6,
+      "rouge": 0.0015
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:23 UTC"
+  },
+  "portraits/24_conducteur": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "888de8a5b7866f6cd5d01591168a30f48421ccc1c6d27f2eadecb32eed11363d",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 15.1,
+      "rouge": 0.0023
+    },
+    "secondes": 23,
+    "date": "2026-11-15 09:23 UTC"
+  },
+  "portraits/07_rigby": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7e992d392882a4af2b8fcda7a4b163d5364f98a6752e9a008a237977d2c6afcc",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 45.4,
+      "rouge": 0.0001
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:24 UTC"
+  },
+  "portraits/10_voisin": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "9c884b1883d4c68950565ace3a7df4d000a3ddec025cff38339fec3a6287a541",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.0,
+      "rouge": 0.0014
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:24 UTC"
+  },
+  "portraits/11_atkins": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0242db3952842472500cec6f6fb1f4899a06ec134c73d74be10a97a6ccf1da4d",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 32.0,
+      "rouge": 0.0001
+    },
+    "secondes": 23,
+    "date": "2026-11-15 09:25 UTC"
+  },
+  "portraits/17_planton": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "17770b0e18cd4b288ea1b4973e59d04bc66755d13e7790438cc34bb5e813bfde",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.0,
+      "rouge": 0.0186
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:25 UTC"
+  },
+  "portraits/18_concierge": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "58d5b159e5404f8bcfcafbd31ab134ae6966ed2371410964f1aec602697fa343",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.4,
+      "rouge": 0.0004
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:25 UTC"
+  },
+  "portraits/25_mort": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7aed261a25cc8634ab036309954663be693379233965079cbdc5782aefd7c65b",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.6,
+      "rouge": 0.0001
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:26 UTC"
+  },
+  "portraits/02_smith_cheapside": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "eb28e4a996af6ee99c589bb6ebf84ec039ef48a35dcc3aeded263b1be7c1f90b",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.5,
+      "rouge": 0.0006
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:26 UTC"
+  },
+  "portraits/04_beddows_cheapside": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "28315d908e7b935cba0245df184056e88a827dfd71082226a022108bbfd7bb51",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.3,
+      "rouge": 0.0006
+    },
+    "secondes": 29,
+    "date": "2026-11-15 09:27 UTC"
+  },
+  "ecran-titre/titre": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b881db8a12296067bf74827677b1cb8ccfa45a24d1906901900df091953b8924",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 12.4,
+      "rouge": 0.0001
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:27 UTC"
+  },
+  "londres/01_institut-imperial": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "185baf573825cd0efde38896bd263f802072dd9c43ff2e317f85a7cc66168c70",
+    "cout": 0.0569,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.0,
+      "rouge": 0.0069
+    },
+    "secondes": 32,
+    "date": "2026-11-15 09:28 UTC"
+  },
+  "londres/02_hotel-chambre_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "e86d5a9a59b12509e52582727ce0f170e1c0d681d339396a8e8ea0ead5be3276",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.7,
+      "rouge": 0.0011
+    },
+    "secondes": 28,
+    "date": "2026-11-15 14:47 UTC"
+  },
+  "londres/03_hotel-chambre_jour": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3629b4caea59970e1b7d1675a2a1b8dd1138ff4c2124ea23737debf6a9e9020a",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 14.0,
+      "rouge": 0.0022
+    },
+    "secondes": 25,
+    "date": "2026-11-15 14:47 UTC"
+  },
+  "londres/04_cheapside-chambre-meublee": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f4b63d4bde613732709a751dbc51ca2ec3e6af81e79e8f29497d383565fa4308",
+    "cout": 0.0567,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 37.6,
+      "rouge": 0.0005
+    },
+    "secondes": 27,
+    "date": "2026-11-15 09:29 UTC"
+  },
+  "londres/05_scotland-yard_bureau-fleming": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b72d8f6a632b8fdc425ba97563c6a633e1151680a7c8596c59e0f6be130d6031",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.1,
+      "rouge": 0.0048
+    },
+    "secondes": 30,
+    "date": "2026-11-15 09:29 UTC"
+  },
+  "londres/06_ambassade-de-turquie": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "643551a73cbb76e8916fed9f699bb5852311c4f0efbfa42b374651159b0ad523",
+    "cout": 0.0446,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 34.9,
+      "rouge": 0.006
+    },
+    "secondes": 28,
+    "date": "2026-11-15 09:30 UTC"
+  },
+  "londres/07_chelsea-arms_reception": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b9399d18d9752ffd0ff26d9456576b33eba08ac7c47417278c3589410d06ffc0",
+    "cout": 0.0446,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.0,
+      "rouge": 0.0003
+    },
+    "secondes": 30,
+    "date": "2026-11-15 09:30 UTC"
+  },
+  "londres/08_camberwell_salon-butter": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "32b1de38035ca5470cd203ddfe12364a5f866d9f08416a54ac6c4c3707460b0a",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 33.7,
+      "rouge": 0.0008
+    },
+    "secondes": 29,
+    "date": "2026-11-15 09:31 UTC"
+  },
+  "londres/09_fleet-street_archives": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "9c6e640c938fe40176dc4e48cb4467914bcdfcad9c94aca486e0e204a2c65b2d",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 34.2,
+      "rouge": 0.0016
+    },
+    "secondes": 28,
+    "date": "2026-11-15 09:31 UTC"
+  },
+  "londres/10_st-johns-wood_villa_jour": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "93a9e3e8da7c065425c53837c6a84c0245c91ff8465a03e864d2f16bc6c9a6f2",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.4,
+      "rouge": 0.0014
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:32 UTC"
+  },
+  "londres/11_st-johns-wood_villa_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "71c9cbb3815316bcce5957e12283c19762e56c84942c6f16c52d52c4a6cea393",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.9,
+      "rouge": 0.0
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:32 UTC"
+  },
+  "londres/12_st-johns-wood_ruines": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "46978df367253a2f3daf14963c39fb71ac89d25603ad80bfc685f546460ef7ad",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.1,
+      "rouge": 0.0012
+    },
+    "secondes": 29,
+    "date": "2026-11-15 09:33 UTC"
+  },
+  "londres/13_islington_brophy-lane_jour": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "61b32b1c0c6c6b51f6c1e47af0c7489adf10fb4951aedaccc5cfbb3ea2c4e17b",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.8,
+      "rouge": 0.004
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:33 UTC"
+  },
+  "londres/14_islington_brophy-lane_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d493d03d9d20fa3c84264ef18f7e4d3a21e1a0d5bf79f3ca001f21a9bbf2d5aa",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.2,
+      "rouge": 0.0023
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:33 UTC"
+  },
+  "londres/15_stoke-newington_jour": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0626adb19b81ee3d20257519c6fbe48e454850178073f399bc14e015e2dfaa44",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.1,
+      "rouge": 0.0158
+    },
+    "secondes": 29,
+    "date": "2026-11-15 09:34 UTC"
+  },
+  "londres/16_stoke-newington_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3c63fc88f6d2b4daacf393c88ec86ff4759de7f9f521e9a801a7d16415901cc2",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.4,
+      "rouge": 0.01
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:34 UTC"
+  },
+  "londres/17_boutique-makryat": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1b0583c5a281e2d26b178cb3c97239cffbc1c35a37e4113f39a5d8bf5ef66d2b",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.4,
+      "rouge": 0.0006
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:35 UTC"
+  },
+  "londres/18_british-museum_salle-de-lecture": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "eca9852890439f34c8af78bc283ccb7375226157b0bd7c2de3a70bd1e4746009",
+    "cout": 0.0445,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.4,
+      "rouge": 0.0002
+    },
+    "secondes": 28,
+    "date": "2026-11-15 09:35 UTC"
+  },
+  "londres/19_chambre-henry-stanley": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "53dbb003c8b30d9bd091a2913df5aa4a54df1304f04a59f52a3571bc8f32b081",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 45.8,
+      "rouge": 0.0008
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:36 UTC"
+  },
+  "londres/20_cave-butter_maquette": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d2de42f5fa44909070962ae8296bd879bb5336732c576b4b2d7a8644db2cc21d",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 35.8,
+      "rouge": 0.0001
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:36 UTC"
+  },
+  "londres/21_train-fantome_voiture-1": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "43e98a7a59f623482d6cd9e0c025d8814294818a0d6b62dfbdd639d8b8b7ae90",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 10.5,
+      "rouge": 0.0006
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:36 UTC"
+  },
+  "londres/22_train-fantome_voiture-2": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "28ac2c3d235afe0f48d57a724ab3d86d07652b4405a04eeb7a6a003c631adc0f",
+    "cout": 0.0566,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 32.4,
+      "rouge": 0.0082
+    },
+    "secondes": 29,
+    "date": "2026-11-15 09:37 UTC"
+  },
+  "londres/23_train-fantome_retour": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "51890af8873e25393b0e6e6762379ccc9fa22080a30925ef1eabfc0a40a4434d",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.1,
+      "rouge": 0.003
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:37 UTC"
+  },
+  "londres/24_campagne_au-petit-matin": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f1a829e716b3dcac719a79db110c57a5339c10634b9be3c06a078af6e39ea5c7",
+    "cout": 0.0322,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.6,
+      "rouge": 0.0024
+    },
+    "secondes": 25,
+    "date": "2026-11-15 09:38 UTC"
+  },
+  "londres/25_gare-victoria": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "5b6f22e05784c6cbbb93f4bc736c6e878d4e5b290bfca70a85232163718da482",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.3,
+      "rouge": 0.0008
+    },
+    "secondes": 26,
+    "date": "2026-11-15 09:38 UTC"
+  },
+  "londres/26_brouillard_trajet": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "76cad8797ee7496e7a40784f2f2873a23ea7324b11d39878ccb89d38958cb058",
+    "cout": 0.0321,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.3,
+      "rouge": 0.0001
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:39 UTC"
+  },
+  "prologue/01_wagon-restaurant": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "bf92e32f0a4f89513becc203b8d32bfcfb990616a3019ea508bb84a9197e6884",
+    "cout": 0.0576,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 29.5,
+      "rouge": 0.0009
+    },
+    "secondes": 34,
+    "date": "2026-11-15 14:48 UTC"
+  },
+  "prologue/02_soufflet": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "a3282bc59f786e814004b65c35adc009f7ac7caca45ffd568c4f47c5cbd631c1",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 38.0,
+      "rouge": 0.0016
+    },
+    "secondes": 23,
+    "date": "2026-11-15 09:40 UTC"
+  },
+  "prologue/03_voitures-lits": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6533286224dfb2ee0ceca561455f6b7666a3035abefeb663d45d154b20a76faf",
+    "cout": 0.0453,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.3,
+      "rouge": 0.0026
+    },
+    "secondes": 30,
+    "date": "2026-11-15 14:48 UTC"
+  },
+  "prologue/04_compartiment-7": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f06e211289d2136bb3cd6cf881a552b7235f582945b6c941f8300ee87e0a7e0c",
+    "cout": 0.0323,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.0,
+      "rouge": 0.0004
+    },
+    "secondes": 30,
+    "date": "2026-11-15 09:40 UTC"
+  },
+  "portraits/26_vane": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f97404ee6baebcc973a3df006c6720f1a20e1ad513ef30c9878c75eb0f55a96e",
+    "cout": 0.0324,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 36.9,
+      "rouge": 0.0064
+    },
+    "secondes": 27,
+    "date": "2026-11-15 09:41 UTC"
+  },
+  "londres/27_gordon-square_seance": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d1fb4c38f8ac89f0ed7414abd6515b3271bb87794c41a71e9d64cca14c8ff5a7",
+    "cout": 0.0449,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 43.2,
+      "rouge": 0.0035
+    },
+    "secondes": 30,
+    "date": "2026-11-15 09:41 UTC"
+  },
+  "documents/01_coupure-journal": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "039770b747301e980a502db1539f341eab999faf95368c76a31cdea932bb3484",
+    "cout": 0.0523,
+    "taille_recue": "1600x1200",
+    "avertissements": [
+      "beaucoup de détails dans les bandes du haut ou du bas"
+    ],
+    "mesures": {
+      "saturation": 34.8,
+      "rouge": 0.0003
+    },
+    "secondes": 32,
+    "date": "2026-11-15 09:42 UTC"
+  },
+  "documents/02_page-reliee": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "f7b2b90622ab75f5233fea9780c29c01ac5c4548d786300819a249a64c649f6c",
+    "cout": 0.0523,
+    "taille_recue": "1600x1200",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.9,
+      "rouge": 0.0049
+    },
+    "secondes": 31,
+    "date": "2026-11-15 09:42 UTC"
+  },
+  "documents/03_telegramme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "c0e1a3ba41ca0c5006dde22cd912085782b4e3eee1300da95794efc2fd29b374",
+    "cout": 0.0522,
+    "taille_recue": "1600x1200",
+    "avertissements": [
+      "beaucoup de détails dans les bandes du haut ou du bas"
+    ],
+    "mesures": {
+      "saturation": 26.9,
+      "rouge": 0.0007
+    },
+    "secondes": 29,
+    "date": "2026-11-15 09:43 UTC"
+  },
+  "documents/04_lettre": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "0e109617153d71ec34411998b2b32a5dd049ead79d99d80f11d6fe2ccd54c22b",
+    "cout": 0.0522,
+    "taille_recue": "1600x1200",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.4,
+      "rouge": 0.0005
+    },
+    "secondes": 33,
+    "date": "2026-11-15 09:44 UTC"
+  },
+  "documents/05_lettre-roussie": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "7ac711fbadcd9a3e94bf3239558b17076964ea1864f6d1dc8288d639ba590f1a",
+    "cout": 0.0522,
+    "taille_recue": "1600x1200",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.5,
+      "rouge": 0.0004
+    },
+    "secondes": 35,
+    "date": "2026-11-15 09:44 UTC"
+  },
+  "documents/06_carte-de-visite": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "35be8939dee55d76ca8043e8d2822ac476d63a5ae2b9bef211d2857c8291c027",
+    "cout": 0.0523,
+    "taille_recue": "1600x1200",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.9,
+      "rouge": 0.0024
+    },
+    "secondes": 31,
+    "date": "2026-11-15 09:45 UTC"
+  },
+  "documents/07_billet": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1600x1200",
+    "sha256": "fbf983a0cbb1ebf01e39a2deb870c55354ef0a4df3d69dcb3e1bf22a698f3741",
+    "cout": 0.0522,
+    "taille_recue": "1600x1200",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.8,
+      "rouge": 0.0007
+    },
+    "secondes": 32,
+    "date": "2026-11-15 09:45 UTC"
+  },
+  "portraits/pj_arnaud": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7bd55a9a37f1d2f4a3e9389a5961d3259cdf5321d9634adaf8aecd45715b97a9",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.0,
+      "rouge": 0.0003
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:46 UTC"
+  },
+  "portraits/pj_pemberton": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d7a425f92f7abc6a59fae0b92c4c8b5b12aa6380af62cd7106ba70e65aa227cd",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.7,
+      "rouge": 0.0002
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:46 UTC"
+  },
+  "portraits/pj_doyle": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "4fa304010be76186d813597c61621c421c5642ac5466a13921951ce448548399",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.7,
+      "rouge": 0.0
+    },
+    "secondes": 24,
+    "date": "2026-11-15 09:46 UTC"
+  },
+  "portraits/pj_ashby": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "82ecfffb089403440db6f6aa4f4ffb0ba7d5663aa7262ab5bae1d8aea6c5e7c1",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.3,
+      "rouge": 0.0003
+    },
+    "secondes": 27,
+    "date": "2026-11-15 09:47 UTC"
+  },
+  "portraits/27_blain": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "33efdbef5f557371ccc6fc7429b712e460b1f8b5f5daad75a05e0fc6579cb096",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.3,
+      "rouge": 0.0003
+    },
+    "secondes": 25,
+    "date": "2026-11-15 21:28 UTC"
+  },
+  "portraits/28_gaudry": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8fef208dea0395f70f8cb311aa5d71367eb689f4da03ed38c4052b5a31c0f898",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.6,
+      "rouge": 0.0004
+    },
+    "secondes": 26,
+    "date": "2026-11-15 21:28 UTC"
+  },
+  "portraits/29_remi": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "922d7827bd05c04e1d0184b83ac0e3f11af7deba9a38bf66bcb45eff187232af",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.2,
+      "rouge": 0.0013
+    },
+    "secondes": 26,
+    "date": "2026-11-15 21:28 UTC"
+  },
+  "portraits/30_brevin": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7241f2462158f8e115f0696b3e24ed42c852f1190572a2a56d50fee0c2bfbf08",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.4,
+      "rouge": 0.0002
+    },
+    "secondes": 29,
+    "date": "2026-11-15 21:29 UTC"
+  },
+  "portraits/31_rogniat": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7347d4ae25b3098727180733526318761cbde29447b09c3a0872d0b29e556a96",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.3,
+      "rouge": 0.0001
+    },
+    "secondes": 25,
+    "date": "2026-11-15 21:29 UTC"
+  },
+  "portraits/32_leroux": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8ca60a64960d986f665bdc904aaff0b6f8ad724fed0a08bb63d0109164c497ac",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.7,
+      "rouge": 0.0001
+    },
+    "secondes": 26,
+    "date": "2026-11-15 21:30 UTC"
+  },
+  "portraits/33_mandrin": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "14cf87bf74fb7ee0f4b3979426d0c57cba6786015038beae4b23687333ccb3ba",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.6,
+      "rouge": 0.0002
+    },
+    "secondes": 26,
+    "date": "2026-11-15 21:30 UTC"
+  },
+  "portraits/34_guetteur": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6c31500ebb9c85d007cdd67e8a99a5d101c90b4cb139d2f310ea8de2124994a0",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.9,
+      "rouge": 0.0002
+    },
+    "secondes": 25,
+    "date": "2026-11-15 21:31 UTC"
+  },
+  "paris/01_gare-du-nord": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ef1bcc694235ffba0b789f63f401600a09b3c152d590e6e278e2320479e54150",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.4,
+      "rouge": 0.0008
+    },
+    "secondes": 27,
+    "date": "2026-11-15 21:31 UTC"
+  },
+  "paris/02_hotel-du-cygne_chambre_jour": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ca3c275fbd0177cbcd178ed6df00170dc775970dbfc21ab5536aae58a864e14a",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 34.9,
+      "rouge": 0.0213
+    },
+    "secondes": 25,
+    "date": "2026-11-15 21:31 UTC"
+  },
+  "paris/03_hotel-du-cygne_chambre_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b63c148a2b26173173fd3f2390f7635dd0d68f7bef96def03b6049f0f6cdda0d",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 54.8,
+      "rouge": 0.0095
+    },
+    "secondes": 24,
+    "date": "2026-11-15 21:32 UTC"
+  },
+  "paris/04_hotel-du-cygne_guetteur": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "00e9953e45eab39043a6dcf874675d13cef84074ff64e5faae2f319a00435b99",
+    "cout": 0.0451,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "image peu « noir et blanc » (saturation moyenne 61/255)"
+    ],
+    "mesures": {
+      "saturation": 61.2,
+      "rouge": 0.0223
+    },
+    "secondes": 27,
+    "date": "2026-11-15 21:32 UTC"
+  },
+  "paris/05_bibliotheque-nationale_salle-de-travail": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "fa1eb9b3ceb46f74ecf8cd5fe3b46b21e9de17f9bc869bdcd15614a9863d242e",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.5,
+      "rouge": 0.0005
+    },
+    "secondes": 24,
+    "date": "2026-11-15 21:33 UTC"
+  },
+  "paris/06_bibliotheque-de-l-arsenal": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "929f48987bf0bf5e3204fb24e0e1f18eb9ab10a1e55c98fd904a58b2cf4e4719",
+    "cout": 0.0451,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 32.7,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-15 21:33 UTC"
+  },
+  "paris/07_charenton_arcades": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d147c7c269b156e1cc86cf87fc069310a7856838bd29ee6816e02c830dcd1a68",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.1,
+      "rouge": 0.001
+    },
+    "secondes": 27,
+    "date": "2026-11-15 21:34 UTC"
+  },
+  "paris/08_charenton_secretariat": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "18d0ae76d045cd7b9bceb0e7815c3f0f860dd9ca28b1a17979284639a33667be",
+    "cout": 0.0451,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.2,
+      "rouge": 0.0003
+    },
+    "secondes": 26,
+    "date": "2026-11-15 21:34 UTC"
+  },
+  "paris/09_charenton_registres": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "63ad9e93ac9f553efa7b11bb534fc5df1c1b8455415e810629086199b25f530d",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.8,
+      "rouge": 0.0001
+    },
+    "secondes": 27,
+    "date": "2026-11-15 21:35 UTC"
+  },
+  "paris/10_cafe-de-charenton": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "cd01e9e507a110540041564c796165afc4cc9bfe041d4fd8377029a2be8ca7d4",
+    "cout": 0.0452,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 29.7,
+      "rouge": 0.0
+    },
+    "secondes": 29,
+    "date": "2026-11-15 21:35 UTC"
+  },
+  "paris/11_saint-lazare_train-de-banlieue": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3d161ce8047beeb464647117efae12a978bcbdac82d6382054cba2eae4733660",
+    "cout": 0.0326,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.0,
+      "rouge": 0.0005
+    },
+    "secondes": 24,
+    "date": "2026-11-15 21:35 UTC"
+  },
+  "creation/antiquaire_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6dcf258fabfd01b7346fbe5042dffe825026c6790b978c4e7d1cd61ce0add151",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.6,
+      "rouge": 0.0007
+    },
+    "secondes": 33,
+    "date": "2026-11-16 09:15 UTC"
+  },
+  "creation/antiquaire_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "dd631f0b0c7fdbf4259d62105fc4f56678fb7eed66604bc319dacf62f7af48ef",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.7,
+      "rouge": 0.0007
+    },
+    "secondes": 35,
+    "date": "2026-11-16 09:16 UTC"
+  },
+  "creation/antiquaire_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "186e0d92c58ad02e07699fc23f654bc1fc031f891bdeb1ffdd75ffe4c02555d7",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.3,
+      "rouge": 0.0006
+    },
+    "secondes": 35,
+    "date": "2026-11-16 09:16 UTC"
+  },
+  "creation/antiquaire_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6b845b2beacac80fbd837c6a2a9f9d6402b5f6f7965d13c5099ef69a52e35d10",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.1,
+      "rouge": 0.0006
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:17 UTC"
+  },
+  "creation/archeologue_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1998bc1d699ca6660130c4d5155d49691153d8f2a689e54d0d7cc91172add9e9",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.9,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 09:17 UTC"
+  },
+  "creation/archeologue_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "08afacfa9ff801850a4f87af6bde8bc40865bc6f89c757fd4d3b6588c887c740",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.1,
+      "rouge": 0.0008
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:18 UTC"
+  },
+  "creation/archeologue_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6f7a58e1a4f64a94544c609a19888d5376abebe008b2379ce209471cc1604460",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.0,
+      "rouge": 0.0016
+    },
+    "secondes": 29,
+    "date": "2026-11-16 09:18 UTC"
+  },
+  "creation/archeologue_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2b52a0a75448a1c186c162e5f57d59de755daa5ecd2bc2218fce748fe6dae86f",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.8,
+      "rouge": 0.0008
+    },
+    "secondes": 31,
+    "date": "2026-11-16 09:19 UTC"
+  },
+  "creation/avocat_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3867b38cf126ef7d4edba113848f1be806f7c48252976b3f74714038e3f7ab03",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 9.5,
+      "rouge": 0.0014
+    },
+    "secondes": 30,
+    "date": "2026-11-16 09:19 UTC"
+  },
+  "creation/avocat_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "eff8ab971aff7e27bdea5bdbea18d528885369ed2ed2dbdc279e2813d4a3ed86",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.9,
+      "rouge": 0.0009
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:20 UTC"
+  },
+  "creation/avocat_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "da46cc2d77258870dd92ff42275510a1df7b53d7831700a25cc06aa9d92b4b7f",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.9,
+      "rouge": 0.0008
+    },
+    "secondes": 33,
+    "date": "2026-11-16 09:20 UTC"
+  },
+  "creation/avocat_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "782db7cb7eb80ad646326a568aa86ad5583157aab8d6c5c437b2cc8f04bbeda6",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.2,
+      "rouge": 0.0007
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:21 UTC"
+  },
+  "creation/detective_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "a7c47df4880ab0219925a13b33fce1ad40949ae49f33ecfbdade08fcb7e0090f",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.9,
+      "rouge": 0.0001
+    },
+    "secondes": 24,
+    "date": "2026-11-16 09:21 UTC"
+  },
+  "creation/detective_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7a5683d8dee60e68107b1284736254d931f62167ec1ad5ee208e6030233daef4",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 14.9,
+      "rouge": 0.0001
+    },
+    "secondes": 27,
+    "date": "2026-11-16 09:22 UTC"
+  },
+  "creation/detective_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "157e243dcafac1cb62f0b0fd42271b61f5817e9f2a820b5312f01628830b37e3",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.5,
+      "rouge": 0.0001
+    },
+    "secondes": 27,
+    "date": "2026-11-16 09:22 UTC"
+  },
+  "creation/detective_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b932a6d2af21feadf237bcbe5dd12e4a5a30ad8ab6b90641ffe346aa77c94b96",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.0,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 09:23 UTC"
+  },
+  "creation/dilettante_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2a5c4c215aa90f3cc263ab2dfcb099a9c6d6a8d923a67507790dcd255ac93fae",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.8,
+      "rouge": 0.0003
+    },
+    "secondes": 28,
+    "date": "2026-11-16 09:23 UTC"
+  },
+  "creation/dilettante_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8cbce5c4de889b350db8f75d81fb5fb59b61ff8437a1cb2f8396bbff2d37c6aa",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 13.2,
+      "rouge": 0.0003
+    },
+    "secondes": 28,
+    "date": "2026-11-16 09:24 UTC"
+  },
+  "creation/dilettante_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "77306b4832a75a5454d0d86643f939cda7d39bd5ac4aebad6783cfc59c11a192",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.5,
+      "rouge": 0.0003
+    },
+    "secondes": 30,
+    "date": "2026-11-16 09:24 UTC"
+  },
+  "creation/dilettante_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "48827ca5a485237fd8c17e958fa07a09ac59447a422cf6f583384eb33223de9c",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.3,
+      "rouge": 0.0003
+    },
+    "secondes": 30,
+    "date": "2026-11-16 09:25 UTC"
+  },
+  "creation/ecrivain_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "dee133d58709dc15c290738c3d48578d4cb0b64631265a8f84473a09aebacc36",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 12.4,
+      "rouge": 0.0029
+    },
+    "secondes": 31,
+    "date": "2026-11-16 09:25 UTC"
+  },
+  "creation/ecrivain_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f84ce5df8e8b61d24353139b05a92edd7a0c466252d734fa9cfc36d3ded27cac",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.4,
+      "rouge": 0.0048
+    },
+    "secondes": 34,
+    "date": "2026-11-16 09:26 UTC"
+  },
+  "creation/ecrivain_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "9053d959829e6c052e3f1296aae9da93eb5ad0739622fc8125f4904dd5984cde",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.8,
+      "rouge": 0.0068
+    },
+    "secondes": 31,
+    "date": "2026-11-16 09:26 UTC"
+  },
+  "creation/ecrivain_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "76efa1a85f97aa602d52ae2bd9a08be2b397e7f988062999f4e43386c9d9568d",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 36.3,
+      "rouge": 0.0094
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:27 UTC"
+  },
+  "creation/journaliste_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "5ebea93f8a4aeb86cf4cf73d958c228194710faa37e1a9c665ae04aa8f179882",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 13.3,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 09:27 UTC"
+  },
+  "creation/journaliste_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f2b80ae964e19bd1113e26a81ffb8ce4a4b2e01766887637bd576678885e27dd",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.2,
+      "rouge": 0.0001
+    },
+    "secondes": 31,
+    "date": "2026-11-16 09:28 UTC"
+  },
+  "creation/journaliste_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "30898b43f9ce1bc465621650129bbe0185b56e5e652199c042c9eea00429c3f6",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.8,
+      "rouge": 0.0001
+    },
+    "secondes": 31,
+    "date": "2026-11-16 09:28 UTC"
+  },
+  "creation/journaliste_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "71ab9cd480155e42a3ed34c5ba88a1169211cbe193bcd5096a0100aa9d47523d",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.7,
+      "rouge": 0.0002
+    },
+    "secondes": 29,
+    "date": "2026-11-16 09:29 UTC"
+  },
+  "creation/medecin_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ca6629bc518c1e341ca9419f3995ff16f0c3b842b30b3b89d3c9836bed459292",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.9,
+      "rouge": 0.0001
+    },
+    "secondes": 29,
+    "date": "2026-11-16 09:29 UTC"
+  },
+  "creation/medecin_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "fdcdf299ff5d2887c248793241ade810d1b254924a3af55d2b78c6b2d7fd0872",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.1,
+      "rouge": 0.0002
+    },
+    "secondes": 29,
+    "date": "2026-11-16 09:30 UTC"
+  },
+  "creation/medecin_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1033501a2f8b8fb9e8d4c28e353875877e2ed2ad61bd6a811a935c903f0aaa41",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.3,
+      "rouge": 0.0001
+    },
+    "secondes": 30,
+    "date": "2026-11-16 09:30 UTC"
+  },
+  "creation/medecin_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ed16978d743c24fb2a43a62186a6521036b2018f5aa5fe71586366fccf149a02",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.8,
+      "rouge": 0.0001
+    },
+    "secondes": 28,
+    "date": "2026-11-16 09:31 UTC"
+  },
+  "creation/parapsychologue_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "e9114058c71fc383665839adf0cf4fb66d4aa464bc6ad09930aa15cd13b43f49",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.3,
+      "rouge": 0.0006
+    },
+    "secondes": 29,
+    "date": "2026-11-16 09:31 UTC"
+  },
+  "creation/parapsychologue_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1f6630c8fe8f5ca190d796d7f5c255e69d41f87fd96b2865a3fac96c7e39816d",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.7,
+      "rouge": 0.0016
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:32 UTC"
+  },
+  "creation/parapsychologue_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f71146d70468c5fa6f16188a7f0bd21b23995c9ce333019cf4c30247b5717771",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.2,
+      "rouge": 0.0014
+    },
+    "secondes": 28,
+    "date": "2026-11-16 09:32 UTC"
+  },
+  "creation/parapsychologue_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "78a211dd938ca55806e37c9e9d1878e7d91589fa63b4babe301fbde5c13097b6",
+    "cout": 0.0331,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.1,
+      "rouge": 0.0006
+    },
+    "secondes": 28,
+    "date": "2026-11-16 09:33 UTC"
+  },
+  "creation/professeur_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3fe6f21a57ed97ce94ccea484fe284fdf700da583cb8337a6564822e8ba67fd2",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.0,
+      "rouge": 0.0004
+    },
+    "secondes": 27,
+    "date": "2026-11-16 09:33 UTC"
+  },
+  "creation/professeur_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7dac0c45443482ac44dc16abfb108d228186e77ebf6a69dc6163be1c49a9320d",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.4,
+      "rouge": 0.0004
+    },
+    "secondes": 29,
+    "date": "2026-11-16 09:34 UTC"
+  },
+  "creation/professeur_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0b94d54a5b516d53cc0f5c36fbae6dca6dce5c935a7c98ee27ba13a1e40f1f8e",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.5,
+      "rouge": 0.0001
+    },
+    "secondes": 27,
+    "date": "2026-11-16 09:34 UTC"
+  },
+  "creation/professeur_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "4dfead8f5c86b6cfae707327aea9874bd2469039434e0618bc94156aa70267e1",
+    "cout": 0.033,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.0,
+      "rouge": 0.0002
+    },
+    "secondes": 27,
+    "date": "2026-11-16 09:35 UTC"
+  },
+  "paranoia/pj_pemberton": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d16dc7b672fbd99eb5b4399cbc80c2cdd4f9cba7f67b575aaab219ea7ef5693a",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.1,
+      "rouge": 0.0
+    },
+    "secondes": 34,
+    "date": "2026-11-16 09:54 UTC"
+  },
+  "paranoia/pj_doyle": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2abaa0e9b7fe6e77b28040caf94a2c565e0e70677d55682097aa639df0fb11b9",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 33.6,
+      "rouge": 0.0
+    },
+    "secondes": 34,
+    "date": "2026-11-16 09:54 UTC"
+  },
+  "paranoia/pj_ashby": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "bc69f49617fe78445fb6fbb5bcd64df3b172e1c7ff2b4cc9d39167dc61f8e8ea",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.2,
+      "rouge": 0.0
+    },
+    "secondes": 35,
+    "date": "2026-11-16 09:55 UTC"
+  },
+  "paranoia/pj_arnaud": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "9808a9c708c34e9160503bf69e219c4bb8a94890f398c0019cf83ddd2b68ee73",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 35.3,
+      "rouge": 0.0
+    },
+    "secondes": 31,
+    "date": "2026-11-16 09:55 UTC"
+  },
+  "paranoia/antiquaire_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "036fb12ac3e59096de5ed87ea2def1a6cba21020cc995d6d5783d7bb5496d5dd",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 28.6,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 09:56 UTC"
+  },
+  "paranoia/antiquaire_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "91dea707fdedf51ba463207553deca0d21fd2a316eb8dba4a4b9b53358b74b9f",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 34.0,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 09:56 UTC"
+  },
+  "paranoia/antiquaire_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "66465e10b284ad03c720f6ccf621dcd618b8f064788a68055673d54901714240",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "beaucoup de détails dans les bandes du haut ou du bas"
+    ],
+    "mesures": {
+      "saturation": 26.7,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 09:57 UTC"
+  },
+  "paranoia/antiquaire_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0794928c41b2e2d53fec405b803b753acbf881c85ef16cd4e65a985c7c4fc773",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 29.7,
+      "rouge": 0.0
+    },
+    "secondes": 34,
+    "date": "2026-11-16 09:57 UTC"
+  },
+  "paranoia/archeologue_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2c7af702f9cec90c68f40e8e1f1405a64498a26858e55842f7dfb1c33305b0df",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.2,
+      "rouge": 0.0
+    },
+    "secondes": 37,
+    "date": "2026-11-16 09:58 UTC"
+  },
+  "paranoia/archeologue_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "03eb2c709e69c8ae6c96e9957b6b877c543876cf1c22c34e765d805acdefbcef",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.8,
+      "rouge": 0.0004
+    },
+    "secondes": 37,
+    "date": "2026-11-16 09:59 UTC"
+  },
+  "paranoia/archeologue_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b9cc90c381f616de60c2e9aba5a4d4ab72946d772e47a9bedfc7aa332fb9db76",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 22.9,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:19 UTC"
+  },
+  "paranoia/archeologue_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "24df6cacf72863ab40deb0cc17f5d8958644521a68d82f59bd0f057ba776db05",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.1,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:19 UTC"
+  },
+  "paranoia/avocat_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "cb705c78122403192acd34a719da514160ac85aaa7d94d1ead12b5d5ec0776c8",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 14.7,
+      "rouge": 0.0
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:20 UTC"
+  },
+  "paranoia/avocat_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d4c4877881cd95e5fb86493e44f0fda79e7be6052f3bfdde2a4c4da827dc2dab",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 38.0,
+      "rouge": 0.0
+    },
+    "secondes": 27,
+    "date": "2026-11-16 10:20 UTC"
+  },
+  "paranoia/avocat_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8cf056dff3e952eb3c5068edd7051ee973ab3b35b0453324092daf1b8fdb82e8",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 28.5,
+      "rouge": 0.0
+    },
+    "secondes": 31,
+    "date": "2026-11-16 10:21 UTC"
+  },
+  "paranoia/avocat_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6fd710151808108b471ef86e98379982416c38e1879fdb235e598109e4201327",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.7,
+      "rouge": 0.0
+    },
+    "secondes": 35,
+    "date": "2026-11-16 10:21 UTC"
+  },
+  "paranoia/detective_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0cc1b9728761feb7baba73c9f52e458d90509555445ebc6e8a40813ab8f3d6c5",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 27.6,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:22 UTC"
+  },
+  "paranoia/detective_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "21ce6ed8d15773e55df909f548f291f2e14f375ce2131913fb9c347336c191b5",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.8,
+      "rouge": 0.0
+    },
+    "secondes": 31,
+    "date": "2026-11-16 10:22 UTC"
+  },
+  "paranoia/detective_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8b9120a8972895bd287bc83b09c758b3b2ddbcee1c89b19abbac518c00acdd6a",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 35.3,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:23 UTC"
+  },
+  "paranoia/detective_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f23bc43569739dc11ec4b62ea029db4f88c18740711ad950ca9703006beebb09",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 40.9,
+      "rouge": 0.0
+    },
+    "secondes": 34,
+    "date": "2026-11-16 10:23 UTC"
+  },
+  "paranoia/dilettante_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "a42b1133b98449b5374af0b0e27b2f6d7fad8a43b65c5a8c7e3dc4574790e2cc",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 38.0,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:24 UTC"
+  },
+  "paranoia/dilettante_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2b1fecbc74058cd7672fbae0da08be16b911397e8c671bd424240c247193353a",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.6,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:24 UTC"
+  },
+  "paranoia/dilettante_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "c465805acd57a20d723682c09792e39914ce4052bbcc88119f88051df4aec2e5",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 36.1,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:25 UTC"
+  },
+  "paranoia/dilettante_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "e77478fc08be995778ee7995d66fe20e521a10f8e98704642e6b8cb5030e1157",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 39.0,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 10:25 UTC"
+  },
+  "paranoia/ecrivain_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "69899f0453809208980f46be465b1e1ea3ff4dd1648a63dc7a35fbe74071b237",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.7,
+      "rouge": 0.0
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:26 UTC"
+  },
+  "paranoia/ecrivain_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "040fffc605a20eecddddfdc5eeb3d7c78b9235f7e45356889f52d4c5b4e7b4bb",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.9,
+      "rouge": 0.0
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:26 UTC"
+  },
+  "paranoia/ecrivain_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "e08d60006c73adc37389051fe994affa2d8791acf25b3922c635a7256445363c",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 26.9,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:27 UTC"
+  },
+  "paranoia/ecrivain_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3b1e41d8408c7f803c22367d311a903f382ce9c571ff9a0d9f2bd285789f9139",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 44.0,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 10:27 UTC"
+  },
+  "paranoia/journaliste_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "e5be1a7d045c735871a22dc8d2ca52e60f9d92f38e810e0d59729527c5bbb552",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.7,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:28 UTC"
+  },
+  "paranoia/journaliste_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d2c59e3d812c7e35ab94edc537519afa34cbb234714a39db7a7facbfb8dbb2f1",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 35.9,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:29 UTC"
+  },
+  "paranoia/journaliste_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0313ab02f626384a18670fb4f0b8d41d2f4cc2c0cac0a1884c9b8bc9429c0106",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.9,
+      "rouge": 0.0
+    },
+    "secondes": 34,
+    "date": "2026-11-16 10:29 UTC"
+  },
+  "paranoia/journaliste_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "72d78a9e3fd388f797f9d2c60c4e652573e1bb8b61fde53923825e246597296c",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 36.9,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:30 UTC"
+  },
+  "paranoia/medecin_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "a70d48ca9020790b2680a03159b08c1f4a301c2cb3dc355ea00fab6e405aa5f9",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.9,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:30 UTC"
+  },
+  "paranoia/medecin_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8c12299a452ef8ff7c7f27f68ce690235c1f8fa4ea4e8e6afe660b2e01d38971",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.4,
+      "rouge": 0.0
+    },
+    "secondes": 34,
+    "date": "2026-11-16 10:31 UTC"
+  },
+  "paranoia/medecin_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "be17bbc1cbdfc8e99fd1d3a00f203e9528ec93eceea07ff132be164189524b1c",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.6,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:31 UTC"
+  },
+  "paranoia/medecin_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ac4d5020b276718174a510c65ff9683fd707d792cfe24ff3c2ef082dce14faa4",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.0,
+      "rouge": 0.0
+    },
+    "secondes": 31,
+    "date": "2026-11-16 10:32 UTC"
+  },
+  "paranoia/parapsychologue_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "48919f1b488e7be929623ba3fd5f9c42e94758eff48bd220ce8a5bfa88661566",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 29.3,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:32 UTC"
+  },
+  "paranoia/parapsychologue_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1e38dd32ff77ffe54ee502d52ed22c0495f34a7934944de1e374e0b7a504cb41",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 32.1,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:33 UTC"
+  },
+  "paranoia/parapsychologue_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8b2003b440ec5032457ee0cf959e7db5d0d57adc332470ca34765b5b94509fab",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.9,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:33 UTC"
+  },
+  "paranoia/parapsychologue_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "320b18588b01d509e15fc7fc680cbf3db86b7df79598bcb7b3bd8a2d98fadfbe",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 41.6,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:34 UTC"
+  },
+  "paranoia/professeur_h_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "90f98b2289a57a215a20dd6bdec8d4451d7e18cf0101015b86cc865d897b0ab8",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.0,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 10:34 UTC"
+  },
+  "paranoia/professeur_h_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "edbeb368935dca6eb1d1e384d5b335987fdff90c1d3aa340e4002b8798c0540e",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 38.7,
+      "rouge": 0.0
+    },
+    "secondes": 33,
+    "date": "2026-11-16 10:35 UTC"
+  },
+  "paranoia/professeur_f_charme": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b45061708506690077037a6a2e24f53d579962f8602d52dec1346ac5fd97f384",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 29.1,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:36 UTC"
+  },
+  "paranoia/professeur_f_terne": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2c8c47ef037e31c6850f530f1e2f0f5f2c74ebc15ccf123e8fae9a2e41eb347f",
+    "cout": 0.0454,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.2,
+      "rouge": 0.0
+    },
+    "secondes": 32,
+    "date": "2026-11-16 10:36 UTC"
+  },
+  "londres/28_museum-tavern": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "4943c24d2bc5579e344329a562e7fde88a46ab5917f99d112d3ffdb6ded76ee2",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.6,
+      "rouge": 0.001
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:37 UTC"
+  },
+  "londres/29_eglise-st-george": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f1116d4def8f54437df52faf91a3631a8b6408840bbd0685c623f821bf7be9eb",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.1,
+      "rouge": 0.0008
+    },
+    "secondes": 28,
+    "date": "2026-11-16 10:37 UTC"
+  },
+  "londres/30_quais-de-la-tamise": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "5b9bee9dcee137594ba4ffe0799be29560a01cf1e2cca7663184749e96030e68",
+    "cout": 0.0326,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.6,
+      "rouge": 0.0001
+    },
+    "secondes": 26,
+    "date": "2026-11-16 10:37 UTC"
+  },
+  "portraits/35_patron": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "a375a8d3664bf347713bb10cd7e8b3ecf6f951ee4f76f91b7d61580262b47e01",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.0,
+      "rouge": 0.0001
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:38 UTC"
+  },
+  "portraits/36_hollis": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "fb49b295fa4722c8ecd649dec5220193bee4b765a3ba63b2cf5beeee08070ad8",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 15.3,
+      "rouge": 0.0001
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:38 UTC"
+  },
+  "portraits/37_ramasseur": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d587431df3c5aa455fde2dd0bb8b977ddaecae806e41b51660948490b67fe4d2",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 10.8,
+      "rouge": 0.0004
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:39 UTC"
+  },
+  "situations/01_poste-de-bow-street": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "78b1128974ef99217ddefae107e5e56f750dcbc2767be73ed5c35fc9e91b77f1",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 29.0,
+      "rouge": 0.0007
+    },
+    "secondes": 31,
+    "date": "2026-11-16 10:39 UTC"
+  },
+  "situations/02_poste-de-la-rue-de-la-banque": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "16867642b88010f51728354554938c0ceae7e2da44d927d54daec94783ab446c",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 22.0,
+      "rouge": 0.0029
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:40 UTC"
+  },
+  "visions/01_dents-a-la-place-des-yeux": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "34326c997a5e744db004be733b4b5d5312809cef8ed8e087bef839a2bc54772f",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.1,
+      "rouge": 0.0
+    },
+    "secondes": 31,
+    "date": "2026-11-16 10:40 UTC"
+  },
+  "visions/02_dents-qui-transpirent": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "406c34561fad33988a6f4616365030ea7a4fb1f55d533dc59b256f6679d4567f",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.7,
+      "rouge": 0.0038
+    },
+    "secondes": 26,
+    "date": "2026-11-16 10:41 UTC"
+  },
+  "visions/03_spirale-dans-la-buee": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "0585363fa7614b8e9c38e8236c0466deb76b0c04cd83d2b15631104a0330c9b9",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.9,
+      "rouge": 0.0008
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:41 UTC"
+  },
+  "visions/04_fideles-noyes": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6cf2104b2ff8b7419d217e37f066beb0b0bad45e52fea3b201523a7fe113b231",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 13.7,
+      "rouge": 0.0006
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:42 UTC"
+  },
+  "visions/05_cite-engloutie": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3f094bac5e211bea7bcf95d3c9398fc529e8d3a88f3a1b8dc5142a44f1f1e3df",
+    "cout": 0.0326,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.2,
+      "rouge": 0.004
+    },
+    "secondes": 30,
+    "date": "2026-11-16 10:42 UTC"
+  },
+  "visions/06_forme-sur-la-mer": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "bf607b20ac719d16d50d7811ff70e18387429c67478303d001ec85790bdc70d9",
+    "cout": 0.0326,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "beaucoup de détails dans les bandes du haut ou du bas"
+    ],
+    "mesures": {
+      "saturation": 22.0,
+      "rouge": 0.0002
+    },
+    "secondes": 28,
+    "date": "2026-11-16 10:43 UTC"
+  },
+  "visions/07_yeux-dans-le-papier-peint": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "848938bde81ad8f50e98ad871c41c392217ceca889635baab5c3ed1f7b320894",
+    "cout": 0.0324,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.1,
+      "rouge": 0.0
+    },
+    "secondes": 26,
+    "date": "2026-11-16 10:43 UTC"
+  },
+  "visions/08_main-trop-articulee": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8b9dad5513f5d7756379f879bb8a6b0ff7aebe0693267edd37a053287ba511ed",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.1,
+      "rouge": 0.0001
+    },
+    "secondes": 25,
+    "date": "2026-11-16 10:44 UTC"
+  },
+  "visions/09_visage-de-poisson": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "67656e4a3558061fa853aa274754295a2d64a44a1b82d902a39490b08c719d70",
+    "cout": 0.0326,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 10.2,
+      "rouge": 0.0014
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:44 UTC"
+  },
+  "visions/10_bouche-dans-la-paume": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "ae754f05f5e8f04fb39371dc7f6a0d7c11d919652a948c46b7579c29d8b85381",
+    "cout": 0.0324,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.2,
+      "rouge": 0.0003
+    },
+    "secondes": 28,
+    "date": "2026-11-16 10:45 UTC"
+  },
+  "visions/11_peau-sur-un-cintre": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d43e8cc76cf34d5bb61a63aa1af8aabd3ac245493e2204cbe5929c478cdc50a0",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 46.8,
+      "rouge": 0.0205
+    },
+    "secondes": 28,
+    "date": "2026-11-16 10:45 UTC"
+  },
+  "visions/12_voiture-des-morts": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "36e6d00731eb264d9d3f8c215f6d25ad184399e563904c070a4c907a22551fde",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.5,
+      "rouge": 0.0004
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:46 UTC"
+  },
+  "visions/13_statue-qui-ouvre-l-oeil": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7ddd50a94bec9ab8b916a3eebf2082f7a3add255f62380e5e5ce512ba66e7427",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [
+      "aucune touche de rouge détectée"
+    ],
+    "mesures": {
+      "saturation": 19.4,
+      "rouge": 0.0
+    },
+    "secondes": 27,
+    "date": "2026-11-16 10:46 UTC"
+  },
+  "visions/14_foule-sans-visage": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "86e9b64181bd876a06c8e0efe6c73ef0162c2ba7f9fb66eed03b8e3aa9d956c5",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.5,
+      "rouge": 0.004
+    },
+    "secondes": 28,
+    "date": "2026-11-16 10:46 UTC"
+  },
+  "visions/15_visage-dans-l-eau-noire": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "f3111e7aa115187da8bd552ce9b7b94949849f029dce62cac1c2efe05fc2bec8",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.7,
+      "rouge": 0.0022
+    },
+    "secondes": 27,
+    "date": "2026-11-16 10:47 UTC"
+  },
+  "visions/16_sigle-grave": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "9e23b0b6bc86904f52ed3b1591d9c6512b62e7308c88324d3c2ab983d832eb00",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.3,
+      "rouge": 0.0004
+    },
+    "secondes": 26,
+    "date": "2026-11-16 10:47 UTC"
+  },
+  "visions/17_etoile-et-oeil": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2c0805a61e697ca3ac8e178856879bcc1c041436c931e333e6851bf0e8aa0c2e",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.8,
+      "rouge": 0.0031
+    },
+    "secondes": 29,
+    "date": "2026-11-16 10:48 UTC"
+  },
+  "visions/18_sous-la-porte": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "71fccad3591081ed760b315ee4c5908209325809d32647c0c94d49b085666079",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.0,
+      "rouge": 0.0036
+    },
+    "secondes": 27,
+    "date": "2026-11-16 10:48 UTC"
+  },
+  "visions/19_reflet-qui-sourit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "058c33c6fed850cc4982b0c9120645dee619fca0dbc5d49e97a32e62e317b9e0",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.6,
+      "rouge": 0.0004
+    },
+    "secondes": 24,
+    "date": "2026-11-16 10:49 UTC"
+  },
+  "visions/20_etoiles-en-oeil": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6b44bbb316af48ccfc2512f22608ddbdfba550a5b45dce66c634ad78d62be2e1",
+    "cout": 0.0325,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.5,
+      "rouge": 0.0004
+    },
+    "secondes": 28,
+    "date": "2026-11-16 10:49 UTC"
+  },
+  "portraits/38_fauvel": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "6f597bf4dc739da03cd3d155679fae92284923e7ceb1672f7cab1640e4f0d4cf",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 16.0,
+      "rouge": 0.0002
+    },
+    "secondes": 30,
+    "date": "2026-11-16 20:58 UTC"
+  },
+  "portraits/39_thibierge": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7f61f043958c868b5de86720058b82b0fe1b0f181be076970575433c92bb34d9",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 39.6,
+      "rouge": 0.0009
+    },
+    "secondes": 26,
+    "date": "2026-11-16 20:59 UTC"
+  },
+  "portraits/40_arnoult": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "5b364230e78300c4ed06731e19c60c0fb6dedf641051d3b55e33697f522305fd",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.9,
+      "rouge": 0.0029
+    },
+    "secondes": 27,
+    "date": "2026-11-16 20:59 UTC"
+  },
+  "portraits/41_lorien": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "7d2a9cbbff7a0713986e760311186a4bec33d5b3955a3ef244cd46c0be950ea1",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.5,
+      "rouge": 0.0
+    },
+    "secondes": 28,
+    "date": "2026-11-16 20:59 UTC"
+  },
+  "portraits/42_veronique": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "27511f96302a8ce4f6549efe7ea27962fdc43f8c3e073f2dcf3e30fea18381b3",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.9,
+      "rouge": 0.0001
+    },
+    "secondes": 27,
+    "date": "2026-11-16 21:00 UTC"
+  },
+  "portraits/43_caterina": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "95c65d5253965143039d7dc806b9d2084b5f310792688605ec4844e4cb94341a",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.0,
+      "rouge": 0.0009
+    },
+    "secondes": 30,
+    "date": "2026-11-16 21:00 UTC"
+  },
+  "portraits/44_bertin": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "af84a4bc66aee7b3c7f683f1f5ce39de6ef61cfc54c586511ef81e2396dbefab",
+    "cout": 0.0326,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 11.8,
+      "rouge": 0.0015
+    },
+    "secondes": 28,
+    "date": "2026-11-16 21:01 UTC"
+  },
+  "portraits/45_pruvost": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "86154f9b5b6019d61fef77ffbd6c8706f156d52f0dad84400f0ce89eb1d96892",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 14.6,
+      "rouge": 0.0
+    },
+    "secondes": 29,
+    "date": "2026-11-16 21:01 UTC"
+  },
+  "poissy/01_gare-de-poissy": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "2b540ab0dce7c3ad42945016e2f71e5309b6c4359527c7dfa877de4ad1c193ab",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 17.7,
+      "rouge": 0.0002
+    },
+    "secondes": 26,
+    "date": "2026-11-16 21:02 UTC"
+  },
+  "poissy/02_grand-rue_eglise": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "9351421e2607a15c216d3cbe0464c86bd990861a50e6705492e5984ea1afdef1",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.8,
+      "rouge": 0.0002
+    },
+    "secondes": 26,
+    "date": "2026-11-16 21:02 UTC"
+  },
+  "poissy/03_mairie_archives": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "446024878cdda28da58ebce56e08b33d80a9ecc52e432cd58fadeebfd4d627d9",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.8,
+      "rouge": 0.0003
+    },
+    "secondes": 29,
+    "date": "2026-11-16 21:03 UTC"
+  },
+  "poissy/04_eglise_fonts": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "4ad301a05d63f16aaa3ef5c89642a4e25c8aaaf35d9cec8044553f114f36f94c",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.8,
+      "rouge": 0.0003
+    },
+    "secondes": 27,
+    "date": "2026-11-16 21:03 UTC"
+  },
+  "poissy/05_auberge-du-lion-d-or": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "80d448020febba94153dec706fb09a5f2f86130db2737daed52e0e8d8cdb78a7",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.8,
+      "rouge": 0.0
+    },
+    "secondes": 30,
+    "date": "2026-11-16 21:04 UTC"
+  },
+  "poissy/06_maison-lorien_rosiers": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "958bca86be8db8d88738fcb6be193a280fb4cf34d5d65c4c93823444bc7fe642",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.8,
+      "rouge": 0.0
+    },
+    "secondes": 29,
+    "date": "2026-11-16 21:04 UTC"
+  },
+  "poissy/07_cuisine-des-lorien": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "10b911598026317561ba474c6e3ef016ea99145e300539be7f55e91c608d1e5d",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.0,
+      "rouge": 0.0012
+    },
+    "secondes": 27,
+    "date": "2026-11-16 21:05 UTC"
+  },
+  "poissy/08_chambre-d-enfant_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "e80f9a8a36124a5845e9461191de46d6b81f2d159bee526651603ddb661d0756",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.1,
+      "rouge": 0.0002
+    },
+    "secondes": 27,
+    "date": "2026-11-16 21:05 UTC"
+  },
+  "poissy/09_fouille_porte-d-acier": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "cfdb0b1f9ef82ffa1c94938c5dd6b6bc20aad6a575aa3aaecb23e07d8b54a35f",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.6,
+      "rouge": 0.0004
+    },
+    "secondes": 31,
+    "date": "2026-11-16 21:06 UTC"
+  },
+  "poissy/10_caves_cellules": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "cae1a97d36e2383cc570a3ef667fff113be7958734e8e505d6e432e4bd5034d7",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.6,
+      "rouge": 0.0005
+    },
+    "secondes": 26,
+    "date": "2026-11-16 21:06 UTC"
+  },
+  "poissy/11_salle-du-bras": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "38ce4cadb0e5f4da5bcfeff2ccc9dbbbdc01b649244a26a8ce5c4106ed179908",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 41.5,
+      "rouge": 0.0009
+    },
+    "secondes": 31,
+    "date": "2026-11-16 21:07 UTC"
+  },
+  "poissy/12_gare-de-lyon_nuit": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "b4b65356de625dfb35419028e7c81b64c3c9d0a1ec60d00feafeac74c0b95312",
+    "cout": 0.0329,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.3,
+      "rouge": 0.0002
+    },
+    "secondes": 30,
+    "date": "2026-11-16 21:07 UTC"
+  },
+  "poissy/13_compartiment": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "8fe5c98d0faa256b95657756154dab44dc38a5b3cb3e07190e64bb9330825a65",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.1,
+      "rouge": 0.0007
+    },
+    "secondes": 28,
+    "date": "2026-11-16 21:08 UTC"
+  },
+  "poissy/14_voiture-salon": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "1018a6a275babf9e39277d205c85c453d0fb7aa6484b304baaf55fb9b6bca8cd",
+    "cout": 0.0451,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 34.8,
+      "rouge": 0.0003
+    },
+    "secondes": 37,
+    "date": "2026-11-16 21:08 UTC"
+  },
+  "objets/01_serviette-de-ravel": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "d2a519dedd1a89b88e4a3e53a399badc98abd69d641789a5f1044a9a97749040",
+    "cout": 0.0543,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.1,
+      "rouge": 0.0036
+    },
+    "secondes": 53,
+    "date": "2026-11-17 09:32 UTC"
+  },
+  "objets/02_billet-brule": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "9f474725c869af20bd5893c14c40a35bb596ba05b69bdf64ac462473ad321eb0",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.6,
+      "rouge": 0.0003
+    },
+    "secondes": 58,
+    "date": "2026-11-17 09:33 UTC"
+  },
+  "objets/03_bouton-de-manchette": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "92b5cd372f33b06810b218f65394f95248f45efdea1436ce3d951913f483dc2c",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.5,
+      "rouge": 0.0007
+    },
+    "secondes": 59,
+    "date": "2026-11-17 09:34 UTC"
+  },
+  "objets/04_carte-de-smith": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "11fe435a4836354deeef3c575ab024faee237743b99e154eeef3037dae15dce0",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 26.0,
+      "rouge": 0.0031
+    },
+    "secondes": 54,
+    "date": "2026-11-17 09:35 UTC"
+  },
+  "objets/05_valise-de-beddows": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "339dfa290711fff3e09dde5b58eb135ee55a01f6f2129187172b9a365e2fc660",
+    "cout": 0.0541,
+    "taille_recue": "1024x1024",
+    "avertissements": [
+      "couleurs autres que le rouge sur 4% de l’image"
+    ],
+    "mesures": {
+      "saturation": 56.3,
+      "rouge": 0.0371
+    },
+    "secondes": 49,
+    "date": "2026-11-17 09:36 UTC"
+  },
+  "objets/06_plaque-de-cle": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "6b47c4a59a3980d2a164c7f3dea511e8e17adb598037fe70712a7bc500423227",
+    "cout": 0.0541,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 30.9,
+      "rouge": 0.0172
+    },
+    "secondes": 58,
+    "date": "2026-11-17 09:37 UTC"
+  },
+  "objets/07_lettre-roussie": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "7163547b8c0ba5e001130f76679e7e6bb95e6f788a45141ef5c1e0fdaa3641d6",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 32.7,
+      "rouge": 0.0002
+    },
+    "secondes": 72,
+    "date": "2026-11-17 09:38 UTC"
+  },
+  "objets/08_message-sur-la-peau": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "f0228800114c4ae11349474d41cb7f6dc7bdf07d9e595a4eade32b111757a49b",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 27.6,
+      "rouge": 0.0
+    },
+    "secondes": 66,
+    "date": "2026-11-17 09:39 UTC"
+  },
+  "objets/09_maquette-des-alexis": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "363cefcf1aa6c630584e1c8ed8fc611bf9c146cc5e4e52d9f484e4a6e7ff9b1e",
+    "cout": 0.0543,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.2,
+      "rouge": 0.0004
+    },
+    "secondes": 57,
+    "date": "2026-11-17 09:40 UTC"
+  },
+  "objets/10_gueridon-truque": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "f1775d212f0298341948238376f3779f76ee9ec010e31a6e3826d498e6e0744f",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.4,
+      "rouge": 0.0029
+    },
+    "secondes": 58,
+    "date": "2026-11-17 09:41 UTC"
+  },
+  "objets/11_cahier-de-delplace": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "a98c13288d9258dd342b396e1d4811ecc4cd27081f7210634ca72d0cd2336694",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 18.4,
+      "rouge": 0.0046
+    },
+    "secondes": 47,
+    "date": "2026-11-17 09:42 UTC"
+  },
+  "objets/12_registre-de-charenton": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "97c4dc2a9476cb9a85b09613058380e278a09e8e32d57b2502d4be91b52da877",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 28.5,
+      "rouge": 0.0002
+    },
+    "secondes": 54,
+    "date": "2026-11-17 09:43 UTC"
+  },
+  "objets/13_plans-de-la-villa": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "6918ab6e850cd326525b50bff7b1cfa7e8c4e759b054c56b47e8ace10cff4e74",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 31.5,
+      "rouge": 0.0002
+    },
+    "secondes": 63,
+    "date": "2026-11-17 09:44 UTC"
+  },
+  "objets/14_actes-de-1789": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "b9b6c9cc7adf1c32f86700cf67a8bf470871b37dcae245071730948a6f543639",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 21.1,
+      "rouge": 0.0001
+    },
+    "secondes": 59,
+    "date": "2026-11-17 09:45 UTC"
+  },
+  "objets/15_lettre-de-wellington": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "db322d0b5453bee1e531a4b12e962b562526bfd58c37b4b6e3a33674b0af2168",
+    "cout": 0.0542,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 19.2,
+      "rouge": 0.005
+    },
+    "secondes": 57,
+    "date": "2026-11-17 09:46 UTC"
+  },
+  "objets/16_bras-gauche": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "4a865e72089f305cbd6b07c9b16fa6743a0d9f06f50b6735c47ed23c8f8276da",
+    "cout": 0.0543,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 24.4,
+      "rouge": 0.0008
+    },
+    "secondes": 67,
+    "date": "2026-11-17 09:47 UTC"
+  },
+  "objets/17_places-pour-aida": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "1024x1024",
+    "sha256": "f714d4f89b57750021fc6c15f1156e78bfdf7d91e5c8e2faebad192692a8734a",
+    "cout": 0.0541,
+    "taille_recue": "1024x1024",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 15.4,
+      "rouge": 0.0057
+    },
+    "secondes": 55,
+    "date": "2026-11-17 09:48 UTC"
+  },
+  "portraits/46_jeanclaude": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "3fbe4a602e0861d731b4d8d32f8508a026cc30d243004e000e018b0390f8c566",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 20.0,
+      "rouge": 0.0031
+    },
+    "secondes": 27,
+    "date": "2026-11-24 20:19 UTC"
+  },
+  "portraits/47_edgar": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "12927ef8565dee3436f88500f830fb93799d0cbe2b44640a28c428c07111c37d",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 25.2,
+      "rouge": 0.0
+    },
+    "secondes": 28,
+    "date": "2026-11-24 20:20 UTC"
+  },
+  "portraits/48_william": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d1fb2bf0c88d2a5a81ea9f3d476ead0fd299d8be271c791654574412e8fbed90",
+    "cout": 0.0327,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 23.6,
+      "rouge": 0.0002
+    },
+    "secondes": 29,
+    "date": "2026-11-24 20:20 UTC"
+  },
+  "portraits/49_duc": {
+    "etat": "ok",
+    "version": 2,
+    "taille": "2304x960",
+    "sha256": "d90bd3d6c89ca79a0ea04da3f090f74874f3212f50d6b6eaa555d1d3aa935d5f",
+    "cout": 0.0328,
+    "taille_recue": "2304x960",
+    "avertissements": [],
+    "mesures": {
+      "saturation": 3.0,
+      "rouge": 0.0006
+    },
+    "secondes": 28,
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "portraits/50_max": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "portraits/51_guet": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "portraits/52_chappuis": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "portraits/53_rochat": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/01_gare-de-lausanne_brouillard": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/02_hotel-des-alpes": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/03_rue-saint-etienne_cour": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/04_boutique-wellington": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/06_cathedrale_gisant": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/07_bibliotheque-cantonale": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/08_signal_panorama": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/10_rue-du-pre_maison": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/11_maison-vide_porte": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/12_etage_nuit": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/13_compartiment_simplon": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/16_reve_train-aux-stores": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/17_reve_plaine-de-cendre": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/18_reve_boutique": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/19_reve_ville": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/05_salon-de-l-etage": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/14_wagon-restaurant_neige": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  },
+  "lausanne/20_reve_palud_proces": {
+    "etat": "echec",
+    "erreur": "Error code: 429 - You have no credits remaining. Add credits to continue using the API at https://platform.openai.com/settings/organization/billing/.",
+    "date": "2026-11-24 20:21 UTC"
+  }
+}
