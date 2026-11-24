@@ -1513,7 +1513,11 @@
     'lausanne/09_cafe-du-chat-noir': 'paris/10_cafe-de-charenton', 'lausanne/10_rue-du-pre_maison': 'londres/11_st-johns-wood_villa_nuit',
     'lausanne/11_maison-vide_porte': 'londres/12_st-johns-wood_ruines', 'lausanne/12_etage_nuit': 'londres/04_cheapside-chambre-meublee',
     'lausanne/13_compartiment_simplon': 'poissy/13_compartiment', 'lausanne/14_wagon-restaurant_neige': 'prologue/01_wagon-restaurant',
-    'lausanne/15_hotel-de-police': 'paris/08_charenton_secretariat', 'situations/03_hotel-de-police-de-lausanne': 'situations/02_poste-de-la-rue-de-la-banque'
+    'situations/03_hotel-de-police-de-lausanne': 'situations/02_poste-de-la-rue-de-la-banque',
+    // le rêve
+    'lausanne/16_reve_train-aux-stores': 'prologue/03_voitures-lits', 'lausanne/17_reve_plaine-de-cendre': 'londres/24_campagne_au-petit-matin',
+    'lausanne/18_reve_boutique': 'londres/17_boutique-makryat', 'lausanne/19_reve_ville': 'londres/16_stoke-newington_nuit',
+    'lausanne/20_reve_palud_proces': 'londres/27_gordon-square_seance'
   };
   function ou(k) {
     return function (st) {
@@ -1534,7 +1538,10 @@
     la_chatnoir: ou('lausanne/09_cafe-du-chat-noir'),
     la_pre: ou('lausanne/10_rue-du-pre_maison'),
     la_preint: ou('lausanne/11_maison-vide_porte'),
-    la_police: ou('lausanne/15_hotel-de-police'),
+    la_police: ou('situations/03_hotel-de-police-de-lausanne'),
+    re_train: ou('lausanne/16_reve_train-aux-stores'), re_plaine: ou('lausanne/17_reve_plaine-de-cendre'),
+    re_boutique: ou('lausanne/18_reve_boutique'), re_chambre: ou('lausanne/19_reve_ville'), re_ville: ou('lausanne/19_reve_ville'),
+    re_palud: ou('lausanne/20_reve_palud_proces'), re_pre: ou('lausanne/11_maison-vide_porte'),
     tr_compartiment: ou('lausanne/13_compartiment_simplon'),
     tr_restaurant: ou('lausanne/14_wagon-restaurant_neige')
   });

@@ -1357,6 +1357,157 @@
       "prompt": "prompts/objets/17_places-pour-aida.txt",
       "references": [],
       "taille": "1024x1024"
+    },
+    {
+      "image": "lausanne/01_gare-de-lausanne_brouillard",
+      "prompt": "prompts/lausanne/01_gare-de-lausanne_brouillard.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/02_hotel-des-alpes",
+      "prompt": "prompts/lausanne/02_hotel-des-alpes.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/03_rue-saint-etienne_cour",
+      "prompt": "prompts/lausanne/03_rue-saint-etienne_cour.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/04_boutique-wellington",
+      "prompt": "prompts/lausanne/04_boutique-wellington.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/05_salon-de-l-etage",
+      "prompt": "prompts/lausanne/05_salon-de-l-etage.txt",
+      "references": [
+        "portraits/48_william"
+      ]
+    },
+    {
+      "image": "lausanne/06_cathedrale_gisant",
+      "prompt": "prompts/lausanne/06_cathedrale_gisant.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/07_bibliotheque-cantonale",
+      "prompt": "prompts/lausanne/07_bibliotheque-cantonale.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/08_signal_panorama",
+      "prompt": "prompts/lausanne/08_signal_panorama.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/09_cafe-du-chat-noir",
+      "prompt": "prompts/lausanne/09_cafe-du-chat-noir.txt",
+      "references": [
+        "portraits/50_max"
+      ]
+    },
+    {
+      "image": "lausanne/10_rue-du-pre_maison",
+      "prompt": "prompts/lausanne/10_rue-du-pre_maison.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/11_maison-vide_porte",
+      "prompt": "prompts/lausanne/11_maison-vide_porte.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/12_etage_nuit",
+      "prompt": "prompts/lausanne/12_etage_nuit.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/13_compartiment_simplon",
+      "prompt": "prompts/lausanne/13_compartiment_simplon.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/14_wagon-restaurant_neige",
+      "prompt": "prompts/lausanne/14_wagon-restaurant_neige.txt",
+      "references": [
+        "portraits/49_duc"
+      ]
+    },
+    {
+      "image": "situations/03_hotel-de-police-de-lausanne",
+      "prompt": "prompts/situations/03_hotel-de-police-de-lausanne.txt",
+      "references": [
+        "portraits/53_rochat"
+      ]
+    },
+    {
+      "image": "lausanne/16_reve_train-aux-stores",
+      "prompt": "prompts/lausanne/16_reve_train-aux-stores.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/17_reve_plaine-de-cendre",
+      "prompt": "prompts/lausanne/17_reve_plaine-de-cendre.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/18_reve_boutique",
+      "prompt": "prompts/lausanne/18_reve_boutique.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/19_reve_ville",
+      "prompt": "prompts/lausanne/19_reve_ville.txt",
+      "references": []
+    },
+    {
+      "image": "lausanne/20_reve_palud_proces",
+      "prompt": "prompts/lausanne/20_reve_palud_proces.txt",
+      "references": [
+        "portraits/49_duc",
+        "portraits/47_edgar"
+      ]
+    },
+    {
+      "image": "portraits/46_jeanclaude",
+      "prompt": "prompts/portraits/46_jeanclaude.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/47_edgar",
+      "prompt": "prompts/portraits/47_edgar.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/48_william",
+      "prompt": "prompts/portraits/48_william.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/49_duc",
+      "prompt": "prompts/portraits/49_duc.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/50_max",
+      "prompt": "prompts/portraits/50_max.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/51_guet",
+      "prompt": "prompts/portraits/51_guet.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/52_chappuis",
+      "prompt": "prompts/portraits/52_chappuis.txt",
+      "references": []
+    },
+    {
+      "image": "portraits/53_rochat",
+      "prompt": "prompts/portraits/53_rochat.txt",
+      "references": []
     }
   ],
   "version": 2
