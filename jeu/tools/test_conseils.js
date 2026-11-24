@@ -1,7 +1,7 @@
 // Réfléchir (le jet d'Idée) doit toujours souffler une piste concrète, à chaque étape de Paris et de Poissy :
 // on fait avancer l'enquête drapeau par drapeau, et le conseil doit changer en route, sans jamais manquer.
 global.window = global;
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const P = CHAPTERS.paris;
 const g = RPG.createGame(P, null, { rng: () => 0.5, pc: P.pregens[0] }), A = g.api;
 const etapes = [

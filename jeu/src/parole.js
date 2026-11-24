@@ -697,6 +697,8 @@
   function quantA(l) { l = String(l); return /^le /.test(l) ? 'Quant au ' + l.slice(3) : /^les /.test(l) ? 'Quant aux ' + l.slice(4) : 'Quant à ' + l; }
   function stripName(s) { return String(s).replace(/^[^?»]{1,40}\? /, ''); }
   function make(scene) {
+    // la culture du lieu : un chapitre peut dire ce qu'on répond chez lui (scene.culture), avant la culture générale
+    function cultureLocale(api, k) { var c = scene.culture && scene.culture[k]; if (!c) return null; return typeof c === 'function' ? c(api) : c; }
     function npcLine(api, id, x) { api.npc(id, x); }
     scene.checks = scene.checks || {};
     scene.checks.parole_baratin = { skill: 'Baratin', why: 'qu’on vous croie', push: 'Insister, en rajouter (jet forcé)', resolve: function (api, r) {
@@ -1042,7 +1044,7 @@
       // 8. la culture du temps
       if (cult) {
         var ov = f.avis && f.avis[cult.k];
-        var pool = ov || (f.pa && CULT_PA[cult.k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
+        var pool = ov || cultureLocale(api, cult.k) || (f.pa && CULT_PA[cult.k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
         count('cult:' + cult.k);
         say(val(api, pool, 'cult:' + id + ':' + cult.k), true);
         relance(api, f, id, m); saveMem(api, id, m); return true;
@@ -1092,7 +1094,7 @@
     converse.causer = function (api, npc, k) {
       var f = (scene.fiches || {})[npc.id]; if (!f) return false;
       var cult = CULT.filter(function (c) { return c.k === k; })[0]; if (!cult) return false;
-      var pool = (f.avis && f.avis[k]) || (f.pa && CULT_PA[k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
+      var pool = (f.avis && f.avis[k]) || cultureLocale(api, k) || (f.pa && CULT_PA[k]) || (typeof cult[classe(f)] === 'function' ? cult[classe(f)](api) : cult[classe(f)]) || cult.p;
       if (!pool) return false;
       npcLine(api, npc.id, val(api, pool, 'cult:' + npc.id + ':' + k));
       var m = mem(api, npc.id); relance(api, f, npc.id, m); saveMem(api, npc.id, m);

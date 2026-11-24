@@ -1,6 +1,6 @@
 // des phrases pièges : le personnage doit répondre à ce qu'on lui dit, pas à un mot pris pour un autre
 global.window = global;
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const CAS = [
   ['londres', 'institut', 'smith', null, 'J’adore vos moustaches', null, /observe|moustache \?/i],
   ['londres', 'institut', 'smith', null, 'quelles belles moustaches vous avez', null, /observe/i],

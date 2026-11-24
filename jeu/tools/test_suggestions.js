@@ -2,7 +2,7 @@
 // les suggestions de paroles. On compare l'intelligence du personnage et le mode du carnet.
 // node test/suggestions.js [chapitre] [parties]
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const ch = process.argv[2] || 'paris', N = +(process.argv[3] || 30), sc = CHAPTERS[ch];
 const MAX = ch === 'londres' ? 2600 : ch === 'paris' ? 2400 : 400;
 function joue(INT, mode, graine) {

@@ -1,7 +1,7 @@
 // « Demander à l'accueil s'ils ont vu l'homme… », « sortir pour trouver l'homme… » : une question indirecte n'est pas
 // un récit du passé, et le but d'un déplacement nu est le vrai geste. Cas vécus au banquet et à l'hôtel de Londres.
 global.window = global; global.RPG_ABSENTS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const L = CHAPTERS.londres; let ko = 0;
 function partie() { const g = RPG.createGame(L, null, { rng: () => 0.1, pc: JSON.parse(JSON.stringify(L.pregens[0])) }); g.choose({ label: 'Écouter la conférence', action: 'i_conf' }); while (g.state.pending) g.roll(); return g; }
 function dit(g, cmd) { const n = g.state.log.length; g.step(cmd); while (g.state.pending) g.roll(); return g.state.log.slice(n).filter(e => typeof e.x === 'string').map(e => e.x).join(' '); }

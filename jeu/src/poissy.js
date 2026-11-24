@@ -880,7 +880,7 @@
   };
 
   // ================================================================ la fin du chapitre 2
-  P.ending = { title: 'Fin du chapitre 2 : Paris et Poissy', text: 'Lausanne, 6 h 45. Le chapitre 3 arrive bientôt.' };
+  P.ending = { title: 'Fin du chapitre 2 : Paris et Poissy', text: 'Lausanne, 6 h 45. Le chapitre 3 commence.' };
   var finAvant = P.endingFor;
   P.endingFor = function (s) {
     var r = finAvant && finAvant(s); if (r) return r;
@@ -890,7 +890,7 @@
     var bras = (s.inv || []).indexOf(BRAS) >= 0;
     return { title: 'Fin du chapitre 2 : Paris et Poissy', text: 'Lausanne, 6 h 45. Le train s’arrête dans un brouillard de lait, au bord d’un lac qu’on devine sans le voir. ' +
       (bras ? 'Dans votre valise, entre deux chemises, un bras de statue qui ne pèse pas ce qu’il devrait. Il vous reste cinq pièces à trouver, et quelqu’un, quelque part derrière vous, qui attend que vous les trouviez. ' : 'Vous avez laissé à Poissy ce qui dormait sous les roses. Le comte, lui, ne l’oubliera pas. ') +
-      (f.lettre ? 'Rue Saint-Étienne, un certain Edgar Wellington possède un rouleau. ' : '') + 'Le chapitre 3, Lausanne, arrive bientôt.' };
+      (f.lettre ? 'Rue Saint-Étienne, un certain Edgar Wellington possède un rouleau. ' : '') + 'Le chapitre 3, Lausanne, vous attend.' };
   };
   // ce que le chapitre laisse au suivant
   P.memoire = ['fin', 'fugitif', 'arrestations', 'brasPris', 'corpsDeclares', 'lorienAmis', 'gueris', 'lettre', 'ariaEntendue', 'billetsScala', 'brume', 'fievre', 'cri'];

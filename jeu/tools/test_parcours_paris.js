@@ -1,7 +1,7 @@
 // Paris, de la gare du Nord au train de Poissy : un joueur méthodique, avec des dés ordinaires.
 // On vérifie que le chapitre se termine toujours, en combien de jours, et avec quels indices.
 global.window = global; global.RPG_ABSENTS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const P = CHAPTERS.paris, J = 1440;
 let ok = 0, ko = 0; const jours = [], indices = [], notes = [];
 for (let seed0 = 1; seed0 <= 20; seed0++) for (let pi = 0; pi < 3; pi++) {

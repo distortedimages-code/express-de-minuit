@@ -1,7 +1,7 @@
 // garde-fou des noms : le carnet et les sujets de conversation ne citent jamais un nom que le joueur n'a pas lu
 // (Makryat à la salle de lecture du British Museum, le samedi, avant l'article du lundi)
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const sc = CHAPTERS.londres, H = sc._h; let ko = 0;
 function ok(c, m) { if (!c) { ko++; console.log('ÉCHEC', m); } }
 const pc = JSON.parse(JSON.stringify(sc.pregens[1]));

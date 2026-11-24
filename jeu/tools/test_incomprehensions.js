@@ -4,7 +4,7 @@
 // problèmes dans tous les lieux de tous les chapitres, y compris ceux qui seront écrits plus tard.
 // Usage : node jeu/tools/test_incomprehensions.js          (tout)    ·    … corpus | sondes | libelles | boutons
 global.window = global; global.RPG_ABSENTS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const QUOI = process.argv[2] || 'tout';
 const CHAPITRES = Object.assign({ prologue: window.SCENE }, window.CHAPTERS);
 const RECIT = /Ce qui est fait est fait|Vous y repensez un instant|Le passé ne se rejoue pas/;

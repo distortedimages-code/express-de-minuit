@@ -2,8 +2,8 @@
 // on joue le sujet puis chaque suite par ses mots ; la réponse doit venir de la table, sans plantage.
 // Le rapport compte aussi les sujets sans suites, chapitre par chapitre (ce qu'il reste à écrire).
 global.window = global; global.RPG_ABSENTS = []; global.RPG_TABLE = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
-const CH = { prologue: window.SCENE, londres: CHAPTERS.londres, paris: CHAPTERS.paris };
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
+const CH = { prologue: window.SCENE, londres: CHAPTERS.londres, paris: CHAPTERS.paris, lausanne: CHAPTERS.lausanne };
 let ko = 0, n = 0; const couverture = {};
 for (const [ch, sc] of Object.entries(CH)) {
   couverture[ch] = { avec: 0, sans: 0 };

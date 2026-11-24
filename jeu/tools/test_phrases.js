@@ -2,7 +2,7 @@
 // banalité → la culture du temps (aucun sujet de l'enquête, aucun indice) ; insulte, menace → l'humeur du personnage ;
 // maladresse propre, délire → sa réplique écrite. node test/phrases.js [--voir] : --voir affiche chaque réponse.
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const VOIR = process.argv.includes('--voir');
 let n = 0, ko = 0; const notes = [], lignes = [];
 function partie(ch, san) {

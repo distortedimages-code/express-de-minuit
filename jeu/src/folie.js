@@ -98,14 +98,15 @@
   // ---------------------------------------------------------------- 3. cesser de lutter : la fin par la folie
   var FIN_FOLIE = {
     londres: { title: 'Fin : Bethlem', text: 'On vous retrouve au matin sur un banc de l’Embankment, tranquille, les mains couvertes de spirales tracées à l’encre. Vous parlez une langue que personne ne comprend. On vous conduit à l’hôpital de Bethlem, où un interne note votre nom avec un point d’interrogation. Le professeur Smith attendra. Vous, vous écoutez l’eau.' },
+    lausanne: { title: 'Fin : Cery', text: 'On vous retrouve au matin sur les quais d’Ouchy, très calme, les mains pleines de spirales tracées à la craie. Vous parlez au lac, et le lac vous répond. Le soir même, on vous installe à l’asile de Cery, au-dessus de la ville, dans une chambre blanche d’où l’on voit les Alpes. On dit que la vue est apaisante. Vous ne la regardez pas.' },
     paris: { title: 'Fin : Charenton', text: 'On vous ramasse à l’aube sur un quai de la Seine, très calme, les mains pleines de spirales. Le soir même, on vous installe à Charenton, au quartier des agités, dans la chambre voisine de celle de Guimart. La nuit, à travers le mur, vous vous répondez, dans une langue que personne d’autre ne parle.' }
   };
   var I = G.RPG && G.RPG.Idees;
-  ['londres', 'paris'].forEach(function (k) {
+  ['londres', 'paris', 'lausanne'].forEach(function (k) {
     var sc = CH[k]; if (!sc || !I) return;
     var m = I.moteur(k);
     m.idee('*', { id: 'fo_ceder_' + k, kind: 'folie', fragile: 3, idea: 'Cesser de lutter', time: 30,
-      cond: function (api) { return !/^(wagon1|wagon2|retour|campagne|cave)$/.test(api.s.loc) && !api.flag('combat'); },
+      cond: function (api) { return !/^(wagon1|wagon2|retour|campagne|cave)$/.test(api.s.loc) && !/^re_/.test(api.s.loc) && !api.flag('combat') && !api.flag('proces'); },
       txt: 'Vous cessez de lutter. C’est très simple, finalement : il suffit de ne plus répondre aux questions du monde. Vous vous asseyez quelque part, le dos contre un mur, et vous écoutez l’eau. Elle parle de plus en plus clairement. Vous comprenez presque tout.',
       suite: function (api) { api.flag('fin', 'folie'); api.end(); } });
     var avant = sc.endingFor;
@@ -117,12 +118,13 @@
   // les calmants qui stabilisent sans guérir. Ici, une séance par jour au plus, et un cachet de bromure par jour.
   var SOINS = {
     londres: { ou: 'à Harley Street', de: 'de Harley Street', prix: 1.05, prixTxt: 'une guinée', pharma: 0.1, docteur: 'Le docteur Elkins, aliéniste, Harley Street' },
+    lausanne: { ou: 'avenue de Rumine', de: 'de l’avenue de Rumine', prix: 0.8, prixTxt: 'vingt francs suisses', pharma: 0.05, docteur: 'Le docteur Mercier, aliéniste, avenue de Rumine' },
     paris: { ou: 'boulevard Saint-Germain', de: 'du boulevard Saint-Germain', prix: 0.4, prixTxt: 'trente francs', pharma: 0.05, docteur: 'Le docteur Varenne, aliéniste, boulevard Saint-Germain' }
   };
   var BROMURE = 'Un flacon de bromure';
   function ouvert(api) { var h = hour(api.s.min), wd = (4 + day(api.s.min)) % 7; return h >= 9 && h < 18 && wd !== 6; }
-  function enVille(api) { return !/^(wagon1|wagon2|retour|campagne|cave|gare)$/.test(api.s.loc) && !/^(po|oe)_/.test(api.s.loc) && !api.flag('combat') && !api.s.talk; }
-  ['londres', 'paris'].forEach(function (k) {
+  function enVille(api) { return !/^(wagon1|wagon2|retour|campagne|cave|gare)$/.test(api.s.loc) && !/^(po|oe|re|tr)_/.test(api.s.loc) && !/^la_(boutique|etage|preint)$/.test(api.s.loc) && !api.flag('combat') && !api.s.talk; }
+  ['londres', 'paris', 'lausanne'].forEach(function (k) {
     var sc = CH[k], S = SOINS[k]; if (!sc) return;
     sc.globalActions = sc.globalActions || [];
     sc.globalActions.push({

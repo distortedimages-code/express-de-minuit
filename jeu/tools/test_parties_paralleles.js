@@ -1,7 +1,7 @@
 // Deux parties dans le même programme, avec la même scène (comme « Rejouer le chapitre », le chapitre suivant ou le testeur IA) :
 // les jets improvisés (Réfléchir, Écouter, Trouver Objet Caché sur place, jets sociaux) se résolvent dans la partie qui les lance.
 global.window = global;
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 let ko = 0;
 for (const ch of ['londres', 'paris']) {
   const SC = CHAPTERS[ch], A = RPG.createGame(SC, null, { rng: () => 0.05, pc: SC.pregens[0] }), B = RPG.createGame(SC, null, { rng: () => 0.05, pc: SC.pregens[1] });

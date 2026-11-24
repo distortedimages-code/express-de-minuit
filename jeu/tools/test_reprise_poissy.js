@@ -1,7 +1,7 @@
 // Une sauvegarde de l'ancienne version (Paris finissait au départ pour Poissy) doit reprendre à Poissy,
 // et une sauvegarde prise en plein Poissy ou dans le train doit se recharger telle quelle.
 global.window = global; global.RPG_ABSENTS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const P = CHAPTERS.paris; let ko = 0;
 const rng = () => 0.3;
 // 1. ancienne fin « poissy »

@@ -1,6 +1,6 @@
 // le carnet d'idées : chaque fausse piste, tentation et folie, réussie et ratée ; chaque maladresse en conversation
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const MAUVAIS = /undefined|NaN|\[object|\{[A-Za-z]{1,8}\}|\bnull\b|  +«|«\s*»/;
 let n = 0, ko = 0, jets = 0, mal = 0, banal = 0; const notes = [];
 function partie(ch, sort) {

@@ -796,6 +796,7 @@
     if ($('tcreate')) $('tcreate').hidden = true;
     if ($('tinstall')) $('tinstall').hidden = !(appareilApple() && !installe() && !dansCadre());
     if ($('btnParis')) $('btnParis').hidden = !(CH.paris && enAttente('paris').length);
+    if ($('btnLausanne')) $('btnLausanne').hidden = !(CH.lausanne && enAttente('lausanne').length);
     var saved = loadSave();
     $('btnCont').hidden = !(saved && saved.v === 1);
     if (saved && saved.v === 1) $('btnCont').textContent = 'Continuer · ' + ((CH[saved.chapter || 'prologue'] || {}).short || 'partie en cours');
@@ -910,6 +911,7 @@
     showTitle();
     $('btnLondres').addEventListener('click', function () { if (CH.londres) showPick('londres'); });
     if ($('btnParis')) $('btnParis').addEventListener('click', function () { var l = enAttente('paris'); if (CH.paris && l.length) showPick('paris', l); });
+    if ($('btnLausanne')) $('btnLausanne').addEventListener('click', function () { var l = enAttente('lausanne'); if (CH.lausanne && l.length) showPick('lausanne', l); });
     $('btnProlo').addEventListener('click', function () { try { localStorage.removeItem(KEY); } catch (e) {} hideTitle(); mount(null, 'prologue'); });
     $('btnBack').addEventListener('click', function () { $('tpick').hidden = true; $('tmain').hidden = false; });
     // la création d'investigateur : on revient au choix, ou l'on part pour Londres avec la nouvelle fiche

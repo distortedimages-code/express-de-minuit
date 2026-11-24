@@ -1,6 +1,6 @@
 // un jet en attente (et un jet forcé proposé), sauvegardé puis rechargé : le bouton doit marcher
 global.window = global; global.RPG_ABSENTS = []; global.RPG_FAITS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const sc = CHAPTERS.londres; let ko = 0;
 for (const [cmd, seed] of [['Réfléchir', 3], ['j’écoute attentivement', 5], ['je fouille la pièce', 7]]) {
   for (const etape of ['jet', 'force']) {

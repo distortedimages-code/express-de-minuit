@@ -1,7 +1,7 @@
 // Paris : des phrases au hasard, des « oui », des « non », des insultes, à toute heure. On cherche les plantages,
 // les textes abîmés, les répliques d'absents et les parties bloquées.
 global.window = global; global.RPG_ABSENTS = []; global.RPG_BREFS = [];
-for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','idees','folie']) require('../src/' + f + '.js');
+for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
 const P = CHAPTERS.paris;
 const words = 'je examine fouille prends parle vais aller dors lis journal smith gerant bibliotheque nationale carte lecteur secretariat etudiant remi traduire cinquante francs fenalik comte cherche arsenal malon capitaine charenton asile directeur leroux rogniat registres caisses cahier bleu delplace mort infirmiers attends sortie mandrin guimart patient cave poissy villa maison plans oui non peut-etre merci bonjour au revoir pourquoi comment qui imbecile je vous frappe taxi hotel fenetre journaux recents police vampire louvre verre'.split(' ');
 const MAUVAIS = /undefined|NaN|\[object|\{[A-Za-z]{1,8}\}|\bnull\b|«\s*»/;

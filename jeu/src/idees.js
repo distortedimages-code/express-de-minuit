@@ -437,14 +437,52 @@
       txt: 'Un marchand d’objets pieux de la rue Saint-Sulpice vous vend une médaille de saint Christophe, patron des voyageurs, avec un regard plein de compassion. Vous la serrez dans votre poche. Elle ne protège de rien, et vous le savez.' });
   }
 
+  // ----- Lausanne : les fausses pistes, les tentations, ce qu'un esprit troublé propose
+  var La = moteur('lausanne');
+  if (La) {
+    var villeL = function (api) { return /^la_(gare|hotel|cathedrale|musee|signal|chatnoir|police|rue|pre)$/.test(api.s.loc) && !api.flag('visite'); };
+    La.idee('la_gare', { id: 'il_change', kind: 'fausse', idea: 'Changer des livres en francs suisses', time: 15, cout: 0.05,
+      txt: 'Le changeur de la gare vous rend une liasse de billets roses et une poignée de pièces à l’effigie d’une Helvétie assise. Il vous souhaite un bon séjour sans lever les yeux. Lausanne est une ville où l’argent ne se remarque pas, sauf quand on n’en a plus.' });
+    La.idee('la_gare', { id: 'il_lecteur', kind: 'risque', idea: 'Suivre le monsieur qui lit toujours le même journal', time: 40,
+      jet: { skill: 'Discrétion', why: 'le suivre sans qu’il vous voie',
+        ok: 'Il remonte jusqu’à un grand hôtel d’Ouchy, salue un portier, et s’assied dans le hall avec le même journal. Un policier, d’un pays ou d’un autre, qui surveille la conférence. Il ne s’intéresse pas à vous. Pas encore.',
+        ko: { txt: 'Il s’arrête devant une vitrine, et vous regarde dans le reflet. Puis il plie son journal, traverse, et vient vous demander l’heure, en anglais, avec un accent impossible à situer. Il sait maintenant à quoi vous ressemblez.' } } });
+    La.idee('la_hotel', { id: 'il_delegue', kind: 'fausse', idea: 'Interroger un délégué dans le hall', time: 30,
+      txt: 'Un secrétaire de la délégation italienne, ravi de parler à quelqu’un qui ne lui demande rien sur Mossoul, vous parle pendant une demi-heure de la cuisine de sa mère. Il n’a jamais entendu parler d’un taxidermiste anglais, ni d’une statue byzantine. Il vous laisse sa carte.' });
+    La.idee('la_hotel', { id: 'il_bain', kind: 'fausse', idea: 'Prendre un bain chaud', time: 45,
+      cond: function (api) { var h = hour(api.s.min); return h >= 7 && h < 23; },
+      txt: 'Une baignoire à pieds de lion, une eau brûlante qui sent le fer. Pendant trois quarts d’heure, il n’y a ni Simulacre, ni Smith, ni comte. Puis l’eau refroidit, et tout revient.' });
+    La.idee('la_rue', { id: 'il_vitrine', kind: 'risque', idea: 'Entrer par la fenêtre de la cour', time: 15,
+      cond: function (api) { return !api.flag('edgarVu') && !api.flag('meurtre'); },
+      jet: { skill: 'Discrétion', why: 'entrer sans être vu de la cour',
+        ok: 'Le loquet de la petite fenêtre cède. Vous passez une jambe, et une tête de sanglier vous regarde, à vingt centimètres. Derrière elle, dans le noir, un homme assis vous regarde aussi, sans bouger, sans rien dire. Vous ressortez, plus vite que vous n’êtes entré{e}.',
+        ko: { txt: 'Une voisine, au premier, ouvre ses volets en grand et vous demande ce que vous faites à la fenêtre de M. Wellington. Vous bredouillez. Elle ne referme pas ses volets, et vous regarde jusqu’au bout de la rue.' } } });
+    La.idee('la_cathedrale', { id: 'il_vitraux', kind: 'fausse', idea: 'Étudier la grande rose de vitrail', time: 30,
+      cond: function (api) { var h = hour(api.s.min); return h >= 8 && h < 17; },
+      txt: 'La rose montre le monde comme on le voyait il y a sept cents ans : les saisons, les mois, les éléments, et au bord, des peuples monstrueux qui vivaient aux confins. Des hommes sans tête, des hommes à un seul pied. Vous cherchez, sans savoir pourquoi, un homme sans peau. Il n’y en a pas.' });
+    La.idee('la_musee', { id: 'il_coquillages', kind: 'fausse', idea: 'Visiter la salle des coquillages', time: 30,
+      txt: 'Des milliers de coquillages d’eau douce, classés, étiquetés à l’encre violette, alignés dans des tiroirs vitrés. Un gardien vous suit à trois pas, les mains dans le dos. Rien ne vous apprend rien, et c’est très reposant.' });
+    La.idee('la_chatnoir', { id: 'il_cartes', kind: 'risque', idea: 'Jouer aux cartes avec des étudiants', time: 60,
+      cond: function (api) { var h = hour(api.s.min); return h >= 14 && h < 20; },
+      jet: { skill: 'CHANCE', why: 'ne pas perdre votre chemise',
+        ok: 'Trois étudiants en médecine, un jass dont vous apprenez les règles en perdant, puis en gagnant. Vous ressortez avec quelques francs de plus et l’adresse d’une pension où l’on mange bien.',
+        ko: { txt: 'Les étudiants jouent mieux qu’ils ne l’avouaient. Vous perdez, gaiement d’abord, puis moins gaiement. Ils vous offrent un verre pour se faire pardonner.', cout: 0.4 } } });
+    La.idee('*', { id: 'il_lac', kind: 'folie', idea: 'Descendre au lac et regarder l’eau jusqu’à la nuit', time: 90, cond: villeL,
+      jet: { skill: 'SAN', label: 'Santé mentale', loss: ['0', '1d2'], why: 'remonter avant la nuit',
+        ok: 'Ouchy, les quais, les cygnes, le lac immense et gris. Il clapote contre la pierre, voilà tout. Vous remontez par la Ficelle, transi{e}.',
+        ko: 'Vous regardez l’eau si longtemps qu’elle se met à respirer. Le lac est un animal couché, et il dort mal. Vous remontez dans la nuit, en évitant les fontaines.' } });
+    La.idee('*', { id: 'il_mains', kind: 'folie', idea: 'Retourner voir si le chevalier a retrouvé ses mains', time: 40, cond: villeL,
+      txt: 'Vous remontez les cent soixante marches, le cœur battant, et vous allez droit au tombeau. Les poignets du chevalier sont nus, comme avant. Bien sûr. Vous restez pourtant un long moment à attendre qu’ils bougent.', san: '1' });
+  }
+
   // =================================================================
   //  EN CONVERSATION : banalités et maladresses
   // =================================================================
-  var FEM = { veuve: 1, atkins: 1, pike: 1, vane: 1, brevin: 1, rogniat: 1, arnoult: 1, veronique: 1, quitterie: 1, caterina: 1 };
+  var FEM = { veuve: 1, atkins: 1, pike: 1, vane: 1, brevin: 1, rogniat: 1, arnoult: 1, veronique: 1, quitterie: 1, caterina: 1, chappuis: 1 };
   // une enfant : pas de menaces ni d'insultes à lui souffler
   var ENFANTS = /^(quitterie)$/;
-  var MUETS = /^(morts|ravel|brule|stanley|alexis)$/;
-  var POLICE = /^(fleming|rigby|planton|sergent|agentsj)$/;
+  var MUETS = /^(morts|ravel|brule|stanley|alexis|prince)$/;
+  var POLICE = /^(fleming|rigby|planton|sergent|agentsj|rochat)$/;
   var BANAL = {
     prologue: [
       { label: 'Parler du temps qu’il fait', say: 'Quel temps de chien, cette nuit.', cult: 'brouillard' },
@@ -459,6 +497,14 @@
       { label: 'Parler de la TSF', say: 'Vous avez déjà écouté la TSF, la BBC ?', cult: 'tsf' },
       { label: 'Parler de la vie chère', say: 'Tout est si cher, en ce moment.', cult: 'argent' },
       { label: 'Parler du spiritisme', say: 'Vous croyez au spiritisme, vous ?', cult: 'spiritisme' }
+    ],
+    lausanne: [
+      { label: 'Parler du brouillard', say: 'Quel brouillard, on ne voit même pas le lac.', cult: 'brouillard' },
+      { label: 'Parler de la conférence', say: 'Et cette conférence, avec les Turcs, ça avance ?', cult: 'turquie' },
+      { label: 'Parler de Lausanne', say: 'Lausanne est une jolie ville.', cult: 'paris' },
+      { label: 'Parler de l’Italie', say: 'On dit qu’en Italie, les chemises noires font la loi.', cult: 'mussolini' },
+      { label: 'Parler de la vie chère', say: 'Tout est si cher, en Suisse.', cult: 'argent' },
+      { label: 'Parler du spiritisme', say: 'Vous croyez aux esprits, vous ?', cult: 'spiritisme' }
     ],
     paris: [
       { label: 'Parler de la pluie', say: 'Quel temps, il pleut depuis des jours.', cult: 'brouillard' },

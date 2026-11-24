@@ -612,8 +612,10 @@
     function selonHeure(x) {
       if (typeof x !== 'string' || s.min === undefined) return x;
       var h = Math.floor(((s.min % 1440) + 1440) % 1440 / 60), soir = h >= 18 || h < 5, nuit = h >= 22 || h < 5;
-      if (soir) return x.replace(/([Bb])onne journée/g, nuit ? '$1onne nuit' : '$1onne soirée').replace(/(^|« |\. )Bonjour\b/g, '$1Bonsoir');
-      return x.replace(/([Bb])onne soirée/g, '$1onne journée').replace(/(^|« |\. )Bonsoir\b/g, '$1Bonjour');
+      // seule la formule de salut change (« Bonne soirée ! ») ; « nous passerons une bonne soirée » parle d'un moment, pas de l'heure
+      function salut(re, par) { return function (t) { return t.replace(re, function (all, avant, b, pos, src) { return /\b(une|un|cette|la|passer|passerons|passerez|passez|bien)\s$/i.test(src.slice(Math.max(0, pos - 12), pos + avant.length)) ? all : avant + b + par; }); }; }
+      if (soir) return salut(/(^|[^A-Za-zÀ-ÿ])([Bb])onne journée/g, nuit ? 'onne nuit' : 'onne soirée')(x).replace(/(^|« |\. )Bonjour\b/g, '$1Bonsoir');
+      return salut(/(^|[^A-Za-zÀ-ÿ])([Bb])onne soirée/g, 'onne journée')(x).replace(/(^|« |\. )Bonsoir\b/g, '$1Bonjour');
     }
     function logNpc(who, x) {
       // une humeur à faire entendre avant la réponse (« Bon. Je vous réponds, mais changez de ton. »)
@@ -627,6 +629,8 @@
       x = selonHeure(x);
       var npc = scene.npcs[who];
       var name = npc ? npc.name : who;
+      // un personnage muet (npc.muet) n'a pas de voix : ce qu'il « dit » entre guillemets, il l'écrit
+      if (npc && npc.muet && typeof x === 'string' && /^« /.test(x)) x = fresh('muet:' + who, ['Il écrit dans son carnet, et vous le tend : ', 'Il griffonne quelques mots, et tourne le carnet vers vous : ', 'Il écrit, d’une écriture d’écolier appliqué : ']) + x;
       // verrou des faits : personne ne parle d'un événement qui n'a pas encore eu lieu (scene.faits)
       var fi = npc && faitInconnu(x);
       if (fi) {
@@ -1085,15 +1089,15 @@
         // « Vous avez déjà examiné la table de Ravel. » + l'essentiel de ce qu'on avait vu, en une ou deux phrases
         var tout = produced.map(function (e) { return e.x; }).join(' '), phr = tout.match(/[^.!?…]+[.!?…]+(\s*»)?/g) || [tout], res = '';
         for (var pi = 0; pi < phr.length && (res + phr[pi]).length < 170; pi++) res += phr[pi];
-        produced[0].x = deja + ' ' + (res.trim() || phr[0].trim()) + ' ' + fresh('rienNeuf', ['Rien n’a changé.', 'Rien de neuf.', 'Tout est comme tout à l’heure.']);
+        produced[0].x = tokens(deja + ' ' + (res.trim() || phr[0].trim()) + ' ' + fresh('rienNeuf', ['Rien n’a changé.', 'Rien de neuf.', 'Tout est comme tout à l’heure.']));
         for (var pj = 1; pj < produced.length; pj++) { var ix = s.log.indexOf(produced[pj]); if (ix >= 0) s.log.splice(ix, 1); }
       } else if (k === 1 && g.againPrefix) {
-        produced[0].x = fresh('againPre', g.againPrefix) + produced[0].x;
+        produced[0].x = tokens(fresh('againPre', g.againPrefix)) + produced[0].x;
       } else {
         var pool = !obj && g.againBare ? g.againBare : sanState() >= 2 && g.againMad ? g.againMad : g.again;
         var line = cap(fresh(obj ? 'again' : 'againBare', pool).replace(/\{x\}/g, obj).replace(/\{X\}/g, cap(obj)))
           .replace(/(^|\s)à le /g, '$1au ').replace(/(^|\s)à les /g, '$1aux ').replace(/(^|\s)de le /g, '$1du ').replace(/(^|\s)de les /g, '$1des ');
-        produced[0].x = line;
+        produced[0].x = tokens(line); // (la phrase est écrite après le journal : ses jetons {e} sont remplacés ici)
         for (var i = 1; i < produced.length; i++) { var idx = s.log.indexOf(produced[i]); if (idx >= 0) s.log.splice(idx, 1); }
         if (k >= 3 && g.loop) {
           api.event(scene.nudge ? scene.nudge(api) : fresh('loop', g.loop));
@@ -2306,6 +2310,13 @@
         s.pendingPush = null;
       }
       s.turn++;
+      // une scène qui prend toute la parole (un procès, un discours à une foule) : le chapitre reçoit la phrase
+      // telle quelle, qu'elle soit dite ou jouée ; les commandes du joueur (fiche, carnet, aide) restent à lui
+      if (scene.capture && !s.talk) {
+        if (!dire && handleMeta(p)) { s.turn--; finish(); return; }
+        s.tick = scene.talkTick || 1;
+        if (scene.capture(api, raw, p, dire ? 'dire' : 'agir') === true) { afterTurn(); finish(); return; }
+      }
       if (dire) { s.tick = scene.talkTick || 1; parler(raw, p); afterTurn(); finish(); return; }
       if (handleMeta(p)) { s.turn--; finish(); return; }
       s.tick = scene.talkTick || 1;
