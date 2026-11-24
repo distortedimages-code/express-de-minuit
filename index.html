@@ -13430,7 +13430,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   // ================================================================ les personnages
   P.npcs = {
     jeanclaude: H.npc({ id: 'jeanclaude', name: 'Jean-Claude, porteur', short: 'Jean-Claude', patience: 9, cooldown: 15, selfKeys: ['JEANCLAUDE'], lieux: ['la_gare'],
-      greet: function (api, first) { api.npc('jeanclaude', first ? 'Un porteur aux yeux gonflés de sommeil, la casquette de la Compagnie enfoncée jusqu’aux oreilles, une moustache de phoque. « Jean-Claude, pour vous servir. Vous allez pas rester plantés là dans ce brouillard. Venez au bureau, il y a le poêle. »' : api.fresh('jcG', ['« Ah, c’est vous. »', '« Encore besoin de Jean-Claude ? »', 'Jean-Claude soulève sa casquette.'])); },
+      greet: function (api, first) { api.npc('jeanclaude', first ? 'Un porteur aux yeux gonflés de sommeil, la casquette de la Compagnie enfoncée jusqu’aux oreilles, une moustache de phoque. « Jean-Claude, pour vous servir. Vous allez pas rester planté{e} là dans ce brouillard. Venez au bureau, il y a le poêle. »' : api.fresh('jcG', ['« Ah, c’est vous. »', '« Encore besoin de Jean-Claude ? »', 'Jean-Claude soulève sa casquette.'])); },
       bye: '« Bonne journée. Et gardez vos sous dans la poche de devant : avec la conférence, il y a du monde. »',
       deflect: ['« Ça, je sais pas. »', '« Demandez-moi plutôt un hôtel ou un horaire. »', 'Il se gratte la nuque.'],
       topics: [
