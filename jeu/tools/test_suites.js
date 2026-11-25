@@ -3,6 +3,8 @@
 // Le rapport compte aussi les sujets sans suites, chapitre par chapitre (ce qu'il reste à écrire).
 global.window = global; global.RPG_ABSENTS = []; global.RPG_TABLE = [];
 for (const f of ['engine','scene','londres','londres_circuits','londres_combat','parole','fiches','jets','londres_seance','londres_impro','londres_objets','paris','poissy','lausanne','lausanne_reve','idees','folie']) require('../src/' + f + '.js');
+// ce test vérifie les suites, pas le registre : la partie sait déjà tout
+const omni = (g, sc) => { g.api.apprendre(Object.keys(sc.savoirs || {})); Object.keys(sc.clues || {}).forEach(c => g.api.apprendre(c)); return g; };
 const CH = { prologue: window.SCENE, londres: CHAPTERS.londres, paris: CHAPTERS.paris, lausanne: CHAPTERS.lausanne };
 let ko = 0, n = 0; const couverture = {};
 for (const [ch, sc] of Object.entries(CH)) {
@@ -11,7 +13,7 @@ for (const [ch, sc] of Object.entries(CH)) {
     if (!t.suites) { couverture[ch].sans++; continue; }
     couverture[ch].avec++;
     for (let rep = 0; rep < 3; rep++) {
-      const g0 = RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.4, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.4 });
+      const g0 = omni(RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.4, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.4 }), sc);
       g0.state.talk = id; const st0 = g0.api.npcs(id); st0.asked[t.id] = rep;
       const tab = typeof t.suites === 'function' ? t.suites(g0.api, rep) : Array.isArray(t.suites) ? t.suites[Math.min(rep, t.suites.length - 1)] : t.suites;
       if (!tab) continue;
@@ -19,7 +21,7 @@ for (const [ch, sc] of Object.entries(CH)) {
         const e = tab[k];
         if (!e.prendre && !e.demander && !e.parler) { ko++; console.log('SUITE SANS RÉPONSE', ch, id, t.id, k); continue; }
         const mot = String(e.mots || k).split(',')[0].trim();
-        const g = RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.4, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.4 });
+        const g = omni(RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.4, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.4 }), sc);
         try {
           if (npc.loc) g.api.go(npc.loc);
           g.state.talk = id; g.api.npcs(id).asked[t.id] = rep; g.state.pending = null;
@@ -39,7 +41,7 @@ for (const [ch, sc] of Object.entries(CH)) {
 let sug = 0;
 for (const [ch, sc] of Object.entries(CH)) for (const [id, npc] of Object.entries(sc.npcs)) for (const t of npc.topics || []) {
   if (!t.suites) continue;
-  const mk = () => { const g = RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.4, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.4 }); if (npc.loc) g.api.go(npc.loc); g.state.talk = id; g.state.pending = null; g.choose({ label: t.chip || t.id, topic: t.id }); while (g.state.pending) g.roll(); return g; };
+  const mk = () => { const g = omni(RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.4, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.4 }), sc); if (npc.loc) g.api.go(npc.loc); g.state.talk = id; g.state.pending = null; g.choose({ label: t.chip || t.id, topic: t.id }); while (g.state.pending) g.roll(); return g; };
   let g0; try { g0 = mk(); } catch (e) { continue; } if (g0.state.talk !== id) continue;
   const tab = g0.api.npcs(id).table; if (!tab) continue;
   const lab = new Set(Object.keys(tab.suites).filter(k => k[0] !== '_').map(k => k));

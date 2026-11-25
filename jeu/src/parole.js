@@ -5,7 +5,7 @@
 (function (G) {
   'use strict';
   if (!(G.RPG && G.RPG.Humeur) && typeof require === 'function') { try { require('./humeur.js'); } catch (e) {} }
-  function N(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, ' ').replace(/-/g, ' ').replace(/[^a-z0-9?! ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function N(s) { var t = String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, ' ').replace(/-/g, ' ').replace(/[^a-z0-9?! ]/g, ' ').replace(/\s+/g, ' ').trim(); return G.RPG && G.RPG.idiomes ? G.RPG.idiomes(t) : t; } // « mort de faim » : j'ai faim
   var STOP = {}; ('a au aux avec ce ces cet cette dans de des du elle en et eux il ils je la le les leur lui ma me mes moi mon ne ni nos notre nous on ou par pas pour qu que qui sa se ses si son sur ta te tes toi ton tu un une vos votre vous y est sont etes suis es ai as avez avons ont etait etre avoir fait faire dit dire bien tres plus moins tout tous toute toutes alors donc mais car comme quoi quel quelle quels quelles dont ici la-bas cela ca ceci celui celle ceux sont sera serait peut peux pouvez veux voulez sais savez connais connaissez pense pensez crois croyez trouve trouvez aime aimez monsieur madame mademoiselle docteur oui non merci bonjour bonsoir hein bon ben euh voila vraiment jamais toujours encore deja rien quelque chose chose quand comment pourquoi combien depuis parlez parler dites racontez').split(' ').forEach(function (w) { STOP[w] = 1; });
   var COMMON = {}; ('monsieur madame temps chose choses jour jours annee annees homme hommes femme femmes gens monde fois heure heures nuit soir matin grand grande grands petit petite beaucoup assez aussi autre autres meme faut avait avaient etaient sont avez etes vous nous leur leurs dans pour avec sans sous chez entre depuis apres avant encore juste vrai vraie tout tous bien tres plus moins quelque quelques chaque votre notre cette celle celui ceux alors donc mais comme parce quand comment pourquoi combien quel quelle quels quelles savoir connais connaissez pense pensez croyez aimez aime faire dire voir venir aller prendre parler question questions reponse vraiment peut etre deja toujours jamais rien personne quelqu quelquun chose ceci cela voila voici pardon merci bonjour bonsoir salut avoir etre fait faites dites disent savez sais crois pensez trouvez trouve aimeriez voulez veux pouvez peux connu connue mieux moins trop tant').split(' ').forEach(function (w) { COMMON[w] = 1; });
   function pick(api, key, arr) { return api.fresh(key, arr); }
@@ -674,7 +674,7 @@
     var cands = [];
     function add(k, v) { try { if (typeof v === 'function') v = v(api); } catch (e) { v = null; } if (!v) return; (Array.isArray(v) ? v : [v]).forEach(function (x) { if (typeof x === 'string') cands.push({ k: k, line: x, n: ' ' + N(x) + ' ' }); }); }
     Object.keys(f.moi || {}).forEach(function (k) { if (k !== 'defaut') add('moi:' + k, f.moi[k]); });
-    Object.keys(f.sait || {}).forEach(function (k) { add('sait:' + k, f.sait[k]); });
+    Object.keys(f.sait || {}).forEach(function (k) { if (!(api.sourd && api.sourd(k))) add('sait:' + k, f.sait[k]); }); // ce qu'il sait d'un secret qu'on ignore ne sort pas
     var best = null, unkN = (unk || []).map(N);
     cands.forEach(function (c) {
       var sc = 0;

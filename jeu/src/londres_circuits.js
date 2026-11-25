@@ -307,9 +307,9 @@
   // ================================================================ le monde relance : crieurs, Beddows, pensées
   var CRIEURS = [
     { d: 1, has: 'CONFERENCE', x: '« Le professeur Smith et les fantômes ! Demandez le Times ! »' },
-    { d: 2, has: 'INCENDIE', x: '« Incendie à St John’s Wood ! La maison du savant en flammes ! Le domestique en fuite ! »' },
-    { d: 3, has: 'MEURTRES', x: '« Triple meurtre au Chelsea Arms ! Trois morts, un seul nom ! »' },
-    { d: 4, has: 'STANLEY', x: '« Volatilisé à Stoke Newington ! Un homme part en fumée ! Demandez le Scoop ! »', cond: function (api) { return api.has('BILLET'); } }
+    { d: 2, has: 'INCENDIE', apprend: ['INCENDIE'], x: '« Incendie à St John’s Wood ! La maison du savant en flammes ! Le domestique en fuite ! »' },
+    { d: 3, has: 'MEURTRES', apprend: ['MEURTRES'], x: '« Triple meurtre au Chelsea Arms ! Trois morts, un seul nom ! »' },
+    { d: 4, has: 'STANLEY', apprend: ['VOLATILISE', 'STOKE'], x: '« Volatilisé à Stoke Newington ! Un homme part en fumée ! Demandez le Scoop ! »', cond: function (api) { return api.has('BILLET'); } }
   ];
   var CONSEILS = [
     { k: 'smith', cond: function (api) { return day(api.s.min) >= 1 && !brule(api) && !api.flag('stjohnVu'); }, x: 'Depuis le banquet, pas un mot de Smith. Lui qui écrit d’ordinaire trois lettres par jour. Sa maison de St John’s Wood n’est qu’à une demi-heure.' },
@@ -337,6 +337,7 @@
         if (c.d === d && !api.has(c.has) && !api.flag('crieur' + c.d) && (!c.cond || c.cond(api))) {
           api.flag('crieur' + c.d, true);
           api.event('Au coin de la rue, un gamin aux genoux nus agite une liasse de journaux : ' + c.x);
+          if (c.apprend) api.apprendre(c.apprend); // le titre crié dans la rue, tout le monde l'a entendu
           api.chips([{ label: 'Acheter un journal', action: 'g_journal' }]);
           return true;
         }

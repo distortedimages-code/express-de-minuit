@@ -368,6 +368,10 @@
       baratin_yard: { skill: 'Baratin', why: 'glaner une information auprès des agents',
         resolve: function (api, r) {
           if (!r.success) { api.say('Les agents se méfient des curieux aujourd’hui. On vous raccompagne poliment vers la sortie. Vous pourrez retenter votre chance demain.'); return; }
+          if (!api.sait('MEURTRES')) {
+            api.say('Un jeune agent, flatté qu’on l’écoute, baisse la voix : l’affaire du jour, c’est le Chelsea Arms. Trois hommes poignardés dans la même chambre, et tous les trois avec des papiers au nom d’un certain Makryat. « L’inspecteur Fleming n’en dort plus. »');
+            api.clue('MEURTRES'); learn(api, 'chelsea'); learn(api, 'ambassade'); return;
+          }
           var order = ['TELEGRAMME', 'ECORCHES', 'ADRESSE'].filter(function (c) { return !api.has(c); });
           var c = order[0];
           if (c === 'TELEGRAMME') api.say('Un jeune agent, flatté qu’on l’écoute, baisse la voix : chacun des trois morts avait dans sa poche le même télégramme, envoyé de Paris. « Venez à Londres immédiatement. Urgent. » Signé d’une seule lettre : M.');
@@ -698,7 +702,7 @@
       ] }),
 
     mustapha: npc({ id: 'mustapha', name: 'Mustapha Köprülü', patience: 6, cooldown: 60, selfKeys: ['MUSTAPHA'],
-      greet: function (api, first) { api.npc('mustapha', first ? 'Un jeune homme élégant, moustache fine, costume de Savile Row, vous reçoit dans un bureau qui sent le café et la cire. « Mustapha Köprülü, attaché. Si c’est pour l’affaire du Chelsea Arms, {m}, l’ambassade n’a rien à déclarer. »' : api.fresh('musG', ['« Encore vous, {m}. »', 'Il sourit, un peu las. « {M} ? »'])); },
+      greet: function (api, first) { api.npc('mustapha', first ? 'Un jeune homme élégant, moustache fine, costume de Savile Row, vous reçoit dans un bureau qui sent le café et la cire. « Mustapha Köprülü, attaché. ' + (api.sait('MEURTRES') ? 'Si c’est pour l’affaire du Chelsea Arms, {m}, l’ambassade n’a rien à déclarer. »' : 'Que puis-je pour vous, {m} ? »') : api.fresh('musG', ['« Encore vous, {m}. »', 'Il sourit, un peu las. « {M} ? »'])); },
       bye: '« Bonne journée. Et méfiez-vous de vos journaux. »',
       deflect: ['« Je ne vois pas le rapport, {m}. »', '« Vous parlez comme un journaliste. Ce n’est pas un compliment. »'],
       topics: [
@@ -893,6 +897,7 @@
     var p = PLACES[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return zone(api.s.loc) !== id && !/^wagon|^retour|^campagne|^institut/.test(api.s.loc); },
+      sait: function (api) { return id === 'institut' || known(api, id); },
       run: function (api, pa) {
         if (id === 'institut') { api.say(api.fresh('instFini', ['L’Institut impérial ? Le banquet est terminé depuis longtemps. Les salons sont fermés, les chaises empilées ; il n’y a plus rien à y apprendre.', 'Vous pensez à l’Institut impérial, à ses lustres et à son champagne tiède. Le banquet est fini : ce qui compte, maintenant, se passe ailleurs dans Londres.'])); return; }
         if (!known(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.'); return; }
@@ -981,7 +986,7 @@
         { label: null, ids: ['SALLE', 'CARTEVISITE', 'BILLETS', 'VALISE', 'DESTINATIONS', 'LAMPE', 'PORTE', 'CHAMBRE', 'TABLE', 'COULOIR', 'DAMEDEUX'] }
       ],
       nudges: [
-        { at: 4, cond: function (api) { return !api.flag('presse1') && presse(api.s.min) >= 3; }, run: function (api) { api.event('Le garçon d’étage frappe. « Les journaux de {m}, sous la porte. Une sale histoire à Chelsea, si je puis me permettre. »'); } },
+        { at: 4, cond: function (api) { return !api.flag('presse1') && presse(api.s.min) >= 3; }, run: function (api) { api.event('Le garçon d’étage frappe. « Les journaux de {m}, sous la porte. Une sale histoire en première page, si je puis me permettre. »'); } },
         { at: 8, cond: function (api) { return api.has('QUETE') && !api.item(BILLETS); }, run: function (api) { api.event('Vous repensez à la voix brisée de Smith : « Allez vite. » La réception peut réserver vos billets chez Cook.'); } },
         { at: 3, cond: function (api) { return api.has('QUETE') && !api.flag('carteMusee'); }, run: function (api) { api.event('Le simulacre, les rouleaux, Fenalik, Gremanci… La salle de lecture du British Museum n’est qu’à dix minutes à pied. S’il existe une trace écrite de tout cela, c’est là.'); } }
       ],
@@ -1530,7 +1535,7 @@
         api.chips([{ label: 'Aller : votre hôtel, à Bloomsbury', action: 'go_hotel' }, { label: 'Aller : la gare Victoria', action: 'go_victoria' }]);
       } },
     { id: 'g_police', label: 'Prévenir la police', verbs: ['PARLER', 'CRIER'], nouns: ['POLICE'], cond: function (api) { return api.s.loc !== 'yard' && api.s.loc !== 'stoke'; },
-      run: function (api) { learn(api, 'yard'); api.say('Scotland Yard est à vingt minutes en taxi. L’inspecteur Fleming s’occupe des meurtres du Chelsea Arms, le sergent Rigby de l’incendie de Smith.'); } }
+      run: function (api) { learn(api, 'yard'); var qui = [api.sait('MEURTRES') ? 'l’inspecteur Fleming s’occupe des meurtres du Chelsea Arms' : '', api.sait('INCENDIE') ? 'le sergent Rigby de l’incendie de Smith' : ''].filter(Boolean); api.say('Scotland Yard est à vingt minutes en taxi.' + (qui.length ? ' D’après les journaux, ' + qui.join(', ') + '.' : ' On vous y écoutera, si vous avez quelque chose à dire.')); } }
   ];
 
   L.generic = {
@@ -1603,7 +1608,7 @@
   L.timeEvents = [
     { id: 'billet', at: at(3, 18, 30), cond: function (api) { return !api.has('BILLET') && !api.flag('cheapsideVu'); },
       run: function (api) { if (api.s.loc === 'hotel') billet(api); else { api.flag('billetAttend', true); api.event('Quelque part en ville, à cette heure, vous ne le savez pas encore, quelqu’un glisse une enveloppe sous la porte de votre chambre d’hôtel.'); } } },
-    { id: 'stanley', at: at(4, 7, 0), run: function (api) { api.flag('stanleyDispo', true); if (api.s.loc === 'hotel') api.event('Le garçon d’étage glisse les journaux du jour sous votre porte. On entend, dans le couloir, quelqu’un lire à voix haute un titre sur un « homme volatilisé ».'); } },
+    { id: 'stanley', at: at(4, 7, 0), run: function (api) { api.flag('stanleyDispo', true); api.apprendre('VOLATILISE'); if (api.s.loc === 'hotel') api.event('Le garçon d’étage glisse les journaux du jour sous votre porte. On entend, dans le couloir, quelqu’un lire à voix haute un titre sur un « homme volatilisé ».'); } },
     { id: 'presse', at: at(6, 9, 0), cond: function (api) { return !api.has('QUETE'); }, run: function (api) { api.event('Le temps passe. Le souvenir de la carte de Smith, de son « il me reste peu de temps », vous brûle les doigts.'); } },
     { id: 'presse2', at: at(8, 9, 0), cond: function (api) { return api.has('QUETE') && !api.item(BILLETS); }, run: function (api) { api.event('Une semaine déjà depuis Cheapside. Smith vous a demandé de faire vite. Les billets se réservent à l’hôtel ou à la gare Victoria.'); } }
   ];
@@ -1611,6 +1616,73 @@
   L.help = function (api) {
     api.sys('Écrivez ce que fait votre investigateur : « je lis le journal », « je vais à Scotland Yard », « je parle à Beddows », « j’examine les registres ». Pour vous déplacer dans Londres, écrivez « aller à… » ou demandez « où aller ? ». Mots utiles : inventaire, fiche, carnet, aide.');
   };
+
+  // ---------------------------------------------------------------- le registre des savoirs
+  // Ce que le personnage peut savoir de l'intrigue, comment on le reconnaît dans un texte (mots, pour le censeur),
+  // quels mots du joueur restent sourds tant qu'il ne le sait pas (concepts), et d'où il peut le tenir (par).
+  // Un indice du carnet est un savoir de plein droit : MEURTRES s'apprend en lisant le Times (api.clue).
+  L.savoirs = {
+    HANTISES: { label: 'La théorie des hantises de Smith', par: ['CONFERENCE'], mots: /\bhantises?\b|rideaux de la perception|tentatives? (maladroites? )?de retour/, sourds: ['hantise', 'hantises'] },
+    MEURTRES: { label: 'Les trois morts du Chelsea Arms', mots: /triple meurtre|(?<!(vingt|trente|quarante|cinquante|soixante|cent|mille) )trois (hommes|morts|turcs|messieurs|cadavres|corps|victimes|passeports)\b|poignardes?|meme mort|chambre des trois|trois fois le meme mort|meurtres? (du|au) chelsea/, evoque: /\bmorts?\b|cadavres?|\btues?\b|assassin|\bcrimes?\b/, sourds: ['meurtre', 'meurtres', 'assassinat', 'assassinats', 'poignarde', 'poignardes', 'triple'] },
+    CHELSEA: { label: 'L’hôtel Chelsea Arms', par: ['MEURTRES', 'CLE14'], quand: function (api) { return !!api.flag('known:chelsea'); }, mots: /\bchelsea\b/, concepts: ['CHELSEA'] },
+    MAKRYAT: { label: 'Le nom de Makryat', par: ['MEURTRES', 'LETTRE', 'ADRESSE'], mots: /makryat/, concepts: ['MAKRYAT'] },
+    INCENDIE: { label: 'L’incendie chez Smith', par: ['FUYARD', 'LETTRE'], mots: /incendie (chez|de|a) (smith|st john|la maison)|maison (de smith |du professeur |du savant )?(a )?(brule|flambe|en flammes)|en flammes|ruines de st john|(smith|le professeur) (a )?disparu|(professeur|smith) (demeure )?introuvable/ },
+    FUYARD: { label: 'Le fardeau de « Beddows »', par: ['INCENDIE'], mots: /lourd (ballot|fardeau)|ballot sur l epaule|charge d un lourd|roule dans une couverture/ },
+    ECORCHES: { label: 'Les corps écorchés', par: ['BEDDOWS', 'PEAU'], mots: /ecorch|depec/, sourds: ['ecorche', 'ecorches', 'ecorchee', 'ecorchees', 'ecorcher', 'depece', 'depeces', 'depecer'] },
+    TELEGRAMME: { label: 'Le télégramme de Paris', mots: /venez a londres immediatement|meme telegramme/ },
+    SIMULACRE: { label: 'Le simulacre de Sedefkar', par: ['QUETE', 'PISTES', 'ROULEAUX'], mots: /simulacre|sedefkar/, sourds: ['simulacre', 'sedefkar'] },
+    ROULEAUX: { label: 'Les rouleaux de Topkapı', par: ['QUETE'], mots: /topkap/, sourds: ['topkapi'] },
+    MOSQUEE: { label: 'La Mosquée Maudite', par: ['QUETE'], mots: /mosquee maudite/ },
+    PISTES: { label: 'Les pistes de Smith', mots: /fenalik|gremanci|winckelmann|todorovic/, sourds: ['fenalik', 'gremanci', 'winckelmann', 'todorovic'] },
+    BEDDOWS: { label: 'La mort de Beddows', mots: /beddows (est )?mort|cadavre de beddows|corps de beddows|ecorche du british/ },
+    ADRESSE: { label: 'La boutique de Brophy Lane', par: ['LETTRE'], quand: function (api) { return !!api.flag('known:islington'); }, mots: /brophy/ },
+    AGE: { label: 'Le vrai âge de Makryat', mots: /trente neuf ans|vieillard de trente/ },
+    STOKE: { label: 'La pension de Stoke Newington', par: ['TRAIN', 'STANLEY'], quand: function (api) { return !!api.flag('known:stoke'); }, mots: /stoke newington/, sourds: ['stoke', 'newington'] },
+    VOLATILISE: { label: 'Un homme volatilisé (les journaux)', par: ['STANLEY'], mots: /volatilise|parti en fumee|part en fumee/ },
+    STANLEY: { label: 'La disparition d’Henry Stanley', par: ['TRAIN'], mots: /henry stanley/, sourds: ['stanley'] },
+    ALEXIS: { label: 'Les Alexis', par: ['TRAIN', 'MAQUETTE', 'VOIX'], mots: /randolph/, sourds: ['randolph', 'alexis'] },
+    VANE: { label: 'Mrs Vane', par: ['VOIX', 'TRUQUEE'], quand: function (api) { return !!api.flag('known:vane'); }, mots: /hortense|mrs vane|gordon square/, concepts: ['VANE'] }
+  };
+  // ce que chaque sujet exige : un savoir (on n'en parle pas avant d'en avoir eu vent), ou rien (« libre » : la
+  // personne, le lieu, ce qu'on a sous les yeux). Le censeur refuse tout sujet qui n'est pas ici.
+  var apres = function (min) { return function (api) { return api.s.min >= min; }; };
+  L.declarations = {
+    'smith/sujet': 'libre', 'smith/hantises': ['HANTISES'], 'smith/visite': 'libre', 'smith/beddows': 'libre', 'smith/maison': 'libre',
+    'smith/moustachu': 'libre', 'smith/continent': 'libre', 'smith/occulte': 'libre',
+    'beddows/imposteur': 'libre', 'beddows/maitre': 'libre', 'beddows/attaque': { libre: true, apprend: ['INCENDIE'] }, 'beddows/police': 'libre',
+    'beddows/plan': 'libre', 'beddows/voyage': 'libre', 'beddows/simulacre': 'libre', 'beddows/notes': 'libre', 'beddows/cheapside': 'libre', 'beddows/lui': 'libre',
+    'fleming/meurtres': ['MEURTRES'], 'fleming/smith': 'libre', 'fleming/aide': 'libre',
+    'rigby/incendie': ['INCENDIE'], 'rigby/beddows': ['INCENDIE'], 'rigby/makryat': ['MEURTRES'], 'rigby/cocher': 'libre',
+    'chelseaclerk/quoi': { libre: true, apprend: ['MEURTRES'] }, 'chelseaclerk/meurtres': ['MEURTRES'], 'chelseaclerk/femme': ['MEURTRES'], 'chelseaclerk/cle': 'libre',
+    'mustapha/makryat': ['MAKRYAT'], 'mustapha/presse': ['MEURTRES'], 'mustapha/cafe': 'libre', 'mustapha/mosquee': ['MOSQUEE'],
+    'voisin/vieux': 'libre', 'voisin/photos': ['MEURTRES'], 'voisin/cle': 'libre', 'voisin/client': { libre: true, apprend: ['STOKE'] },
+    'atkins/soir': 'libre', 'atkins/lui': 'libre', 'atkins/maquette': 'libre', 'atkins/police': 'libre', 'atkins/payer': 'libre', 'atkins/vane': 'libre',
+    'sergent/stanley': 'libre', 'sergent/credit': 'libre',
+    'butter/stanley': 'libre', 'butter/maquette': 'libre', 'butter/emprunt': 'libre', 'butter/voyage': 'libre', 'butter/diner': 'libre',
+    'alexis/lui': 'libre', 'alexis/temps': 'libre', 'alexis/albert': 'libre', 'alexis/plan': 'libre', 'alexis/morts': 'libre',
+    'stanley/histoire': 'libre', 'stanley/alexis': 'libre', 'stanley/trains': 'libre',
+    'bibliothecaire/carte': 'libre',
+    'concierge/courrier': 'libre', 'concierge/smith': { libre: true, apprend: function (api) { return api.s.min >= at(2, 6, 0) ? ['INCENDIE'] : null; } },
+    'concierge/telegramme': 'libre', 'concierge/telParis': ['MEURTRES'], 'concierge/telStamboul': ['QUETE'], 'concierge/telAmi': 'libre',
+    'concierge/annonce': 'libre', 'concierge/adSmith': 'libre', 'concierge/adMak': ['MAKRYAT'], 'concierge/adTrain': 'libre',
+    'concierge/lieux': 'libre', 'concierge/dame': 'libre', 'concierge/billets': 'libre',
+    'concierge/ragots': { libre: true, apprend: function (api) { return day(api.s.min) >= 3 ? ['MEURTRES'] : null; } }, 'concierge/vane': 'libre',
+    'agentsj/feu': 'libre', 'agentsj/fouiller': 'libre', 'agentsj/beddows': 'libre',
+    'laitier/vu': 'libre', 'laitier/visage': 'libre',
+    'pike/alexis': 'libre', 'pike/makryat': ['MAKRYAT'], 'pike/stanley': ['STOKE'], 'pike/smith': 'libre', 'pike/aide': 'libre', 'pike/vane': 'libre',
+    'vane/seance': 'libre', 'vane/smith': 'libre', 'vane/trucs': 'libre', 'vane/albert': 'libre', 'vane/atkins': 'libre',
+    'patron/ragots': 'libre', 'patron/smith': 'libre', 'hollis/smith': 'libre', 'hollis/mal': 'libre', 'hollis/vane': ['VANE'],
+    // les actions qui supposent qu'on sait de quoi il retourne
+    'action:m_simulacre': ['SIMULACRE'], 'action:m_rouleaux': ['ROULEAUX|SIMULACRE'], 'action:m_alexis': ['ALEXIS'], 'action:m_makryat': ['MAKRYAT'],
+    'action:y_rigby': { sait: apres(at(1, 23, 0)) },
+    // être sur place, c'est savoir où l'on est ; rencontrer quelqu'un, c'est savoir qui il est
+    'lieu:vane': { apprend: ['VANE'] }, 'lieu:chelsea': { apprend: ['CHELSEA'] }, 'lieu:islington': { apprend: ['ADRESSE'] }, 'lieu:boutique': { apprend: ['ADRESSE'] },
+    'lieu:stoke': { apprend: ['STOKE'] }, 'lieu:chambre_stanley': { apprend: ['STOKE'] }, 'pnj:alexis': { apprend: ['ALEXIS'] }
+  };
+  // au Chelsea Arms, on peut demander ce qui s'est passé sans avoir lu le journal : c'est lui qui l'apprend
+  L.npcs.chelseaclerk.topics.unshift(T('quoi', ['HISTOIRE', 'POLICE', ['ETAGE', 0.8], ['QUELQUUN', 0.8], ['SALLE', 0.7]],
+    ['Il soupire, comme quelqu’un qui récite. « Trois messieurs, {m}, trouvés au matin dans la même chambre, poignardés. Tous les trois avec des papiers au nom de M. Makryat, qui avait loué la 14. La police a tout bouclé. Adressez-vous à Scotland Yard, à l’inspecteur Fleming. »'],
+    { chip: 'Ce qui s’est passé ici', cond: function (api) { return !api.sait('MEURTRES'); } }));
 
   L.intro = function (api) {
     api.title('L’Express de minuit', 'Londres · Danseurs dans le brouillard');

@@ -1280,7 +1280,7 @@
           return;
         }
         if (p && p.c.TELEGRAMME !== undefined) { api.say('Vous approchez le télégramme d’une flamme, puis vous vous ravisez. C’est la seule preuve que Ravel vous a appelé.'); return; }
-        api.say('Mettre le feu à un train en marche ? Ce n’est pas l’homme en gris qui en souffrirait.');
+        api.say(api.sait('HOMMEGRIS') ? 'Mettre le feu à un train en marche ? Ce n’est pas l’homme en gris qui en souffrirait.' : 'Mettre le feu à un train en marche ? Vous brûleriez avec lui, et tous ces gens endormis.');
       } },
     { id: 'g_prier', label: 'Prier', verbs: ['PRIER'], bare: true,
       run: function (api) {
@@ -1394,6 +1394,60 @@
     byeAlt: ['« Buona notte. »', 'Il marmonne quelque chose qui ressemble à « enfin ».', '« Ciao, signore. »']
   });
 
+  // ---------------------------------------------------------------- le registre des savoirs (voir londres.js)
+  SCENE.savoirs = {
+    HOMMEGRIS: { label: 'L’homme en gris venu chercher Ravel', par: ['SERVEUR', 'VEUVE', 'CONDUCTEUR'], mots: /homme (en )?gris|grand homme gris|avec un ami a lui|l ami de ravel|venu le chercher/, sourds: ['hommegris'], anon: { HOMMEGRIS: 'cet homme' } }
+  };
+  SCENE.declarations = {
+    'serveur/insister': 'libre',
+    'serveur/charme': 'libre',
+    'serveur/ravel': 'libre',
+    'serveur/hommegris': 'libre',
+    'serveur/note': 'libre',
+    'serveur/commande': 'libre',
+    'serveur/veuve': 'libre',
+    'serveur/cuisine': 'libre',
+    'serveur/lits': 'libre',
+    'serveur/symbole': 'libre',
+    'serveur/manchette': 'libre',
+    'serveur/traces': 'libre',
+    'serveur/train': 'libre',
+    'serveur/statuette': 'libre',
+    'serveur/passagers': 'libre',
+    'serveur/guerre': 'libre',
+    'serveur/docteur': 'libre',
+    'serveur/police': 'libre',
+    'serveur/ours': 'libre',
+    'serveur/accompagner': 'libre',
+    'serveur/contempler': 'libre',
+    'veuve/ravel': { libre: true, apprend: ['HOMMEGRIS'] },
+    'veuve/hommegris': { libre: true, chipSait: ['HOMMEGRIS'], apprend: ['HOMMEGRIS'] },
+    'veuve/cartes': 'libre',
+    'veuve/serveur': 'libre',
+    'veuve/symbole': 'libre',
+    'veuve/lac': 'libre',
+    'veuve/train': 'libre',
+    'veuve/social': 'libre',
+    'veuve/statuette': 'libre',
+    'veuve/mescartes': 'libre',
+    'veuve/jouer': 'libre',
+    'veuve/cloche': 'libre',
+    'veuve/passagers': 'libre',
+    'veuve/guerre': 'libre',
+    'veuve/docteur': 'libre',
+    'veuve/police': 'libre',
+    'veuve/accompagner': 'libre',
+    'veuve/contempler': 'libre',
+    'conducteur/ravel': { libre: true, apprend: ['HOMMEGRIS'] },
+    'conducteur/hommegris': { libre: true, chipSait: ['HOMMEGRIS'], apprend: ['HOMMEGRIS'] },
+    'conducteur/cle': 'libre',
+    'conducteur/traces': 'libre',
+    'conducteur/train': 'libre',
+    'conducteur/passagers': 'libre',
+    'conducteur/guerre': 'libre',
+    'conducteur/police': 'libre',
+    'conducteur/accompagner': 'libre'
+  };
   G.SCENE = SCENE;
   SCENE.short = 'Prologue';
   SCENE.examples = '« j’examine la table », « je fouille le cendrier », « je parle à la vieille dame », « je vais dans le couloir »';

@@ -213,7 +213,7 @@
     ]
   };
   L.checks.san_quais = { skill: 'SAN', label: 'Santé mentale', loss: ['0', '1'], why: 'garder son calme',
-    resolve: function (api, r) { api.say(r.success ? 'Vous donnez un penny au gamin et vous lui dites de jeter ça au fleuve. Il le jette. Il en a vu d’autres.' : 'Vous reculez si vite que vous heurtez le parapet. Vous pensez aux trois morts du Chelsea Arms, et à ce qu’on a fait de leur peau.'); } };
+    resolve: function (api, r) { api.say(r.success ? 'Vous donnez un penny au gamin et vous lui dites de jeter ça au fleuve. Il le jette. Il en a vu d’autres.' : 'Vous reculez si vite que vous heurtez le parapet.' + (api.sait('ECORCHES') ? ' Vous pensez aux trois morts du Chelsea Arms, et à ce qu’on a fait de leur peau.' : ' Vous ne saurez jamais à qui elle était, et c’est très bien ainsi.')); } };
 
   // ---------------------------------------------------------------- jeter quelque chose à la figure de quelqu'un
   function present(api, concept) {

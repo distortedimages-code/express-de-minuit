@@ -14,6 +14,8 @@ function jouer(g, cmd, mode) { const n = g.state.log.length; g.step(cmd, mode ||
 function partie(ch, prep) {
   const sc = CHAPITRES[ch];
   const g = RPG.createGame(sc, null, sc.pregens ? { rng: () => 0.1, pc: JSON.parse(JSON.stringify(sc.pregens[0])) } : { rng: () => 0.1 });
+  // ce test vérifie la lecture des phrases, pas le registre des savoirs : le personnage sait déjà tout
+  g.api.apprendre(Object.keys(sc.savoirs || {})); Object.keys(sc.clues || {}).forEach(c => g.api.apprendre(c));
   if (prep) prep(g); g.state.pending = null; return g;
 }
 // les variantes d'une phrase : sans accents, apostrophes droites, minuscules, « je » ↔ infinitif pour quelques verbes

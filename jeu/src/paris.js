@@ -54,6 +54,7 @@
   function goP(id) {
     var p = PL[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
+      sait: function (api) { return connu(api, id) || id === 'lyon'; }, // un lieu dont on n'a pas eu vent ne se propose pas (la gare de Lyon, on la connaît)
       cond: function (api) { return api.s.loc !== id && api.s.loc !== 'p_' + id && api.s.loc !== 'gare' && !ailleurs(api); },
       run: function (api) {
         // la gare de Lyon, on la connaît depuis l'arrivée (le train y attend) : elle n'apparaît dans les destinations qu'une fois utile
@@ -182,7 +183,7 @@
         resolve: function (api, r) { recherche(api, r); } },
       bn_journaux: { skill: 'Bibliothèque', why: 'dépouiller les journaux récents',
         resolve: function (api, r) {
-          if (!r.success) { api.say('Des colonnes de faits divers, de cours de la Bourse et de réclames pour des pastilles. Vos yeux brûlent. Rien sur Charenton, ou alors vous l’avez laissé passer.'); return; }
+          if (!r.success) { api.say('Des colonnes de faits divers, de cours de la Bourse et de réclames pour des pastilles. Vos yeux brûlent.' + (api.sait('CHARENTON') ? ' Rien sur Charenton, ou alors vous l’avez laissé passer.' : ' Rien qui vous parle, ou alors vous l’avez laissé passer.')); return; }
           api.say('Dans les quotidiens de la semaine dernière, un encadré noir revient d’un journal à l’autre.');
           api.doc('LE DOCTEUR ÉTIENNE DELPLACE — Nous pleurons notre directeur, homme d’une haute conscience et pionnier de la neurologie. Sa disparition, par un tragique accident, est une perte cruelle pour la maison de Charenton, pour Paris et pour la science française. Nos pensées vont à sa famille. — Dr François Leroux, directeur par intérim.', 'Le Petit Parisien · janvier 1923');
           if (!api.has('DELPLACE')) api.clue('DELPLACE');
@@ -353,7 +354,7 @@
         T('smith', ['SMITH', 'BEDDOWS'], ['« Monsieur Smith prenait toujours la 12, sur la cour. Il travaillait la nuit. Il laissait des pourboires de prince et des cendres partout. » Il baisse la voix. « On m’a dit, pour l’incendie. Quelle pitié. »'], { chip: 'Le professeur Smith' }),
         T('lieux', ['DESTINATIONS', 'TAXI'], function (api) { api.npc('gerant', '« Le métro est à Palais-Royal. Pour un taxi, je sonne le chasseur. Où souhaitez-vous vous rendre, {m} ? »'); api.chips(destChips(api).slice(0, 5)); }, { chip: 'Se déplacer dans Paris' }),
         T('charenton', ['CHARENTON', 'DELPLACE', 'DECES'], ['« Charenton ? » Il se signe presque. « C’est au bout de la ligne, {m}, après Bercy. On y a mis le marquis de Sade, autrefois. On n’y va pas pour son plaisir. »', '« Les journaux ont parlé du directeur, la semaine dernière. Un accident. On n’a pas dit lequel, ce qui est toujours mauvais signe. »']),
-        T('fenalik', ['FENALIK', 'POISSY'], ['« Fenalik ? Ce nom ne me dit rien. Un Alsacien ? » Il réfléchit. « Poissy, je connais : ma belle-sœur y tient une mercerie. Une petite ville tranquille. Il ne s’y passe jamais rien. »']),
+        T('fenalik', ['FENALIK', 'POISSY'], function (api) { api.npc('gerant', '« Fenalik ? Ce nom ne me dit rien. Un Alsacien ? »' + (api.sait('POISSY') ? ' Il réfléchit. « Poissy, je connais : ma belle-sœur y tient une mercerie. Une petite ville tranquille. Il ne s’y passe jamais rien. »' : ' Il réfléchit, puis secoue la tête. « Non. Demandez à la Nationale, ils ont tout. »')); }),
         T('train', ['VOYAGE', 'TRAIN', 'BILLETS', 'VICTORIA', 'LYON'], function (api) { api.npc('gerant', '« Le Simplon-Orient part de la gare de Lyon, {m}, chaque soir à 22 h 50. Vos places sont retenues : la Compagnie nous a prévenus. Vous partirez quand vos affaires à Paris seront finies. »'); apprendre(api, 'lyon'); }, { chip: 'L’Orient-Express' })
       ] }),
     gaudry: H.npc({ id: 'gaudry', name: 'M. Gaudry, au secrétariat', short: 'M. Gaudry', patience: 5, cooldown: 60, selfKeys: ['GAUDRY', 'SECRETAIRE'],
@@ -514,7 +515,7 @@
           extra: ['BN', 'SMITH', 'CHARENTON', 'FENALIK', 'POISSY', 'DESTINATIONS', 'TAXI', 'VOYAGE', 'TRAIN'], run: function (api, p) { api.talk('gerant', p); } },
         { id: 'ph_journal', label: 'Lire les journaux', idea: true, verbs: ['EXAMINER', 'PRENDRE', 'UTILISER'], nouns: ['JOURNAL'], repeatable: true, time: 15,
           run: function (api) {
-            if (!api.flag('journalParis')) { api.flag('journalParis', true); api.say('Le Petit Parisien, Le Matin. ' + ruhr(api) + ' On ne parle que de cela. En page trois, entre un vol de bijoux et un chien écrasé : « À la maison de santé de Charenton, le docteur Leroux prend la direction après la mort accidentelle du docteur Delplace. » Trois lignes.'); return; }
+            if (!api.flag('journalParis')) { api.flag('journalParis', true); api.say('Le Petit Parisien, Le Matin. ' + ruhr(api) + ' On ne parle que de cela. En page trois, entre un vol de bijoux et un chien écrasé : « À la maison de santé de Charenton, le docteur Leroux prend la direction après la mort accidentelle du docteur Delplace. » Trois lignes.'); api.apprendre(['DELPLACE', 'CHARENTON']); return; }
             api.say(api.fresh('journalP', [day(api.s.min) >= 6 ? 'La Ruhr, toujours la Ruhr. Le franc baisse. Rien qui vous regarde.' : 'La Ruhr, encore : on attend l’ultimatum. Rien qui vous regarde.', 'Un feuilleton, des réclames, le prix du charbon. Vous repliez le journal.']));
           } },
         { id: 'ph_dormir', label: 'Dormir jusqu’au matin', idea: true, ideaCond: function (api) { return hour(api.s.min) >= 15 || hour(api.s.min) < 6; }, verbs: ['DORMIR', 'ATTENDRE'], nouns: ['CHAMBRE', 'HEURE'], bare: true, repeatable: true,
@@ -569,7 +570,7 @@
             api.say(api.fresh('rechJournaux', ['On vous apporte les quotidiens du mois, reliés par semaine, lourds comme des dalles.', 'Les journaux, encore. Vous reprenez à la date où vous vous étiez arrêté.']));
             etude(api, 90); api.check('bn_journaux', { diff: difficulte(api) });
           } },
-        { id: 'bn_villa', label: 'Chercher la maison de Poissy', idea: true, ideaCond: function (api) { return api.has('MALON') && !api.has('VILLA'); }, verbs: ['FOUILLER', 'EXAMINER', 'PRENDRE'], nouns: ['VILLA', 'POISSY'], repeatable: true,
+        { id: 'bn_villa', label: 'Chercher la maison de Poissy', sait: ['POISSY'], idea: true, ideaCond: function (api) { return api.has('MALON') && !api.has('VILLA'); }, verbs: ['FOUILLER', 'EXAMINER', 'PRENDRE'], nouns: ['VILLA', 'POISSY'], repeatable: true,
           run: function (api) {
             if (api.has('VILLA')) { api.say(api.fresh('villaDeja', ['Vous avez vu les plans, et la gravure. Une fois suffit.', 'Non. Vous ne redemanderez pas ce carton.'])); return; }
             if (!salleBN(api)) return;
@@ -689,7 +690,7 @@
   // ================================================================ réponses générales, horaires, humeur
   P.generic = Object.assign({}, L.generic, {
     loop: ['Vous tournez en rond. Le monde, lui, continue sans vous.', 'Il y a sûrement autre chose à tenter.', 'Il faudrait changer d’approche.'],
-    lost: ['Vous hésitez. Fenalik, la Nationale, Charenton : par quel bout reprendre ?', 'Vous consultez votre carnet. Le fil est là, quelque part entre deux pages.'],
+    lost: ['Vous hésitez. Fenalik, la Nationale, les vieux papiers : par quel bout reprendre ?', 'Vous consultez votre carnet. Le fil est là, quelque part entre deux pages.'],
     verbs: Object.assign({}, L.generic.verbs, {
       ALLER: function (api) { if (ailleurs(api) && P.allerAilleurs) return P.allerAilleurs(api); var c = destChips(api); return c.length ? 'Pour aller où ? Vous connaissez : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.' : 'Vous ne connaissez pas encore d’autre adresse à Paris.'; }
     })
@@ -744,6 +745,43 @@
   function dateLongue(min) { var d = day(min), wd = JOURS[(4 + d) % 7]; return wd.charAt(0).toUpperCase() + wd.slice(1) + ' ' + (5 + d) + ' janvier 1923'; }
   // les drapeaux de Londres qui comptent pour la suite (le moteur ne transmet que ceux-là)
   L.memoire = ['discours', 'demasque', 'cheapsideFini', 'stanleySauve', 'maquetteDetruite', 'seanceFaite', 'fin', 'arrestations'];
+  // ---------------------------------------------------------------- le registre des savoirs (voir londres.js)
+  var co = function (id) { return function (api) { return !!api.flag('connu:' + id); }; };
+  P.savoirs = {
+    POISSY: { label: 'Poissy, la maison du comte', par: ['COUR', 'MALON', 'ACTES', 'LEGENDE', 'VILLA'], quand: co('po_gare'), mots: /poissy/, concepts: ['POISSY'] },
+    MALONNOM: { label: 'Le capitaine Malon', par: ['MALON'], quand: co('arsenal'), mots: /malon/, concepts: ['MALON'] },
+    CHARENTON: { label: 'Charenton', par: ['RIGAULT', 'REGISTRE', 'DELPLACE', 'CAHIER', 'MANDRIN'], quand: co('charenton'), mots: /charenton/, sourds: ['charenton'] },
+    DELPLACE: { label: 'La mort du docteur Delplace', par: ['CAHIER', 'MANDRIN'], mots: /delplace/, concepts: ['DELPLACE'] },
+    GUIMART: { label: 'L’infirmier Guimart', par: ['CAHIER', 'MANDRIN'], mots: /guimart/, concepts: ['GUIMART'] },
+    LORIEN: { label: 'Les Lorien', par: ['ACTES'], quand: co('lorien'), mots: /lorien/, sourds: ['lorien', 'veronique', 'quitterie'] },
+    ROSERAIE: { label: 'Le clos de la Roseraie', par: ['ACTES', 'LEGENDE'], mots: /roseraie|clos du diable/ },
+    WELLINGTON: { label: 'Edgar Wellington', par: ['LETTRE'], mots: /wellington|rue saint etienne/ },
+    CAVOLLARO: { label: 'La Cavollaro', par: ['CATERINA'], mots: /cavollaro/, sourds: ['cavollaro', 'caterina'] },
+    CELLULES: { label: 'Les cellules sous la maison', par: ['BRAS', 'MALON'], mots: /squelettes|instruments de supplice|couloir de cellules/ }
+  };
+  P.declarations = {
+    'gerant/bn': 'libre', 'gerant/smith': 'libre', 'gerant/lieux': 'libre', 'gerant/charenton': ['CHARENTON'], 'gerant/fenalik': 'libre', 'gerant/train': 'libre',
+    'gaudry/carte': 'libre', 'gaudry/fenalik': 'libre', 'gaudry/aide': 'libre', 'gaudry/horaires': 'libre',
+    'remi/travail': 'libre', 'remi/engager': 'libre', 'remi/engager20': 'libre', 'remi/lui': 'libre', 'remi/fenalik': 'libre', 'remi/charenton': ['CHARENTON'],
+    'brevin/malon': ['MALONNOM'], 'brevin/lieu': 'libre', 'brevin/lui': 'libre',
+    'rogniat/leroux': 'libre', 'rogniat/registres': 'libre', 'rogniat/delplace': 'libre', 'rogniat/caisses': 'libre', 'rogniat/guimart': ['GUIMART'],
+    'leroux/asile': 'libre', 'leroux/fenalik': ['RIGAULT|REGISTRE|CAHIER'], 'leroux/delplace': ['DELPLACE'], 'leroux/guimart': ['GUIMART'],
+    'mandrin/delplace': ['DELPLACE'], 'mandrin/patient': { sait: ['DELPLACE'], apprend: ['GUIMART'] }, 'mandrin/parole': ['DELPLACE'], 'mandrin/guimart': ['GUIMART'],
+    'mandrin/verre': 'libre', 'mandrin/lui': 'libre',
+    'fauvel/actes': 'libre', 'fauvel/lorien': 'libre', 'fauvel/poissy': 'libre', 'fauvel/heures': 'libre', 'fauvel/lui': 'libre',
+    'thibierge/fonts': 'libre', 'thibierge/comte': 'libre', 'thibierge/lorien': ['LORIEN'], 'thibierge/morts': ['CELLULES'], 'thibierge/lui': 'libre',
+    'arnoult/chambre': 'libre', 'arnoult/lorien': ['LORIEN'], 'arnoult/comte': 'libre', 'arnoult/outils': 'libre', 'arnoult/lui': 'libre',
+    'lorien/histoire': 'libre', 'lorien/cicatrice': 'libre', 'lorien/veronique': 'libre', 'lorien/quitterie': 'libre', 'lorien/roses': 'libre',
+    'lorien/fouille': 'libre', 'lorien/soins': 'libre', 'lorien/lui': 'libre',
+    'veronique/opera': 'libre', 'veronique/histoire': 'libre', 'veronique/bras': 'libre', 'veronique/lui': 'libre',
+    'quitterie/monsieur': 'libre', 'quitterie/bras': 'libre', 'quitterie/jeu': 'libre', 'quitterie/lui': 'libre',
+    'pruvost/travail': 'libre',
+    'caterina/milan': 'libre', 'caterina/aida': 'libre', 'caterina/paris': 'libre', 'caterina/lui': 'libre', 'caterina/voyage': 'libre',
+    'bertin/horaire': 'libre', 'bertin/fourgon': 'libre',
+    'lieu:charenton': { apprend: ['CHARENTON'] }, 'lieu:arsenal': { apprend: ['MALONNOM'] }, 'lieu:po_lorien': { apprend: ['LORIEN', 'POISSY'] },
+    'lieu:po_gare': { apprend: ['POISSY'] }, 'lieu:po_ville': { apprend: ['POISSY'] }, 'pnj:caterina': { apprend: ['CAVOLLARO'] }, 'pnj:lorien': { apprend: ['LORIEN'] }
+  };
+
   P.intro = function (api) {
     var pa = passe(api), f = (pa && pa.drapeaux) || {}, a = function (id) { return !!pa && (pa.indices || []).indexOf(id) >= 0; };
     // Victoria, Douvres, le ferry, Calais, la gare du Nord : sept heures quarante de voyage

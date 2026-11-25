@@ -5,6 +5,23 @@
   // ---------------------------------------------------------------------------
   // 1. Normalisation du texte
   // ---------------------------------------------------------------------------
+  // les expressions figées ne sont pas des faits : « mort de faim », « c'est un crime de… », « ça me tue »
+  var IDIOMES = [
+    [/\b(je suis |on est |nous sommes |suis |je me sens )?(mort|morte|morts|mortes|creve|crevee|creves) de (faim|soif)\b/g, ' j ai $3 '],
+    [/\b(je |on |nous )?(meurs|meurt|mourons|mourrais|mourrait|vais mourir|va mourir|crever|creve) de (faim|soif)\b/g, ' j ai $3 '],
+    [/\b(mort|morte|morts|mortes|mourir|meurs|meurt|creve|crevee|crever) de (fatigue|sommeil|ennui)\b/g, ' fatigue '],
+    [/\b(mort|morte|morts|mortes|mourir|meurs|meurt|creve|crever) de (froid|chaud)\b/g, ' $2 '],
+    [/\b(mort|morte|morts|mortes|mourir|meurs|meurt|creve|crever) de (rire|rigoler)\b|\bmdr\b/g, ' rire '],
+    [/\b(mort|morte|morts|mortes|mourir|meurs|meurt) de (peur|trouille|frousse|honte|jalousie|inquietude|envie|impatience)\b|\bplus mort que vif\b|\bplus morte que vive\b/g, ' peur '],
+    [/\b(je suis|on est|je me sens) (creve|crevee|lessive|lessivee|epuise|epuisee|mort|morte|vanne|vannee)\b(?! de)/g, ' fatigue '],
+    [/\bc est (un |le |du )?(crime|criminel|meurtre|un assassinat|assassin) (de |d |que |qu )/g, ' c est mal de '],
+    [/\bc est (criminel|mortel|tuant|a mourir)\b/g, ' c est dur '],
+    [/\b(me|nous) (tue|tues|tuez|tuent|achevez|achevent)\b/g, ' me fatigue '], // « ce brouillard me tue » : au présent, c'est une façon de parler
+    [/\btuer le temps\b/g, ' passer le temps '],
+    [/\b(quel |un )?silence de mort\b/g, ' calme plat '],
+    [/\b(a mourir d ennui|ennuyeux a mourir|triste a mourir|bete a mourir)\b/g, ' ennuyeux '],
+  ];
+  function idiomes(t) { var x = ' ' + t + ' '; for (var i = 0; i < IDIOMES.length; i++) x = x.replace(IDIOMES[i][0], IDIOMES[i][1]); return x.replace(/\s+/g, ' ').trim(); }
   var BASE_PHRASES = [
     // « je me rends à… », « je me dirige vers… » : on y va (et pas « prendre »)
     [/\b(je me|nous nous|on se|je m) (rends|rend|rendons|rendrai|rendrons|dirige|dirigeons|dirigerai)\b/g, ' je vais'],
@@ -100,13 +117,42 @@
 
   function stripAccents(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, ''); }
 
+  // Le registre d'un chapitre (scene.declarations) dit, sujet par sujet, ce qu'il exige : 'smith/hantises': ['HANTISES'],
+  // 'smith/beddows': 'libre', ou un objet { sait, apprend, libre }. 'action:go_chelsea' vise une action, 'lieu:vane' un lieu,
+  // 'pnj:alexis' un personnage. Appliqué une fois, quand toutes les pièces du chapitre sont chargées.
+  function declarer(scene) {
+    var D = scene && scene.declarations;
+    if (!D || scene._declare === D) return;
+    scene._declare = D;
+    var inconnues = scene._declInconnues = [];
+    function cible(k) {
+      var m;
+      if ((m = /^action:(.+)$/.exec(k))) {
+        var all = (scene.globalActions || []).slice();
+        Object.keys(scene.locations || {}).forEach(function (l) { all = all.concat(scene.locations[l].actions || []); });
+        return all.filter(function (a) { return a.id === m[1]; })[0];
+      }
+      if ((m = /^lieu:(.+)$/.exec(k))) return scene.locations && scene.locations[m[1]];
+      if ((m = /^pnj:(.+)$/.exec(k))) return scene.npcs && scene.npcs[m[1]];
+      var q = k.split('/'), npc = scene.npcs && scene.npcs[q[0]];
+      return npc && (npc.topics || []).filter(function (t) { return t.id === q[1]; })[0];
+    }
+    Object.keys(D).forEach(function (k) {
+      var x = cible(k), v = D[k];
+      if (!x) { inconnues.push(k); return; }
+      if (v === 'libre') { x.libre = true; return; }
+      if (Array.isArray(v) || typeof v === 'string' || typeof v === 'function') { x.sait = v; return; }
+      if (v && typeof v === 'object') Object.keys(v).forEach(function (c) { x[c] = v[c]; });
+    });
+  }
+
   function normalize(raw, extraPhrases) {
     var s = ' ' + String(raw || '').toLowerCase().replace(/œ/g, 'oe').replace(/æ/g, 'ae') + ' ';
     s = stripAccents(s);
     s = s.replace(/['’`´]/g, ' ').replace(/[^a-z0-9]+/g, ' ');
     s = s.replace(/([a-z])\1{2,}/g, '$1$1');
     s = ' ' + s.replace(/\s+/g, ' ').trim() + ' ';
-    var all = (extraPhrases || []).concat(BASE_PHRASES);
+    var all = IDIOMES.concat(extraPhrases || [], BASE_PHRASES);
     for (var i = 0; i < all.length; i++) s = s.replace(all[i][0], all[i][1]);
     return s.replace(/\s+/g, ' ').trim();
   }
@@ -505,13 +551,14 @@
     var pcx = (saved && saved.pc) || opts.pc || scene.investigator;
     if (pcx && pcx.last) lex.add('ETAT', 'n', [pcx.last, pcx.key].filter(Boolean).join(', '));
 
+    declarer(scene);
     var s = saved ? saved : freshState();
     function freshState() {
       var pc = JSON.parse(JSON.stringify(opts.pc || scene.investigator));
       pc.sanStart = pc.sanStart || pc.san;
       return {
         v: 1, chapter: scene.id || 'prologue', loc: scene.start.loc, min: scene.start.min, turn: 0, idle: 0,
-        flags: {}, clues: [], inv: (opts.pc && opts.pc.inv ? opts.pc.inv : scene.start.inv).slice(), money: opts.pc && opts.pc.money !== undefined ? opts.pc.money : scene.start.money,
+        flags: {}, clues: [], savoirs: {}, inv: (opts.pc && opts.pc.inv ? opts.pc.inv : scene.start.inv).slice(), money: opts.pc && opts.pc.money !== undefined ? opts.pc.money : scene.start.money,
         pc: pc,
         npcs: {}, talk: null, pending: null, pendingPush: null,
         visited: {}, done: {}, counters: {}, nudged: {}, ambient: {}, log: [], ended: false, seq: 0
@@ -547,6 +594,7 @@
     }
     function log(e) {
       if (typeof e.x === 'string') e.x = tokens(e.x);
+      if (repriseEnCours) e.reprise = true;
       if ((e.t === 'narr' || e.t === 'event') && scene.generic && scene.generic.dup && !inExec) {
         for (var q = s.log.length - 1, seenN = 0; q >= 0 && seenN < 6; q--) {
           var prev = s.log[q];
@@ -717,7 +765,23 @@
       return base[name] !== undefined ? base[name] : 5;
     }
     function money(n) { return scene.money ? scene.money(n) : Math.round(n * 100) / 100 + ' francs'; }
-    function labelOf(id) { var c = lex.concepts[id]; return (c && c.label) || id.toLowerCase(); }
+    function labelOf(id) {
+      var c = lex.concepts[id], lab = (c && c.label) || id.toLowerCase(), S = scene.savoirs;
+      if (!S || !s) return lab;
+      // le nom complet d'une chose trahirait un savoir qu'on n'a pas (« les rouleaux de Sedefkar », « Randolph Alexis ») :
+      // on dit la chose avec le mot ordinaire, ou avec le nom anonyme que le registre propose (anon: { HOMMEGRIS: 'cet homme' })
+      var t = ' ' + normalize(lab) + ' ', ks = Object.keys(S);
+      for (var i = 0; i < ks.length; i++) {
+        var d = S[ks[i]]; if (!d || sait(ks[i])) continue;
+        if (d.anon && d.anon[id]) return d.anon[id];
+        if (d.mots && d.mots.test(t)) {
+          var w = c && (c.words || []).filter(function (x) { return x.length > 2 && !(MUETS && MUETS[x]) && !d.mots.test(' ' + x + ' '); })[0];
+          if (!w) return 'cela';
+          return c.npc ? w.charAt(0).toUpperCase() + w.slice(1) : (/[sx]$/.test(w) ? 'ces ' : /^[aeiouyh]/.test(w) ? 'cet ' : 'ce ') + w;
+        }
+      }
+      return lab;
+    }
 
     var api = {
       get s() { return s; },
@@ -766,6 +830,11 @@
         return true;
       },
       has: function (id) { return s.clues.indexOf(id) >= 0; },
+      // le registre des savoirs : ce que le personnage sait vraiment (les indices du carnet en font partie)
+      sait: function (id) { return sait(id); },
+      // un mot du lexique qu'on n'entend pas encore (un savoir qu'on n'a pas) : la parole ne cherche rien dessus
+      sourd: function (concept) { var v = verrous()[concept] || MUETS[normalize(concept)]; return !!(v && !v.some(function (k) { return sait(k); })); },
+      apprendre: function (id) { apprendre(id); },
       flag: function (k, v) { if (v === undefined) return s.flags[k]; s.flags[k] = v; return v; },
       once: function (k) { if (s.flags['once:' + k]) return false; s.flags['once:' + k] = true; return true; },
       count: function (k) { var v = s.counters[k] || 0; s.counters[k] = v + 1; return v; },
@@ -792,6 +861,7 @@
         // on change de lieu : l'interlocuteur resté derrière ne répond plus
         if (s.talk && !pnjIci(s.talk)) s.talk = null;
         log({ t: 'loc', loc: id, name: scene.locations[id].name });
+        apprendDe(scene.locations[id]); // y être, c'est savoir où l'on est
         if (!quiet) scene.locations[id].enter(api, first);
       },
       check: function (id, o) {
@@ -842,9 +912,79 @@
     };
 
     // ----- actions du monde -----
+    // ----- le registre des savoirs -----
+    // Ce que le personnage sait : les indices de son carnet, et ce qu'il a appris sans indice (api.apprendre).
+    // Un sujet, une action, une suite exigent des savoirs (sait: ['MEURTRES', 'CLE14|ADRESSE'], ou une fonction) :
+    // sans eux, ils n'existent pas, ni proposés ni déclenchés par ce qu'on tape. Un sujet ou une action qui les
+    // apprend le dit (apprend: ['HANTISES']). Les mots d'un savoir encore inconnu (scene.savoirs[id].concepts)
+    // ne s'entendent pas dans ce que tape le joueur : il ne peut pas aborder ce dont il n'a pas eu vent.
+    // test/censeur.js lit tout ce qui s'affiche et refuse le moindre mot d'un savoir qu'on n'a pas encore.
+    function sait(id, prof) {
+      if (s.clues.indexOf(id) >= 0 || (s.savoirs && s.savoirs[id])) return true;
+      // un savoir peut venir d'autres (par: ['MEURTRES', 'CLE14'] : l'hôtel, on le connaît par le journal ou par la clé)
+      var d = scene.savoirs && scene.savoirs[id];
+      if (!d) return false;
+      if (d.quand) { try { if (d.quand(api)) return true; } catch (e) { /* rien */ } }
+      return !!(d.par && (prof || 0) < 4 && d.par.some(function (k) { return k !== id && sait(k, (prof || 0) + 1); }));
+    }
+    function apprendre(id) {
+      if (!id) return;
+      if (Array.isArray(id)) { id.forEach(apprendre); return; }
+      s.savoirs = s.savoirs || {};
+      if (!s.savoirs[id]) s.savoirs[id] = s.turn || 1;
+    }
+    function exigences(x) {
+      var r = x && x.sait; if (!r) return true;
+      if (typeof r === 'function') { try { return !!r(api); } catch (e) { return false; } }
+      if (!Array.isArray(r)) r = [r];
+      return r.every(function (k) { return String(k).split('|').some(sait); });
+    }
+    function apprendDe(x) { var r = x && x.apprend; if (typeof r === 'function') r = r(api); if (r) apprendre(r); }
+    // les mots d'un savoir inconnu sont sourds : retirés de ce que le joueur a tapé (« les meurtres » avant le journal)
+    // deux sortes de verrous : un mot du lexique tout entier (concepts: ['MAKRYAT']), quand tous ses mots sont des secrets,
+    // ou des mots précis (sourds: ['randolph', 'alexis']), quand le mot du lexique mêle le secret et l'ordinaire
+    // (« statue », « peau », « pension » s'entendent ; « simulacre », « écorchés », « Stoke Newington », non)
+    var VERROUS = null, MUETS = null;
+    function verrous() {
+      if (VERROUS) return VERROUS;
+      VERROUS = {}; MUETS = {};
+      var S = scene.savoirs || {};
+      Object.keys(S).forEach(function (id) {
+        (S[id].concepts || []).forEach(function (c) { (VERROUS[c] || (VERROUS[c] = [])).push(id); });
+        (S[id].sourds || []).forEach(function (w) { w = normalize(w); (MUETS[w] || (MUETS[w] = [])).push(id); });
+      });
+      return VERROUS;
+    }
+    function verrou(p) {
+      var V = verrous(), sourds = [], sourdsPos = [];
+      if (!p || !p.all) return p;
+      var toks = String(p.text || '').split(' ');
+      function ferme(id) { var v = V[id]; return v && !v.some(function (k) { return sait(k); }); }
+      function muet(w) { var v = w && MUETS[w]; return v && !v.some(function (k) { return sait(k); }); }
+      p.all = p.all.filter(function (x) {
+        if (ferme(x.id) || (x.pos !== undefined && muet(toks[x.pos]))) { sourds.push(x.id); if (x.pos !== undefined) sourdsPos.push(x.pos); return false; }
+        return true;
+      });
+      var muetsBruts = toks.some(muet);
+      if (!sourds.length && !muetsBruts) return p;
+      var reste = {}; p.all.forEach(function (x) { reste[x.id] = 1; });
+      p.nouns = (p.nouns || []).filter(function (x) { return reste[x.id]; });
+      p.verbs = (p.verbs || []).filter(function (x) { return reste[x.id]; });
+      sourds.forEach(function (id) { if (!reste[id]) delete p.c[id]; });
+      if (p.pronom && !reste[p.pronom] && sourds.indexOf(p.pronom) >= 0) p.pronom = null;
+      p.sourds = sourds;
+      // les mots eux-mêmes s'effacent de la phrase : la parole des personnages lit le texte brut
+      var effaces = {};
+      sourdsPos.forEach(function (i) { if (toks[i]) { effaces[toks[i]] = 1; toks[i] = ''; } });
+      toks = toks.map(function (w) { if (muet(w)) { effaces[w] = 1; return ''; } return w; });
+      p.text = toks.filter(Boolean).join(' ');
+      p.brut = p.brut || p.raw; p.sourdsMots = [];
+      p.raw = String(p.raw || '').replace(/[A-Za-zÀ-ÖØ-öø-ÿŒœ]+/g, function (w) { if (effaces[normalize(w)]) { p.sourdsMots.push(w); return '…'; } return w; });
+      return p;
+    }
     function availableActions() {
       var l = loc();
-      return (l.actions || []).concat(scene.globalActions || []).filter(function (a) { return !a.cond || a.cond(api); });
+      return (l.actions || []).concat(scene.globalActions || []).filter(function (a) { return (!a.cond || a.cond(api)) && exigences(a); });
     }
     function findAction(id) {
       var all = [];
@@ -1071,6 +1211,7 @@
       var startSeq = s.seq; // le journal est plafonné : on repère les nouvelles entrées par leur numéro
       inExec = !a.repeatable;
       try { a.run(api, p); } finally { inExec = false; }
+      apprendDe(a);
       if (a.repeatable || s.talk || s.pending) return;
       // Même action, même texte qu'avant : on varie au lieu de répéter
       var produced = s.log.filter(function (e) { return e.n > startSeq && e.t === 'narr'; });
@@ -1297,13 +1438,13 @@
       n = n || 5; mode = mode || 'normal';
       var st = npcState(npc.id), r = alea(signatureIdees() + '|' + Object.keys(st.asked).length + '|' + s.turn);
       var sujets = topicChips(npc).map(function (t) { return { label: t.label, topic: t.topic, asked: t.asked }; });
-      var ex = scene.paroles ? scene.paroles(api, npc) : null, banal = melanger(((ex && ex.banal) || []).slice(), r), mal = melanger(((ex && ex.maladresse) || []).slice(), r);
+      var ex = scene.paroles ? scene.paroles(api, npc) : null, banal = melanger(((ex && ex.banal) || []).filter(exigences), r), mal = melanger(((ex && ex.maladresse) || []).filter(exigences), r);
       var out = [], vus = {};
       function prend(c) { if (!c || vus[c.label] || out.length >= n) return; vus[c.label] = 1; out.push(c); }
       // ce que la dernière réplique a mis sur la table : deux réponses au plus, puis une piste du scénario et une maladresse
       var tb = st.table && s.turn - st.table.turn <= 2 ? st.table : null;
       if (tb) {
-        var cles = Object.keys(tb.suites).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x]; });
+        var cles = Object.keys(tb.suites).filter(function (x) { return x.charAt(0) !== '_' && !tb.pris[x] && exigences(tb.suites[x]); });
         cles.slice(0, 2).forEach(function (x) {
           var e = tb.suites[x], m = (e.chip || String(e.mots || x).split(',')[0]).trim();
           // le mot tel que le personnage l'a dit, avec ses accents (« thèse », « L’Humanité »), plutôt que la clé
@@ -1400,7 +1541,7 @@
       var dest = destinataire(p);
       if (dest && pnjPresent(dest.id)) {
         var ta = availableActions().filter(function (a) { return a.talkTo === dest.id; })[0];
-        var reste = rewrite(lex, parse(lex, dest.reste, scene.phrases));
+        var reste = verrou(rewrite(lex, parse(lex, dest.reste, scene.phrases)));
         exec(ta, rewrite(lex, parse(lex, '', scene.phrases)));
         if (s.talk === dest.id && !s.pending && dest.reste.split(/\s+/).length >= 2) handleDialogue(reste);
         return;
@@ -1459,9 +1600,21 @@
       });
       return best;
     }
+    // un sujet d'intrigue (qui exige des savoirs) ne s'ouvre que sur un mot fort et propre à lui, entendu tel quel :
+    // « mort », approché, ou un verbe seul ne suffisent jamais (« je suis mort de faim » ne parle pas des trois morts)
+    function intrigue(t) { return !!(t.sait && (typeof t.sait === 'function' || [].concat(t.sait).length)); }
+    function scoreFort(t, p) {
+      var best = 0;
+      (t.keys || []).forEach(function (k) {
+        var id = typeof k === 'string' ? k : k[0], w = typeof k === 'string' ? 1 : k[1], c = lex.concepts[id];
+        if (!c || c.type === 'v' || SUJETS_LIBRES[id] || GENERIQUES[id] || w < 0.9) return;
+        if (p.c[id] !== undefined && p.c[id] >= 0.9) best = Math.max(best, p.c[id] * w);
+      });
+      return best ? Math.max(best, topicScore(t, p)) : 0;
+    }
     function rankTopics(npc, p) {
-      return (npc.topics || []).filter(function (t) { return !t.cond || t.cond(api); })
-        .map(function (t, i) { return { t: t, i: i, score: topicScore(t, p) }; })
+      return (npc.topics || []).filter(function (t) { return (!t.cond || t.cond(api)) && exigences(t); })
+        .map(function (t, i) { return { t: t, i: i, score: intrigue(t) ? scoreFort(t, p) : topicScore(t, p) }; })
         .filter(function (x) { return x.score > 0; })
         .sort(function (a, b) { return (b.score - a.score) || (nounScore(b.t, p) - nounScore(a.t, p)) || (premierMot(a.t, p) - premierMot(b.t, p)) || (a.i - b.i); });
     }
@@ -1469,6 +1622,7 @@
     // Une suggestion de sujet ne sort que si on en a déjà parlé avec lui (le joueur ou lui-même l'a nommé),
     // ou si la chose est là, sous les yeux. Sinon la suggestion trahirait ce que le personnage ne sait pas encore.
     var SUJETS_LIBRES = { TOIMEME: 1, AUREVOIR: 1, ARGENT: 1, HEURE: 1, POLI: 1, PSY: 1, FLATTER: 1, PERSUADER: 1, BARATIN: 1, MENACER: 1, INSISTER: 1, COMMANDER: 1, BOISSON: 1, DONNER: 1, SUITE: 1 };
+    var IGNORE = ['« De quoi parlez-vous ? »', '« Je ne vois pas de quoi vous voulez parler. »', '« Pardon ? Je ne vous suis pas. »'];
     var GENERIQUES = { QUELQUUN: 1, AUTREX: 1, SALLE: 1, PORTE: 1, LAMPE: 1, TABLE: 1, ICI: 1 };
     function abordes(id) { s.abordes = s.abordes || {}; return s.abordes[id] || (s.abordes[id] = {}); }
     function noterAborde(id, p) {
@@ -1487,6 +1641,8 @@
     }
     function sujetOuvert(npc, t, st) {
       if (st.asked[t.id] || t.chipAlways) return true;
+      // un sujet qui exige des savoirs : c'est le registre qui l'ouvre, pas les mots entendus
+      if (t.sait && (typeof t.sait === 'function' || [].concat(t.sait).length)) return exigences(t);
       var a = abordes(npc.id), self = npc.selfKeys || [], sujets = 0, ouvert = false;
       (t.keys || []).forEach(function (k) {
         var id = typeof k === 'string' ? k : k[0], w = typeof k === 'string' ? 1 : k[1], c = lex.concepts[id];
@@ -1510,7 +1666,7 @@
     }
     function topicChips(npc) {
       var st = npcState(npc.id);
-      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st) && chipLu(npc, t) && !epuise(npc, t, st); })
+      var list = (npc.topics || []).filter(function (t) { return t.chip && (!t.cond || t.cond(api)) && exigences(t) && (!t.chipSait || exigences({ sait: t.chipSait })) && (!t.chipCond || t.chipCond(api)) && sujetOuvert(npc, t, st) && chipLu(npc, t) && !epuise(npc, t, st); })
         .map(function (t) { return { label: t.chip, topic: t.id, asked: !!st.asked[t.id] }; });
       list.sort(function (a, b) { return (a.asked ? 1 : 0) - (b.asked ? 1 : 0); });
       return list.slice(0, 6);
@@ -1525,6 +1681,13 @@
       var t = npc.topics.find(function (x) { return x.id === topicId; });
       if (!t) return;
       var st = npcState(npc.id);
+      // dernier rempart : un sujet dont on n'a pas eu vent ne se joue pas, d'où qu'il vienne
+      if (!exigences(t)) {
+        if (G.RPG_VERROUS) G.RPG_VERROUS.push({ chapitre: s.chapter, qui: npc.id, sujet: topicId });
+        talkMode = 'raw'; api.npc(npc.id, fresh('ignore:' + npc.id, npc.ignore || IGNORE)); talkMode = null;
+        s.tick = scene.talkTick || 1; return;
+      }
+      if (G.RPG_SUJETS) G.RPG_SUJETS.push({ chapitre: s.chapter, qui: npc.id, sujet: topicId, intrigue: intrigue(t), turn: s.turn });
       var n = st.asked[topicId] || 0;
       // ses répliques sont toutes dites, mais il lui reste une suite (t.more) : on passe à la suite au lieu de répéter
       var total = t.lines ? t.lines.length : (t.run && t.run.nb > 0 ? t.run.nb : 0), suiteT = typeof t.more === 'function' ? t.more(api) : t.more;
@@ -1540,10 +1703,12 @@
       s.tick = scene.talkTick || 1;
       talkMode = 'topic'; sujetEnCours = topicId;
       try {
+        if (n === 0 && intrigue(t)) { accroche(npc, t, p); talkMode = 'topic'; }
         if (t.run) t.run(api, n, p);
         else api.npc(npc.id, t.lines[Math.min(n, t.lines.length - 1)]);
       } finally { talkMode = null; sujetEnCours = null; }
       (st.vu || (st.vu = {}))[topicId] = sigEtat();
+      apprendDe(t);
       poserTable(st, t, n);
     }
     // ----- ce qui est sur la table -----
@@ -1567,11 +1732,11 @@
     function lireTable(npc, st, p) {
       var tb = st.table; if (!tb || s.turn - tb.turn > 2) return null;
       var t = ' ' + normalize(p.raw || '') + ' ', nb = t.trim().split(/\s+/).length, S = tb.suites;
-      var nommes = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && motsSuite(S[k], k).some(function (m) { return t.indexOf(' ' + m + ' ') >= 0; }); });
+      var nommes = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && exigences(S[k]) && motsSuite(S[k], k).some(function (m) { return t.indexOf(' ' + m + ' ') >= 0; }); });
       var q = /\?/.test(p.raw || ''), pr = TABLE_PRENDRE.test(t), dm = TABLE_DEMANDE.test(t);
       // le bouton même d'une suite (« Prendre le pain », « Regarder sa poupée ») : cette suite
       var tapeC = normalize(p.raw || '').replace(/\s*\?$/, '');
-      var parChip = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && S[k].chip && normalize(S[k].chip) === tapeC; })[0];
+      var parChip = Object.keys(S).filter(function (k) { return k.charAt(0) !== '_' && exigences(S[k]) && S[k].chip && normalize(S[k].chip) === tapeC; })[0];
       if (parChip) return { nommes: [parChip], intent: S[parChip].prendre ? 'prendre' : S[parChip].demander ? 'demander' : 'parler', seul: true };
       // « Rien entendu ? » : une question sur une chose de la table n'est pas un refus
       var intent = TABLE_REFUS.test(t.trim()) && !(q && nommes.length) ? 'refuser' : (q || dm) && !(pr && !q) ? 'demander' : pr ? 'prendre' : nommes.length ? 'prendre' : null;
@@ -1753,6 +1918,7 @@
         talkMode = 'greet';
         if (typeof npc.greet === 'function') npc.greet(api, first);
         else api.npc(npcId, first ? npc.greet[0] : npc.greet[1]);
+        apprendDe(npc); // le rencontrer, c'est savoir qui il est (« Randolph Alexis, pour vous servir »)
         talkMode = null;
       }
       if (p && s.talk === npcId) {
@@ -1820,11 +1986,12 @@
         if (f.t) {
           if (st.asked[f.t]) { st.fil[i] = 1; continue; }
           var top = (npc.topics || []).filter(function (x) { return x.id === f.t; })[0];
-          if (!top || (top.cond && !top.cond(api))) continue;
+          if (!top || (top.cond && !top.cond(api)) || !exigences(top)) continue;
         }
+        if (!exigences(f)) continue;
         st.fil[i] = 1; st.filTour = s.turn; st.ecart = 0;
         var x = Array.isArray(f.x) ? fresh('fil:' + npc.id + ':' + i, f.x) : f.x;
-        talkMode = 'raw'; filEnCours = f.t || null; logNpc(npc.id, x); filEnCours = null; talkMode = null;
+        talkMode = 'raw'; filEnCours = f.t || null; logNpc(npc.id, x); filEnCours = null; talkMode = null; apprendDe(f);
         // une amorce attend toujours qu'on la suive, même quand elle ne finit pas sur un point d'interrogation
         if (f.t && s.talk === npc.id) st.question = { turn: s.turn, fil: f.t, sujet: null, ouverte: false };
         if (G.RPG_FILS) G.RPG_FILS.push({ who: npc.id, t: f.t, x: x });
@@ -1863,6 +2030,82 @@
       if (best && /^go_/.test(best.a.id) && p.c[(best.a.nouns || [])[0]] === undefined) return false; // un déplacement : le lieu lui-même doit être nommé
       return !!(best && best.score >= 1.2 && best.a.talkTo !== npc.id && !best.a.talk && ((best.a.verbs || []).some(function (v) { return p.c[v] !== undefined; }) || scoreLibelle(best.a, p) >= THRESHOLD));
     }
+    // ----- la reprise : le personnage répète, en question, ce qu'il ne comprend pas -----
+    // Un mot d'un savoir qu'on n'a pas encore (« les meurtres », avant le journal), ou un mot qu'il ne connaît pas
+    // (« le zorglub ») : il le reprend tel quel et attend, sans rien ajouter (« Des meurtres ? Qu'entendez-vous par là ? »).
+    var repriseEnCours = false; // la ligne ne fait que reprendre les mots du joueur : le censeur la laisse passer
+    var REPRISE_SOURD = ['« {X} ? Qu’entendez-vous par là ? »', '« {X} ? Je ne vois pas de quoi vous voulez parler. »', '« {X} ? Pardon, je ne vous suis pas. »', '« {X} ? J’ai peur de ne pas comprendre, {m}. »'];
+    var REPRISE_INCONNU = ['« {X} ? Je ne connais pas, {m}. »', '« {X} ? Qu’est-ce que c’est que ça ? »', '« {X} ? Le mot ne me dit rien. »', '« {X} ? J’ai peur de ne pas vous suivre. »'];
+    var ARTICLE_DIT = '(?:(?:le|la|les|un|une|des|du|ce|cet|cette|ces|mon|ma|mes|votre|vos|son|sa|ses|au|aux)\\s+|l[’\']\\s*|d[’\']\\s*)?';
+    function groupeDit(raw, mot) {
+      var e = String(mot).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), m = new RegExp('(?:^|[^A-Za-zÀ-ÿ])(' + ARTICLE_DIT + e + ')(?![A-Za-zÀ-ÿ])', 'i').exec(String(raw || ''));
+      var g = (m ? m[1] : mot).replace(/\s+/g, ' ').trim();
+      return g.charAt(0).toUpperCase() + g.slice(1);
+    }
+    function motsEtranges(p) {
+      if (p.sourdsMots && p.sourdsMots.length) return { mot: p.sourdsMots[0], sourd: true };
+      var D = G.RPG_DICO; if (!D) return null;
+      var u = (p.unknown || []).filter(function (w) { return w.length >= 4 && !/\d/.test(w) && !D[w] && !(G.RPG_MOTS && G.RPG_MOTS[w]) && !STOP.has(w); })[0];
+      if (!u) return null;
+      // le mot tel que le joueur l'a tapé, avec ses majuscules et ses accents
+      var brut = (String(p.brut || p.raw || '').match(/[A-Za-zÀ-ÖØ-öø-ÿŒœ]+/g) || []).filter(function (w) { return normalize(w) === u; })[0] || u;
+      return { mot: brut, sourd: false };
+    }
+    function reprise(npc, st, e, p) {
+      var X = groupeDit(p.brut || p.raw, e.mot), pool = (e.sourd ? npc.repriseSourd : npc.reprise) || (e.sourd ? REPRISE_SOURD : REPRISE_INCONNU);
+      talkMode = 'raw'; repriseEnCours = true;
+      try { api.npc(npc.id, fresh((e.sourd ? 'repS:' : 'repI:') + npc.id, pool).replace('{X}', X).replace('{x}', X.charAt(0).toLowerCase() + X.slice(1))); }
+      finally { talkMode = null; repriseEnCours = false; }
+      if (G.RPG_REPRISES) G.RPG_REPRISES.push({ qui: npc.id, mot: e.mot, sourd: e.sourd, raw: p.raw });
+      st.patience -= 0.5; st.ecart = (st.ecart || 0) + 1;
+      s.tick = scene.talkTick || 1;
+    }
+    // ----- le doute : un sujet qu'on connaît, mais évoqué de loin -----
+    // « les morts », quand on sait l'affaire du Chelsea Arms : il demande si c'est de cela qu'on parle ; un « oui » y mène.
+    function deDit(chip) {
+      var c = String(chip || '');
+      if (/^Les /.test(c)) return 'des ' + c.slice(4);
+      if (/^Le /.test(c)) return 'du ' + c.slice(3);
+      if (/^La /.test(c)) return 'de la ' + c.slice(3);
+      if (/^L[’']/.test(c)) return 'de l’' + c.slice(2);
+      return null;
+    }
+    function sujetDeLoin(npc, p) {
+      var S = scene.savoirs || {}, dit = ' ' + normalize(p.brut || p.raw || '') + ' ';
+      // le savoir que la phrase évoque : ses mots exacts (« les trois morts »), ou ses mots vagues (evoque : « ces morts »)
+      function evoque(t) {
+        return Array.isArray(t.sait) && t.sait.some(function (k) { return String(k).split('|').some(function (id) { var d = S[id]; return d && sait(id) && ((d.mots && d.mots.test(dit)) || (d.evoque && d.evoque.test(dit))); }); });
+      }
+      return (npc.topics || []).filter(function (t) {
+        return intrigue(t) && t.chip && deDit(t.chip) && (!t.cond || t.cond(api)) && exigences(t) && !scoreFort(t, p) && (topicScore(t, p) >= 0.6 || evoque(t));
+      })[0];
+    }
+    function douter(npc, st, t) {
+      talkMode = 'raw';
+      api.npc(npc.id, fresh('doute:' + npc.id, ['« Vous voulez parler {D} ? »', '« {D2} ? C’est de cela que vous parlez ? »', '« Vous pensez {D} ? »']).replace('{D}', deDit(t.chip)).replace('{D2}', t.chip));
+      talkMode = null;
+      st.confirme = { id: t.id, turn: s.turn };
+      api.chips([{ label: t.chip, topic: t.id }]);
+      s.tick = scene.talkTick || 1;
+    }
+    // l'accroche d'un sujet d'intrigue qu'on aborde soi-même pour la première fois : il reprend le mot, et confirme
+    var ACCROCHES = ['« {X} ? Oui, effectivement. »', '« {X} ? Ah. Vous êtes au courant. »', '« {X}… Vous en avez entendu parler, vous aussi. »', '« {X} ? Hum. Oui. »'];
+    function accroche(npc, t, p) {
+      if (!p || !p.raw || (t.chip && normalize(p.raw) === normalize(t.chip))) return;
+      if (npc.accroches === false || alea('accroche|' + npc.id + '|' + t.id + '|' + s.turn)() < 0.4) return;
+      var best = null;
+      (t.keys || []).forEach(function (k) {
+        var id = typeof k === 'string' ? k : k[0], c = lex.concepts[id];
+        if (!c || c.type === 'v' || SUJETS_LIBRES[id] || GENERIQUES[id] || c.npc) return;
+        (p.all || []).forEach(function (x) { if (x.id === id && x.score >= 0.9 && (!best || x.score > best.score)) best = x; });
+      });
+      if (!best) return;
+      var tok = String(p.text || '').split(' ')[best.pos], brut = tok && (String(p.raw || '').match(/[A-Za-zÀ-ÖØ-öø-ÿŒœ]+/g) || []).filter(function (w) { return normalize(w) === tok; })[0];
+      if (!brut || brut.length < 4) return;
+      talkMode = 'raw';
+      api.npc(npc.id, fresh('accroche:' + npc.id, npc.accroches || ACCROCHES).replace('{X}', groupeDit(p.raw, brut)));
+      talkMode = null;
+    }
     function handleDialogue(p) {
       // un récit (« j'ai essayé de l'étrangler ») : on en parle, on ne le refait pas. Les verbes ne déclenchent rien.
       if (recit(p.raw)) {
@@ -1899,7 +2142,7 @@
       if (dest && dest.id !== npc.id && pnjPresent(dest.id)) {
         api.endTalk(false);
         startTalk(dest.id);
-        if (s.talk === dest.id && dest.reste.split(/\s+/).length >= 2) handleDialogue(rewrite(lex, parse(lex, dest.reste, scene.phrases)));
+        if (s.talk === dest.id && dest.reste.split(/\s+/).length >= 2) handleDialogue(verrou(rewrite(lex, parse(lex, dest.reste, scene.phrases))));
         return;
       }
       // ce que la dernière réplique a mis sur la table (« je prends », « et la terrine ? ») : le dernier sujet abordé,
@@ -1908,7 +2151,7 @@
       var luTable = lireTable(npc, st, p);
       if (luTable && jouerTable(npc, st, luTable, p)) return;
       // le libellé d'un sujet proposé, tapé tel quel (« Les anciens registres ») : ce sujet
-      var tapeT = normalize(p.raw || '').replace(/^\d+ /, ''), chipT = tapeT.split(' ').length >= 2 && (npc.topics || []).filter(function (x) { return typeof x.chip === 'string' && normalize(x.chip) === tapeT && (!x.cond || x.cond(api)); })[0];
+      var tapeT = normalize(p.raw || '').replace(/^\d+ /, ''), chipT = tapeT.split(' ').length >= 2 && (npc.topics || []).filter(function (x) { return typeof x.chip === 'string' && normalize(x.chip) === tapeT && (!x.cond || x.cond(api)) && exigences(x); })[0];
       if (chipT) { runTopic(npc, chipT.id, p); return; }
       // un geste (« j'examine le projecteur », « je retourne dans le couloir ») : on quitte la conversation pour agir
       // en mode « Dire », les mots restent des mots : seul « je m'en vais », dit tout haut, met fin à la conversation
@@ -1939,9 +2182,21 @@
         if (s.talk !== npc.id) return;
       }
       // « parlez-moi de cet homme », « et lui ? » : on revient sur le dernier sujet, pas sur sa dernière question
-      if (!p.nouns.length && st.last && /\b(cet homme|ce monsieur|ce type|ce gars|cet individu|cette femme|cette dame|celui la|celle la|ce personnage|de lui|d elle|sur lui|sur elle)\b/.test(p.text) && npc.topics.some(function (x) { return x.id === st.last && (!x.cond || x.cond(api)); })) { runTopic(npc, st.last, p); return; }
+      if (!p.nouns.length && st.last && /\b(cet homme|ce monsieur|ce type|ce gars|cet individu|cette femme|cette dame|celui la|celle la|ce personnage|de lui|d elle|sur lui|sur elle)\b/.test(p.text) && npc.topics.some(function (x) { return x.id === st.last && (!x.cond || x.cond(api)) && exigences(x); })) { runTopic(npc, st.last, p); return; }
+      // il vient de demander « vous voulez parler des meurtres ? » : un oui y mène, un non le laisse là
+      if (st.confirme && s.turn - st.confirme.turn <= 1) {
+        var cf = st.confirme, kb = reponseBreve(p, npc); st.confirme = null;
+        if (kb === 'oui') { runTopic(npc, cf.id, p); return; }
+        if (kb === 'non') { talkMode = 'raw'; api.npc(npc.id, fresh('douteNon:' + npc.id, ['« Ah. De quoi, alors ? »', '« Bon. Je vous écoute. »', '« Pardon. Je vous ai mal compris. »'])); talkMode = null; s.tick = scene.talkTick || 1; return; }
+      }
+      // un mot qu'il ne peut pas comprendre (un savoir qu'on n'a pas, un mot qu'il ne connaît pas) : il le reprend en question
+      var etr = motsEtranges(p);
+      if (etr && !(tb && tb.score >= (etr.sourd ? 0.9 : 0.64)) && !(A && (A.answer || (A.prior && !etr.sourd)))) { reprise(npc, st, etr, p); return; }
       // une réponse à la question que le PNJ vient de poser
       if (A && A.answer && talkBack()) return;
+      // un sujet d'intrigue qu'on connaît, évoqué de loin (« et ces morts ? ») : il demande si c'est de cela qu'on parle
+      var loin0 = !(tb && tb.score >= 0.64) && !reponseBreve(p, npc) ? sujetDeLoin(npc, p) : null;
+      if (loin0 && !st.asked[loin0.id]) { douter(npc, st, loin0); return; }
       var bref = reponseBreve(p, npc);
       if (bref) { repondreBref(npc, st, bref, p); return; }
       if (A && A.mine && talkBack()) return;
@@ -1982,7 +2237,7 @@
           .map(function (x) { return (x || '').trim(); }).filter(function (x) { return x.split(/\s+/).length >= 3; });
         if (morceaux.length >= 2) {
           var prises = morceaux.map(function (m) {
-            var q = rewrite(lex, parse(lex, m, scene.phrases)); q.raw = m; q.dit = p.dit; q.morceau = true;
+            var q = verrou(rewrite(lex, parse(lex, m, scene.phrases))); q.raw = m; q.dit = p.dit; q.morceau = true;
             var tq = rankTopics(npc, q).filter(function (x) { return !horsSujet(x.t, q, npc); })[0];
             return tq && tq.score >= 0.64 ? { q: q, t: tq } : null;
           }).filter(Boolean);
@@ -1990,6 +2245,9 @@
           if (prises.length) { runTopic(npc, prises[0].t.t.id, prises[0].q); return; }
         }
       }
+      // un sujet d'intrigue qu'on connaît, mais évoqué de loin : il demande si c'est de cela qu'on parle
+      var loin = sujetDeLoin(npc, p);
+      if (loin && !st.asked[loin.id]) { douter(npc, st, loin); return; }
       // pas de sujet écrit d'avance : le PNJ répond de lui-même, avec ce qu'il est et ce qu'il sait
       if (A && talkBack()) return;
       if (tb && tb.score >= 0.64) { runTopic(npc, tb.t.id, p); return; }
@@ -2299,7 +2557,7 @@
       if (!raw) return;
       var dire = mode === 'dire';
       log(dire ? { t: 'player', x: raw, said: true } : { t: 'player', x: raw });
-      var p = rewrite(lex, parse(lex, raw, scene.phrases));
+      var p = verrou(rewrite(lex, parse(lex, raw, scene.phrases)));
       if (s.pending) {
         if (p.c.LANCER !== undefined || p.c.INSISTER !== undefined) { roll(); return; }
         api.sys('Les dés d’abord : touchez « Lancer les dés » ou écrivez « lancer ».');
@@ -2330,7 +2588,7 @@
       // « dire qu'on est de la police » : c'est une parole. On la dit à son interlocuteur, ou à la seule personne présente.
       var dit = discoursRapporte(raw);
       if (dit) {
-        var pd = rewrite(lex, parse(lex, dit, scene.phrases));
+        var pd = verrou(rewrite(lex, parse(lex, dit, scene.phrases)));
         if (!s.talk) {
           var gens = availableActions().filter(function (a) { return a.talkTo && !(scene.disponible && scene.disponible(api, a.talkTo)); });
           if (gens.length === 1) exec(gens[0], rewrite(lex, parse(lex, '', scene.phrases)));
@@ -2350,7 +2608,7 @@
         if (s.pending || s.ended) break;
         // la conversation s'est arrêtée en route : une question qui suit reste sans réponse
         if (qi > 0 && !s.talk && /\?\s*$/.test(sq[qi])) break;
-        if (unGeste(sq[qi], rewrite(lex, parse(lex, sq[qi], scene.phrases)))) apres = true;
+        if (unGeste(sq[qi], verrou(rewrite(lex, parse(lex, sq[qi], scene.phrases))))) apres = true;
         s.prefix = null;
       }
       if (apres) afterTurn();
@@ -2378,7 +2636,7 @@
       var segs = phrasesDe(texte);
       for (var i = 0; i < segs.length; i++) {
         if (!s.talk || s.pending || s.ended) break;
-        var ps = rewrite(lex, parse(lex, segs[i], scene.phrases));
+        var ps = verrou(rewrite(lex, parse(lex, segs[i], scene.phrases)));
         ps.dit = true;
         handleDialogue(ps);
         s.prefix = null;
@@ -2409,7 +2667,7 @@
         if (segs.length < 2) handleDialogue(p);
         else for (var si = 0; si < segs.length; si++) {
           if (s.pending || s.ended) break;
-          var psg = rewrite(lex, parse(lex, segs[si], scene.phrases));
+          var psg = verrou(rewrite(lex, parse(lex, segs[si], scene.phrases)));
           if (s.talk) handleDialogue(psg);
           // la conversation est finie : un geste qui suit se fait encore, une question reste sans réponse
           else if (!/\?\s*$/.test(segs[si]) && GESTE.test(psg.text)) { resoudre(psg); handleWorld(psg); }
@@ -2479,6 +2737,7 @@
       }
       if (chip.action) {
         var a = findAction(chip.action);
+        if (a && !exigences(a)) a = null; // une suggestion périmée ne fait rien savoir
         if (!a || (a.cond && !a.cond(api))) return;
         var refo = null; try { refo = MJ && MJ.action(chip.label, mjPick); } catch (e) { refo = null; }
         log({ t: 'player', x: refo || chip.label, mj: !!refo, chip: chip.label });
@@ -2556,9 +2815,10 @@
 
     return {
       get state() { return s; },
+      get scene() { return scene; },
       lex: lex,
-      parse: function (raw) { return rewrite(lex, parse(lex, raw, scene.phrases)); },
-      rank: function (raw) { return rankActions(rewrite(lex, parse(lex, raw, scene.phrases))); },
+      parse: function (raw) { return verrou(rewrite(lex, parse(lex, raw, scene.phrases))); },
+      rank: function (raw) { return rankActions(verrou(rewrite(lex, parse(lex, raw, scene.phrases)))); },
       // pour les tests : les gestes possibles ici, et le nom lisible d'un concept
       actionsIci: function () { return availableActions(); },
       libelle: function (id) { return lex.concepts[id] ? labelOf(id) : null; },
@@ -2578,5 +2838,5 @@
     };
   }
 
-  G.RPG = { createGame: createGame, recit: recit, normalize: normalize, stem: stem, phon: phon, osa: osa, rollExpr: rollExpr, levelOf: levelOf };
+  G.RPG = { createGame: createGame, recit: recit, normalize: normalize, idiomes: idiomes, stem: stem, phon: phon, osa: osa, rollExpr: rollExpr, levelOf: levelOf };
 })(typeof window !== 'undefined' ? window : globalThis);

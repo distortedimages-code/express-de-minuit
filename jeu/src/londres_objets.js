@@ -119,7 +119,7 @@
       var cierge = /cierge|bougie/.test(t);
       if (cierge && !api.item(OBJETS.cierge.nom)) { api.say('Vous n’avez pas de cierge sur vous.'); return true; }
       if (!api.item(OBJETS.allumettes.nom)) { api.say('Vous fouillez vos poches : pas une allumette. Il faudra en trouver, la prochaine fois que vous passerez à l’hôtel.'); return true; }
-      if (cierge) { api.say(api.s.loc === 'eglise' ? 'Vous allumez le cierge et vous le plantez parmi les autres, devant la statue. Pour Smith. Pour Beddows. Pour les trois du Chelsea Arms, dont personne ne sait plus le nom.' : 'La flamme du cierge monte droite, puis se couche, comme si quelqu’un venait d’ouvrir une porte que vous ne voyez pas.'); return true; }
+      if (cierge) { api.say(api.s.loc === 'eglise' ? 'Vous allumez le cierge et vous le plantez parmi les autres, devant la statue. Pour Smith. Pour Beddows.' + (api.sait('MEURTRES') ? ' Pour les trois du Chelsea Arms, dont personne ne sait plus le nom.' : '') + '' : 'La flamme du cierge monte droite, puis se couche, comme si quelqu’un venait d’ouvrir une porte que vous ne voyez pas.'); return true; }
       api.say(api.s.loc === 'cave' ? 'L’allumette craque. Une seconde, la cave entière apparaît, les murs suintants, la maquette, et dans l’angle une forme qui n’est qu’un sac. Puis la flamme vous brûle les doigts.' : api.s.loc === 'chambre_stanley' ? 'L’allumette éclaire les gravures de locomotives. Dans la lueur qui tremble, elles ont l’air d’avancer vers vous.' : 'Une allumette craque, éclaire votre main, s’éteint. Vous aviez besoin de voir une flamme qui obéit.');
       return true;
     }

@@ -71,6 +71,7 @@
     var p = PL[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return enVille(api) && !ici(api, id); },
+      sait: function (api) { return connu(api, id); }, // un lieu dont on n'a pas eu vent ne se propose pas
       run: function (api) {
         if (!connu(api, id)) { api.say('Vous ne savez pas encore où c’est, ni ce que vous y feriez. Il vous faudrait d’abord une adresse, ou une raison.'); return; }
         if (api.flag('visite') && P.quitterVisite) P.quitterVisite(api, id);
@@ -1103,7 +1104,7 @@
     var reveil = (h >= 21 ? d + 1 : d) * D + 5 * 60 + 40;
     api.say(api.fresh('dodoNuitL', ['Vous dormez mal. La pluie, le vent, et quelque part la voix du guet qui crie l’heure. À cinq heures et demie, vous êtes debout.', 'Une nuit hachée. Vous rêvez de bêtes empaillées qui tournent la tête toutes ensemble. À l’aube, vous ouvrez les yeux avant le réveil.']));
     api.s.min = reveil; api.s.tick = 0;
-    if (crime(api) && !api.flag('crimeVu') && !api.flag('sauveW')) api.say('Le train part à six heures quarante-cinq. Et personne n’est venu au Chat Noir, hier soir. Ni Edgar, ni le duc.');
+    if (crime(api) && !api.flag('crimeVu') && !api.flag('sauveW')) api.say(api.sait('CHATNOIR') && api.sait('DUC') ? 'Le train part à six heures quarante-cinq. Et personne n’est venu au Chat Noir, hier soir. Ni Edgar, ni le duc.' : 'Le train part à six heures quarante-cinq. Et rue Saint-Étienne, personne ne vous a fait signe.');
   };
   P.trainPossible = function (api) { var m = mn(api); return day(api.s.min) > j0(api) && m >= 5 * 60 + 30 && m < 6 * 60 + 45; };
   P.monter = function (api) {
@@ -1291,7 +1292,7 @@
   // ================================================================ réponses générales, horaires, humeur
   P.generic = Object.assign({}, L.generic, {
     loop: ['Vous tournez en rond. Lausanne, elle, ne tourne pas : elle descend.', 'Il y a sûrement autre chose à tenter.', 'Il faudrait changer d’approche.'],
-    lost: ['Vous hésitez. Le rouleau, Edgar, le duc : par quel bout reprendre ?', 'Vous consultez votre carnet. Le fil est là, quelque part entre deux pages.'],
+    lost: ['Vous hésitez. Le rouleau, Edgar, cette ville : par quel bout reprendre ?', 'Vous consultez votre carnet. Le fil est là, quelque part entre deux pages.'],
     verbs: Object.assign({}, L.generic.verbs, {
       ALLER: function (api) { if (reve(api)) return 'Les rues de ce rêve ne mènent pas où l’on veut. Elles mènent où elles veulent.'; if (train(api)) return 'Le train vous emporte. Vous pouvez aller au wagon-restaurant, ou rester dans votre compartiment.'; var c = destChips(api); return c.length ? 'Pour aller où ? Vous connaissez : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.' : 'Vous ne connaissez pas encore d’autre adresse à Lausanne.'; }
     })
@@ -1567,6 +1568,90 @@
   PA.suite = 'lausanne';
   P.precedent = 'paris';
   P.nomsCommuns = Object.assign({}, PA.nomsCommuns || {}, { Saint: 1, Étienne: 1, Pré: 1, Signal: 1, Rumine: 1, Palud: 1, Dufour: 1, Ouchy: 1, Lavaux: 1, Riponne: 1, Sauvabelin: 1, Brigue: 1, Simplon: 1, Victoria: 1 });
+  // ---------------------------------------------------------------- le registre des savoirs (voir londres.js)
+  var drap = function () { var f = [].slice.call(arguments); return function (api) { return f.some(function (k) { return !!api.flag(k); }); }; };
+  P.savoirs = {
+    DUC: { label: 'Le duc des Esseintes', par: ['KULTEN'], quand: drap('ducVu', 'ducVenu', 'ducEntre', 'ducVuEntrer', 'ducIci', 'ducTrain'), mots: /\bduc\b|esseintes/, sourds: ['duc', 'esseintes', 'floressas'] },
+    MAX: { label: 'Max von Wurtheim', quand: drap('maxVu', 'rdvClub'), mots: /\bmax\b|wurtheim/, sourds: ['max', 'maximilian', 'wurtheim'] },
+    CHATNOIR: { label: 'Le Chat Noir et son club', quand: drap('connu:la_chatnoir', 'rdvClub'), mots: /chat noir|club de sept heures/, concepts: ['CHATNOIR', 'CLUB'] },
+    MAISONDUC: { label: 'La maison de la rue du Pré', par: ['KULTEN'], quand: drap('connu:la_pre'), mots: /rue du pre\b/, concepts: ['MAISONDUC'] },
+    CRIME: { label: 'Les morts de la rue Saint-Étienne', evoque: /\bmorts?\b|cadavres?|\btues?\b|assassin|\bcrimes?\b/, quand: drap('crimeVu', 'edgarVuMort'), mots: /morts de la rue saint etienne|(les|des) wellington (sont |ont ete )?(morts|tues|assassines)|on a tue (edgar|william)|(edgar|william) (est|a ete) (mort|tue|assassine)/ }
+  };
+  P.declarations = {
+    'jeanclaude/hotel': 'libre',
+    'jeanclaude/wellington': 'libre',
+    'jeanclaude/ville': 'libre',
+    'jeanclaude/conference': 'libre',
+    'jeanclaude/guet': 'libre',
+    'jeanclaude/duc': 'libre',
+    'jeanclaude/train': 'libre',
+    'jeanclaude/lui': 'libre',
+    'jeanclaude/pourboire': 'libre',
+    'burnier/chambre': 'libre',
+    'burnier/conference': 'libre',
+    'burnier/wellington': 'libre',
+    'burnier/duc': 'libre',
+    'burnier/lieux': 'libre',
+    'burnier/journal': 'libre',
+    'edgar/rouleau': 'libre',
+    'edgar/prix': 'libre',
+    'edgar/voir': 'libre',
+    'edgar/william': 'libre',
+    'edgar/guerre': 'libre',
+    'edgar/lausanne': 'libre',
+    'edgar/duc': ['DUC'],
+    'edgar/morphine': 'libre',
+    'edgar/occulte': { libre: true, apprend: ['DUC', 'MAX', 'CHATNOIR'] },
+    'edgar/fenalik': 'libre',
+    'edgar/bras': 'libre',
+    'edgar/lui': 'libre',
+    'william/carnet': 'libre',
+    'william/ours': 'libre',
+    'william/duc': 'libre',
+    'william/edgar': 'libre',
+    'william/guerre': 'libre',
+    'william/travail': 'libre',
+    'duc/lui': 'libre',
+    'duc/rouleau': 'libre',
+    'duc/edgar': 'libre',
+    'duc/gisant': 'libre',
+    'duc/lausanne': 'libre',
+    'duc/reves': 'libre',
+    'duc/conference': 'libre',
+    'duc/fenalik': 'libre',
+    'duc/club': { libre: true, apprend: ['MAX', 'CHATNOIR'] },
+    'duc/artifice': 'libre',
+    'duc/maison': 'libre',
+    'duc/guet': 'libre',
+    'max/histoire': 'libre',
+    'max/tout': 'libre',
+    'max/duc': { libre: true, apprend: ['MAISONDUC'] },
+    'max/edgar': 'libre',
+    'max/retard': 'libre',
+    'max/club': 'libre',
+    'max/addition': 'libre',
+    'guet/heures': 'libre',
+    'guet/ville': 'libre',
+    'guet/suicides': 'libre',
+    'guet/maison': { libre: true, apprend: ['MAISONDUC'] },
+    'guet/brouillard': 'libre',
+    'guet/lui': 'libre',
+    'chappuis/journaux': 'libre',
+    'chappuis/occulte': 'libre',
+    'chappuis/lecteur': 'libre',
+    'chappuis/musee': 'libre',
+    'chappuis/lui': 'libre',
+    'rochat/crime': ['CRIME'],
+    'rochat/duc': 'libre',
+    'rochat/conference': 'libre',
+    'rochat/lui': 'libre',
+    'morand/horaire': 'libre',
+    'morand/repas': 'libre',
+    'morand/passagers': 'libre',
+    'maitre/menu': 'libre',
+    'maitre/chaise': 'libre',
+    'pnj:duc': { apprend: ['DUC'] }, 'pnj:max': { apprend: ['MAX'] }, 'lieu:la_chatnoir': { apprend: ['CHATNOIR'] }, 'lieu:la_pre': { apprend: ['MAISONDUC'] }
+  };
   G.CHAPTERS.lausanne = P;
 })(typeof window !== 'undefined' ? window : globalThis);
 

@@ -576,7 +576,7 @@
         run: function (api, n) { froisse(api, n, 'Mlle Brévin vous regarde comme une reliure mangée aux vers. « Je suis archiviste, {m}. » Elle tourne les talons.', 180, true); } }],
       rogniat: [{ label: 'Lui demander si elle couvre le directeur', mal: 'couvre', dit: 'Vous couvrez le docteur Leroux, n’est-ce pas ?',
         run: function (api, n) { froisse(api, n, 'Mme Rogniat pose les deux mains à plat sur son bureau. « Je couvre ce bureau, {m}. Personne n’y touche. » Elle ne vous quittera plus des yeux, ni les caisses.', 240, true); } }],
-      leroux: [{ label: 'L’accuser d’avoir tué Delplace', mal: 'accuser', dit: 'C’est vous qui avez tué le docteur Delplace, n’est-ce pas ?',
+      leroux: [{ label: 'L’accuser d’avoir tué Delplace', sait: ['DELPLACE'], mal: 'accuser', dit: 'C’est vous qui avez tué le docteur Delplace, n’est-ce pas ?',
         run: function (api, n) {
           api.npc('leroux', 'Le pince-nez saute. « Sortez. Sortez, ou je vous fais sortir par les infirmiers, et la police avec ! »');
           api.flag('lerouxChasse', true); api.npcs('leroux').closedUntil = api.s.min + 100000; api.endTalk(false);

@@ -94,7 +94,7 @@
   P.versLyon = function (api) {
     if (!api.item(BRAS) && !api.flag('lyonAverti')) {
       api.flag('lyonAverti', true);
-      api.say('Vous consultez votre carnet avant de faire monter les bagages. ' + (api.flag('connu:poissy') ? 'À Poissy, ce qui dort sous la maison du comte y dort toujours.' : 'Poissy, et la maison du comte : vous n’y êtes pas allé{e}.') + ' Le train, lui, repassera demain soir, et tous les soirs.');
+      api.say('Vous consultez votre carnet avant de faire monter les bagages. ' + (api.flag('connu:poissy') ? 'À Poissy, ce qui dort sous la maison du comte y dort toujours.' : (api.sait('POISSY') ? 'Poissy, et la maison du comte : vous n’y êtes pas allé{e}.' : 'Le comte Fenalik : vous n’avez pas retrouvé sa trace.')) + ' Le train, lui, repassera demain soir, et tous les soirs.');
       api.chips([{ label: 'Partir quand même pour la gare de Lyon', action: 'go_lyon' }, { label: 'Relire vos notes', action: 'p_notes' }]);
       return;
     }
@@ -1139,7 +1139,7 @@
     accident: { chip: 'Quel accident ?', mots: 'accident, quel accident, lequel, le directeur, mauvais signe', demander: ['« On a écrit “un tragique accident”, docteur, et rien d’autre. Quand on ne dit pas lequel, c’est qu’on a honte. Ou qu’on a peur. »'] }
   }]);
   suites('gerant', 'fenalik', {
-    soeur: { mots: 'belle soeur, votre belle soeur, mercerie', demander: ['« Elle vend du fil et des boutons, et elle sait tout ce qui se dit à Poissy. Malheureusement, elle le répète aussi. »'] },
+    soeur: { sait: ['POISSY'], mots: 'belle soeur, votre belle soeur, mercerie', demander: ['« Elle vend du fil et des boutons, et elle sait tout ce qui se dit à Poissy. Malheureusement, elle le répète aussi. »'] },
     tranquille: { mots: 'tranquille, il ne s y passe rien, jamais rien', demander: ['« Une sous-préfecture, docteur. Le marché, l’église, la Seine. On y va pour s’ennuyer, et l’on n’est jamais déçu. »'] }
   });
   suites('gaudry', 'carte', {
