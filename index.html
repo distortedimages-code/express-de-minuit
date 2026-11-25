@@ -244,6 +244,10 @@ body[data-san="2"] .sanstate, body[data-san="3"] .sanstate { background: var(--r
   transition: background .15s, color .15s, border-color .15s;
 }
 .chip:hover { background: var(--text); color: var(--ink); }
+/* un lieu dit pourquoi on irait : la raison, en petit, sous le nom */
+.chip.pq { display: inline-flex; flex-direction: column; align-items: flex-start; text-align: left; white-space: normal; max-width: 100%; line-height: 1.25; padding-top: 7px; padding-bottom: 7px; }
+.chip .pq-why { display: block; font-size: 11.5px; font-style: italic; opacity: .72; margin-top: 3px; letter-spacing: 0; text-transform: none; }
+.chip.pq:hover .pq-why { opacity: .9; }
 .chip.hot { background: var(--red); color: var(--text); border-color: var(--red); }
 .chip.hot:hover { background: var(--text); color: var(--ink); border-color: var(--text); }
 .chip.hot b { color: var(--text); }
@@ -2030,7 +2034,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       var neuf = function (l) { return l.filter(function (a) { return !s.done[a.id]; }); };
       ['fausse', 'risque', 'folie'].forEach(function (k) { F[k] = melanger(neuf(F[k]), r); });
       var out = [], pris = {};
-      function prend(a, lab) { if (!a || pris[a.id] || out.length >= n) return; pris[a.id] = 1; out.push({ label: lab || etiquette(a), action: a.id }); }
+      function prend(a, lab) { if (!a || pris[a.id] || out.length >= n) return; pris[a.id] = 1; var q = typeof a.pourquoi === 'function' ? a.pourquoi(api) : a.pourquoi; out.push(q ? { label: lab || etiquette(a), action: a.id, pourquoi: q } : { label: lab || etiquette(a), action: a.id }); }
       // les bonnes idées : les pistes, dans l'ordre du scénario, puis les gens qu'on n'a pas encore entendus
       var parler = F.base.filter(function (a) { return a.talkTo; }), regard = F.base.filter(function (a) { return !a.talkTo; });
       var bons = neuf(F.piste).concat(neuf(parler));
@@ -5223,9 +5227,46 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     api.flag('known:' + id, true);
     api.sys('Nouveau lieu : ' + PLACES[id].label + '. Écrivez « aller à… » ou touchez « Où aller ? ».');
   }
+  // ---------------------------------------------------------------- pourquoi y aller
+  // Un lieu ne se propose que si le personnage a une raison d'y aller, tirée de ce qu'il a vu ou entendu ; la raison
+  // s'affiche sous le bouton (« Fleming y enquête sur les trois morts du Chelsea Arms »). La première qui vaut l'emporte.
+  // Sans raison, le lieu ne se propose pas, mais on peut toujours y aller en l'écrivant.
+  var POURQUOI = {
+    hotel: [[function () { return true; }, 'Votre chambre, le concierge, le courrier.']],
+    cheapside: [[function (api) { return api.has('BILLET') && !api.flag('cheapsideFini'); }, 'Le billet de Smith vous y donne rendez-vous.'],
+      [function (api) { return api.has('FUYARD'); }, 'Là où le cocher a déposé « Beddows » et son fardeau.']],
+    chelsea: [[function (api) { return api.sait('MEURTRES'); }, 'Les trois morts y ont été trouvés, chambre 14.'],
+      [function (api) { return api.has('CLE14'); }, 'La clé tombée de la poche du moustachu vient de là : chambre 14.']],
+    yard: [[function (api) { return api.sait('MEURTRES'); }, 'L’inspecteur Fleming y enquête sur les trois morts du Chelsea Arms.'],
+      [function (api) { return api.sait('INCENDIE'); }, 'La police enquête sur l’incendie chez Smith.'],
+      [function () { return true; }, 'La police, si vous avez quelque chose à signaler.']],
+    ambassade: [[function (api) { return api.sait('MAKRYAT'); }, 'Les morts du Chelsea Arms avaient des passeports turcs au nom de Makryat.']],
+    islington: [[function (api) { return api.has('ADRESSE') || api.sait('ADRESSE'); }, 'La boutique de Makryat, l’antiquaire.']],
+    musee: [[function (api) { return api.has('QUETE'); }, 'Ses livres, pour en savoir plus sur le simulacre et sur Fenalik.'],
+      [function (api) { return api.has('TRAIN') || api.has('ALEXIS'); }, 'Ses registres, pour remonter la piste du train miniature.'],
+      [function (api) { return api.sait('MEURTRES'); }, 'Ses journaux et ses livres, pour en savoir plus sur Makryat.']],
+    stoke: [[function (api) { return api.has('TRAIN') || api.has('STANLEY'); }, 'Henry Stanley y logeait, l’homme qui a acheté le train miniature.'],
+      [function (api) { return api.sait('VOLATILISE'); }, 'Le journal parle d’un homme parti en fumée, là-bas.']],
+    camberwell: [[function () { return true; }, 'Arthur Butter y habite : il connaît le train et l’homme qui l’a acheté.']],
+    victoria: [[function (api) { return api.has('QUETE'); }, 'Le train de Douvres, quand vous serez prêt à partir pour le continent.']],
+    stjohn: [[function (api) { return api.sait('INCENDIE'); }, 'Ce qui reste de la maison de Smith, après l’incendie.']],
+    archives: [[function (api) { return api.has('TRAIN') || api.has('ALEXIS') || api.has('MAQUETTE'); }, 'Les vieux journaux, pour l’histoire du train et de ses propriétaires.'],
+      [function (api) { return api.sait('VOLATILISE'); }, 'Les vieux journaux, pour l’homme parti en fumée.'],
+      [function (api) { return api.sait('MEURTRES'); }, 'Les vieux journaux, pour le passé de Makryat.']],
+    vane: [[function (api) { return api.has('VOIX'); }, 'La médium chez qui une voix vous a parlé.'],
+      [function () { return true; }, 'Le salon de la médium que Smith avait démasquée.']],
+    pub: [[function () { return true; }, 'Une pinte et un coin de banquette, en face du British Museum.']],
+    eglise: [[function () { return true; }, 'Un moment de calme, à l’abri du brouillard.']],
+    quais: [[function () { return true; }, 'Marcher au bord de la Tamise, et réfléchir.']]
+  };
+  function pourquoi(api, id) {
+    var l = POURQUOI[id] || [];
+    for (var i = 0; i < l.length; i++) { try { if (l[i][0](api)) return l[i][1]; } catch (e) { /* rien */ } }
+    return null;
+  }
   function destChips(api) {
-    return Object.keys(PLACES).filter(function (k) { return k !== zone(api.s.loc) && known(api, k) && k !== 'institut'; })
-      .map(function (k) { return { label: 'Aller : ' + PLACES[k].label, action: 'go_' + k }; });
+    return Object.keys(PLACES).filter(function (k) { return k !== zone(api.s.loc) && known(api, k) && k !== 'institut' && pourquoi(api, k); })
+      .map(function (k) { return { label: 'Aller : ' + PLACES[k].label, action: 'go_' + k, pourquoi: pourquoi(api, k) }; });
   }
   function taxi(api, dest) {
     var lines = [
@@ -6082,6 +6123,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return zone(api.s.loc) !== id && !/^wagon|^retour|^campagne|^institut/.test(api.s.loc); },
       sait: function (api) { return id === 'institut' || known(api, id); },
+      pourquoi: function (api) { return pourquoi(api, id); }, ideaCond: function (api) { return !!pourquoi(api, id); },
       run: function (api, pa) {
         if (id === 'institut') { api.say(api.fresh('instFini', ['L’Institut impérial ? Le banquet est terminé depuis longtemps. Les salons sont fermés, les chaises empilées ; il n’y a plus rien à y apprendre.', 'Vous pensez à l’Institut impérial, à ses lustres et à son champagne tiède. Le banquet est fini : ce qui compte, maintenant, se passe ailleurs dans Londres.'])); return; }
         if (!known(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.'); return; }
@@ -6686,7 +6728,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
       } },
     { id: 'g_lieux', label: 'Où aller ?', verbs: ['ALLER', 'EXAMINER', 'PRENDRE', 'COMMANDER'], nouns: ['DESTINATIONS', 'TAXI'], repeatable: true,
       cond: function (api) { return !/^wagon|^retour|^institut|^campagne/.test(api.s.loc); },
-      run: function (api) { var c = destChips(api); if (!c.length) { api.say('Vous ne connaissez encore aucune adresse utile.'); return; } api.say('Vous pouvez vous rendre à : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.'); api.chips(c); } },
+      run: function (api) { var c = destChips(api); if (!c.length) { api.say('Rien ne vous appelle ailleurs pour l’instant. Vous pouvez toujours écrire « aller à… ».'); return; } api.say(c.length > 1 ? 'Plusieurs adresses vous appellent :' : 'Une adresse vous appelle :'); api.chips(c); } },
     { id: 'g_journal', label: 'Acheter un journal', verbs: ['PRENDRE', 'EXAMINER', 'COMMANDER', 'DONNER'], nouns: ['JOURNAL'], repeatable: true, cond: function (api) { return /^(islington|stoke|victoria|yard|chelsea|musee|camberwell)$/.test(api.s.loc); },
       run: function (api) {
         var hj = hour(api.s.min);
@@ -6939,7 +6981,7 @@ form.line input { min-width: 0; flex: 1 1 auto; }
 
     // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)
   L.nomsCommuns = { Enfer: 1, Harley: 1, Street: 1 };
-L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
+L._h = { depart: depart, PLACES: PLACES, pourquoi: pourquoi, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);
 
@@ -11208,9 +11250,25 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     api.flag('connu:' + id, true);
     api.sys('Nouveau lieu : ' + PL[id].label + '. Écrivez « aller à… » ou touchez « Où aller ? ».');
   }
+  // pourquoi y aller : ce que le personnage a vu ou entendu (voir londres.js) ; sans raison, le lieu ne se propose pas
+  var oui = function () { return true; }, a = function (c) { return function (api) { return api.has(c) || api.sait(c); }; };
+  var POURQUOI = {
+    hotel: [[oui, 'Votre chambre, et le gérant, qui sait où tout se trouve.']],
+    bn: [[a('SCANDALE'), 'Ses archives, pour creuser ce que vous avez trouvé sur Fenalik.'], [oui, 'Ses archives, pour retrouver la trace du comte Fenalik.']],
+    arsenal: [[a('MALON'), 'Les papiers du capitaine Malon y sont conservés.']],
+    charenton: [[a('DELPLACE'), 'Son directeur, le docteur Delplace, y est mort il y a une semaine.'], [a('RIGAULT'), 'Fenalik y fut enfermé, d’après le docteur Rigault.'],
+      [a('CHARENTON'), 'La maison de santé dont parlent vos notes.']],
+    poissy: [[function (api) { return api.has('ACTES') || api.has('LEGENDE'); }, 'Le clos de la Roseraie, où vivait le comte.'], [a('POISSY'), 'Le comte Fenalik y avait sa maison.']],
+    lyon: [[a('LETTRE'), 'Le train pour Lausanne, où vous attend Edgar Wellington.'], [oui, 'Les trains pour la Suisse et l’Italie, quand vous serez prêt à partir.']]
+  };
+  function pourquoi(api, id) {
+    var l = POURQUOI[id] || [];
+    for (var i = 0; i < l.length; i++) { try { if (l[i][0](api)) return l[i][1]; } catch (e) { /* rien */ } }
+    return null;
+  }
   function destChips(api) {
-    return Object.keys(PL).filter(function (k) { return k !== api.s.loc && connu(api, k); })
-      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k }; });
+    return Object.keys(PL).filter(function (k) { return k !== api.s.loc && connu(api, k) && pourquoi(api, k); })
+      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k, pourquoi: pourquoi(api, k) }; });
   }
   function trajet(api, dest, minutes) {
     var lignes = nuit(api)
@@ -11224,6 +11282,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     var p = PL[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       sait: function (api) { return connu(api, id) || id === 'lyon'; }, // un lieu dont on n'a pas eu vent ne se propose pas (la gare de Lyon, on la connaît)
+      pourquoi: function (api) { return pourquoi(api, id); }, ideaCond: function (api) { return !!pourquoi(api, id); },
       cond: function (api) { return api.s.loc !== id && api.s.loc !== 'p_' + id && api.s.loc !== 'gare' && !ailleurs(api); },
       run: function (api) {
         // la gare de Lyon, on la connaît depuis l'arrivée (le train y attend) : elle n'apparaît dans les destinations qu'une fois utile
@@ -13426,9 +13485,27 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   function reve(api) { return /^re_/.test(api.s.loc); }
   function train(api) { return /^tr_/.test(api.s.loc); }
   function ici(api, id) { return api.s.loc === id || (id === 'la_rue' && enBoutique(api)); }
+  // pourquoi y aller : ce que le personnage a vu ou entendu (voir londres.js) ; sans raison, le lieu ne se propose pas
+  var oui = function () { return true; }, a = function (c) { return function (api) { return api.has(c) || api.sait(c); }; };
+  var POURQUOI = {
+    la_gare: [[oui, 'Les trains pour Milan, et le chef de gare qui sait tout.']],
+    la_hotel: [[oui, 'Votre chambre à l’hôtel des Alpes.']],
+    la_rue: [[a('CRIME'), 'La boutique des Wellington, rue Saint-Étienne.'], [oui, 'Edgar Wellington y tient boutique, avec le rouleau qu’il veut vendre.']],
+    la_cathedrale: [[a('GISANT'), 'Le chevalier sans mains, sous les voûtes.'], [oui, 'La cathédrale qui domine la ville, et son guet de nuit.']],
+    la_musee: [[a('KULTEN'), 'Le livre que personne ne demande y attend.'], [oui, 'Sa bibliothèque, pour vos recherches.']],
+    la_signal: [[oui, 'Le belvédère, d’où l’on voit tout le lac.']],
+    la_chatnoir: [[a('CLUB'), 'Le club de sept heures et demie s’y réunit.'], [oui, 'Un café de la ville, où l’on vous a donné rendez-vous.']],
+    la_pre: [[a('MAISONDUC'), 'La maison du duc, rue du Pré.']],
+    la_police: [[a('CRIME'), 'Pour déclarer les morts de la rue Saint-Étienne.'], [oui, 'La police, si vous avez quelque chose à signaler.']]
+  };
+  function pourquoi(api, id) {
+    var l = POURQUOI[id] || [];
+    for (var i = 0; i < l.length; i++) { try { if (l[i][0](api)) return l[i][1]; } catch (e) { /* rien */ } }
+    return null;
+  }
   function destChips(api) {
-    return Object.keys(PL).filter(function (k) { return !ici(api, k) && connu(api, k); })
-      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k }; });
+    return Object.keys(PL).filter(function (k) { return !ici(api, k) && connu(api, k) && pourquoi(api, k); })
+      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k, pourquoi: pourquoi(api, k) }; });
   }
   function trajet(api, dest, minutes) {
     var lignes = nuit(api)
@@ -13445,6 +13522,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return enVille(api) && !ici(api, id); },
       sait: function (api) { return connu(api, id); }, // un lieu dont on n'a pas eu vent ne se propose pas
+      pourquoi: function (api) { return pourquoi(api, id); }, ideaCond: function (api) { return !!pourquoi(api, id); },
       run: function (api) {
         if (!connu(api, id)) { api.say('Vous ne savez pas encore où c’est, ni ce que vous y feriez. Il vous faudrait d’abord une adresse, ou une raison.'); return; }
         if (api.flag('visite') && P.quitterVisite) P.quitterVisite(api, id);
@@ -19458,6 +19536,8 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
   }
   function pad(n) { return n < 10 ? '0' + n : String(n); }
   function scrollDown() { logEl.scrollTop = logEl.scrollHeight; }
+  // un bouton peut dire pourquoi (« Aller : Scotland Yard », et dessous : ce qui vous y appelle)
+  function libelle(c) { return esc(c.label) + (c.pourquoi ? '<span class="pq-why">' + esc(c.pourquoi) + '</span>' : ''); }
   function btn(label, cls, onClick) {
     var b = document.createElement('button'); b.type = 'button'; b.className = (cls && /^(act|ghost)/.test(cls)) ? cls : 'chip' + (cls ? ' ' + cls : ''); b.innerHTML = label;
     b.addEventListener('click', onClick); return b;
@@ -19494,7 +19574,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
         break;
       case 'chips':
         d.className = 'e-chips';
-        e.list.forEach(function (c) { d.appendChild(btn(esc(c.label), '', function () { act(function () { game.choose(c); }); })); });
+        e.list.forEach(function (c) { d.appendChild(btn(libelle(c), c.pourquoi ? 'pq' : '', function () { act(function () { game.choose(c); }); })); });
         break;
       case 'vue': return carteImage(e.img, e.nom || '', 'lieu');
       case 'end': d.appendChild(endCard()); break;
@@ -19839,7 +19919,7 @@ L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, l
     ib.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
     bar.appendChild(ib);
     if (ideasOpen) {
-      game.ideas(4, mode).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
+      game.ideas(4, mode).forEach(function (i) { bar.appendChild(btn(libelle(i), i.pourquoi ? 'pq' : '', function () { act(function () { game.choose(i); }); })); });
     }
     else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(hint); }
   }
