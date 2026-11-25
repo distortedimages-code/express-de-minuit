@@ -17,7 +17,7 @@ function textes(e) {
   if (typeof e.x === 'string') out.push(e.x);
   if (typeof e.title === 'string') out.push(e.title);
   if (typeof e.nom === 'string') out.push(e.nom);
-  if (Array.isArray(e.list)) e.list.forEach(c => c && c.label && out.push(c.label));
+  if (Array.isArray(e.list)) e.list.forEach(c => { if (c && c.label) out.push(c.label); if (c && c.pourquoi) out.push(c.pourquoi); });
   return out;
 }
 
@@ -34,7 +34,7 @@ function surveiller(g, etiquette) {
     // ce qui est proposé à l'écran en ce moment
     try {
       if (s.talk) (g.suggestionsParole(6, 'normal') || []).forEach(c => lus.push({ x: c.label, t: 'suggestion' }));
-      else if (!s.ended) (g.ideas(4) || []).forEach(c => lus.push({ x: c.label, t: 'idée' }));
+      else if (!s.ended) (g.ideas(4) || []).forEach(c => { lus.push({ x: c.label, t: 'idée' }); if (c.pourquoi) lus.push({ x: c.pourquoi, t: 'raison' }); });
     } catch (e) { /* une partie finie */ }
     ids.forEach(id => { if (A.sait(id)) APPRIS[s.chapter + ':' + id] = (APPRIS[s.chapter + ':' + id] || 0) + 1; });
     lus.forEach(({ x, t }) => {

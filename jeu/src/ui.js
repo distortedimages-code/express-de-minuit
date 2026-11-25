@@ -117,6 +117,8 @@
   }
   function pad(n) { return n < 10 ? '0' + n : String(n); }
   function scrollDown() { logEl.scrollTop = logEl.scrollHeight; }
+  // un bouton peut dire pourquoi (« Aller : Scotland Yard », et dessous : ce qui vous y appelle)
+  function libelle(c) { return esc(c.label) + (c.pourquoi ? '<span class="pq-why">' + esc(c.pourquoi) + '</span>' : ''); }
   function btn(label, cls, onClick) {
     var b = document.createElement('button'); b.type = 'button'; b.className = (cls && /^(act|ghost)/.test(cls)) ? cls : 'chip' + (cls ? ' ' + cls : ''); b.innerHTML = label;
     b.addEventListener('click', onClick); return b;
@@ -153,7 +155,7 @@
         break;
       case 'chips':
         d.className = 'e-chips';
-        e.list.forEach(function (c) { d.appendChild(btn(esc(c.label), '', function () { act(function () { game.choose(c); }); })); });
+        e.list.forEach(function (c) { d.appendChild(btn(libelle(c), c.pourquoi ? 'pq' : '', function () { act(function () { game.choose(c); }); })); });
         break;
       case 'vue': return carteImage(e.img, e.nom || '', 'lieu');
       case 'end': d.appendChild(endCard()); break;
@@ -498,7 +500,7 @@
     ib.setAttribute('aria-pressed', ideasOpen ? 'true' : 'false');
     bar.appendChild(ib);
     if (ideasOpen) {
-      game.ideas(4, mode).forEach(function (i) { bar.appendChild(btn(esc(i.label), '', function () { act(function () { game.choose(i); }); })); });
+      game.ideas(4, mode).forEach(function (i) { bar.appendChild(btn(libelle(i), i.pourquoi ? 'pq' : '', function () { act(function () { game.choose(i); }); })); });
     }
     else { var hint = document.createElement('span'); hint.className = 'label'; hint.textContent = '« Agir » : ce que vous faites · « Dire » : ce que vous dites'; bar.appendChild(hint); }
   }

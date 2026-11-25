@@ -1372,7 +1372,7 @@
       var neuf = function (l) { return l.filter(function (a) { return !s.done[a.id]; }); };
       ['fausse', 'risque', 'folie'].forEach(function (k) { F[k] = melanger(neuf(F[k]), r); });
       var out = [], pris = {};
-      function prend(a, lab) { if (!a || pris[a.id] || out.length >= n) return; pris[a.id] = 1; out.push({ label: lab || etiquette(a), action: a.id }); }
+      function prend(a, lab) { if (!a || pris[a.id] || out.length >= n) return; pris[a.id] = 1; var q = typeof a.pourquoi === 'function' ? a.pourquoi(api) : a.pourquoi; out.push(q ? { label: lab || etiquette(a), action: a.id, pourquoi: q } : { label: lab || etiquette(a), action: a.id }); }
       // les bonnes idées : les pistes, dans l'ordre du scénario, puis les gens qu'on n'a pas encore entendus
       var parler = F.base.filter(function (a) { return a.talkTo; }), regard = F.base.filter(function (a) { return !a.talkTo; });
       var bons = neuf(F.piste).concat(neuf(parler));

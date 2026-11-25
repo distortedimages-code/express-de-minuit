@@ -267,6 +267,8 @@ Ce que tape le joueur passe aussi par le registre. Un mot d'un savoir inconnu es
 
 **La reprise et le doute.** Un personnage reprend en question ce qu'il ne peut pas comprendre, sans rien ajouter : « Des meurtres ? Qu'entendez-vous par là ? » (un savoir qu'on n'a pas), « Le zorglub ? Je ne connais pas. » (un mot qui n'est ni du lexique ni du français courant, d'après `dico.js`, fabriqué par `jeu/tools/dico.py`). Les mots hors époque gardent leurs réponses (« iPhone ? »). Un sujet qu'on connaît, mais évoqué de loin, le fait douter : « Vous voulez parler des meurtres du Chelsea Arms ? », et un « oui » y mène. La première fois qu'on aborde soi-même un sujet d'intrigue, il reprend parfois le mot (« Les meurtres ? Oui, effectivement. »).
 
+**Pourquoi y aller.** Un lieu ne se propose (« Où aller ? », les boutons « Aller : … ») que si le personnage a une raison d'y aller, tirée de ce qu'il a vu ou entendu, et la raison s'affiche en petit sous le bouton : « Scotland Yard — L'inspecteur Fleming y enquête sur les trois morts du Chelsea Arms ». Chaque chapitre tient sa table (`POURQUOI`, dans `londres.js`, `paris.js`, `lausanne.js`) : pour chaque lieu, des raisons dans l'ordre, la première qui vaut l'emporte. Sans raison, le lieu ne se propose pas, mais on peut toujours y aller en l'écrivant. Le censeur relit aussi ces raisons.
+
 **Les vérifications.**
 
 - `node jeu/tools/test_registre.js` (lancé par la compilation, qui s'arrête en cas de faute) : chaque sujet déclare ce qu'il exige, chaque savoir cité existe, chaque déclaration a sa cible, chaque mot verrouillé est au lexique. Avec `--carte`, il écrit la carte des savoirs (ce que chacun ouvre).

@@ -53,9 +53,27 @@
   function reve(api) { return /^re_/.test(api.s.loc); }
   function train(api) { return /^tr_/.test(api.s.loc); }
   function ici(api, id) { return api.s.loc === id || (id === 'la_rue' && enBoutique(api)); }
+  // pourquoi y aller : ce que le personnage a vu ou entendu (voir londres.js) ; sans raison, le lieu ne se propose pas
+  var oui = function () { return true; }, a = function (c) { return function (api) { return api.has(c) || api.sait(c); }; };
+  var POURQUOI = {
+    la_gare: [[oui, 'Les trains pour Milan, et le chef de gare qui sait tout.']],
+    la_hotel: [[oui, 'Votre chambre à l’hôtel des Alpes.']],
+    la_rue: [[a('CRIME'), 'La boutique des Wellington, rue Saint-Étienne.'], [oui, 'Edgar Wellington y tient boutique, avec le rouleau qu’il veut vendre.']],
+    la_cathedrale: [[a('GISANT'), 'Le chevalier sans mains, sous les voûtes.'], [oui, 'La cathédrale qui domine la ville, et son guet de nuit.']],
+    la_musee: [[a('KULTEN'), 'Le livre que personne ne demande y attend.'], [oui, 'Sa bibliothèque, pour vos recherches.']],
+    la_signal: [[oui, 'Le belvédère, d’où l’on voit tout le lac.']],
+    la_chatnoir: [[a('CLUB'), 'Le club de sept heures et demie s’y réunit.'], [oui, 'Un café de la ville, où l’on vous a donné rendez-vous.']],
+    la_pre: [[a('MAISONDUC'), 'La maison du duc, rue du Pré.']],
+    la_police: [[a('CRIME'), 'Pour déclarer les morts de la rue Saint-Étienne.'], [oui, 'La police, si vous avez quelque chose à signaler.']]
+  };
+  function pourquoi(api, id) {
+    var l = POURQUOI[id] || [];
+    for (var i = 0; i < l.length; i++) { try { if (l[i][0](api)) return l[i][1]; } catch (e) { /* rien */ } }
+    return null;
+  }
   function destChips(api) {
-    return Object.keys(PL).filter(function (k) { return !ici(api, k) && connu(api, k); })
-      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k }; });
+    return Object.keys(PL).filter(function (k) { return !ici(api, k) && connu(api, k) && pourquoi(api, k); })
+      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k, pourquoi: pourquoi(api, k) }; });
   }
   function trajet(api, dest, minutes) {
     var lignes = nuit(api)
@@ -72,6 +90,7 @@
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return enVille(api) && !ici(api, id); },
       sait: function (api) { return connu(api, id); }, // un lieu dont on n'a pas eu vent ne se propose pas
+      pourquoi: function (api) { return pourquoi(api, id); }, ideaCond: function (api) { return !!pourquoi(api, id); },
       run: function (api) {
         if (!connu(api, id)) { api.say('Vous ne savez pas encore où c’est, ni ce que vous y feriez. Il vous faudrait d’abord une adresse, ou une raison.'); return; }
         if (api.flag('visite') && P.quitterVisite) P.quitterVisite(api, id);

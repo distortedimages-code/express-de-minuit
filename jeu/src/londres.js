@@ -39,9 +39,46 @@
     api.flag('known:' + id, true);
     api.sys('Nouveau lieu : ' + PLACES[id].label + '. Écrivez « aller à… » ou touchez « Où aller ? ».');
   }
+  // ---------------------------------------------------------------- pourquoi y aller
+  // Un lieu ne se propose que si le personnage a une raison d'y aller, tirée de ce qu'il a vu ou entendu ; la raison
+  // s'affiche sous le bouton (« Fleming y enquête sur les trois morts du Chelsea Arms »). La première qui vaut l'emporte.
+  // Sans raison, le lieu ne se propose pas, mais on peut toujours y aller en l'écrivant.
+  var POURQUOI = {
+    hotel: [[function () { return true; }, 'Votre chambre, le concierge, le courrier.']],
+    cheapside: [[function (api) { return api.has('BILLET') && !api.flag('cheapsideFini'); }, 'Le billet de Smith vous y donne rendez-vous.'],
+      [function (api) { return api.has('FUYARD'); }, 'Là où le cocher a déposé « Beddows » et son fardeau.']],
+    chelsea: [[function (api) { return api.sait('MEURTRES'); }, 'Les trois morts y ont été trouvés, chambre 14.'],
+      [function (api) { return api.has('CLE14'); }, 'La clé tombée de la poche du moustachu vient de là : chambre 14.']],
+    yard: [[function (api) { return api.sait('MEURTRES'); }, 'L’inspecteur Fleming y enquête sur les trois morts du Chelsea Arms.'],
+      [function (api) { return api.sait('INCENDIE'); }, 'La police enquête sur l’incendie chez Smith.'],
+      [function () { return true; }, 'La police, si vous avez quelque chose à signaler.']],
+    ambassade: [[function (api) { return api.sait('MAKRYAT'); }, 'Les morts du Chelsea Arms avaient des passeports turcs au nom de Makryat.']],
+    islington: [[function (api) { return api.has('ADRESSE') || api.sait('ADRESSE'); }, 'La boutique de Makryat, l’antiquaire.']],
+    musee: [[function (api) { return api.has('QUETE'); }, 'Ses livres, pour en savoir plus sur le simulacre et sur Fenalik.'],
+      [function (api) { return api.has('TRAIN') || api.has('ALEXIS'); }, 'Ses registres, pour remonter la piste du train miniature.'],
+      [function (api) { return api.sait('MEURTRES'); }, 'Ses journaux et ses livres, pour en savoir plus sur Makryat.']],
+    stoke: [[function (api) { return api.has('TRAIN') || api.has('STANLEY'); }, 'Henry Stanley y logeait, l’homme qui a acheté le train miniature.'],
+      [function (api) { return api.sait('VOLATILISE'); }, 'Le journal parle d’un homme parti en fumée, là-bas.']],
+    camberwell: [[function () { return true; }, 'Arthur Butter y habite : il connaît le train et l’homme qui l’a acheté.']],
+    victoria: [[function (api) { return api.has('QUETE'); }, 'Le train de Douvres, quand vous serez prêt à partir pour le continent.']],
+    stjohn: [[function (api) { return api.sait('INCENDIE'); }, 'Ce qui reste de la maison de Smith, après l’incendie.']],
+    archives: [[function (api) { return api.has('TRAIN') || api.has('ALEXIS') || api.has('MAQUETTE'); }, 'Les vieux journaux, pour l’histoire du train et de ses propriétaires.'],
+      [function (api) { return api.sait('VOLATILISE'); }, 'Les vieux journaux, pour l’homme parti en fumée.'],
+      [function (api) { return api.sait('MEURTRES'); }, 'Les vieux journaux, pour le passé de Makryat.']],
+    vane: [[function (api) { return api.has('VOIX'); }, 'La médium chez qui une voix vous a parlé.'],
+      [function () { return true; }, 'Le salon de la médium que Smith avait démasquée.']],
+    pub: [[function () { return true; }, 'Une pinte et un coin de banquette, en face du British Museum.']],
+    eglise: [[function () { return true; }, 'Un moment de calme, à l’abri du brouillard.']],
+    quais: [[function () { return true; }, 'Marcher au bord de la Tamise, et réfléchir.']]
+  };
+  function pourquoi(api, id) {
+    var l = POURQUOI[id] || [];
+    for (var i = 0; i < l.length; i++) { try { if (l[i][0](api)) return l[i][1]; } catch (e) { /* rien */ } }
+    return null;
+  }
   function destChips(api) {
-    return Object.keys(PLACES).filter(function (k) { return k !== zone(api.s.loc) && known(api, k) && k !== 'institut'; })
-      .map(function (k) { return { label: 'Aller : ' + PLACES[k].label, action: 'go_' + k }; });
+    return Object.keys(PLACES).filter(function (k) { return k !== zone(api.s.loc) && known(api, k) && k !== 'institut' && pourquoi(api, k); })
+      .map(function (k) { return { label: 'Aller : ' + PLACES[k].label, action: 'go_' + k, pourquoi: pourquoi(api, k) }; });
   }
   function taxi(api, dest) {
     var lines = [
@@ -898,6 +935,7 @@
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       cond: function (api) { return zone(api.s.loc) !== id && !/^wagon|^retour|^campagne|^institut/.test(api.s.loc); },
       sait: function (api) { return id === 'institut' || known(api, id); },
+      pourquoi: function (api) { return pourquoi(api, id); }, ideaCond: function (api) { return !!pourquoi(api, id); },
       run: function (api, pa) {
         if (id === 'institut') { api.say(api.fresh('instFini', ['L’Institut impérial ? Le banquet est terminé depuis longtemps. Les salons sont fermés, les chaises empilées ; il n’y a plus rien à y apprendre.', 'Vous pensez à l’Institut impérial, à ses lustres et à son champagne tiède. Le banquet est fini : ce qui compte, maintenant, se passe ailleurs dans Londres.'])); return; }
         if (!known(api, id)) { api.say('Vous ne savez pas encore où aller pour ça. Il faudrait d’abord une adresse, ou une raison.'); return; }
@@ -1502,7 +1540,7 @@
       } },
     { id: 'g_lieux', label: 'Où aller ?', verbs: ['ALLER', 'EXAMINER', 'PRENDRE', 'COMMANDER'], nouns: ['DESTINATIONS', 'TAXI'], repeatable: true,
       cond: function (api) { return !/^wagon|^retour|^institut|^campagne/.test(api.s.loc); },
-      run: function (api) { var c = destChips(api); if (!c.length) { api.say('Vous ne connaissez encore aucune adresse utile.'); return; } api.say('Vous pouvez vous rendre à : ' + c.map(function (x) { return x.label.replace('Aller : ', ''); }).join(', ') + '.'); api.chips(c); } },
+      run: function (api) { var c = destChips(api); if (!c.length) { api.say('Rien ne vous appelle ailleurs pour l’instant. Vous pouvez toujours écrire « aller à… ».'); return; } api.say(c.length > 1 ? 'Plusieurs adresses vous appellent :' : 'Une adresse vous appelle :'); api.chips(c); } },
     { id: 'g_journal', label: 'Acheter un journal', verbs: ['PRENDRE', 'EXAMINER', 'COMMANDER', 'DONNER'], nouns: ['JOURNAL'], repeatable: true, cond: function (api) { return /^(islington|stoke|victoria|yard|chelsea|musee|camberwell)$/.test(api.s.loc); },
       run: function (api) {
         var hj = hour(api.s.min);
@@ -1755,6 +1793,6 @@
 
     // des noms que l'investigateur n'a pas besoin d'avoir lus pour y penser (voir le garde-fou des noms, engine.js)
   L.nomsCommuns = { Enfer: 1, Harley: 1, Street: 1 };
-L._h = { depart: depart, PLACES: PLACES, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
+L._h = { depart: depart, PLACES: PLACES, pourquoi: pourquoi, ZONE: ZONE, zone: zone, known: known, learn: learn, destChips: destChips, taxi: taxi, npc: npc, T: T, day: day, hour: hour, at: at, D: D, lirePresse: lirePresse, presse: presse, billet: billet, reserver: reserver, dormir: dormir, goAct: goAct, CARTE: CARTE, BILLETS: BILLETS, MAQ: MAQ, VALISE: VALISE };
   G.CHAPTERS.londres = L;
 })(typeof window !== 'undefined' ? window : globalThis);

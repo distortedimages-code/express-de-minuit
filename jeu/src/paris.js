@@ -39,9 +39,25 @@
     api.flag('connu:' + id, true);
     api.sys('Nouveau lieu : ' + PL[id].label + '. Écrivez « aller à… » ou touchez « Où aller ? ».');
   }
+  // pourquoi y aller : ce que le personnage a vu ou entendu (voir londres.js) ; sans raison, le lieu ne se propose pas
+  var oui = function () { return true; }, a = function (c) { return function (api) { return api.has(c) || api.sait(c); }; };
+  var POURQUOI = {
+    hotel: [[oui, 'Votre chambre, et le gérant, qui sait où tout se trouve.']],
+    bn: [[a('SCANDALE'), 'Ses archives, pour creuser ce que vous avez trouvé sur Fenalik.'], [oui, 'Ses archives, pour retrouver la trace du comte Fenalik.']],
+    arsenal: [[a('MALON'), 'Les papiers du capitaine Malon y sont conservés.']],
+    charenton: [[a('DELPLACE'), 'Son directeur, le docteur Delplace, y est mort il y a une semaine.'], [a('RIGAULT'), 'Fenalik y fut enfermé, d’après le docteur Rigault.'],
+      [a('CHARENTON'), 'La maison de santé dont parlent vos notes.']],
+    poissy: [[function (api) { return api.has('ACTES') || api.has('LEGENDE'); }, 'Le clos de la Roseraie, où vivait le comte.'], [a('POISSY'), 'Le comte Fenalik y avait sa maison.']],
+    lyon: [[a('LETTRE'), 'Le train pour Lausanne, où vous attend Edgar Wellington.'], [oui, 'Les trains pour la Suisse et l’Italie, quand vous serez prêt à partir.']]
+  };
+  function pourquoi(api, id) {
+    var l = POURQUOI[id] || [];
+    for (var i = 0; i < l.length; i++) { try { if (l[i][0](api)) return l[i][1]; } catch (e) { /* rien */ } }
+    return null;
+  }
   function destChips(api) {
-    return Object.keys(PL).filter(function (k) { return k !== api.s.loc && connu(api, k); })
-      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k }; });
+    return Object.keys(PL).filter(function (k) { return k !== api.s.loc && connu(api, k) && pourquoi(api, k); })
+      .map(function (k) { return { label: 'Aller : ' + PL[k].label, action: 'go_' + k, pourquoi: pourquoi(api, k) }; });
   }
   function trajet(api, dest, minutes) {
     var lignes = nuit(api)
@@ -55,6 +71,7 @@
     var p = PL[id];
     return { id: 'go_' + id, label: 'Aller : ' + p.label, repeatable: true, verbs: ['ALLER', 'VISITER'], nouns: [p.concept].concat(p.also), extraVerbs: ['PRENDRE', 'PARLER'], boost: 0.1,
       sait: function (api) { return connu(api, id) || id === 'lyon'; }, // un lieu dont on n'a pas eu vent ne se propose pas (la gare de Lyon, on la connaît)
+      pourquoi: function (api) { return pourquoi(api, id); }, ideaCond: function (api) { return !!pourquoi(api, id); },
       cond: function (api) { return api.s.loc !== id && api.s.loc !== 'p_' + id && api.s.loc !== 'gare' && !ailleurs(api); },
       run: function (api) {
         // la gare de Lyon, on la connaît depuis l'arrivée (le train y attend) : elle n'apparaît dans les destinations qu'une fois utile

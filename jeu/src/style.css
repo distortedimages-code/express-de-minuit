@@ -226,6 +226,10 @@ body[data-san="2"] .sanstate, body[data-san="3"] .sanstate { background: var(--r
   transition: background .15s, color .15s, border-color .15s;
 }
 .chip:hover { background: var(--text); color: var(--ink); }
+/* un lieu dit pourquoi on irait : la raison, en petit, sous le nom */
+.chip.pq { display: inline-flex; flex-direction: column; align-items: flex-start; text-align: left; white-space: normal; max-width: 100%; line-height: 1.25; padding-top: 7px; padding-bottom: 7px; }
+.chip .pq-why { display: block; font-size: 11.5px; font-style: italic; opacity: .72; margin-top: 3px; letter-spacing: 0; text-transform: none; }
+.chip.pq:hover .pq-why { opacity: .9; }
 .chip.hot { background: var(--red); color: var(--text); border-color: var(--red); }
 .chip.hot:hover { background: var(--text); color: var(--ink); border-color: var(--text); }
 .chip.hot b { color: var(--text); }
